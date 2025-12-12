@@ -1,0 +1,13 @@
+{
+  "name": "vibebin-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --recursive build",
+    "cli": "pnpm --filter cli dev",
+    "type-check": "pnpm --recursive type-check"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}
