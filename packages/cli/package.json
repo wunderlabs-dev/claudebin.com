@@ -17,8 +17,7 @@
     "commander": "^11.1.0",
     "nanoid": "^5.0.4",
     "open": "^9.1.0",
-    "ora": "^7.0.1",
-    "vibebin-shared": "workspace:*"
+    "ora": "^7.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

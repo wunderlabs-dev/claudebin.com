@@ -5,9 +5,15 @@
     "dev": "pnpm --filter web dev",
     "build": "pnpm --recursive build",
     "cli": "pnpm --filter cli dev",
-    "type-check": "pnpm --recursive type-check"
+    "type-check": "pnpm --recursive type-check",
+    "format": "biome format --write .",
+    "lint": "biome lint --write .",
+    "check": "biome check --write .",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
+    "husky": "^9.1.7",
     "typescript": "^5.3.0"
   }
 }
