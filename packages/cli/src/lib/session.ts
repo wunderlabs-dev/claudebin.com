@@ -1,22 +1,22 @@
-import os from "node:os";
-import fs from "node:fs/promises";
-import path from "node:path";
-import process from "node:process";
-import { not, isEmpty, isNil } from "ramda";
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import process from 'node:process';
+import { isEmpty, isNil, not } from 'ramda';
 
-import { ONE_HOUR_MS } from "@/helpers/constants";
-import { getProjectDirName, getFilesWithStats } from "@/helpers/utils";
+import { ONE_HOUR_MS } from '@/helpers/constants';
+import { getFilesWithStats, getProjectDirName } from '@/helpers/utils';
 
 export const getClaudeProjectPath = (projectDirName: string) => {
-  return path.join(os.homedir(), ".claude", "projects", projectDirName);
+  return path.join(os.homedir(), '.claude', 'projects', projectDirName);
 };
 
 export const findRecentSessionPath = (
   files: { file: string; mtime: Date }[],
-  projectPath: string
+  projectPath: string,
 ) => {
   const [session] = files
-    .filter((entry) => not(entry.file.startsWith("agent-")))
+    .filter((entry) => not(entry.file.startsWith('agent-')))
     .filter((entry) => entry.mtime.getTime() > Date.now() - ONE_HOUR_MS)
     .sort((file1, file2) => file2.mtime.getTime() - file1.mtime.getTime());
 
@@ -40,5 +40,5 @@ export const readSessionContent = async () => {
   const sessionPath = await resolveSessionPath();
   if (isNil(sessionPath)) return null;
 
-  return fs.readFile(sessionPath, "utf8");
+  return fs.readFile(sessionPath, 'utf8');
 };

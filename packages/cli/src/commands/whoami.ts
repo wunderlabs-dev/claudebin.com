@@ -1,3 +1,3 @@
 export const whoami = async () => {
-  console.log("whoami");
+  console.log('whoami');
 };

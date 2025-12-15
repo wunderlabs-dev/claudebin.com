@@ -1,15 +1,15 @@
-import fs from "node:fs/promises";
-import path from "node:path";
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-import { NON_ALPHANUMERIC_PATTERN } from "@/helpers/constants";
+import { NON_ALPHANUMERIC_PATTERN } from '@/helpers/constants';
 
 export const getProjectDirName = (path: string) => {
-  return path.replace(NON_ALPHANUMERIC_PATTERN, "-");
+  return path.replace(NON_ALPHANUMERIC_PATTERN, '-');
 };
 
 export const getFilesWithStats = async (
   files: string[],
-  historyPath: string
+  historyPath: string,
 ) => {
   return Promise.all(
     files.map(async (file) => {
@@ -20,6 +20,6 @@ export const getFilesWithStats = async (
         file,
         mtime: stats.mtime,
       };
-    })
+    }),
   );
 };
