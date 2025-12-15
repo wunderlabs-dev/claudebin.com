@@ -6,8 +6,8 @@
     "vibebin": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --clean",
-    "dev": "tsup src/index.ts --format esm --watch",
+    "build": "tsup src/*.ts --format esm --clean",
+    "dev": "tsup src/*.ts --format esm --watch",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -17,10 +17,12 @@
     "dotenv": "^17.2.3",
     "nanoid": "^5.0.4",
     "open": "^9.1.0",
-    "ora": "^7.0.1"
+    "ora": "^7.0.1",
+    "ramda": "^0.32.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "@types/ramda": "^0.31.1",
     "tsup": "^8.5.1",
     "typescript": "^5.3.0"
   }

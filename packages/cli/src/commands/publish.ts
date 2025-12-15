@@ -1,4 +1,5 @@
-// ABOUTME: Publish command that uploads Claude session to vibebin
-// ABOUTME: Checks authentication status and prompts login if needed before publishing
+// ABOUTME: Publish command for sharing Claude Code sessions
+// ABOUTME: Handles session discovery and upload to Vibebin
+import { readSessionContent } from "@/lib/session";
 
-export const publish = async (_options: { private: boolean }) => {};
+export const publish = async (options: { private: boolean }) => {};
