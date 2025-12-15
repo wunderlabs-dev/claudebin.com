@@ -1,5 +1,11 @@
 // ABOUTME: Publish command for sharing Claude Code sessions
 // ABOUTME: Handles session discovery and upload to Vibebin
-import { readSessionContent } from '@/lib/session';
+import { isNil } from "ramda";
 
-export const publish = async (options: { private: boolean }) => {};
+import { getCurrentUser, authenticateWithToken } from "@/lib/user";
+
+export const publish = async (options: { private: boolean }) => {
+  const user = await getCurrentUser();
+
+  console.log(user);
+};
