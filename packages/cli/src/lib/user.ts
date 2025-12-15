@@ -1,10 +1,9 @@
 // ABOUTME: User profile management and authentication verification
 // ABOUTME: Fetches current user data from Supabase using stored token
 
-import { supabase } from "@/lib/supabase";
-import { isNil } from "ramda";
-
-import { readConfig, writeConfig } from "@/helpers/utils";
+import { isNil } from 'ramda';
+import { readConfig, writeConfig } from '@/helpers/utils';
+import { supabase } from '@/lib/supabase';
 
 export const getCurrentUser = async () => {
   const config = await readConfig();
