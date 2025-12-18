@@ -1,19 +1,19 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import fs from "node:fs/promises";
+import path from "node:path";
 
 import {
   CONFIG_DIR,
   CONFIG_FILE,
   CONFIG_INDENT,
   NON_ALPHANUMERIC_PATTERN,
-} from '@/helpers/constants';
+} from "@/helpers/constants";
 
 type Config = {
   token?: string;
 };
 
 export const getProjectDirName = (path: string) => {
-  return path.replace(NON_ALPHANUMERIC_PATTERN, '-');
+  return path.replace(NON_ALPHANUMERIC_PATTERN, "-");
 };
 
 export const getFilesWithStats = async (
@@ -40,7 +40,7 @@ export const readConfig = async (): Promise<Config | null> => {
     return null;
   }
 
-  const fileContent = await fs.readFile(CONFIG_FILE, 'utf8');
+  const fileContent = await fs.readFile(CONFIG_FILE, "utf8");
   const config = JSON.parse(fileContent);
 
   return config;
@@ -58,6 +58,6 @@ export const writeConfig = async <T>(config: T): Promise<void> => {
   return fs.writeFile(
     CONFIG_FILE,
     JSON.stringify({ ...existingConfig, ...config }, null, CONFIG_INDENT),
-    'utf8',
+    "utf8",
   );
 };
