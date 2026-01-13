@@ -1,7 +1,8 @@
 // packages/web/app/api/auth/start/route.ts
-import { createClient } from "@/lib/supabase/server";
+
 import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {

@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0a0a0a;
-  --color-foreground: #fafafa;
+  --color-orange-50: #ff6900;
+  --color-orange-100: #ff781a;
+  --color-orange-150: #ff8733;
+  --color-orange-200: #ff964d;
+  --color-orange-250: #ffa566;
+  --color-orange-300: #ffb480;
+  --color-orange-350: #ffc399;
+  --color-orange-400: #ffd2b2;
+  --color-orange-450: #ffe1cc;
+  --color-orange-500: #fff0e5;
+  --color-orange-550: #ff6900;
 }
