@@ -1,10 +1,11 @@
 {
-  "name": "vibebin-monorepo",
+  "name": "claudebin-monorepo",
   "private": true,
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm --recursive build",
     "cli": "pnpm --filter cli dev",
+    "plugin": "pnpm --filter claudebin-mcp dev",
     "type-check": "pnpm --recursive type-check",
     "format": "biome format --write .",
     "lint": "biome lint --write .",

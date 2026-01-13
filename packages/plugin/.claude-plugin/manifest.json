@@ -1,0 +1,12 @@
+{
+  "name": "claudebin",
+  "description": "Share Claude Code sessions to claudebin.com",
+  "version": "0.1.0",
+  "commands": ["commands/*.md"],
+  "mcpServers": {
+    "claudebin": {
+      "command": "node",
+      "args": ["mcp/dist/index.js"]
+    }
+  }
+}
