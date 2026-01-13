@@ -1,11 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
+// packages/web/app/api/auth/poll/route.ts
 
-/**
- * GET /api/auth/poll?code=X
- *
- * Check if an authentication code has been completed.
- * Returns pending, success (with token), or expired.
- */
+import { type NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+
 export const GET = async (request: NextRequest) => {
   const code = request.nextUrl.searchParams.get("code");
 
@@ -16,25 +13,35 @@ export const GET = async (request: NextRequest) => {
     );
   }
 
-  // TODO: Look up code in database and check status
-  // For now, always return pending
-  return NextResponse.json({
-    status: "pending",
-  });
+  const supabase = await createClient();
 
-  // Success response format (for reference):
-  // return NextResponse.json({
-  //   status: "success",
-  //   token: "eyJhbG...",
-  //   user: {
-  //     id: "uuid",
-  //     username: "vlad",
-  //     avatar_url: "https://...",
-  //   },
-  // });
+  const { data: session, error } = await supabase
+    .from("cli_auth_sessions")
+    .select("*, profiles(*)")
+    .eq("code", code)
+    .single();
 
-  // Expired response format (for reference):
-  // return NextResponse.json({
-  //   status: "expired",
-  // });
+  if (error || !session) {
+    return NextResponse.json({ status: "expired" });
+  }
+
+  // Check if code expired
+  if (new Date(session.expires_at) < new Date()) {
+    return NextResponse.json({ status: "expired" });
+  }
+
+  // Check if auth completed
+  if (session.completed_at && session.user_id && session.access_token) {
+    return NextResponse.json({
+      status: "success",
+      token: session.access_token,
+      user: {
+        id: session.profiles.id,
+        username: session.profiles.username,
+        avatar_url: session.profiles.avatar_url,
+      },
+    });
+  }
+
+  return NextResponse.json({ status: "pending" });
 };
