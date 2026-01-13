@@ -27,6 +27,9 @@ bun type-check        # TypeScript check all packages
 bun --filter cli build       # Build CLI only
 bun --filter cli type-check  # Type-check CLI only
 bun --filter web dev         # Run Next.js dev server
+
+# Plugin (local development)
+claude --plugin-dir ./packages/plugin   # Start with plugin loaded
 ```
 
 ## Architecture
@@ -72,3 +75,10 @@ Sessions are read from `~/.claude/projects/[normalized-path]/` where the path is
 ## Configuration
 
 User config is stored at `~/.claudebin/config.json` containing auth token and user info.
+
+## Plugin Commands
+
+When running with `--plugin-dir ./packages/plugin`:
+- `/share` - Extract current session as JSONL
+- `/auth` - Authenticate with Claudebin
+- `/whoami` - Check current authentication status
