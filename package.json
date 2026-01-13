@@ -1,12 +1,16 @@
 {
   "name": "claudebin-monorepo",
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "packages/plugin/mcp"
+  ],
   "scripts": {
-    "dev": "pnpm --filter web dev",
-    "build": "pnpm --recursive build",
-    "cli": "pnpm --filter cli dev",
-    "plugin": "pnpm --filter claudebin-mcp dev",
-    "type-check": "pnpm --recursive type-check",
+    "dev": "bun --filter web dev",
+    "build": "bun --filter '*' build",
+    "cli": "bun --filter cli dev",
+    "plugin": "bun --filter claudebin-mcp dev",
+    "type-check": "bun --filter '*' type-check",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",
@@ -16,6 +20,5 @@
     "@biomejs/biome": "^2.3.8",
     "husky": "^9.1.7",
     "typescript": "^5.3.0"
-  },
-  "packageManager": "pnpm@10.11.0+sha1.4048eeefd564ff1ab248fac3e2854d38245fe2f1"
+  }
 }

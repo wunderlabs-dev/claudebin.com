@@ -5,8 +5,8 @@
   "commands": ["commands/*.md"],
   "mcpServers": {
     "claudebin": {
-      "command": "node",
-      "args": ["mcp/dist/index.js"]
+      "command": "bun",
+      "args": ["run", "mcp/dist/index.js"]
     }
   }
 }
