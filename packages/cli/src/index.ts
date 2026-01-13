@@ -9,7 +9,7 @@ import { whoami } from "@/commands/whoami";
 const program = new Command();
 
 program
-  .name("vibebin")
+  .name("claudebin")
   .description("Publish and share your vibe coding sessions")
   .version("0.1.0")
   .option("-p, --private", "Publish session as private")

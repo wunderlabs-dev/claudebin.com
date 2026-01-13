@@ -1,18 +1,18 @@
-# Vibebin Monorepo Structure
+# Claudebin Monorepo Structure
 
 **Date:** 12 December 2025
 **Status:** Initial Design
 
 ## Overview
 
-Vibebin uses a pnpm workspace monorepo to manage three packages: CLI, web app, and shared code.
+Claudebin uses a pnpm workspace monorepo to manage three packages: CLI, web app, and shared code.
 
 ## Directory Structure
 
 ```
-vibebin/
+claudebin/
 ├── packages/
-│   ├── cli/                    # CLI tool (npx vibebin)
+│   ├── cli/                    # CLI tool (npx claudebin)
 │   │   ├── src/
 │   │   │   ├── commands/
 │   │   │   │   └── publish.ts  # Main publish command
@@ -24,7 +24,7 @@ vibebin/
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   ├── web/                    # Next.js app (vibebin.link)
+│   ├── web/                    # Next.js app (claudebin.link)
 │   │   ├── app/
 │   │   │   ├── @[username]/
 │   │   │   │   └── [sessionId]/
@@ -79,7 +79,7 @@ vibebin/
 
 ```json
 {
-  "name": "vibebin-monorepo",
+  "name": "claudebin-monorepo",
   "private": true,
   "scripts": {
     "dev": "pnpm --filter web dev",
@@ -104,11 +104,11 @@ packages:
 
 ```json
 {
-  "name": "vibebin",
+  "name": "claudebin",
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "vibebin": "./dist/index.js"
+    "claudebin": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -123,7 +123,7 @@ packages:
     "nanoid": "^5.0.4",
     "open": "^9.1.0",
     "ora": "^7.0.1",
-    "vibebin-shared": "workspace:*"
+    "claudebin-shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -136,7 +136,7 @@ packages:
 
 ```json
 {
-  "name": "vibebin-web",
+  "name": "claudebin-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -153,7 +153,7 @@ packages:
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "shiki": "^0.14.5",
-    "vibebin-shared": "workspace:*"
+    "claudebin-shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -170,7 +170,7 @@ packages:
 
 ```json
 {
-  "name": "vibebin-shared",
+  "name": "claudebin-shared",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -292,17 +292,17 @@ pnpm handles dependency ordering automatically.
 
 ### CLI to npm
 
-- Package: `vibebin`
+- Package: `claudebin`
 - Built artifacts in `packages/cli/dist/`
 - Published via GitHub Actions on version tag
-- Users install: `npx vibebin publish`
+- Users install: `npx claudebin publish`
 
 ### Web to Vercel
 
 - Deploy `packages/web/` directory
 - Environment variables: Supabase credentials
 - Auto-deploy on main branch push
-- Custom domain: `vibebin.link`
+- Custom domain: `claudebin.link`
 
 ## Development Workflow
 

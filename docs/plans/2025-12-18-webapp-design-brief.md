@@ -1,11 +1,11 @@
-# Vibebin Web App - Design Brief
+# Claudebin Web App - Design Brief
 
 **Date:** 18 December 2025
 **Status:** Ready for design
 
 ## Product Overview
 
-Vibebin is "pastebin for AI coding sessions." Developers publish their Claude conversations with one CLI command (`npx vibebin publish`) and get a shareable link. The web app displays these conversations and allows copying them for context reuse.
+Claudebin is "pastebin for AI coding sessions." Developers publish their Claude conversations with one CLI command (`npx claudebin publish`) and get a shareable link. The web app displays these conversations and allows copying them for context reuse.
 
 **Core principle:** Get out of the user's way. Content (conversations) is the focus, UI should be nearly invisible.
 
@@ -24,7 +24,7 @@ Vibebin is "pastebin for AI coding sessions." Developers publish their Claude co
 
 ## The Three Pages
 
-### 1. Landing Page (`vibebin.link/`)
+### 1. Landing Page (`claudebin.link/`)
 
 **Purpose:** Quickly explain the concept and show how it works.
 
@@ -36,13 +36,13 @@ Vibebin is "pastebin for AI coding sessions." Developers publish their Claude co
 
 2. **Demo video:**
    - Short video (30-60 seconds) showing:
-     - Terminal: `npx vibebin publish`
+     - Terminal: `npx claudebin publish`
      - CLI output with link
      - Browser opening to session page
    - Autoplay, muted, looping
 
 3. **Install command:**
-   - Show: `npx vibebin publish`
+   - Show: `npx claudebin publish`
    - Copy button to copy the install command
    - No "Sign up" button - let the CLI handle auth
 
@@ -50,7 +50,7 @@ Vibebin is "pastebin for AI coding sessions." Developers publish their Claude co
 
 ---
 
-### 2. Session Page (`vibebin.link/@username/session-id`)
+### 2. Session Page (`claudebin.link/@username/session-id`)
 
 **Purpose:** Display a published conversation. The main content page.
 
@@ -87,7 +87,7 @@ Vibebin is "pastebin for AI coding sessions." Developers publish their Claude co
 
 ---
 
-### 3. CLI Auth Page (`vibebin.link/cli/auth`)
+### 3. CLI Auth Page (`claudebin.link/cli/auth`)
 
 **Purpose:** Handle GitHub OAuth for CLI authentication.
 
@@ -101,7 +101,7 @@ Vibebin is "pastebin for AI coding sessions." Developers publish their Claude co
 
 **Before authentication:**
 - Simple centered layout
-- Message: "Authenticate Vibebin CLI"
+- Message: "Authenticate Claudebin CLI"
 - "Sign in with GitHub" button
 - Small note: "This will allow the CLI to publish sessions on your behalf"
 

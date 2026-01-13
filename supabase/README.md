@@ -1,6 +1,6 @@
-# Vibebin Database Setup
+# Claudebin Database Setup
 
-This directory contains SQL migrations for setting up the Vibebin database on Supabase.
+This directory contains SQL migrations for setting up the Claudebin database on Supabase.
 
 ## Prerequisites
 

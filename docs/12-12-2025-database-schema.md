@@ -1,11 +1,11 @@
-# Vibebin Database Schema
+# Claudebin Database Schema
 
 **Date:** 12 December 2025
 **Status:** Initial Design
 
 ## Overview
 
-Vibebin uses Supabase (Postgres) with two main tables: `profiles` and `sessions`.
+Claudebin uses Supabase (Postgres) with two main tables: `profiles` and `sessions`.
 
 ## Tables
 

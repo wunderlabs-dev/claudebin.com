@@ -1,4 +1,4 @@
-# Vibebin CLI Design
+# Claudebin CLI Design
 
 **Date:** 12 December 2025
 **Status:** Initial Design
@@ -6,7 +6,7 @@
 ## Command Interface
 
 ```bash
-npx vibebin publish [options]
+npx claudebin publish [options]
 
 Options:
   --public        Make session publicly accessible (default)
@@ -24,15 +24,15 @@ Options:
    - User can specify path if needed
 
 2. **Check Authentication**
-   - Read `~/.vibebin/config.json` for stored token
+   - Read `~/.claudebin/config.json` for stored token
    - If not found or expired, initiate OAuth flow
 
 3. **OAuth Flow** (if needed)
    - Generate one-time code
-   - Open browser to `vibebin.link/cli/auth?code=xyz123`
+   - Open browser to `claudebin.link/cli/auth?code=xyz123`
    - User signs in with GitHub
    - CLI polls for completion or user pastes token
-   - Save token to `~/.vibebin/config.json`
+   - Save token to `~/.claudebin/config.json`
 
 4. **Read & Parse Session**
    - Read Claude history JSON
@@ -53,7 +53,7 @@ Options:
 
 7. **Return URL**
    - Print success message with shareable URL
-   - Format: `vibebin.link/@username/session-id`
+   - Format: `claudebin.link/@username/session-id`
 
 ### Subsequent Publishes
 
@@ -66,7 +66,7 @@ Same workflow, but skip OAuth (token already stored).
 ```bash
 ? Authenticate with GitHub? (opens browser) [Enter]
 ⠋ Publishing session...
-✔ Published! https://vibebin.link/@marius/abc123xy
+✔ Published! https://claudebin.link/@marius/abc123xy
 ```
 
 Uses:
@@ -82,7 +82,7 @@ Uses:
   Tried: ~/.claude/history/
 
   Specify path manually:
-  npx vibebin publish --file /path/to/session.json
+  npx claudebin publish --file /path/to/session.json
 ```
 
 **Auth token expired:**
@@ -94,7 +94,7 @@ Uses:
 **Network failure:**
 ```
 ✖ Failed to publish session
-  Network error: Could not reach vibebin.link
+  Network error: Could not reach claudebin.link
 
   Retrying in 3 seconds... (attempt 2/3)
 ```
@@ -109,7 +109,7 @@ Uses:
 
 ## Configuration Storage
 
-**Location:** `~/.vibebin/config.json`
+**Location:** `~/.claudebin/config.json`
 
 **Structure:**
 ```json
@@ -147,16 +147,16 @@ Uses:
 
 ```json
 {
-  "name": "vibebin",
+  "name": "claudebin",
   "version": "0.1.0",
   "bin": {
-    "vibebin": "./dist/index.js"
+    "claudebin": "./dist/index.js"
   },
   "type": "module"
 }
 ```
 
-Published to npm as `vibebin`, runnable via `npx vibebin`.
+Published to npm as `claudebin`, runnable via `npx claudebin`.
 
 ## Error Handling Priorities
 

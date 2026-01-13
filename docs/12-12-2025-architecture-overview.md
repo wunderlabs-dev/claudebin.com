@@ -1,11 +1,11 @@
-# Vibebin Architecture Overview
+# Claudebin Architecture Overview
 
 **Date:** 12 December 2025
 **Status:** Initial Design
 
 ## Purpose
 
-Vibebin is a minimalistic tool for publishing and sharing Claude coding sessions. Users can run `npx vibebin publish` after a session to get a shareable link.
+Claudebin is a minimalistic tool for publishing and sharing Claude coding sessions. Users can run `npx claudebin publish` after a session to get a shareable link.
 
 ## Core Use Cases
 
@@ -16,8 +16,8 @@ Vibebin is a minimalistic tool for publishing and sharing Claude coding sessions
 
 ```
 ┌─────────────┐
-│   CLI Tool  │ (npx vibebin publish)
-│  @vibebin   │
+│   CLI Tool  │ (npx claudebin publish)
+│  @claudebin   │
 └──────┬──────┘
        │
        │ Reads Claude history JSON
@@ -35,7 +35,7 @@ Vibebin is a minimalistic tool for publishing and sharing Claude coding sessions
        │
        ▼
 ┌─────────────────┐
-│  Next.js Web    │ (vibebin.link)
+│  Next.js Web    │ (claudebin.link)
 │  - SSR viewer   │
 │  - /llms.txt    │
 └─────────────────┘

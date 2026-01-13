@@ -1,11 +1,11 @@
-# Vibebin Authentication Flow
+# Claudebin Authentication Flow
 
 **Date:** 12 December 2025
 **Status:** Initial Design
 
 ## Overview
 
-Vibebin uses GitHub OAuth via Supabase Auth for user authentication. Authentication is required to publish sessions.
+Claudebin uses GitHub OAuth via Supabase Auth for user authentication. Authentication is required to publish sessions.
 
 ## Authentication Methods
 
@@ -13,11 +13,11 @@ Vibebin uses GitHub OAuth via Supabase Auth for user authentication. Authenticat
 
 **First-Time Flow:**
 
-1. User runs `npx vibebin publish`
-2. CLI checks `~/.vibebin/config.json` for existing token
+1. User runs `npx claudebin publish`
+2. CLI checks `~/.claudebin/config.json` for existing token
 3. If no token found:
    - Generate one-time authentication code
-   - Open browser to `vibebin.link/cli/auth?code=xyz123`
+   - Open browser to `claudebin.link/cli/auth?code=xyz123`
    - User sees "Sign in with GitHub" on web page
 4. User authenticates with GitHub (handled by Supabase Auth)
 5. Web app receives OAuth callback
@@ -33,7 +33,7 @@ Vibebin uses GitHub OAuth via Supabase Auth for user authentication. Authenticat
     - Access token
     - Refresh token
     - User info (ID, username, avatar)
-11. CLI saves to `~/.vibebin/config.json`
+11. CLI saves to `~/.claudebin/config.json`
 
 **Subsequent Uses:**
 
@@ -47,7 +47,7 @@ Vibebin uses GitHub OAuth via Supabase Auth for user authentication. Authenticat
 
 **Browser Sessions:**
 
-1. User visits vibebin.link and clicks "Sign in with GitHub"
+1. User visits claudebin.link and clicks "Sign in with GitHub"
 2. Supabase Auth handles GitHub OAuth redirect
 3. On callback, create profile if first-time user
 4. Set session cookie (managed by Supabase)
@@ -57,7 +57,7 @@ Vibebin uses GitHub OAuth via Supabase Auth for user authentication. Authenticat
 
 ### CLI Config File
 
-**Location:** `~/.vibebin/config.json`
+**Location:** `~/.claudebin/config.json`
 
 **Structure:**
 ```json
@@ -163,6 +163,6 @@ Vibebin uses GitHub OAuth via Supabase Auth for user authentication. Authenticat
 - Short expiration reduces window of vulnerability
 
 ### Username Changes
-- GitHub username changes don't affect vibebin username
-- vibebin username is set once at account creation
+- GitHub username changes don't affect claudebin username
+- claudebin username is set once at account creation
 - Could add "change username" feature later if needed

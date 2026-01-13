@@ -1,4 +1,4 @@
-# vibebin.link
+# claudebin.link
 
 **pastebin.com for vibes**
 
@@ -11,7 +11,7 @@ At the moment works only with Claude.
 After your coding session, run:
 
 ```bash
-npx vibebin publish
+npx claudebin publish
 ```
 
 Get back a link to share.
