@@ -5,20 +5,58 @@
 
 ## Overview
 
-Device Authorization Flow for authenticating the Claude Code plugin with Claudebin. Similar to `gh auth login` - works in terminal environments without browser automation.
+Device Authorization Flow for authenticating the Claude Code plugin with Claudebin. Claudebin.com is the auth provider - sign-in methods (GitHub, Google, etc.) are just connectors to create/access user accounts.
 
-## Flow
+## Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│              claudebin.com                       │
+│           (the auth provider)                    │
+│                                                  │
+│  ┌─────────────┐    ┌─────────────────────────┐ │
+│  │ User Entity │◄───│ GitHub/Google/Email/etc │ │
+│  │ (profiles)  │    │ (sign-in methods)       │ │
+│  └──────┬──────┘    └─────────────────────────┘ │
+│         │                                        │
+│         ▼                                        │
+│  ┌─────────────┐                                │
+│  │ Auth Tokens │ ◄── issued to plugin/CLI       │
+│  └─────────────┘                                │
+└─────────────────────────────────────────────────┘
+          ▲
+          │ authenticate via device flow
+          │
+    ┌─────┴─────┐
+    │  Plugin   │
+    │   CLI     │
+    └───────────┘
+```
+
+**Claudebin.com owns:**
+- User identity (profiles table)
+- Authentication (issues Claudebin tokens)
+- Sessions storage
+
+**Sign-in methods are just connectors:**
+- GitHub, Google, email/password, magic link, etc.
+- User can add multiple over time
+- Plugin doesn't know or care which was used
+
+## Device Authorization Flow
 
 ```
 1. User: /auth
 2. MCP Server: POST /api/auth/start → { code, url }
 3. Claude: "Visit this URL: https://claudebin.com/cli/auth?code=abc123"
-4. User: Opens URL, clicks "Sign in with GitHub", completes OAuth
+4. User: Opens URL, signs in (any method)
 5. Browser: Shows "✓ Authenticated! Return to terminal"
 6. MCP Server: Polls /api/auth/poll?code=abc123 until success
-7. MCP Server: Saves token to ~/.claudebin/config.json
+7. MCP Server: Saves Claudebin token to ~/.claudebin/config.json
 8. Claude: "You're now authenticated as @username"
 ```
+
+The plugin receives a **Claudebin token**, not a GitHub/Google token. It has no knowledge of how the user signed in.
 
 ## MCP Tools
 
@@ -110,12 +148,12 @@ Check if code has been authenticated.
 
 ### GET /cli/auth?code=X
 
-OAuth page shown to user in browser.
+Auth page shown to user in browser.
 
-**Before auth:** "Sign in with GitHub" button
+**Before auth:** Sign-in options (whatever claudebin.com supports)
 **After auth:** "✓ Authenticated! Return to your terminal"
 
-Completing OAuth associates the code with the authenticated user.
+Completing sign-in associates the code with the user's Claudebin account.
 
 ## Slash Commands
 
@@ -174,21 +212,22 @@ Shared between CLI and plugin.
 - Polling rate-limited to 1 request/second
 - HTTPS only
 - Config file created with 0600 permissions
+- Tokens are Claudebin-issued JWTs, not third-party tokens
 
 ## Implementation Order
 
 1. **Server-side** (requires web app):
-   - Database table for auth codes
+   - Database table for auth codes (cli_auth_sessions exists)
    - POST /api/auth/start endpoint
    - GET /api/auth/poll endpoint
-   - GET /cli/auth page with GitHub OAuth
+   - GET /cli/auth page with sign-in (uses Supabase Auth)
 
-2. **MCP server**:
-   - Add `authenticate` tool
-   - Add `whoami` tool
-   - Add `logout` tool
+2. **MCP server** (done):
+   - `authenticate` tool
+   - `whoami` tool
+   - `logout` tool
    - Config file read/write helpers
 
-3. **Slash commands**:
+3. **Slash commands** (done):
    - `/auth` command
-   - `/whoami` command (optional)
+   - `/whoami` command
