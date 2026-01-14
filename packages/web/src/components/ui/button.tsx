@@ -4,20 +4,29 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/helpers";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+  // Layout | Sizing | Shape | Interaction | Transition
+  "inline-flex items-center justify-center h-12 px-5 py-3 rounded-full whitespace-nowrap select-none cursor-pointer transition ease-in-out disabled:pointer-events-none",
   {
     variants: {
       variant: {
-        default: "h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90",
-        outline: "h-9 px-4 py-2 border bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "h-9 px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        icon: "size-9",
+        // Background | Hover | Active | Disabled
+        default:
+          "bg-orange-50 hover:bg-linear-to-br hover:to-orange-150 active:to-orange-50 disabled:bg-orange-50/20 disabled:text-gray-400",
+        // Background | Outline | Hover | Active | Disabled
+        secondary:
+          "bg-gray-150 outline outline-gray-50 hover:bg-linear-to-br hover:to-gray-50 active:to-gray-150 active:outline-gray-150 disabled:bg-gray-150 disabled:text-gray-400 disabled:outline-gray-150",
+        // Background | Outline | Hover | Active | Disabled
+        outline:
+          "bg-orange-50/20 outline outline-orange-50 hover:bg-orange-50 active:bg-orange-50/60 disabled:bg-orange-50/10 disabled:outline-transparent",
+        // Sizing | Background | Outline | Hover | Active | Disabled
+        circle:
+          "w-12 px-3 bg-gray-150 outline outline-gray-50 hover:bg-linear-to-br hover:to-gray-50 active:to-gray-150 active:outline-gray-150 disabled:bg-gray-150 disabled:text-gray-400 disabled:outline-gray-150",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
