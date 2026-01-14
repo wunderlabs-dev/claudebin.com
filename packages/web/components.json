@@ -18,7 +18,5 @@
     "lib": "@/utils",
     "hooks": "@/hooks"
   },
-  "registries": {
-    "base": "https://base-ui.shadcn.com/r"
-  }
+  "registries": {}
 }
