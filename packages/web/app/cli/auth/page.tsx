@@ -1,154 +1,130 @@
-"use client";
+import { createClient } from "@/lib/supabase/server";
 
-import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+interface Props {
+  searchParams: Promise<{ code?: string }>;
+}
 
-const AuthContent = () => {
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code");
-  const success = searchParams.get("success");
-  const error = searchParams.get("error");
-  const [isLoading, setIsLoading] = useState(false);
+const CliAuthPage = async ({ searchParams }: Props) => {
+  const { code } = await searchParams;
 
   if (!code) {
     return (
-      <div className="text-center">
-        <h1 className="mb-4 text-2xl font-bold text-red-400">Invalid Link</h1>
-        <p className="text-neutral-400">
+      <Layout>
+        <ErrorState title="Invalid Link">
           This authentication link is missing the required code parameter.
-        </p>
-      </div>
+        </ErrorState>
+      </Layout>
     );
   }
 
-  if (success) {
+  const supabase = await createClient();
+
+  const { data: cliSession, error: sessionLookupError } = await supabase
+    .from("cli_auth_sessions")
+    .select("*")
+    .eq("code", code)
+    .single();
+
+  if (sessionLookupError || !cliSession) {
     return (
-      <div className="text-center">
-        <div className="mb-4 text-4xl">✓</div>
-        <h1 className="mb-2 text-2xl font-bold text-green-400">
-          Authenticated!
-        </h1>
-        <p className="text-neutral-400">
-          You can close this window and return to your terminal.
-        </p>
-      </div>
+      <Layout>
+        <ErrorState title="Invalid Code">
+          This authentication code was not found. It may have expired.
+        </ErrorState>
+      </Layout>
     );
   }
 
-  if (error) {
+  if (cliSession.completed_at) {
     return (
-      <div className="text-center">
-        <h1 className="mb-4 text-2xl font-bold text-red-400">
-          Authentication Failed
-        </h1>
-        <p className="text-neutral-400">
+      <Layout>
+        <SuccessState />
+      </Layout>
+    );
+  }
+
+  if (new Date(cliSession.expires_at) < new Date()) {
+    return (
+      <Layout>
+        <ErrorState title="Code Expired">
+          This authentication code has expired. Please run the auth command
+          again.
+        </ErrorState>
+      </Layout>
+    );
+  }
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    return (
+      <Layout>
+        <ErrorState title="Not Authenticated">
           Something went wrong. Please try again.
-        </p>
-      </div>
+        </ErrorState>
+      </Layout>
     );
   }
 
-  const handleSignIn = async (provider: "github" | "google") => {
-    setIsLoading(true);
-    const supabase = createClient();
+  const { error: updateError } = await supabase
+    .from("cli_auth_sessions")
+    .update({
+      user_id: session.user.id,
+      access_token: session.access_token,
+      refresh_token: session.refresh_token,
+      completed_at: new Date().toISOString(),
+    })
+    .eq("code", code)
+    .is("completed_at", null);
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?cli_code=${code}`,
-      },
-    });
-
-    if (error) {
-      console.error("Sign in error:", error);
-      setIsLoading(false);
-    }
-  };
+  if (updateError) {
+    return (
+      <Layout>
+        <ErrorState title="Authentication Failed">
+          Failed to complete authentication. Please try again.
+        </ErrorState>
+      </Layout>
+    );
+  }
 
   return (
-    <div className="text-center">
-      <h1 className="mb-2 text-2xl font-bold">Sign in to Claudebin</h1>
-      <p className="mb-8 text-neutral-400">
-        Sign in to link your account with the CLI.
-      </p>
+    <Layout>
+      <SuccessState />
+    </Layout>
+  );
+};
 
-      <div className="space-y-3">
-        <button
-          type="button"
-          onClick={() => handleSignIn("github")}
-          disabled={isLoading}
-          className="flex w-full items-center justify-center gap-3 rounded-lg bg-neutral-800 px-6 py-3 font-medium transition-colors hover:bg-neutral-700 disabled:opacity-50"
-        >
-          <GitHubIcon />
-          Continue with GitHub
-        </button>
-
-        <button
-          type="button"
-          onClick={() => handleSignIn("google")}
-          disabled={isLoading}
-          className="flex w-full items-center justify-center gap-3 rounded-lg bg-neutral-800 px-6 py-3 font-medium transition-colors hover:bg-neutral-700 disabled:opacity-50"
-        >
-          <GoogleIcon />
-          Continue with Google
-        </button>
-      </div>
-
-      <p className="mt-6 text-sm text-neutral-500">
-        Code: <code className="text-neutral-400">{code.slice(0, 8)}...</code>
-      </p>
+const Layout = ({ children }: { children: React.ReactNode }) => (
+  <main className="flex min-h-screen flex-col items-center justify-center p-8">
+    <div className="w-full max-w-md rounded-xl border border-neutral-800 bg-neutral-900 p-8">
+      {children}
     </div>
-  );
-};
-
-const GitHubIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-  </svg>
+  </main>
 );
 
-const GoogleIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="#4285F4"
-      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-    />
-    <path
-      fill="#34A853"
-      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-    />
-    <path
-      fill="#FBBC05"
-      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-    />
-    <path
-      fill="#EA4335"
-      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-    />
-  </svg>
+const SuccessState = () => (
+  <div className="text-center">
+    <div className="mb-4 text-4xl">✓</div>
+    <h1 className="mb-2 text-2xl font-bold text-green-400">Authenticated!</h1>
+    <p className="text-neutral-400">
+      You can close this window and return to your terminal.
+    </p>
+  </div>
 );
 
-const AuthPage = () => {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <div className="w-full max-w-md rounded-xl border border-neutral-800 bg-neutral-900 p-8">
-        <Suspense
-          fallback={
-            <div className="text-center text-neutral-400">Loading...</div>
-          }
-        >
-          <AuthContent />
-        </Suspense>
-      </div>
-    </main>
-  );
-};
+const ErrorState = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => (
+  <div className="text-center">
+    <h1 className="mb-4 text-2xl font-bold text-red-400">{title}</h1>
+    <p className="text-neutral-400">{children}</p>
+  </div>
+);
 
-export default AuthPage;
+export default CliAuthPage;

@@ -1,10 +1,12 @@
 <instructions>
-Call the authenticate tool to start the authentication flow.
-Display the URL returned and instruct the user to visit it.
-Wait for the authentication to complete.
+IMMEDIATELY call auth_start. Do not think first.
 </instructions>
 
-<output>
-If successful: "You're now authenticated as @{username}"
-If failed: Display the error message
-</output>
+<then>
+Show the URL to the user.
+Tell them authentication is polling in the background.
+When user says done (or after ~10 seconds), call auth_status with the code.
+If status is "pending", wait a moment and check again.
+If status is "success", say "Authenticated as @{username}"
+If error, show it.
+</then>
