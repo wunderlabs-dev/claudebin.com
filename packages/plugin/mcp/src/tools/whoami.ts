@@ -2,10 +2,11 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { readConfig } from "../config.js";
 
 export const registerWhoami = (server: McpServer): void => {
-  server.tool(
+  server.registerTool(
     "whoami",
-    "Check current Claudebin authentication status",
-    {},
+    {
+      description: "Check current Claudebin authentication status",
+    },
     async () => {
       const config = await readConfig();
 

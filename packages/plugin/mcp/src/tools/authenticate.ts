@@ -4,10 +4,12 @@ import { writeConfig } from "../config.js";
 import type { Config } from "../types.js";
 
 export const registerAuthenticate = (server: McpServer): void => {
-  server.tool(
+  server.registerTool(
     "authenticate",
-    "Authenticate with Claudebin using the device authorization flow. Returns a URL for the user to visit, then polls for completion.",
-    {},
+    {
+      description:
+        "Authenticate with Claudebin using the device authorization flow. Returns a URL for the user to visit, then polls for completion.",
+    },
     async () => {
       const startResult = await startAuth();
 
