@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint": "biome lint ./src",
+    "format": "biome format --write ./src"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
