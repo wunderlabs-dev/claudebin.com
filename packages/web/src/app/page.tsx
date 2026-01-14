@@ -8,6 +8,16 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
 import {
+  Card,
+  CardHeader,
+  CardMeta,
+  CardContent,
+  CardTitle,
+  CardAuthor,
+  CardFooter,
+  CardStat,
+} from "@/components/ui/card";
+import {
   SvgIconArrowBottom,
   SvgIconArrowLeft,
   SvgIconArrowLink,
@@ -74,6 +84,30 @@ const HomePage = () => {
             <ListItemLabel variant="active">Navigation</ListItemLabel>
           </ListItem>
         </List>
+      </section>
+
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">Card</h2>
+        <Card>
+          {/* <CardHeader>
+            <CardMeta>
+              <SvgIconClock size="sm" />
+              <span>2h ago</span>
+              <SvgIconArrowLink size="sm" className="ml-auto text-orange-50" />
+            </CardMeta>
+          </CardHeader> */}
+          <CardContent></CardContent>
+          {/* <CardFooter>
+            <CardStat>
+              <SvgIconTalk size="sm" />
+              <span>10 prompts</span>
+            </CardStat>
+            <CardStat>
+              <SvgIconFile size="sm" />
+              <span>2 files</span>
+            </CardStat>
+          </CardFooter> */}
+        </Card>
       </section>
 
       <section className="flex flex-col items-start gap-4">

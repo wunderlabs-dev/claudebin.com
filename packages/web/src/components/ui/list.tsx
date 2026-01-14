@@ -6,7 +6,9 @@ import { cn } from "@/utils/helpers";
 type ListProps = React.ComponentProps<"ul">;
 
 const List = ({ className, ...props }: ListProps) => {
-  return <ul data-slot="list" className={cn("flex gap-8", className)} {...props} />;
+  return (
+    <ul data-slot="list" className={cn("flex gap-8", className)} {...props} />
+  );
 };
 
 const listItemVariants = cva(
@@ -26,12 +28,17 @@ const listItemVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
-type ListItemProps = React.ComponentProps<"li"> & VariantProps<typeof listItemVariants>;
+type ListItemProps = React.ComponentProps<"li"> &
+  VariantProps<typeof listItemVariants>;
 
-const ListItem = ({ className, variant = "default", ...props }: ListItemProps) => {
+const ListItem = ({
+  className,
+  variant = "default",
+  ...props
+}: ListItemProps) => {
   return (
     <li
       data-slot="list-item"
@@ -60,12 +67,17 @@ const listItemLabelVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
-type ListItemLabelProps = React.ComponentProps<"span"> & VariantProps<typeof listItemLabelVariants>;
+type ListItemLabelProps = React.ComponentProps<"span"> &
+  VariantProps<typeof listItemLabelVariants>;
 
-const ListItemLabel = ({ className, variant = "default", ...props }: ListItemLabelProps) => {
+const ListItemLabel = ({
+  className,
+  variant = "default",
+  ...props
+}: ListItemLabelProps) => {
   return (
     <span
       data-slot="list-item-label"
@@ -75,4 +87,10 @@ const ListItemLabel = ({ className, variant = "default", ...props }: ListItemLab
   );
 };
 
-export { List, ListItem, listItemVariants, ListItemLabel, listItemLabelVariants };
+export {
+  List,
+  ListItem,
+  listItemVariants,
+  ListItemLabel,
+  listItemLabelVariants,
+};
