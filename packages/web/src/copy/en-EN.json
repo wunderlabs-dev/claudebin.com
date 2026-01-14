@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "title": "Claudebin - Share Your Claude Sessions",
+    "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
+  },
+  "common": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "loading": "Loading..."
+  },
+  "auth": {
+    "title": "Sign in to Claudebin",
+    "subtitle": "Connect your account to publish and share your Claude Code sessions.",
+    "continueWithGithub": "Continue with GitHub",
+    "continueWithGoogle": "Continue with Google"
+  }
+}
