@@ -4,21 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/helpers";
 
 const buttonVariants = cva(
-  // Layout | Sizing | Shape | Interaction | Transition
   "inline-flex items-center justify-center h-12 px-5 py-3 rounded-full whitespace-nowrap select-none cursor-pointer transition ease-in-out disabled:pointer-events-none",
   {
     variants: {
       variant: {
-        // Background | Hover | Active | Disabled
         default:
           "bg-orange-50 hover:bg-linear-to-br hover:to-orange-150 active:to-orange-50 disabled:bg-orange-50/20 disabled:text-gray-400",
-        // Background | Outline | Hover | Active | Disabled
         secondary:
           "bg-gray-150 outline outline-gray-50 hover:bg-linear-to-br hover:to-gray-50 active:to-gray-150 active:outline-gray-150 disabled:bg-gray-150 disabled:text-gray-400 disabled:outline-gray-150",
-        // Background | Outline | Hover | Active | Disabled
         outline:
           "bg-orange-50/20 outline outline-orange-50 hover:bg-orange-50 active:bg-orange-50/60 disabled:bg-orange-50/10 disabled:outline-transparent",
-        // Sizing | Background | Outline | Hover | Active | Disabled
         circle:
           "w-12 px-3 bg-gray-150 outline outline-gray-50 hover:bg-linear-to-br hover:to-gray-50 active:to-gray-150 active:outline-gray-150 disabled:bg-gray-150 disabled:text-gray-400 disabled:outline-gray-150",
       },
@@ -29,7 +24,8 @@ const buttonVariants = cva(
   },
 );
 
-type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
+type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants>;
 
 const Button = ({ className, variant = "default", ...props }: ButtonProps) => {
   return (
