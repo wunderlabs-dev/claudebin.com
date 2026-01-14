@@ -39,18 +39,15 @@ export const registerAuthenticate = (server: McpServer): void => {
       const statusFile = getStatusFilePath(result.code);
       writeFileSync(statusFile, JSON.stringify({ status: "pending" }));
 
+      const apiUrl = process.env.CLAUDEBIN_API_URL || "http://localhost:3000";
       const pollerScript = `
-        const { createTRPCClient, httpLink } = require("@trpc/client");
         const fs = require("fs");
 
         const statusFile = "${statusFile}";
         const code = "${result.code}";
+        const apiUrl = "${apiUrl}";
         const deadline = Date.now() + 5 * 60 * 1000;
         const pollInterval = 2000;
-
-        const api = createTRPCClient({
-          links: [httpLink({ url: "${process.env.CLAUDEBIN_API_URL || "http://localhost:3000"}/api/trpc" })],
-        });
 
         const poll = async () => {
           if (Date.now() >= deadline) {
@@ -59,8 +56,12 @@ export const registerAuthenticate = (server: McpServer): void => {
           }
 
           try {
-            const result = await api.auth.poll.query({ code });
-            if (result.status === "success") {
+            const url = apiUrl + "/api/trpc/auth.poll?input=" + encodeURIComponent(JSON.stringify({ code }));
+            const res = await fetch(url);
+            const json = await res.json();
+            const result = json.result?.data;
+
+            if (result?.status === "success") {
               fs.writeFileSync(statusFile, JSON.stringify({
                 status: "success",
                 token: result.token,
@@ -68,7 +69,7 @@ export const registerAuthenticate = (server: McpServer): void => {
                 user: result.user,
               }));
               process.exit(0);
-            } else if (result.status === "expired") {
+            } else if (result?.status === "expired") {
               fs.writeFileSync(statusFile, JSON.stringify({ status: "expired" }));
               process.exit(0);
             }
@@ -106,30 +107,50 @@ export const registerAuthenticate = (server: McpServer): void => {
   server.registerTool(
     "auth_status",
     {
-      description: "Check authentication status. Call after auth_start.",
+      description:
+        "Wait for authentication to complete. Polls for up to 60 seconds.",
       inputSchema: {
         code: z.string().describe("The auth code from auth_start"),
       },
     },
     async ({ code }) => {
       const statusFile = getStatusFilePath(code);
+      const deadline = Date.now() + 60_000;
+      const pollInterval = 1000;
 
-      if (!existsSync(statusFile)) {
+      const waitForResult = async (): Promise<Record<string, unknown>> => {
+        if (!existsSync(statusFile)) {
+          if (Date.now() >= deadline) {
+            return { status: "timeout" };
+          }
+          await new Promise((r) => setTimeout(r, pollInterval));
+          return waitForResult();
+        }
+
+        const data = JSON.parse(readFileSync(statusFile, "utf-8"));
+        if (data.status === "pending" && Date.now() < deadline) {
+          await new Promise((r) => setTimeout(r, pollInterval));
+          return waitForResult();
+        }
+        return data;
+      };
+
+      const data = await waitForResult();
+
+      if (data.status === "timeout") {
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
-                status: "not_found",
-                error: "No auth session found for this code",
+                status: "timeout",
+                error: "Authentication timed out",
               }),
             },
           ],
           isError: true,
         };
       }
-
-      const data = JSON.parse(readFileSync(statusFile, "utf-8"));
 
       if (data.status === "success") {
         // Save config and cleanup
