@@ -12,8 +12,8 @@ export const POST = async (request: Request): Promise<Response> => {
 
   const { session_id } = await request.json();
 
-  if (!session_id) {
-    return NextResponse.json({ error: "Missing session_id" }, { status: 400 });
+  if (!session_id || typeof session_id !== "string") {
+    return NextResponse.json({ error: "Invalid session_id" }, { status: 400 });
   }
 
   const supabase = createServiceClient();
@@ -35,6 +35,10 @@ export const POST = async (request: Request): Promise<Response> => {
         { error: "Session already processed" },
         { status: 400 },
       );
+    }
+
+    if (!session.storage_path) {
+      throw new Error("Session has no storage_path");
     }
 
     // Download JSONL from Storage
@@ -104,14 +108,17 @@ export const POST = async (request: Request): Promise<Response> => {
     });
   } catch (error) {
     // Mark session as failed
-    await supabase
+    const { error: updateError } = await supabase
       .from("sessions")
       .update({
         status: "failed",
-        error_message:
-          error instanceof Error ? error.message : String(error),
+        error_message: error instanceof Error ? error.message : String(error),
       })
       .eq("id", session_id);
+
+    if (updateError) {
+      console.error(`Failed to mark session ${session_id} as failed:`, updateError);
+    }
 
     return NextResponse.json(
       {

@@ -100,8 +100,8 @@ export const sessionsRouter = router({
           "x-internal-secret": process.env.INTERNAL_API_SECRET || "",
         },
         body: JSON.stringify({ session_id: id }),
-      }).catch(() => {
-        // Ignore fetch errors - session will remain in processing state
+      }).catch((err) => {
+        console.error("Failed to trigger session processing:", id, err);
       });
 
       return {

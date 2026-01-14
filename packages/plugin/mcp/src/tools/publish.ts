@@ -1,6 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { getValidToken } from "../auth.js";
+import {
+  POLL_INTERVAL_MS,
+  SESSION_POLL_TIMEOUT_MS,
+  getValidToken,
+} from "../auth.js";
 import { extractSession } from "../session.js";
 import { createApiClient } from "../trpc.js";
 
@@ -13,15 +17,16 @@ const SessionStatus = {
 
 const MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
 
+type PollResult = { success: true; url: string } | { success: false; error: string };
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const pollForProcessing = async (
   sessionId: string,
   apiUrl: string,
-  timeoutMs = 120_000, // 2 minutes
-): Promise<{ success: true; url: string } | { success: false; error: string }> => {
+  timeoutMs = SESSION_POLL_TIMEOUT_MS,
+): Promise<PollResult> => {
   const deadline = Date.now() + timeoutMs;
-  const pollInterval = 2000;
 
   while (Date.now() < deadline) {
     try {
@@ -45,7 +50,7 @@ const pollForProcessing = async (
       // Network error, continue polling
     }
 
-    await sleep(pollInterval);
+    await sleep(POLL_INTERVAL_MS);
   }
 
   return { success: false, error: "Processing timed out after 2 minutes" };

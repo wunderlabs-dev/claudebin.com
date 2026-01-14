@@ -1,6 +1,11 @@
 import { exec } from "node:child_process";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { startAuth } from "../auth.js";
+import {
+  AUTH_POLL_TIMEOUT_MS,
+  AUTH_TOKEN_TTL_MS,
+  POLL_INTERVAL_MS,
+  startAuth,
+} from "../auth.js";
 import { writeConfig } from "../config.js";
 import type { Config } from "../types.js";
 
@@ -9,6 +14,10 @@ const PollStatus = {
   SUCCESS: "success",
   EXPIRED: "expired",
 } as const;
+
+type PollResult =
+  | { success: true; token: string; refresh_token: string; user: { id: string; username: string; avatar_url: string } }
+  | { success: false; error: string };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -26,18 +35,9 @@ const openUrl = (url: string) => {
 const pollForCompletion = async (
   code: string,
   apiUrl: string,
-  timeoutMs = 60_000,
-): Promise<
-  | {
-      success: true;
-      token: string;
-      refresh_token: string;
-      user: { id: string; username: string; avatar_url: string };
-    }
-  | { success: false; error: string }
-> => {
+  timeoutMs = AUTH_POLL_TIMEOUT_MS,
+): Promise<PollResult> => {
   const deadline = Date.now() + timeoutMs;
-  const pollInterval = 2000;
 
   while (Date.now() < deadline) {
     try {
@@ -60,7 +60,7 @@ const pollForCompletion = async (
       }
     } catch {}
 
-    await sleep(pollInterval);
+    await sleep(POLL_INTERVAL_MS);
   }
 
   return { success: false, error: "Authentication timed out" };
@@ -120,7 +120,7 @@ export const registerAuthenticate = (server: McpServer): void => {
         auth: {
           token: pollResult.token,
           refresh_token: pollResult.refresh_token,
-          expires_at: Date.now() + 30 * 24 * 60 * 60 * 1000,
+          expires_at: Date.now() + AUTH_TOKEN_TTL_MS,
         },
         user: pollResult.user,
       };

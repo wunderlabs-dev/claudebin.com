@@ -26,3 +26,10 @@ CREATE POLICY "messages_delete_service_only"
   ON messages
   FOR DELETE
   USING (false);
+
+-- Only service role can update messages
+CREATE POLICY "messages_update_service_only"
+  ON messages
+  FOR UPDATE
+  USING (false)
+  WITH CHECK (false);
