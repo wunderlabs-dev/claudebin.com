@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { readConfig } from "../config.js";
+import { refreshAuth } from "../auth.js";
+import { isTokenExpired, readConfig } from "../config.js";
 import { extractSession } from "../session.js";
 import { createApiClient } from "../trpc.js";
 
@@ -21,7 +22,7 @@ export const registerPublish = (server: McpServer): void => {
       },
     },
     async ({ project_path, title, is_public }) => {
-      const config = await readConfig();
+      let config = await readConfig();
 
       if (!config.auth?.token) {
         return {
@@ -36,6 +37,41 @@ export const registerPublish = (server: McpServer): void => {
           ],
           isError: true,
         };
+      }
+
+      // Check if token expired and try to refresh
+      if (isTokenExpired(config)) {
+        const refreshed = await refreshAuth();
+        if (!refreshed) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify({
+                  success: false,
+                  error: "Token expired. Run authenticate to sign in again.",
+                }),
+              },
+            ],
+            isError: true,
+          };
+        }
+        // Re-read config with new tokens
+        config = await readConfig();
+        if (!config.auth?.token) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify({
+                  success: false,
+                  error: "Token refresh failed. Run authenticate to sign in again.",
+                }),
+              },
+            ],
+            isError: true,
+          };
+        }
       }
 
       const sessionResult = await extractSession(project_path);
