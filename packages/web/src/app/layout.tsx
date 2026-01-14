@@ -35,7 +35,9 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   return (
     <html lang={locale} className={cn(sans.variable, mono.variable)}>
       <body className="min-h-screen font-sans antialiased">
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
