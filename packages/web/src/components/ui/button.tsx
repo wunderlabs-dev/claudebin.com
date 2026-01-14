@@ -39,7 +39,7 @@ const buttonVariants = cva(
           "bg-gray-150 outline outline-gray-50",
           "hover:bg-orange-50 hover:bg-linear-to-br hover:to-orange-150",
           "active:bg-orange-50 active:to-orange-50 active:shadow-ridge-t",
-          "disabled:bg-orange-50/20 disabled:text-gray-400",
+          "disabled:bg-gray-150 disabled:text-gray-400 disabled:outline-transparent",
         ],
       },
     },
