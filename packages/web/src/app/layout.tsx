@@ -1,9 +1,11 @@
 import "@/static/css/globals.css";
 
 import type { Metadata } from "next";
+import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
+
+import { cn } from "@/utils/helpers";
 
 import copy from "@/copy/en-EN.json";
 
@@ -31,7 +33,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${sans.variable} ${mono.variable}`}>
+    <html lang={locale} className={cn(sans.variable, mono.variable)}>
       <body className="min-h-screen font-sans antialiased">
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
