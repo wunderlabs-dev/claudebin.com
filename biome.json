@@ -43,7 +43,10 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
-      "semicolons": "always"
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "bracketSpacing": true,
+      "arrowParentheses": "always"
     }
   },
   "assist": {
