@@ -1,34 +1,77 @@
-import { spawn } from "node:child_process";
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { exec } from "node:child_process";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
 import { startAuth } from "../auth.js";
 import { writeConfig } from "../config.js";
 import type { Config } from "../types.js";
 
-const getStatusFilePath = (code: string) =>
-  join(tmpdir(), `claudebin-auth-${code}.json`);
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+const openUrl = (url: string) => {
+  const platform = process.platform;
+  const cmd =
+    platform === "darwin" ? "open" : platform === "win32" ? "start" : "xdg-open";
+  exec(`${cmd} "${url}"`);
+};
+
+const pollForCompletion = async (
+  code: string,
+  apiUrl: string,
+  timeoutMs = 60_000,
+): Promise<
+  | { success: true; token: string; refresh_token: string; user: { id: string; username: string; avatar_url: string } }
+  | { success: false; error: string }
+> => {
+  const deadline = Date.now() + timeoutMs;
+  const pollInterval = 2000;
+
+  while (Date.now() < deadline) {
+    try {
+      const url = `${apiUrl}/api/trpc/auth.poll?input=${encodeURIComponent(JSON.stringify({ code }))}`;
+      const res = await fetch(url);
+      const json = await res.json();
+      const result = json.result?.data;
+
+      if (result?.status === "success") {
+        return {
+          success: true,
+          token: result.token,
+          refresh_token: result.refresh_token,
+          user: result.user,
+        };
+      }
+
+      if (result?.status === "expired") {
+        return { success: false, error: "Authentication code expired" };
+      }
+    } catch {}
+
+    await sleep(pollInterval);
+  }
+
+  return { success: false, error: "Authentication timed out" };
+};
 
 export const registerAuthenticate = (server: McpServer): void => {
   server.registerTool(
-    "auth_start",
+    "authenticate",
     {
       description:
-        "Start Claudebin authentication. Returns URL immediately and polls in background.",
+        "Authenticate with Claudebin. Opens browser, waits for sign-in, saves credentials.",
     },
     async () => {
-      const result = await startAuth();
+      const apiUrl = process.env.CLAUDEBIN_API_URL || "http://localhost:3000";
 
-      if (!result.success) {
+      // Start auth session
+      const startResult = await startAuth();
+
+      if (!startResult.success) {
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify({
                 success: false,
-                error: result.error,
+                error: startResult.error,
               }),
             },
           ],
@@ -36,58 +79,37 @@ export const registerAuthenticate = (server: McpServer): void => {
         };
       }
 
-      const statusFile = getStatusFilePath(result.code);
-      writeFileSync(statusFile, JSON.stringify({ status: "pending" }));
+      // Open browser
+      openUrl(startResult.url);
 
-      const apiUrl = process.env.CLAUDEBIN_API_URL || "http://localhost:3000";
-      const pollerScript = `
-        const fs = require("fs");
+      // Poll for completion
+      const pollResult = await pollForCompletion(startResult.code, apiUrl);
 
-        const statusFile = "${statusFile}";
-        const code = "${result.code}";
-        const apiUrl = "${apiUrl}";
-        const deadline = Date.now() + 5 * 60 * 1000;
-        const pollInterval = 2000;
-
-        const poll = async () => {
-          if (Date.now() >= deadline) {
-            fs.writeFileSync(statusFile, JSON.stringify({ status: "timeout" }));
-            process.exit(0);
-          }
-
-          try {
-            const url = apiUrl + "/api/trpc/auth.poll?input=" + encodeURIComponent(JSON.stringify({ code }));
-            const res = await fetch(url);
-            const json = await res.json();
-            const result = json.result?.data;
-
-            if (result?.status === "success") {
-              fs.writeFileSync(statusFile, JSON.stringify({
-                status: "success",
-                token: result.token,
-                refresh_token: result.refresh_token,
-                user: result.user,
-              }));
-              process.exit(0);
-            } else if (result?.status === "expired") {
-              fs.writeFileSync(statusFile, JSON.stringify({ status: "expired" }));
-              process.exit(0);
-            }
-          } catch (e) {}
-
-          setTimeout(poll, pollInterval);
+      if (!pollResult.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                success: false,
+                error: pollResult.error,
+              }),
+            },
+          ],
+          isError: true,
         };
+      }
 
-        poll();
-      `;
-
-      // Spawn background process
-      const child = spawn("node", ["-e", pollerScript], {
-        detached: true,
-        stdio: "ignore",
-        env: { ...process.env },
-      });
-      child.unref();
+      // Save config
+      const config: Config = {
+        auth: {
+          token: pollResult.token,
+          refresh_token: pollResult.refresh_token,
+          expires_at: Date.now() + 30 * 24 * 60 * 60 * 1000,
+        },
+        user: pollResult.user,
+      };
+      await writeConfig(config);
 
       return {
         content: [
@@ -95,119 +117,8 @@ export const registerAuthenticate = (server: McpServer): void => {
             type: "text",
             text: JSON.stringify({
               success: true,
-              code: result.code,
-              url: result.url,
+              username: pollResult.user.username,
             }),
-          },
-        ],
-      };
-    },
-  );
-
-  server.registerTool(
-    "auth_status",
-    {
-      description:
-        "Wait for authentication to complete. Polls for up to 60 seconds.",
-      inputSchema: {
-        code: z.string().describe("The auth code from auth_start"),
-      },
-    },
-    async ({ code }) => {
-      const statusFile = getStatusFilePath(code);
-      const deadline = Date.now() + 60_000;
-      const pollInterval = 1000;
-
-      const waitForResult = async (): Promise<Record<string, unknown>> => {
-        if (!existsSync(statusFile)) {
-          if (Date.now() >= deadline) {
-            return { status: "timeout" };
-          }
-          await new Promise((r) => setTimeout(r, pollInterval));
-          return waitForResult();
-        }
-
-        const data = JSON.parse(readFileSync(statusFile, "utf-8"));
-        if (data.status === "pending" && Date.now() < deadline) {
-          await new Promise((r) => setTimeout(r, pollInterval));
-          return waitForResult();
-        }
-        return data;
-      };
-
-      const data = await waitForResult();
-
-      if (data.status === "timeout") {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                status: "timeout",
-                error: "Authentication timed out",
-              }),
-            },
-          ],
-          isError: true,
-        };
-      }
-
-      if (data.status === "success") {
-        // Save config and cleanup
-        const config: Config = {
-          auth: {
-            token: data.token,
-            refresh_token: data.refresh_token,
-            expires_at: Date.now() + 30 * 24 * 60 * 60 * 1000,
-          },
-          user: data.user,
-        };
-        await writeConfig(config);
-
-        try {
-          unlinkSync(statusFile);
-        } catch {}
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                status: "success",
-                username: data.user.username,
-              }),
-            },
-          ],
-        };
-      }
-
-      if (data.status === "expired" || data.status === "timeout") {
-        try {
-          unlinkSync(statusFile);
-        } catch {}
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                status: data.status,
-                error:
-                  data.status === "expired"
-                    ? "Authentication code expired"
-                    : "Authentication timed out",
-              }),
-            },
-          ],
-          isError: true,
-        };
-      }
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify({ status: "pending" }),
           },
         ],
       };

@@ -1,20 +1,8 @@
-import { PollStatus } from "@claudebin/web/trpc/routers/auth.js";
 import { readConfig, writeConfig } from "./config.js";
 import { createApiClient } from "./trpc.js";
 
-const POLL_INTERVAL_MS = 2_000;
-const POLL_TIMEOUT_MS = 5 * 60 * 1_000;
 const TOKEN_REFRESH_BUFFER_MS = 5 * 60 * 1_000;
 const DEFAULT_TOKEN_TTL_MS = 60 * 60 * 1_000;
-
-// Extends server PollStatus with client-only timeout
-export const PollResultStatus = {
-  ...PollStatus,
-  TIMEOUT: "timeout",
-} as const;
-
-const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
 
 export interface AuthStartResult {
   success: true;
@@ -45,53 +33,6 @@ export const startAuth = async (): Promise<
       error: `Failed to connect to Claudebin: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
-};
-
-export type PollResult =
-  | {
-      status: typeof PollResultStatus.SUCCESS;
-      token: string;
-      refresh_token: string;
-      user: { id: string; username: string; avatar_url: string };
-    }
-  | { status: typeof PollResultStatus.EXPIRED }
-  | { status: typeof PollResultStatus.TIMEOUT };
-
-const pollOnce = async (
-  api: ReturnType<typeof createApiClient>,
-  code: string,
-): Promise<PollResult | null> => {
-  try {
-    const result = await api.auth.poll.query({ code });
-
-    if (result.status === PollStatus.PENDING) {
-      return null;
-    }
-
-    return result;
-  } catch {
-    return null;
-  }
-};
-
-export const pollForAuth = async (
-  code: string,
-  deadline = Date.now() + POLL_TIMEOUT_MS,
-  api = createApiClient(),
-): Promise<PollResult> => {
-  if (Date.now() >= deadline) {
-    return { status: PollResultStatus.TIMEOUT };
-  }
-
-  await sleep(POLL_INTERVAL_MS);
-
-  const result = await pollOnce(api, code);
-
-  if (result) {
-    return result;
-  }
-
-  return pollForAuth(code, deadline, api);
 };
 
 const refreshAuth = async (): Promise<boolean> => {

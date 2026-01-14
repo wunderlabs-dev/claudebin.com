@@ -1,8 +1,21 @@
 <instructions>
-Call the whoami tool to check authentication status.
+IMMEDIATELY call whoami. Do not think first.
 </instructions>
 
 <output>
-If authenticated: "Signed in as @{username}"
-If not: "Not authenticated. Run /auth to sign in."
+If authenticated, display:
+```
+┌────────────────────────────────┐
+│  👤 @{username}                │
+│  ✓ Authenticated               │
+└────────────────────────────────┘
+```
+
+If not authenticated:
+```
+┌────────────────────────────────┐
+│  ⚠️  Not signed in              │
+│  Run /auth to authenticate     │
+└────────────────────────────────┘
+```
 </output>
