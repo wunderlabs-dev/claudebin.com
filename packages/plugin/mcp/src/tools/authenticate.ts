@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { pollForAuth, startAuth } from "../auth.js";
+import { PollResultStatus, pollForAuth, startAuth } from "../auth.js";
 import { writeConfig } from "../config.js";
 import type { Config } from "../types.js";
 
@@ -30,7 +30,7 @@ export const registerAuthenticate = (server: McpServer): void => {
 
       const pollResult = await pollForAuth(startResult.code);
 
-      if (pollResult.status === "expired") {
+      if (pollResult.status === PollResultStatus.EXPIRED) {
         return {
           content: [
             {
@@ -45,7 +45,7 @@ export const registerAuthenticate = (server: McpServer): void => {
         };
       }
 
-      if (pollResult.status === "timeout") {
+      if (pollResult.status === PollResultStatus.TIMEOUT) {
         return {
           content: [
             {

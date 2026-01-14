@@ -1,7 +1,14 @@
+import { PollStatus } from "@claudebin/web/trpc/routers/auth.js";
 import { createApiClient } from "./trpc.js";
 
 const POLL_INTERVAL_MS = 2000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
+
+// Extends server PollStatus with client-only timeout
+export const PollResultStatus = {
+  ...PollStatus,
+  TIMEOUT: "timeout",
+} as const;
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,12 +46,12 @@ export const startAuth = async (): Promise<
 
 export type PollResult =
   | {
-      status: "success";
+      status: typeof PollResultStatus.SUCCESS;
       token: string;
       user: { id: string; username: string; avatar_url: string };
     }
-  | { status: "expired" }
-  | { status: "timeout" };
+  | { status: typeof PollResultStatus.EXPIRED }
+  | { status: typeof PollResultStatus.TIMEOUT };
 
 const pollOnce = async (
   api: ReturnType<typeof createApiClient>,
@@ -53,7 +60,7 @@ const pollOnce = async (
   try {
     const result = await api.auth.poll.query({ code });
 
-    if (result.status === "pending") {
+    if (result.status === PollStatus.PENDING) {
       return null;
     }
 
@@ -69,7 +76,7 @@ export const pollForAuth = async (
   api = createApiClient(),
 ): Promise<PollResult> => {
   if (Date.now() >= deadline) {
-    return { status: "timeout" };
+    return { status: PollResultStatus.TIMEOUT };
   }
 
   await sleep(POLL_INTERVAL_MS);

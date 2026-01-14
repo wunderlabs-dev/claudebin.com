@@ -7,6 +7,14 @@ const getBaseUrl = () => {
   return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 };
 
+export const PollStatus = {
+  PENDING: "pending",
+  EXPIRED: "expired",
+  SUCCESS: "success",
+} as const;
+
+export type PollStatusType = (typeof PollStatus)[keyof typeof PollStatus];
+
 interface User {
   id: string;
   username: string;
@@ -14,9 +22,9 @@ interface User {
 }
 
 export type PollResponse =
-  | { status: "pending" }
-  | { status: "expired" }
-  | { status: "success"; token: string; user: User };
+  | { status: typeof PollStatus.PENDING }
+  | { status: typeof PollStatus.EXPIRED }
+  | { status: typeof PollStatus.SUCCESS; token: string; user: User };
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
@@ -54,16 +62,16 @@ export const authRouter = router({
         .single();
 
       if (error || !session) {
-        return { status: "expired" };
+        return { status: PollStatus.EXPIRED };
       }
 
       if (new Date(session.expires_at) < new Date()) {
-        return { status: "expired" };
+        return { status: PollStatus.EXPIRED };
       }
 
       if (session.completed_at && session.user_id && session.access_token) {
         return {
-          status: "success",
+          status: PollStatus.SUCCESS,
           token: session.access_token,
           user: {
             id: session.profiles.id,
@@ -73,6 +81,6 @@ export const authRouter = router({
         };
       }
 
-      return { status: "pending" };
+      return { status: PollStatus.PENDING };
     }),
 });
