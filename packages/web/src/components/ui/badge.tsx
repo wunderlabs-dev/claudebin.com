@@ -14,9 +14,9 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-orange-50/10 outline outline-orange-50/50 text-orange-50",
-        success: "bg-green-50/10 outline outline-green-50/50 text-green-50",
-        error: "bg-red-50/10 outline outline-red-50/50 text-red-50",
+        default: "bg-orange-50/10 border border-orange-50/50 text-orange-50",
+        success: "bg-green-50/10 border border-green-50/50 text-green-50",
+        error: "bg-red-50/10 border border-red-50/50 text-red-50",
       },
     },
     defaultVariants: {
