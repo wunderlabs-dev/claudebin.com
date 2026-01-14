@@ -65,7 +65,8 @@ export const registerPublish = (server: McpServer): void => {
                 type: "text",
                 text: JSON.stringify({
                   success: false,
-                  error: "Token refresh failed. Run authenticate to sign in again.",
+                  error:
+                    "Token refresh failed. Run authenticate to sign in again.",
                 }),
               },
             ],
