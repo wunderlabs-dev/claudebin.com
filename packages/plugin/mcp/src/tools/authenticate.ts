@@ -9,7 +9,11 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const openUrl = (url: string) => {
   const platform = process.platform;
   const cmd =
-    platform === "darwin" ? "open" : platform === "win32" ? "start" : "xdg-open";
+    platform === "darwin"
+      ? "open"
+      : platform === "win32"
+        ? "start"
+        : "xdg-open";
   exec(`${cmd} "${url}"`);
 };
 
@@ -18,7 +22,12 @@ const pollForCompletion = async (
   apiUrl: string,
   timeoutMs = 60_000,
 ): Promise<
-  | { success: true; token: string; refresh_token: string; user: { id: string; username: string; avatar_url: string } }
+  | {
+      success: true;
+      token: string;
+      refresh_token: string;
+      user: { id: string; username: string; avatar_url: string };
+    }
   | { success: false; error: string }
 > => {
   const deadline = Date.now() + timeoutMs;
