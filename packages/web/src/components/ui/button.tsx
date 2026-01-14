@@ -42,9 +42,25 @@ const buttonVariants = cva(
           "disabled:bg-gray-150 disabled:text-gray-400 disabled:outline-transparent",
         ],
       },
+      color: {
+        default: [],
+        success: [],
+      },
     },
+    compoundVariants: [
+      {
+        variant: "outline",
+        color: "success",
+        className: [
+          "bg-transparent outline-green-50 text-green-50",
+          "hover:bg-green-50/20",
+          "active:bg-green-50/10",
+        ],
+      },
+    ],
     defaultVariants: {
       variant: "default",
+      color: "default",
     },
   },
 );
@@ -52,12 +68,18 @@ const buttonVariants = cva(
 type ButtonProps = React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants>;
 
-const Button = ({ className, variant = "default", ...props }: ButtonProps) => {
+const Button = ({
+  className,
+  variant = "default",
+  color = "default",
+  ...props
+}: ButtonProps) => {
   return (
     <button
       data-slot="button"
       data-variant={variant}
-      className={cn(buttonVariants({ variant, className }))}
+      data-color={color}
+      className={cn(buttonVariants({ variant, color, className }))}
       {...props}
     />
   );

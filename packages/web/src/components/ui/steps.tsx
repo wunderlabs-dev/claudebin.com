@@ -19,11 +19,16 @@ const Steps = ({ className, children, ...props }: StepsProps) => {
   );
 };
 
-const StepsItem = ({ number, children, className, ...props }: StepsItemProps) => {
+const StepsItem = ({
+  number,
+  children,
+  className,
+  ...props
+}: StepsItemProps) => {
   return (
     <li className={cn("flex items-center gap-3", className)} {...props}>
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-orange-50 text-sm font-medium text-orange-50">
-        {number}
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-full outline outline-orange-50 text-orange-50">
+        <Typography variant="small">{number}</Typography>
       </span>
       <Typography variant="small">{children}</Typography>
     </li>

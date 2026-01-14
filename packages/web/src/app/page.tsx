@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
 import { Steps, StepsItem } from "@/components/ui/steps";
+import { FormControl, Input, InputLabel } from "@/components/ui/input";
+import { CopyInput } from "@/components/ui/copy-input";
 import {
   SvgIconArrowBottom,
   SvgIconArrowLeft,
@@ -33,6 +35,31 @@ import {
 const HomePage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center gap-8 p-8">
+      {/* CopyInput */}
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">CopyInput</h2>
+        <CopyInput value="npx claudebin publish" />
+      </section>
+
+      {/* Input */}
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">Input</h2>
+        <div className="flex flex-col gap-4">
+          <FormControl>
+            <InputLabel htmlFor="default">Default label</InputLabel>
+            <Input id="default" placeholder="Default input" />
+          </FormControl>
+          <FormControl variant="error">
+            <InputLabel htmlFor="error">Error label</InputLabel>
+            <Input id="error" placeholder="Error input" />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="disabled">Disabled label</InputLabel>
+            <Input id="disabled" disabled placeholder="Disabled input" />
+          </FormControl>
+        </div>
+      </section>
+
       {/* Typography */}
       <section className="flex flex-col items-start gap-4">
         <h2 className="text-lg font-medium">Typography</h2>
@@ -75,18 +102,18 @@ const HomePage = () => {
       <section className="flex flex-col items-center gap-4">
         <h2 className="text-lg font-medium">Badges</h2>
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Badge variant="default">Label</Badge>
-          <Badge variant="success">Label</Badge>
-          <Badge variant="error">Label</Badge>
+          <Badge variant="default">InputLabel</Badge>
+          <Badge variant="success">InputLabel</Badge>
+          <Badge variant="error">InputLabel</Badge>
           <Badge variant="default">
-            <SvgIconClock /> Label
+            <SvgIconClock /> InputLabel
           </Badge>
           <Badge variant="success">
-            <SvgIconUser size="sm" /> Label
+            <SvgIconUser size="sm" /> InputLabel
             <SvgIconUser size="sm" />
           </Badge>
           <Badge variant="error">
-            <SvgIconSkull size="sm" /> Label
+            <SvgIconSkull size="sm" /> InputLabel
             <SvgIconSkull size="sm" />
           </Badge>
         </div>

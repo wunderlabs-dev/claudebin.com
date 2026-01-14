@@ -32,7 +32,9 @@ type VariantElementMap = {
 
 type Variant = keyof VariantElementMap;
 
-type TypographyProps<V extends Variant = "body"> = React.ComponentProps<VariantElementMap[V]> &
+type TypographyProps<V extends Variant = "body"> = React.ComponentProps<
+  VariantElementMap[V]
+> &
   VariantProps<typeof typographyVariants> & {
     variant?: V;
     as?: React.ElementType;

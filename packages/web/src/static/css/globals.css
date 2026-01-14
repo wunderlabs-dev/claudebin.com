@@ -33,5 +33,6 @@
   --color-gray-500: #d1d1d1;
   --color-gray-550: #e8e8e8;
 
-  --shadow-ridge-t: inset 0 1px 0 0 color-mix(in srgb, var(--color-white) 20%, transparent);
+  --shadow-ridge-t: inset 0 1px 0 0
+    color-mix(in srgb, var(--color-white) 20%, transparent);
 }
