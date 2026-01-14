@@ -1,19 +1,29 @@
 # Claudebin Web - TypeScript UI Engineering Standards
 
-For Senior TypeScript UI Engineers. Write clean, maintainable code.
+## Project Structure
 
-## CRITICAL RULES
+```
+src/
+├── app/             # Next.js App Router pages
+├── components/      # Reusable UI components
+│   └── ui/          # shadcn/ui components
+├── sections/        # Page-level section components
+├── utils/           # Utilities, constants, helpers
+├── copy/            # i18n translations (en-EN.json)
+├── i18n/            # i18n config
+└── static/          # CSS, fonts
+```
+
+## Critical Rules
 
 ### NEVER Use Tailwind Arbitrary Values
 
-Arbitrary values are FORBIDDEN.
-
 ```tsx
-// WRONG - Will be rejected
-<div className="w-[347px] text-[#ff0000] mt-[23px] bg-[#f5f5f5]" />
+// Wrong
+<div className="w-[347px] text-[#ff0000] mt-[23px]" />
 
-// CORRECT - Use theme values only
-<div className="w-full max-w-md text-destructive mt-6 bg-muted" />
+// Correct
+<div className="w-full max-w-md text-destructive mt-6" />
 ```
 
 **If you need a custom value:** Add it to `globals.css` @theme first.
@@ -23,63 +33,51 @@ Arbitrary values are FORBIDDEN.
 ```tsx
 // Correct
 const items = data.items;
-const totalCount = items.length;
 
 // Wrong
 let items = data.items;
-var totalCount = items.length;
 ```
 
-Use `let` only when reassignment is absolutely necessary (rare).
+Use `let` only when reassignment is absolutely necessary.
 
 ### Import Ordering
 
-When working with imports in ANY file (new or existing), follow this order with blank lines between groups:
-
 ```tsx
-// 1. CSS imports (at the very top, use alias when possible)
+// 1. CSS imports
 import "@/static/css/globals.css";
 
-// 2. Vendors (React, third-party libraries)
+// 2. Vendors (React, third-party)
 import { useRef } from "react";
-import { useOnClickOutside } from "usehooks-ts";
 
 // 3. Custom hooks
 import { useUiState } from "@/hooks/useUiState";
 
 // 4. UI components (shadcn/ui)
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 
 // 5. Custom components
-import { SessionBrowserAppBar } from "@/components/SessionBrowserAppBar";
-import { SessionBrowserIframe } from "@/components/SessionBrowserIframe";
+import { SessionAppBar } from "@/components/SessionAppBar";
 
 // 6. Sections
-import { SessionBrowserSection } from "@/sections/SessionBrowserSection";
+import { SessionSection } from "@/sections/SessionSection";
 ```
 
-**Order Summary:**
+Each group separated by blank line. Always use `@/*` path alias.
 
-1. CSS files
-2. Vendors (React, third-party libraries)
-3. Custom hooks
-4. UI components (shadcn/ui)
-5. Custom components
-6. Sections
+## Component Conventions
 
-**Rules:**
+### Structure
 
-- Each group MUST be separated by a blank line
-- ALWAYS organize imports according to the groups above
-- Always use `@/*` path alias
+Each component lives in its own directory:
 
-## TypeScript Conventions
+```
+components/Button/
+├── Button.tsx    # Component implementation
+├── types.ts      # Types and variant definitions
+└── index.ts      # Barrel exports
+```
 
-### Components
-
-- ALWAYS use arrow functions
-- NEVER use function declarations
+### Arrow Functions Only
 
 ```tsx
 // Correct
@@ -91,306 +89,162 @@ export function DashboardAppBar() { ... }
 
 ### Props
 
-- ALWAYS use `type` (NEVER `interface`)
-- Define `type ComponentNameProps = {}` at the top
+- Use `type` (never `interface`)
+- Spread native HTML attributes: `& HTMLAttributes<HTMLElement>`
+- Set defaults in parameters: `variant = "default"`
 
 ```tsx
-// Correct
-type DashboardAppBarProps = {
-  title: string;
-  onMenuClick: () => void;
-}
+type ButtonProps = {
+  variant?: ButtonVariant;
+} & HTMLButtonAttributes<HTMLButtonElement>;
 
-export const DashboardAppBar = ({ title, onMenuClick }: DashboardAppBarProps) => { ... }
+export const Button = ({ variant = "default", ...props }: ButtonProps) => { ... }
+```
 
-// Wrong
-interface DashboardAppBarProps { ... }
+### Type Patterns
+
+Use `as const` for variant unions:
+
+```typescript
+export const ButtonVariants = ["default", "outline", "ghost"] as const;
+export type ButtonVariant = (typeof ButtonVariants)[number];
+export type ButtonVariantMapping = Record<ButtonVariant, string>;
+```
+
+Use discriminated unions when variant affects required props:
+
+```typescript
+type ChipDefaultProps = ChipBaseProps & {
+  variant?: "default";
+  color: ChipColor;
+};
+type ChipOutlinedProps = ChipBaseProps & { variant: "outlined"; color?: never };
+export type ChipProps = ChipDefaultProps | ChipOutlinedProps;
+```
+
+### Exports
+
+Barrel exports in `index.ts`:
+
+```typescript
+export { default as Button } from "./Button";
+export * from "./types";
 ```
 
 ### Event Handlers
 
-- NEVER use inline callbacks
-- ALWAYS define named handler functions
+Named handlers only, never inline callbacks:
 
 ```tsx
-// Wrong - inline callback
-<Button onClick={() => console.log("clicked")}>Click me</Button>;
+// Wrong
+<Button onClick={() => console.log("clicked")}>Click</Button>
 
-// Correct - named handler
+// Correct
 const handleClick = () => {
   console.log("clicked");
 };
 
-<Button onClick={handleClick}>Click me</Button>;
+<Button onClick={handleClick}>Click</Button>
 ```
 
-**Handler naming convention:** `handle[Action]` (e.g., `handleSignUp`, `handleSubmit`, `handleDelete`)
+Naming: `handle[Action]` (e.g., `handleSignUp`, `handleSubmit`)
 
-### Internationalization
+### Naming Conventions
 
-- ALL rendered strings MUST be in `copy/en-EN.json`
-- NEVER hardcode strings directly in components
-- Use `useTranslations` hook for all text
-- **ALWAYS add strings to translations BEFORE using them in components**
+- **Files**: PascalCase for components (`Button.tsx`), camelCase for utils (`helpers.ts`)
+- **Types**: `ComponentNameProps`, `ComponentNameVariant`, `ComponentNameVariantMapping`
+- **Mapping objects**: `xxxClassNames` (e.g., `buttonVariantClassNames`)
+- **Const arrays**: Plural form (`ButtonVariants`)
 
-```tsx
-// Wrong - hardcoded string
-<p>By continuing, you agree to our Terms of Service</p>
-<Button>Save</Button>
+## Styling
 
-// Correct - from translations
-const t = useTranslations("auth");
-<p>{t("termsAgreement")}</p>
-
-const t = useTranslations("common");
-<Button>{t("save")}</Button>
-```
-
-**Workflow:**
-
-1. First, add the string to `copy/en-EN.json`
-2. Then, use it in the component with `t()`
-3. Never use hardcoded strings, even temporarily
-
-## Architecture
-
-### Structure
-
-```
-src/
-  app/             # Next.js App Router pages
-  components/      # Reusable UI components
-    ui/            # shadcn/ui components
-  sections/        # Page-level section components
-  utils/           # Utilities and helpers
-  copy/            # i18n translations
-  i18n/            # i18n config
-  static/          # CSS, fonts
-```
-
-### Component Naming
-
-Prefix components by page/context:
-
-```
-SessionBrowserAppBar, SessionBrowserSideBar, ProfileHeaderCard
-AppBar, SideBar (too generic, missing context)
-```
-
-### shadcn/ui Structure
-
-```
-components/ui/
-  Button/
-    Button.tsx       # Component implementation with type definitions
-    index.ts         # Exports
-```
-
-**Notes:**
-
-- Props types MUST be defined in the component file (NOT in separate types.ts)
-- Use index.ts for exports
-
-**components/ui/Button/index.ts:**
+### Variant Mapping Objects
 
 ```typescript
-export { default as Button } from "./Button";
+const buttonVariantClassNames: ButtonVariantMapping = {
+  default: "bg-primary text-primary-foreground",
+  outline: "border border-input bg-background",
+  ghost: "hover:bg-accent hover:text-accent-foreground"
+};
+
+// Use cn() for class merging
+className={cn("base-classes", buttonVariantClassNames[variant])}
 ```
 
-## Clean Code Principles
+### Tailwind Rules
+
+- Reference `globals.css` @theme for all values
+- Use semantic color names (`primary`, `secondary`, `muted`)
+- Use spacing scale (`gap-4`, `p-6`, `mt-8`)
+- Check `globals.css` @theme before styling anything
+
+## Internationalization
+
+- ALL rendered strings MUST be in `copy/en-EN.json`
+- Use `useTranslations` hook for all text
+- Add strings to translations BEFORE using in components
+
+```tsx
+const t = useTranslations("auth");
+<p>{t("termsAgreement")}</p>
+```
+
+Rich text with inline renderers:
+
+```tsx
+{t.rich("error404.doesNotExist", {
+  serif: (chunks: ReactNode) => (
+    <span className="font-serif italic">{chunks}</span>
+  ),
+})}
+```
+
+Translation strings use XML-like tags:
+
+```json
+{
+  "error404.doesNotExist": "The page does <serif>not exist</serif>."
+}
+```
+
+## Clean Code
 
 ### Variables
 
-**Use meaningful, pronounceable, searchable names**
+- Use meaningful, pronounceable names
+- Never use single-letter variables
+- Use default parameters
 
 ```tsx
 // Bad
-const yyyymmdstr = moment().format("YYYY/MM/DD");
-const d = new Date();
-
-// Good
-const currentDate = moment().format("YYYY/MM/DD");
-const elapsedTimeInDays = new Date();
-```
-
-**NEVER use single-letter variable names**
-
-```tsx
-// Bad - single letter variables
-locations.forEach((l) => dispatch(l));
 items.filter((i) => i.id !== id);
 
-// Good - descriptive names
-locations.forEach((location) => dispatch(location));
-items.filter((item) => item.id !== id);
-```
-
-**Use default parameters**
-
-```tsx
-// Bad
-const createUser = (name) => {
-  const userName = name || "Guest";
-}
-
 // Good
-const createUser = (name = "Guest") => { ... }
+items.filter((item) => item.id !== id);
 ```
 
 ### Functions
 
-**Do one thing**
-
-```tsx
-// Bad - doing multiple things
-const emailClients = (clients) => {
-  clients.forEach((client) => {
-    const clientRecord = database.lookup(client);
-    if (clientRecord.isActive()) {
-      email(client);
-    }
-  });
-}
-
-// Good - single responsibility
-const emailActiveClients = (clients) => {
-  clients.filter(isActiveClient).forEach(email);
-}
-
-const isActiveClient = (client) => {
-  const clientRecord = database.lookup(client);
-  return clientRecord.isActive();
-}
-```
-
-**Limit function parameters (2 or fewer ideally)**
-
-```tsx
-// Bad
-const createMenu = (title, body, buttonText, cancellable) => { ... }
-
-// Good - use object destructuring
-const createMenu = ({ title, body, buttonText, cancellable }) => { ... }
-
-createMenu({
-  title: "Foo",
-  body: "Bar",
-  buttonText: "Baz",
-  cancellable: true
-});
-```
-
-**Avoid side effects - don't mutate**
-
-```tsx
-// Bad - mutates input
-const addItemToCart = (cart, item) => {
-  cart.push({ item, date: Date.now() });
-};
-
-// Good - returns new array
-const addItemToCart = (cart, item) => {
-  return [...cart, { item, date: Date.now() }];
-};
-```
-
-### Conditionals
-
-**Encapsulate conditionals**
-
-```tsx
-// Bad
-if (fsm.state === "fetching" && isEmpty(listNode)) { ... }
-
-// Good
-const shouldShowSpinner = (fsm, listNode) => {
-  return fsm.state === "fetching" && isEmpty(listNode);
-}
-
-if (shouldShowSpinner(fsmInstance, listNodeInstance)) { ... }
-```
-
-**Avoid negative conditionals**
-
-```tsx
-// Bad
-if (!isDOMNodeNotPresent(node)) { ... }
-
-// Good
-if (isDOMNodePresent(node)) { ... }
-```
+- Do one thing (single responsibility)
+- Limit parameters (2 or fewer, use object destructuring)
+- Avoid side effects - don't mutate
+- Encapsulate conditionals
+- Avoid negative conditionals
 
 ### Error Handling
 
-**Don't ignore caught errors**
-
-```tsx
-// Bad
-try {
-  functionThatMightThrow();
-} catch (error) {
-  console.log(error);
-}
-
-// Good
-try {
-  functionThatMightThrow();
-} catch (error) {
-  console.error(error);
-  notifyUserOfError(error);
-  reportErrorToService(error);
-}
-```
-
-**Use async/await over promises**
-
-```tsx
-// Less clean
-get("https://api.example.com")
-  .then((body) => writeFile("data.json", body))
-  .then(() => console.log("File written"))
-  .catch((err) => console.error(err));
-
-// Cleaner
-const fetchAndSaveData = async () => {
-  try {
-    const body = await get("https://api.example.com");
-    await writeFile("data.json", body);
-    console.log("File written");
-  } catch (err) {
-    console.error(err);
-  }
-}
-```
+- Don't ignore caught errors
+- Use async/await over promise chains
 
 ### Comments
 
-**Only comment complex business logic**
+- Use `// ABOUTME:` prefix for explanation comments on complex patterns
+- Only comment WHY, not WHAT
+- Delete commented code (use version control)
 
-Good code documents itself. Comments are for WHY, not WHAT.
+### Animations
 
-**Don't leave commented code**
-
-Use version control. Delete dead code.
-
-```tsx
-// Bad
-doStuff();
-// doOtherStuff();
-// doSomeMoreStuff();
-
-// Good
-doStuff();
-```
-
-## Styling with Tailwind
-
-- Reference `globals.css` @theme for all values
-- Use semantic color names (`primary`, `secondary`, `muted`)
-- Use spacing scale (`space-4`, `gap-6`, `p-8`)
-- Use theme breakpoints (`md:`, `lg:`)
-
-**Check `globals.css` @theme before styling anything.**
+Define in `/src/utils/keyframes.ts` and reuse across components.
 
 ## Code Organization
 
@@ -400,3 +254,7 @@ doStuff();
 - Keep functions small and focused
 - Extract complex logic into custom hooks
 - Prefer composition over prop drilling
+
+## Commit Convention
+
+Follow conventional commits: `feat`, `fix`, `docs`, `chore`, `style`, `refactor`, `ci`, `test`, `revert`, `perf`
