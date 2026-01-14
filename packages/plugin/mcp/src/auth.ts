@@ -92,7 +92,7 @@ export const pollForAuth = async (
   return pollForAuth(code, deadline, api);
 };
 
-export const refreshAuth = async (): Promise<boolean> => {
+const refreshAuth = async (): Promise<boolean> => {
   const config = await readConfig();
 
   if (!config.auth?.refresh_token) return false;
@@ -123,4 +123,23 @@ export const refreshAuth = async (): Promise<boolean> => {
   } catch {
     return false;
   }
+};
+
+export const getValidToken = async (): Promise<string | null> => {
+  const config = await readConfig();
+
+  if (!config.auth?.token) {
+    return null;
+  }
+
+  if (!config.auth.expires_at || Date.now() > config.auth.expires_at - 5 * 60 * 1000) {
+    const refreshed = await refreshAuth();
+    if (!refreshed) {
+      return null;
+    }
+    const refreshedConfig = await readConfig();
+    return refreshedConfig.auth?.token ?? null;
+  }
+
+  return config.auth.token;
 };
