@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Typography } from "@/components/ui/typography";
+import { Steps, StepsItem } from "@/components/ui/steps";
 import {
   SvgIconArrowBottom,
   SvgIconArrowLeft,
@@ -31,6 +33,21 @@ import {
 const HomePage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center gap-8 p-8">
+      {/* Typography */}
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">Typography</h2>
+        <div className="flex flex-col gap-2">
+          <Typography variant="h1">Heading 1</Typography>
+          <Typography variant="h2">Heading 2</Typography>
+          <Typography variant="h3">Heading 3</Typography>
+          <Typography variant="h4">Heading 4</Typography>
+          <Typography variant="body">Body text paragraph</Typography>
+          <Typography variant="small">Small text</Typography>
+          <Typography variant="caption">Caption text</Typography>
+        </div>
+      </section>
+
+      {/* Buttons */}
       <section className="flex flex-col items-center gap-4">
         <h2 className="text-lg font-medium">Buttons</h2>
         <div className="flex flex-wrap items-center justify-center gap-4">
@@ -73,6 +90,15 @@ const HomePage = () => {
             <SvgIconSkull size="sm" />
           </Badge>
         </div>
+      </section>
+
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">Steps</h2>
+        <Steps>
+          <StepsItem number={1}>Open your terminal</StepsItem>
+          <StepsItem number={2}>Run the command</StepsItem>
+          <StepsItem number={3}>Share your session</StepsItem>
+        </Steps>
       </section>
 
       <section className="flex flex-col items-center gap-4">
