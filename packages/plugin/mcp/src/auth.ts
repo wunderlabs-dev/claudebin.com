@@ -2,8 +2,10 @@ import { PollStatus } from "@claudebin/web/trpc/routers/auth.js";
 import { readConfig, writeConfig } from "./config.js";
 import { createApiClient } from "./trpc.js";
 
-const POLL_INTERVAL_MS = 2000;
-const POLL_TIMEOUT_MS = 5 * 60 * 1000;
+const POLL_INTERVAL_MS = 2_000;
+const POLL_TIMEOUT_MS = 5 * 60 * 1_000;
+const TOKEN_REFRESH_BUFFER_MS = 5 * 60 * 1_000;
+const DEFAULT_TOKEN_TTL_MS = 60 * 60 * 1_000;
 
 // Extends server PollStatus with client-only timeout
 export const PollResultStatus = {
@@ -114,8 +116,8 @@ const refreshAuth = async (): Promise<boolean> => {
         token: result.access_token,
         refresh_token: result.refresh_token,
         expires_at: result.expires_at
-          ? result.expires_at * 1000
-          : Date.now() + 60 * 60 * 1000,
+          ? result.expires_at * 1_000
+          : Date.now() + DEFAULT_TOKEN_TTL_MS,
       },
     });
 
@@ -132,7 +134,10 @@ export const getValidToken = async (): Promise<string | null> => {
     return null;
   }
 
-  if (!config.auth.expires_at || Date.now() > config.auth.expires_at - 5 * 60 * 1000) {
+  if (
+    !config.auth.expires_at ||
+    Date.now() > config.auth.expires_at - TOKEN_REFRESH_BUFFER_MS
+  ) {
     const refreshed = await refreshAuth();
     if (!refreshed) {
       return null;
