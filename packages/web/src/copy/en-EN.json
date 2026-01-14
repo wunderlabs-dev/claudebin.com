@@ -2,5 +2,9 @@
   "metadata": {
     "title": "Claudebin - Share Your Claude Sessions",
     "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
+  },
+  "common": {
+    "copy": "Copy",
+    "copied": "Copied!"
   }
 }
