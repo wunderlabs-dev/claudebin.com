@@ -4,6 +4,7 @@ import { Typography } from "@/components/ui/typography";
 import { Steps, StepsItem } from "@/components/ui/steps";
 import { FormControl, Input, InputLabel } from "@/components/ui/input";
 import { CopyInput } from "@/components/ui/copy-input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   SvgIconArrowBottom,
   SvgIconArrowLeft,
@@ -35,13 +36,30 @@ import {
 const HomePage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center gap-8 p-8">
-      {/* CopyInput */}
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">Tabs</h2>
+        <Tabs defaultValue="option1">
+          <TabsList>
+            <TabsTrigger value="option1">Option</TabsTrigger>
+            <TabsTrigger value="option2">Option</TabsTrigger>
+            <TabsTrigger value="option3">Option</TabsTrigger>
+            <TabsTrigger value="option4">Option</TabsTrigger>
+            <TabsTrigger value="option5">Option</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="option1">Content for option 1</TabsContent>
+          <TabsContent value="option2">Content for option 2</TabsContent>
+          <TabsContent value="option3">Content for option 3</TabsContent>
+          <TabsContent value="option4">Content for option 4</TabsContent>
+          <TabsContent value="option5">Content for option 5</TabsContent>
+        </Tabs>
+      </section>
+
       <section className="flex flex-col items-start gap-4">
         <h2 className="text-lg font-medium">CopyInput</h2>
         <CopyInput value="npx claudebin publish" />
       </section>
 
-      {/* Input */}
       <section className="flex flex-col items-start gap-4">
         <h2 className="text-lg font-medium">Input</h2>
         <div className="flex flex-col gap-4">
@@ -60,7 +78,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Typography */}
       <section className="flex flex-col items-start gap-4">
         <h2 className="text-lg font-medium">Typography</h2>
         <div className="flex flex-col gap-2">
@@ -74,7 +91,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Buttons */}
       <section className="flex flex-col items-center gap-4">
         <h2 className="text-lg font-medium">Buttons</h2>
         <div className="flex flex-wrap items-center justify-center gap-4">

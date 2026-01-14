@@ -8,7 +8,7 @@ const buttonVariants = cva(
     "inline-flex items-center justify-center gap-3",
     "h-12 px-5 py-3",
     "rounded-full",
-    "whitespace-nowrap",
+    "text-white whitespace-nowrap",
     "select-none cursor-pointer",
     "transition ease-in-out",
     "disabled:pointer-events-none",
@@ -51,29 +51,19 @@ const buttonVariants = cva(
       {
         variant: "outline",
         color: "success",
-        className: [
-          "bg-green-50/10 outline-green-50 text-green-50",
-          "hover:bg-green-50/20",
-          "active:bg-green-50/10",
-        ],
+        className: "bg-green-50/10 outline-green-50 hover:bg-green-50/20 active:bg-green-50/10",
       },
     ],
     defaultVariants: {
       variant: "default",
       color: "default",
     },
-  },
+  }
 );
 
-type ButtonProps = React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants>;
+type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
 
-const Button = ({
-  className,
-  variant = "default",
-  color = "default",
-  ...props
-}: ButtonProps) => {
+const Button = ({ className, variant = "default", color = "default", ...props }: ButtonProps) => {
   return (
     <button
       data-slot="button"
