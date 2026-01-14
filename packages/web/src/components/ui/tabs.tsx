@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/utils/helpers";
@@ -19,6 +19,9 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
         "bg-gray-150 outline outline-gray-50",
         className
       )}
+      style={{
+        outline: undefined,
+      }}
       {...props}
     />
   );
