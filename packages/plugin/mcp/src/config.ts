@@ -25,3 +25,9 @@ export const writeConfig = async (config: Config): Promise<void> => {
     mode: 0o600,
   });
 };
+
+export const isTokenExpired = (config: Config): boolean => {
+  if (!config.auth?.expires_at) return true;
+  // Refresh 5 minutes before expiry
+  return Date.now() > config.auth.expires_at - 5 * 60 * 1000;
+};

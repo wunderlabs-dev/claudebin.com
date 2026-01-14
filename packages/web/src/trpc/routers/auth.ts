@@ -24,7 +24,12 @@ interface User {
 export type PollResponse =
   | { status: typeof PollStatus.PENDING }
   | { status: typeof PollStatus.EXPIRED }
-  | { status: typeof PollStatus.SUCCESS; token: string; user: User };
+  | {
+      status: typeof PollStatus.SUCCESS;
+      token: string;
+      refresh_token: string;
+      user: User;
+    };
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
@@ -73,6 +78,7 @@ export const authRouter = router({
         return {
           status: PollStatus.SUCCESS,
           token: session.access_token,
+          refresh_token: session.refresh_token,
           user: {
             id: session.profiles.id,
             username: session.profiles.username,
@@ -82,5 +88,29 @@ export const authRouter = router({
       }
 
       return { status: PollStatus.PENDING };
+    }),
+
+  refresh: publicProcedure
+    .input(z.object({ refresh_token: z.string() }))
+    .mutation(async ({ input }) => {
+      const supabase = await createClient();
+
+      const { data, error } = await supabase.auth.refreshSession({
+        refresh_token: input.refresh_token,
+      });
+
+      if (error || !data.session) {
+        return {
+          success: false as const,
+          error: error?.message ?? "Failed to refresh",
+        };
+      }
+
+      return {
+        success: true as const,
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+        expires_at: data.session.expires_at,
+      };
     }),
 });

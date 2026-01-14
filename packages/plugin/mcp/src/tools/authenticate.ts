@@ -64,6 +64,7 @@ export const registerAuthenticate = (server: McpServer): void => {
       const config: Config = {
         auth: {
           token: pollResult.token,
+          refresh_token: pollResult.refresh_token,
           expires_at: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
         },
         user: pollResult.user,

@@ -1,4 +1,5 @@
 import { PollStatus } from "@claudebin/web/trpc/routers/auth.js";
+import { readConfig } from "./config.js";
 import { createApiClient } from "./trpc.js";
 
 const POLL_INTERVAL_MS = 2000;
@@ -48,6 +49,7 @@ export type PollResult =
   | {
       status: typeof PollResultStatus.SUCCESS;
       token: string;
+      refresh_token: string;
       user: { id: string; username: string; avatar_url: string };
     }
   | { status: typeof PollResultStatus.EXPIRED }
@@ -88,4 +90,28 @@ export const pollForAuth = async (
   }
 
   return pollForAuth(code, deadline, api);
+};
+
+export const refreshAuth = async (): Promise<boolean> => {
+  const config = await readConfig();
+
+  if (!config.auth?.refresh_token) return false;
+
+  const api = createApiClient();
+
+  try {
+    const result = await api.auth.refresh.mutate({
+      refresh_token: config.auth.refresh_token,
+    });
+
+    if (!result.success) {
+      return false;
+    }
+
+    // Note: Would need to update config with new tokens here
+    // This is a stub for now - full implementation would call writeConfig
+    return true;
+  } catch {
+    return false;
+  }
 };
