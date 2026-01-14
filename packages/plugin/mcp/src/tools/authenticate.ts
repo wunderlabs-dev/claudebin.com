@@ -4,6 +4,12 @@ import { startAuth } from "../auth.js";
 import { writeConfig } from "../config.js";
 import type { Config } from "../types.js";
 
+// Matches PollStatus from @claudebin/web/trpc/routers/auth
+const PollStatus = {
+  SUCCESS: "success",
+  EXPIRED: "expired",
+} as const;
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const openUrl = (url: string) => {
@@ -40,7 +46,7 @@ const pollForCompletion = async (
       const json = await res.json();
       const result = json.result?.data;
 
-      if (result?.status === "success") {
+      if (result?.status === PollStatus.SUCCESS) {
         return {
           success: true,
           token: result.token,
@@ -49,7 +55,7 @@ const pollForCompletion = async (
         };
       }
 
-      if (result?.status === "expired") {
+      if (result?.status === PollStatus.EXPIRED) {
         return { success: false, error: "Authentication code expired" };
       }
     } catch {}
