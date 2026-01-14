@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
 import { Steps, StepsItem } from "@/components/ui/steps";
-import { FormControl, Input, InputLabel } from "@/components/ui/input";
+import { FormControl, Input, InputLabel } from "@/components/ui/form-control";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Divider } from "@/components/ui/divider";
+import { List, ListItem, ListItemLabel } from "@/components/ui/list";
 import {
   SvgIconArrowBottom,
   SvgIconArrowLeft,
@@ -53,6 +55,25 @@ const HomePage = () => {
           <TabsContent value="option4">Content for option 4</TabsContent>
           <TabsContent value="option5">Content for option 5</TabsContent>
         </Tabs>
+      </section>
+
+      <section className="flex w-full flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">Divider</h2>
+        <Divider />
+      </section>
+
+      <section className="flex flex-col items-start gap-4">
+        <h2 className="text-lg font-medium">List</h2>
+        <List>
+          <ListItem>
+            <SvgIconUser size="md" />
+            <ListItemLabel>Navigation</ListItemLabel>
+          </ListItem>
+          <ListItem variant="active">
+            <SvgIconUser size="md" />
+            <ListItemLabel variant="active">Navigation</ListItemLabel>
+          </ListItem>
+        </List>
       </section>
 
       <section className="flex flex-col items-start gap-4">
