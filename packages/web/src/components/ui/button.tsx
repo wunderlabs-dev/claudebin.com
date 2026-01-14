@@ -62,12 +62,18 @@ const buttonVariants = cva(
       variant: "default",
       color: "default",
     },
-  }
+  },
 );
 
-type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
+type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants>;
 
-const Button = ({ className, variant = "default", color = "default", ...props }: ButtonProps) => {
+const Button = ({
+  className,
+  variant = "default",
+  color = "default",
+  ...props
+}: ButtonProps) => {
   return (
     <button
       data-slot="button"

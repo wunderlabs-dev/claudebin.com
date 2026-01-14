@@ -40,7 +40,7 @@ const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => 
     >
       <div className="flex items-center gap-5 pl-6">
         <SvgIconBash className="shrink-0 text-orange-300" />
-        <span className="flex-1 font-mono text-base text-white whitespace-nowrap">{value}</span>
+        <span className="flex-1 font-mono text-base text-orange-50 whitespace-nowrap">{value}</span>
       </div>
 
       <Button
@@ -50,7 +50,7 @@ const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => 
         disabled={disabled}
       >
         {copiedText ? t("copied") : t("copy")}
-        {copiedText ? <SvgIconCheck className="text-white" /> : <SvgIconCopy />}
+        {copiedText ? <SvgIconCheck /> : <SvgIconCopy />}
       </Button>
     </div>
   );
