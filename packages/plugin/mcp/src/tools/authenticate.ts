@@ -16,7 +16,12 @@ const PollStatus = {
 } as const;
 
 type PollResult =
-  | { success: true; token: string; refresh_token: string; user: { id: string; username: string; avatar_url: string } }
+  | {
+      success: true;
+      token: string;
+      refresh_token: string;
+      user: { id: string; username: string; avatar_url: string };
+    }
   | { success: false; error: string };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

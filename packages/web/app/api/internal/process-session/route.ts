@@ -117,7 +117,10 @@ export const POST = async (request: Request): Promise<Response> => {
       .eq("id", session_id);
 
     if (updateError) {
-      console.error(`Failed to mark session ${session_id} as failed:`, updateError);
+      console.error(
+        `Failed to mark session ${session_id} as failed:`,
+        updateError,
+      );
     }
 
     return NextResponse.json(
