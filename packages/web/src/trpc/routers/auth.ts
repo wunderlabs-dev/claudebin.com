@@ -7,23 +7,16 @@ const getBaseUrl = () => {
   return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 };
 
-const UserSchema = z.object({
-  id: z.string(),
-  username: z.string(),
-  avatar_url: z.string(),
-});
+interface User {
+  id: string;
+  username: string;
+  avatar_url: string;
+}
 
-const PollResponseSchema = z.discriminatedUnion("status", [
-  z.object({ status: z.literal("pending") }),
-  z.object({ status: z.literal("expired") }),
-  z.object({
-    status: z.literal("success"),
-    token: z.string(),
-    user: UserSchema,
-  }),
-]);
-
-export type PollResponse = z.infer<typeof PollResponseSchema>;
+export type PollResponse =
+  | { status: "pending" }
+  | { status: "expired" }
+  | { status: "success"; token: string; user: User };
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {

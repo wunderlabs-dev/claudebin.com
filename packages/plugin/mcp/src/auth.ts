@@ -66,6 +66,7 @@ const pollOnce = async (
 export const pollForAuth = async (
   code: string,
   deadline = Date.now() + POLL_TIMEOUT_MS,
+  api = createApiClient(),
 ): Promise<PollResult> => {
   if (Date.now() >= deadline) {
     return { status: "timeout" };
@@ -73,12 +74,11 @@ export const pollForAuth = async (
 
   await sleep(POLL_INTERVAL_MS);
 
-  const api = createApiClient();
   const result = await pollOnce(api, code);
 
   if (result) {
     return result;
   }
 
-  return pollForAuth(code, deadline);
+  return pollForAuth(code, deadline, api);
 };
