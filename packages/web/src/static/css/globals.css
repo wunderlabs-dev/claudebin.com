@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
   --color-orange-50: #ff6900;
   --color-orange-100: #ff781a;
   --color-orange-150: #ff8733;
