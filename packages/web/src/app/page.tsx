@@ -1,27 +1,134 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  SvgIconArrowBottom,
+  SvgIconArrowLeft,
+  SvgIconArrowLink,
+  SvgIconArrowRight,
+  SvgIconArrowTop,
+  SvgIconBash,
+  SvgIconCalendar,
+  SvgIconCheck,
+  SvgIconClock,
+  SvgIconCopy,
+  SvgIconFile,
+  SvgIconFolder,
+  SvgIconFork,
+  SvgIconGear,
+  SvgIconGlitters,
+  SvgIconHome,
+  SvgIconJauge,
+  SvgIconKey,
+  SvgIconLine,
+  SvgIconLoading,
+  SvgIconRefresh,
+  SvgIconShield,
+  SvgIconSkull,
+  SvgIconTalk,
+  SvgIconUser,
+} from "@/components/icon";
 
 const HomePage = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
-      <Button variant="default">Default</Button>
-      <Button variant="default" disabled>
-        Default disabled
-      </Button>
+    <main className="flex min-h-screen flex-col items-center gap-8 p-8">
+      <section className="flex flex-col items-center gap-4">
+        <h2 className="text-lg font-medium">Buttons</h2>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Button variant="default">Default</Button>
+          <Button variant="default" disabled>
+            Default disabled
+          </Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="secondary" disabled>
+            Secondary disabled
+          </Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="outline" disabled>
+            Outline disabled
+          </Button>
+          <Button variant="circle">
+            <SvgIconGear />
+          </Button>
+          <Button variant="circle" disabled>
+            <SvgIconGear />
+          </Button>
+        </div>
+      </section>
 
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="secondary" disabled>
-        Secondary disabled
-      </Button>
+      <section className="flex flex-col items-center gap-4">
+        <h2 className="text-lg font-medium">Badges</h2>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Badge variant="default">Label</Badge>
+          <Badge variant="success">Label</Badge>
+          <Badge variant="error">Label</Badge>
+          <Badge variant="default">
+            <SvgIconClock /> Label
+          </Badge>
+          <Badge variant="success">
+            <SvgIconUser size="sm" /> Label
+            <SvgIconUser size="sm" />
+          </Badge>
+          <Badge variant="error">
+            <SvgIconSkull size="sm" /> Label
+            <SvgIconSkull size="sm" />
+          </Badge>
+        </div>
+      </section>
 
-      <Button variant="outline">Outline</Button>
-      <Button variant="outline" disabled>
-        Outline disabled
-      </Button>
+      <section className="flex flex-col items-center gap-4">
+        <h2 className="text-lg font-medium">Icons</h2>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <SvgIconArrowBottom size="lg" />
+          <SvgIconArrowLeft size="lg" />
+          <SvgIconArrowLink size="lg" />
+          <SvgIconArrowRight size="lg" />
+          <SvgIconArrowTop size="lg" />
+          <SvgIconBash size="lg" />
+          <SvgIconCalendar size="lg" />
+          <SvgIconCheck size="lg" />
+          <SvgIconClock size="lg" />
+          <SvgIconCopy size="lg" />
+          <SvgIconFile size="lg" />
+          <SvgIconFolder size="lg" />
+          <SvgIconFork size="lg" />
+          <SvgIconGear size="lg" />
+          <SvgIconGlitters size="lg" />
+          <SvgIconHome size="lg" />
+          <SvgIconJauge size="lg" />
+          <SvgIconKey size="lg" />
+          <SvgIconLine size="lg" />
+          <SvgIconLoading size="lg" />
+          <SvgIconRefresh size="lg" />
+          <SvgIconShield size="lg" />
+          <SvgIconSkull size="lg" />
+          <SvgIconTalk size="lg" />
+          <SvgIconUser size="lg" />
+        </div>
 
-      <Button variant="circle">★</Button>
-      <Button variant="circle" disabled>
-        ★
-      </Button>
+        {/* Icon sizes */}
+        <div className="flex items-end gap-4 mt-4">
+          <div className="flex flex-col items-center gap-1">
+            <SvgIconHome size="xs" />
+            <span className="text-xs text-gray-400">xs</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <SvgIconHome size="sm" />
+            <span className="text-xs text-gray-400">sm</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <SvgIconHome size="md" />
+            <span className="text-xs text-gray-400">md</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <SvgIconHome size="lg" />
+            <span className="text-xs text-gray-400">lg</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <SvgIconHome size="xl" />
+            <span className="text-xs text-gray-400">xl</span>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };
