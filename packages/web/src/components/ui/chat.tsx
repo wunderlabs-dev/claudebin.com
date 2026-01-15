@@ -12,7 +12,9 @@ const Chat = ({ className, ...props }: ChatProps) => {
 type ChatItemProps = React.ComponentProps<"div">;
 
 const ChatItem = ({ className, ...props }: ChatItemProps) => {
-  return <div data-slot="chat-item" className={cn("flex items-start gap-3", className)} {...props} />;
+  return (
+    <div data-slot="chat-item" className={cn("flex items-start gap-3", className)} {...props} />
+  );
 };
 
 const chatContentVariants = cva(["border border-gray-200 rounded-xl px-4 py-3"], {

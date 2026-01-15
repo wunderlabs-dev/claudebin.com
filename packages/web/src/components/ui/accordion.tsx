@@ -47,7 +47,7 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
           "cursor-pointer",
           "disabled:pointer-events-none disabled:opacity-50",
           "[&[data-state=open]>span]:rotate-180",
-          className
+          className,
         )}
         {...props}
       >

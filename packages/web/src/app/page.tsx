@@ -1,4 +1,9 @@
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +14,14 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+  CardMeta,
+} from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 
