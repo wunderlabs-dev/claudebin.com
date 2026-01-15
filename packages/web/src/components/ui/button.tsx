@@ -42,6 +42,12 @@ const buttonVariants = cva(
           "active:bg-orange-50 active:to-orange-50 active:ridge-t",
           "disabled:bg-gray-150 disabled:border-transparent disabled:text-gray-400",
         ],
+        danger: [
+          "bg-red-50/25 border border-red-50",
+          "hover:bg-red-50",
+          "active:bg-red-50/60",
+          "disabled:bg-red-50/10 disabled:border-transparent disabled:text-gray-400",
+        ],
       },
       color: {
         default: [],
@@ -59,7 +65,7 @@ const buttonVariants = cva(
       variant: "default",
       color: "default",
     },
-  }
+  },
 );
 
 type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;

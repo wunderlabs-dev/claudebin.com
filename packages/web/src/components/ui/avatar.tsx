@@ -31,7 +31,7 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
           "relative flex shrink-0 overflow-hidden rounded-full",
           "outline outline-orange-150 bg-orange-50/10",
           avatarSizeClassNames[size],
-          className
+          className,
         )}
         {...props}
       />
@@ -39,7 +39,10 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
   );
 };
 
-const AvatarImage = ({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) => {
+const AvatarImage = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image>) => {
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
@@ -55,7 +58,10 @@ const avatarFallbackFontSizeClassNames: Record<AvatarSize, string> = {
   lg: "text-7xl",
 };
 
-const AvatarFallback = ({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
+const AvatarFallback = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
   const size = useContext(AvatarContext);
 
   return (
@@ -65,7 +71,7 @@ const AvatarFallback = ({ className, ...props }: React.ComponentProps<typeof Ava
         "flex size-full items-center justify-center rounded-full",
         "text-orange-50 font-bold",
         avatarFallbackFontSizeClassNames[size],
-        className
+        className,
       )}
       {...props}
     />
