@@ -79,6 +79,7 @@ User config is stored at `~/.claudebin/config.json` containing auth token and us
 ## Plugin Commands
 
 When running with `--plugin-dir ./packages/plugin`:
-- `/share` - Extract current session as JSONL
-- `/auth` - Authenticate with Claudebin
+- `/share` - Publish current session to claudebin.com and get shareable URL
+- `/auth` - Authenticate with Claudebin via GitHub
 - `/whoami` - Check current authentication status
+- `/logout` - Clear saved credentials
