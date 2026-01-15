@@ -66,7 +66,7 @@ const buttonVariants = cva(
       variant: "default",
       color: "default",
     },
-  }
+  },
 );
 
 type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
@@ -96,7 +96,7 @@ const ButtonText = ({ className, ...props }: ButtonTextProps) => {
         "after:origin-left after:scale-x-0",
         "after:transition-transform after:ease-in-out",
         "group-hover:after:scale-x-100 group-active:text-orange-50",
-        className
+        className,
       )}
       {...props}
     />

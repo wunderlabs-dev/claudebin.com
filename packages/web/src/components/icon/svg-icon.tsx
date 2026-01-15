@@ -51,4 +51,11 @@ const SvgIcon = ({
   );
 };
 
-export { SvgIcon, SvgIconSizes, SvgIconColors, type SvgIconSize, type SvgIconColor, type SvgIconProps };
+export {
+  SvgIcon,
+  SvgIconSizes,
+  SvgIconColors,
+  type SvgIconSize,
+  type SvgIconColor,
+  type SvgIconProps,
+};
