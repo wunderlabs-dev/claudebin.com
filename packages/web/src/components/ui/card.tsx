@@ -70,7 +70,7 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
     <Typography
       data-slot="card-description"
       variant="small"
-      color="muted"
+      color="neutral"
       leading="normal"
       className={className}
       {...props}
@@ -86,7 +86,7 @@ const CardMeta = ({ icon, children, className, ...props }: CardMetaProps) => {
   return (
     <div data-slot="card-meta" className={cn("flex items-center gap-1", className)} {...props}>
       {icon}
-      <Typography variant="caption" color="muted" leading="normal">
+      <Typography variant="caption" color="neutral" leading="normal">
         {children}
       </Typography>
     </div>

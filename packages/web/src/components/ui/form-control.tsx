@@ -39,18 +39,18 @@ const inputVariants = cva(
     "flex",
     "h-12 w-full",
     "px-7 py-3",
-    "rounded-full",
     "font-mono text-base text-white placeholder:text-gray-400",
-    "bg-gray-150 outline outline-gray-50",
+    "bg-gray-150",
     "transition ease-in-out",
-    "focus:outline-orange-50",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
     variants: {
       variant: {
-        default: [],
-        error: "text-red-50 placeholder:text-red-50 outline-red-50 focus:outline-red-50",
+        default: "rounded-full outline outline-gray-50 focus:outline-orange-50",
+        error:
+          "rounded-full outline outline-red-50 text-red-50 placeholder:text-red-50 focus:outline-red-50",
+        filled: "rounded-lg outline-none",
       },
     },
     defaultVariants: {

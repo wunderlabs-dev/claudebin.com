@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
 import { Steps, StepsItem } from "@/components/ui/steps";
@@ -8,14 +8,7 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Tabs, TabsList, TabsListItem, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardMeta,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
 
 import {
   SvgIconArrowBottom,
@@ -46,60 +39,202 @@ import {
   SvgIconUser,
 } from "@/components/icon";
 
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="text-xl font-semibold text-gray-350 uppercase tracking-wider">{children}</h2>
+);
+
+const Section = ({ children }: { children: React.ReactNode }) => (
+  <section className="flex w-full max-w-4xl flex-col gap-6 border-b border-gray-150 pb-12">
+    {children}
+  </section>
+);
+
 const HomePage = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center gap-8 p-8">
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">Tabs</h2>
-        <Tabs defaultValue="option1">
-          <TabsList>
-            <TabsListItem value="option1">Option</TabsListItem>
-            <TabsListItem value="option2">Option</TabsListItem>
-            <TabsListItem value="option3">Option</TabsListItem>
-            <TabsListItem value="option4">Option</TabsListItem>
-            <TabsListItem value="option5">Option</TabsListItem>
-          </TabsList>
+    <main className="flex min-h-screen flex-col items-center gap-12 p-12">
+      {/* Buttons */}
+      <Section>
+        <SectionTitle>Buttons</SectionTitle>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="default">Default</Button>
+            <Button variant="default" disabled>
+              Default disabled
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="secondary" disabled>
+              Secondary disabled
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="outline">Outline</Button>
+            <Button variant="outline" disabled>
+              Outline disabled
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="danger">Danger</Button>
+            <Button variant="danger" disabled>
+              Danger disabled
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="circle">
+              <SvgIconGear />
+            </Button>
+            <Button variant="circle" disabled>
+              <SvgIconGear />
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="link">
+              <SvgIconArrowLeft size="sm" /> <ButtonText>Back</ButtonText>
+            </Button>
+            <Button variant="link">
+              <ButtonText>Next</ButtonText> <SvgIconArrowRight size="sm" />
+            </Button>
+            <Button variant="link" disabled>
+              <SvgIconArrowLeft size="sm" /> <ButtonText>Back</ButtonText>
+            </Button>
+          </div>
+        </div>
+      </Section>
 
-          <TabsContent value="option1">Content for option 1</TabsContent>
-          <TabsContent value="option2">Content for option 2</TabsContent>
-          <TabsContent value="option3">Content for option 3</TabsContent>
-          <TabsContent value="option4">Content for option 4</TabsContent>
-          <TabsContent value="option5">Content for option 5</TabsContent>
-        </Tabs>
+      {/* Avatar */}
+      <Section>
+        <SectionTitle>Avatar</SectionTitle>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-wrap items-center gap-6">
+            <Avatar size="sm">
+              <AvatarFallback>M</AvatarFallback>
+            </Avatar>
+            <Avatar size="md">
+              <AvatarFallback>M</AvatarFallback>
+            </Avatar>
+            <Avatar size="lg">
+              <AvatarFallback>M</AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="flex flex-wrap items-center gap-6">
+            <Avatar size="sm">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>C</AvatarFallback>
+            </Avatar>
+            <Avatar size="md">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>C</AvatarFallback>
+            </Avatar>
+            <Avatar size="lg">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>C</AvatarFallback>
+            </Avatar>
+          </div>
+        </div>
+      </Section>
 
-        <Tabs defaultValue="option1" variant="transparent">
-          <TabsList>
-            <TabsListItem value="option1">Option</TabsListItem>
-            <TabsListItem value="option2">Option</TabsListItem>
-          </TabsList>
+      {/* Badges */}
+      <Section>
+        <SectionTitle>Badges</SectionTitle>
+        <div className="flex flex-wrap items-center gap-4">
+          <Badge variant="default">Default</Badge>
+          <Badge variant="success">Success</Badge>
+          <Badge variant="error">Error</Badge>
+          <Badge variant="neutral">Neutral</Badge>
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <Badge variant="default">
+            <SvgIconClock size="sm" /> With icon
+          </Badge>
+          <Badge variant="success">
+            <SvgIconCheck size="sm" /> Complete
+          </Badge>
+          <Badge variant="error">
+            <SvgIconSkull size="sm" /> Failed
+          </Badge>
+        </div>
+      </Section>
 
-          <TabsContent value="option1">Content for option 1</TabsContent>
-          <TabsContent value="option2">Content for option 2</TabsContent>
-        </Tabs>
-      </section>
+      {/* Input */}
+      <Section>
+        <SectionTitle>Input</SectionTitle>
+        <div className="flex flex-col gap-6 max-w-md">
+          <FormControl>
+            <InputLabel htmlFor="default">Default</InputLabel>
+            <Input id="default" placeholder="Enter text..." />
+          </FormControl>
+          <FormControl variant="error">
+            <InputLabel htmlFor="error">Error</InputLabel>
+            <Input id="error" placeholder="Invalid input" />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="disabled">Disabled</InputLabel>
+            <Input id="disabled" disabled placeholder="Disabled" />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="filled">Filled</InputLabel>
+            <Input id="filled" variant="filled" placeholder="Filled variant" />
+          </FormControl>
+        </div>
+      </Section>
 
-      <section className="flex w-full flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">Divider</h2>
-        <Divider />
-      </section>
+      {/* CopyInput */}
+      <Section>
+        <SectionTitle>Copy Input</SectionTitle>
+        <div className="max-w-md">
+          <CopyInput value="npx claudebin publish" />
+        </div>
+      </Section>
 
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">List</h2>
-        <List>
-          <ListItem>
-            <SvgIconUser size="md" />
-            <ListItemLabel>Navigation</ListItemLabel>
-          </ListItem>
-          <ListItem variant="active">
-            <SvgIconUser size="md" />
-            <ListItemLabel variant="active">Navigation</ListItemLabel>
-          </ListItem>
-        </List>
-      </section>
+      {/* Tabs */}
+      <Section>
+        <SectionTitle>Tabs</SectionTitle>
+        <div className="flex flex-col gap-8">
+          <div>
+            <Typography variant="small" color="neutral" className="mb-3">
+              Default
+            </Typography>
+            <Tabs defaultValue="tab1">
+              <TabsList>
+                <TabsListItem value="tab1">Overview</TabsListItem>
+                <TabsListItem value="tab2">Settings</TabsListItem>
+                <TabsListItem value="tab3">Activity</TabsListItem>
+              </TabsList>
+              <TabsContent value="tab1" className="pt-4">
+                Overview content
+              </TabsContent>
+              <TabsContent value="tab2" className="pt-4">
+                Settings content
+              </TabsContent>
+              <TabsContent value="tab3" className="pt-4">
+                Activity content
+              </TabsContent>
+            </Tabs>
+          </div>
+          <div>
+            <Typography variant="small" color="neutral" className="mb-3">
+              Transparent
+            </Typography>
+            <Tabs defaultValue="tab1" variant="transparent">
+              <TabsList>
+                <TabsListItem value="tab1">All</TabsListItem>
+                <TabsListItem value="tab2">Published</TabsListItem>
+              </TabsList>
+              <TabsContent value="tab1" className="pt-4">
+                All items
+              </TabsContent>
+              <TabsContent value="tab2" className="pt-4">
+                Published items
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </Section>
 
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">Card</h2>
-
+      {/* Card */}
+      <Section>
+        <SectionTitle>Card</SectionTitle>
         <Card>
           <CardHeader>
             <div className="flex items-center gap-1">
@@ -114,136 +249,77 @@ const HomePage = () => {
               <CardDescription>@sarah</CardDescription>
             </div>
             <div className="flex flex-col gap-1">
-              <CardMeta icon={<SvgIconChat size="sm" color="muted" />}>89 prompts</CardMeta>
-              <CardMeta icon={<SvgIconFile size="sm" color="muted" />}>2 files</CardMeta>
+              <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>89 prompts</CardMeta>
+              <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>2 files</CardMeta>
             </div>
           </CardContent>
         </Card>
-      </section>
+      </Section>
 
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">CopyInput</h2>
-        <CopyInput value="npx claudebin publish" />
-      </section>
+      {/* List */}
+      <Section>
+        <SectionTitle>List</SectionTitle>
+        <List>
+          <ListItem>
+            <SvgIconHome size="md" />
+            <ListItemLabel>Dashboard</ListItemLabel>
+          </ListItem>
+          <ListItem variant="active">
+            <SvgIconUser size="md" />
+            <ListItemLabel variant="active">Profile</ListItemLabel>
+          </ListItem>
+          <ListItem>
+            <SvgIconGear size="md" />
+            <ListItemLabel>Settings</ListItemLabel>
+          </ListItem>
+        </List>
+      </Section>
 
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">Input</h2>
-        <div className="flex flex-col gap-4">
-          <FormControl>
-            <InputLabel htmlFor="default">Default label</InputLabel>
-            <Input id="default" placeholder="Default input" />
-          </FormControl>
-          <FormControl variant="error">
-            <InputLabel htmlFor="error">Error label</InputLabel>
-            <Input id="error" placeholder="Error input" />
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="disabled">Disabled label</InputLabel>
-            <Input id="disabled" disabled placeholder="Disabled input" />
-          </FormControl>
-        </div>
-      </section>
-
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">Typography</h2>
-        <div className="flex flex-col gap-2">
-          <Typography variant="h1">Heading 1</Typography>
-          <Typography variant="h2">Heading 2</Typography>
-          <Typography variant="h3">Heading 3</Typography>
-          <Typography variant="h4">Heading 4</Typography>
-          <Typography variant="body">Body text paragraph</Typography>
-          <Typography variant="small">Small text</Typography>
-          <Typography variant="caption">Caption text</Typography>
-        </div>
-      </section>
-
-      <section className="flex flex-col items-center gap-4">
-        <h2 className="text-lg font-medium">Avatar</h2>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <Avatar size="sm">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>C</AvatarFallback>
-          </Avatar>
-          <Avatar size="md">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>C</AvatarFallback>
-          </Avatar>
-          <Avatar size="lg">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>C</AvatarFallback>
-          </Avatar>
-          <Avatar size="sm">
-            <AvatarFallback>M</AvatarFallback>
-          </Avatar>
-          <Avatar size="md">
-            <AvatarFallback>M</AvatarFallback>
-          </Avatar>
-          <Avatar size="lg">
-            <AvatarFallback>M</AvatarFallback>
-          </Avatar>
-        </div>
-      </section>
-
-      <section className="flex flex-col items-center gap-4">
-        <h2 className="text-lg font-medium">Buttons</h2>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <Button variant="default">Default</Button>
-          <Button variant="default" disabled>
-            Default disabled
-          </Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="secondary" disabled>
-            Secondary disabled
-          </Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="outline" disabled>
-            Outline disabled
-          </Button>
-          <Button variant="circle">
-            <SvgIconGear />
-          </Button>
-          <Button variant="circle" disabled>
-            <SvgIconGear />
-          </Button>
-          <Button variant="danger">Danger</Button>
-          <Button variant="danger" disabled>
-            Danger disabled
-          </Button>
-        </div>
-      </section>
-
-      <section className="flex flex-col items-center gap-4">
-        <h2 className="text-lg font-medium">Badges</h2>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <Badge variant="default">InputLabel</Badge>
-          <Badge variant="success">InputLabel</Badge>
-          <Badge variant="error">InputLabel</Badge>
-          <Badge variant="default">
-            <SvgIconClock /> InputLabel
-          </Badge>
-          <Badge variant="success">
-            <SvgIconUser size="sm" /> InputLabel
-            <SvgIconUser size="sm" />
-          </Badge>
-          <Badge variant="error">
-            <SvgIconSkull size="sm" /> InputLabel
-            <SvgIconSkull size="sm" />
-          </Badge>
-        </div>
-      </section>
-
-      <section className="flex flex-col items-start gap-4">
-        <h2 className="text-lg font-medium">Steps</h2>
+      {/* Steps */}
+      <Section>
+        <SectionTitle>Steps</SectionTitle>
         <Steps>
           <StepsItem number={1}>Open your terminal</StepsItem>
           <StepsItem number={2}>Run the command</StepsItem>
           <StepsItem number={3}>Share your session</StepsItem>
         </Steps>
-      </section>
+      </Section>
 
-      <section className="flex flex-col items-center gap-4">
-        <h2 className="text-lg font-medium">Icons</h2>
-        <div className="flex flex-wrap items-center justify-center gap-4">
+      {/* Typography */}
+      <Section>
+        <SectionTitle>Typography</SectionTitle>
+        <div className="flex flex-col gap-4">
+          <Typography variant="h1">Heading 1</Typography>
+          <Typography variant="h2">Heading 2</Typography>
+          <Typography variant="h3">Heading 3</Typography>
+          <Typography variant="h4">Heading 4</Typography>
+          <Typography variant="body">Body text</Typography>
+          <Typography variant="small">Small text</Typography>
+          <Typography variant="caption">Caption text</Typography>
+          <Typography variant="small" color="neutral">
+            Neutral color
+          </Typography>
+        </div>
+      </Section>
+
+      {/* Divider */}
+      <Section>
+        <SectionTitle>Divider</SectionTitle>
+        <div className="w-full">
+          <Typography variant="small" className="mb-4">
+            Content above
+          </Typography>
+          <Divider />
+          <Typography variant="small" className="mt-4">
+            Content below
+          </Typography>
+        </div>
+      </Section>
+
+      {/* Icons */}
+      <section className="flex w-full max-w-4xl flex-col gap-6 pb-12">
+        <SectionTitle>Icons</SectionTitle>
+        <div className="flex flex-wrap items-center gap-4">
           <SvgIconArrowBottom size="lg" />
           <SvgIconArrowLeft size="lg" />
           <SvgIconArrowLink size="lg" />
@@ -252,6 +328,7 @@ const HomePage = () => {
           <SvgIconBash size="lg" />
           <SvgIconCalendar size="lg" />
           <SvgIconCheck size="lg" />
+          <SvgIconChat size="lg" />
           <SvgIconClock size="lg" />
           <SvgIconCopy size="lg" />
           <SvgIconFile size="lg" />
@@ -270,29 +347,12 @@ const HomePage = () => {
           <SvgIconTalk size="lg" />
           <SvgIconUser size="lg" />
         </div>
-
-        {/* Icon sizes */}
-        <div className="flex items-end gap-4 mt-4">
-          <div className="flex flex-col items-center gap-1">
-            <SvgIconHome size="xs" />
-            <span className="text-xs text-gray-400">xs</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <SvgIconHome size="sm" />
-            <span className="text-xs text-gray-400">sm</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <SvgIconHome size="md" />
-            <span className="text-xs text-gray-400">md</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <SvgIconHome size="lg" />
-            <span className="text-xs text-gray-400">lg</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <SvgIconHome size="xl" />
-            <span className="text-xs text-gray-400">xl</span>
-          </div>
+        <div className="flex items-end gap-6">
+          <SvgIconHome size="xs" />
+          <SvgIconHome size="sm" />
+          <SvgIconHome size="md" />
+          <SvgIconHome size="lg" />
+          <SvgIconHome size="xl" />
         </div>
       </section>
     </main>

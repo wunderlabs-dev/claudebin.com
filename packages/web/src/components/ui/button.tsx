@@ -48,6 +48,7 @@ const buttonVariants = cva(
           "active:bg-red-50/60",
           "disabled:bg-red-50/10 disabled:border-transparent disabled:text-gray-400",
         ],
+        link: ["group", "h-auto px-0 py-0 rounded-none", "disabled:text-gray-200"],
       },
       color: {
         default: [],
@@ -65,7 +66,7 @@ const buttonVariants = cva(
       variant: "default",
       color: "default",
     },
-  },
+  }
 );
 
 type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
@@ -82,4 +83,24 @@ const Button = ({ className, variant = "default", color = "default", ...props }:
   );
 };
 
-export { Button, buttonVariants };
+type ButtonTextProps = React.ComponentProps<"span">;
+
+const ButtonText = ({ className, ...props }: ButtonTextProps) => {
+  return (
+    <span
+      data-slot="button-text"
+      className={cn(
+        "relative",
+        "after:absolute after:inset-x-0 after:top-full",
+        "after:h-px after:bg-orange-50",
+        "after:origin-left after:scale-x-0",
+        "after:transition-transform after:ease-in-out",
+        "group-hover:after:scale-x-100 group-active:text-orange-50",
+        className
+      )}
+      {...props}
+    />
+  );
+};
+
+export { Button, ButtonText, buttonVariants };
