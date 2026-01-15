@@ -16,10 +16,7 @@ export const getProjectDirName = (path: string) => {
   return path.replace(NON_ALPHANUMERIC_PATTERN, "-");
 };
 
-export const getFilesWithStats = async (
-  files: string[],
-  historyPath: string,
-) => {
+export const getFilesWithStats = async (files: string[], historyPath: string) => {
   return Promise.all(
     files.map(async (file) => {
       const filePath = path.join(historyPath, file);

@@ -59,7 +59,7 @@ const buttonVariants = cva(
       variant: "default",
       color: "default",
     },
-  },
+  }
 );
 
 type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;

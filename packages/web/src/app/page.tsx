@@ -1,3 +1,4 @@
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
@@ -7,14 +8,7 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Tabs, TabsList, TabsListItem, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardMeta,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
 
 import {
   SvgIconArrowBottom,
@@ -153,6 +147,33 @@ const HomePage = () => {
           <Typography variant="body">Body text paragraph</Typography>
           <Typography variant="small">Small text</Typography>
           <Typography variant="caption">Caption text</Typography>
+        </div>
+      </section>
+
+      <section className="flex flex-col items-center gap-4">
+        <h2 className="text-lg font-medium">Avatar</h2>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Avatar size="sm">
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <Avatar size="md">
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <Avatar size="lg">
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <Avatar size="sm">
+            <AvatarFallback>M</AvatarFallback>
+          </Avatar>
+          <Avatar size="md">
+            <AvatarFallback>M</AvatarFallback>
+          </Avatar>
+          <Avatar size="lg">
+            <AvatarFallback>M</AvatarFallback>
+          </Avatar>
         </div>
       </section>
 
