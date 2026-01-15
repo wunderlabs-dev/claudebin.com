@@ -75,7 +75,6 @@ export const sessionsRouter = router({
           id,
           user_id: user.id,
           title: input.title,
-          conversation_data: null,
           is_public: input.is_public,
           status: SessionStatus.PROCESSING,
           storage_path: storagePath,
