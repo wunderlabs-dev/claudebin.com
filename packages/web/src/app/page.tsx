@@ -24,6 +24,14 @@ import {
 } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
 import {
   SvgIconArrowBottom,
@@ -321,6 +329,43 @@ const HomePage = () => {
             </div>
           </CardContent>
         </Card>
+      </Section>
+
+      {/* Table */}
+      <Section>
+        <SectionTitle>Table</SectionTitle>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Session #1</TableCell>
+              <TableCell>
+                <Badge variant="success">Published</Badge>
+              </TableCell>
+              <TableCell>Jan 15, 2025</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Session #2</TableCell>
+              <TableCell>
+                <Badge variant="neutral">Draft</Badge>
+              </TableCell>
+              <TableCell>Jan 14, 2025</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Session #3</TableCell>
+              <TableCell>
+                <Badge variant="error">Failed</Badge>
+              </TableCell>
+              <TableCell>Jan 13, 2025</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </Section>
 
       {/* List */}
