@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
   getValidToken,
+  refreshAuth,
   POLL_INTERVAL_MS,
   SESSION_POLL_TIMEOUT_MS,
 } from "../auth.js";
@@ -129,23 +130,21 @@ export const registerPublish = (server: McpServer): void => {
       const api = createApiClient();
       const apiUrl = process.env.CLAUDEBIN_API_URL || "http://localhost:3000";
 
-      try {
-        // Phase 1: Upload
+      const tryPublish = async (accessToken: string) => {
         const result = await api.sessions.publish.mutate({
           title,
           conversation_data: sessionResult.content,
           is_public: is_public ?? true,
-          access_token: token,
+          access_token: accessToken,
         });
 
-        // Phase 2: Poll for completion
         const pollResult = await pollForProcessing(result.id, apiUrl);
 
         if (!pollResult.success) {
           return {
             content: [
               {
-                type: "text",
+                type: "text" as const,
                 text: JSON.stringify({
                   success: false,
                   error: pollResult.error,
@@ -160,7 +159,7 @@ export const registerPublish = (server: McpServer): void => {
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: JSON.stringify({
                 success: true,
                 id: result.id,
@@ -169,14 +168,49 @@ export const registerPublish = (server: McpServer): void => {
             },
           ],
         };
+      };
+
+      try {
+        return await tryPublish(token);
       } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+
+        // If token was rejected, try refreshing and retry once
+        if (message.includes("Invalid or expired token")) {
+          const refreshed = await refreshAuth();
+          if (refreshed) {
+            const newToken = await getValidToken();
+            if (newToken) {
+              try {
+                return await tryPublish(newToken);
+              } catch (retryError) {
+                return {
+                  content: [
+                    {
+                      type: "text" as const,
+                      text: JSON.stringify({
+                        success: false,
+                        error:
+                          retryError instanceof Error
+                            ? retryError.message
+                            : String(retryError),
+                      }),
+                    },
+                  ],
+                  isError: true,
+                };
+              }
+            }
+          }
+        }
+
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: JSON.stringify({
                 success: false,
-                error: error instanceof Error ? error.message : String(error),
+                error: message,
               }),
             },
           ],

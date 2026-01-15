@@ -40,7 +40,7 @@ export const startAuth = async (): Promise<
   }
 };
 
-const refreshAuth = async (): Promise<boolean> => {
+export const refreshAuth = async (): Promise<boolean> => {
   const config = await readConfig();
 
   if (!config.auth?.refresh_token) return false;
