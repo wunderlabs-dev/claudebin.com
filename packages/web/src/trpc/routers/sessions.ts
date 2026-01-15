@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
@@ -31,13 +30,13 @@ export const sessionsRouter = router({
       }),
     )
     .mutation(async ({ input }) => {
-      const supabase = await createClient();
+      const serviceSupabase = createServiceClient();
 
       // Verify the token and get user
       const {
         data: { user },
         error: authError,
-      } = await supabase.auth.getUser(input.access_token);
+      } = await serviceSupabase.auth.getUser(input.access_token);
 
       if (authError || !user) {
         throw new Error("Invalid or expired token");
@@ -56,9 +55,6 @@ export const sessionsRouter = router({
       // Generate IDs and paths
       const id = nanoid(10);
       const storagePath = `${user.id}/${id}.jsonl`;
-
-      // Use service client for storage upload (bypasses RLS)
-      const serviceSupabase = createServiceClient();
 
       // Upload to Storage
       const { error: uploadError } = await serviceSupabase.storage
@@ -113,7 +109,7 @@ export const sessionsRouter = router({
   poll: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      const supabase = await createClient();
+      const supabase = createServiceClient();
 
       const { data: session, error } = await supabase
         .from("sessions")

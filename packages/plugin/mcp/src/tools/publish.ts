@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
   getValidToken,
-  refreshAuth,
   POLL_INTERVAL_MS,
+  refreshAuth,
   SESSION_POLL_TIMEOUT_MS,
 } from "../auth.js";
 import { extractSession } from "../session.js";
