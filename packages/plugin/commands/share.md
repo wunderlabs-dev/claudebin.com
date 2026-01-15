@@ -1,7 +1,14 @@
 <instructions>
-Call the extract_session tool with the current working directory as project_path.
+Call the publish tool with:
+- project_path: the current working directory
+- is_public: true
+
+If the user is not authenticated, the tool will return an error asking them to run /auth first.
 </instructions>
 
 <output>
-Output the raw result exactly as returned. Do not summarize, format, or modify it.
+If successful, output the URL in a clear format like:
+"Session published: <url>"
+
+If there's an error, explain what went wrong and how to fix it.
 </output>
