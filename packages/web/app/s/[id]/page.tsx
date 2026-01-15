@@ -65,7 +65,9 @@ const MessageContent = ({ message }: { message: Message }) => {
       <div className="text-xs font-semibold text-gray-500 mb-2 uppercase">
         {type}
       </div>
-      <div className="whitespace-pre-wrap text-sm">{textContent || JSON.stringify(content, null, 2)}</div>
+      <div className="whitespace-pre-wrap text-sm">
+        {textContent || JSON.stringify(content, null, 2)}
+      </div>
     </div>
   );
 };
