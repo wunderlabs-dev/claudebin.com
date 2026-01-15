@@ -48,15 +48,14 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: "rounded-full outline outline-gray-50 focus:outline-orange-50",
-        error:
-          "rounded-full outline outline-red-50 text-red-50 placeholder:text-red-50 focus:outline-red-50",
-        filled: "rounded-lg outline-none",
+        error: "rounded-full outline outline-red-50 text-red-50 placeholder:text-red-50 focus:outline-red-50",
+        filled: "rounded-lg outline-none px-4",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
 type InputProps = ComponentProps<"input"> & VariantProps<typeof inputVariants>;

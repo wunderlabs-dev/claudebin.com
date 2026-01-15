@@ -2,6 +2,8 @@ import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
+  AccordionIcon,
+  AccordionLabel,
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -68,25 +70,27 @@ const HomePage = () => {
       {/* Accordion */}
       <Section>
         <SectionTitle>Accordion</SectionTitle>
-
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
-            <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+            <AccordionTrigger>
+              <AccordionIcon><SvgIconFile size="md" /></AccordionIcon>
+              <AccordionLabel>Read</AccordionLabel>
+            </AccordionTrigger>
+            <AccordionContent>253 lines</AccordionContent>
           </AccordionItem>
-        </Accordion>
-
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
-            <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>
+              <AccordionIcon><SvgIconGear size="md" /></AccordionIcon>
+              <AccordionLabel>Settings</AccordionLabel>
+            </AccordionTrigger>
+            <AccordionContent>Configuration options</AccordionContent>
           </AccordionItem>
-        </Accordion>
-
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
-            <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>
+              <AccordionIcon><SvgIconUser size="md" /></AccordionIcon>
+              <AccordionLabel>Profile</AccordionLabel>
+            </AccordionTrigger>
+            <AccordionContent>User information</AccordionContent>
           </AccordionItem>
         </Accordion>
       </Section>
