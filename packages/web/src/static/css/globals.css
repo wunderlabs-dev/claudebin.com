@@ -32,16 +32,8 @@
   --color-gray-450: #b5b5b5;
   --color-gray-500: #d1d1d1;
   --color-gray-550: #e8e8e8;
-
-  --bg-dots-size: 16px;
-  --bg-dots-color: color-mix(in srgb, var(--color-gray-450) 40%, transparent);
 }
 
-@utility bg-dots {
-  background-size: var(--bg-dots-size) var(--bg-dots-size);
-  background-image: radial-gradient(circle, var(--bg-dots-color) 1px, transparent 1px);
-}
-
-@utility shadow-ridge-t {
+@utility ridge-t {
   box-shadow: inset 0 1px 0 0 color-mix(in srgb, var(--color-white) 20%, transparent);
 }

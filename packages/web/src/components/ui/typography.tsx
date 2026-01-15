@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/utils/helpers";
 
-const typographyVariants = cva("text-inherit", {
+const typographyVariants = cva([], {
   variants: {
     variant: {
       h1: "text-7xl font-extrabold leading-normal",
@@ -14,9 +14,25 @@ const typographyVariants = cva("text-inherit", {
       small: "text-base font-normal leading-6",
       caption: "text-xs font-normal leading-6",
     },
+    fontWeight: {
+      default: [],
+      semibold: "font-semibold",
+      bold: "font-bold",
+    },
+    color: {
+      default: "text-inherit",
+      muted: "text-gray-350",
+    },
+    leading: {
+      default: [],
+      normal: "leading-normal",
+    },
   },
   defaultVariants: {
     variant: "body",
+    fontWeight: "default",
+    color: "default",
+    leading: "default",
   },
 });
 
@@ -32,9 +48,7 @@ type VariantElementMap = {
 
 type Variant = keyof VariantElementMap;
 
-type TypographyProps<V extends Variant = "body"> = React.ComponentProps<
-  VariantElementMap[V]
-> &
+type TypographyProps<V extends Variant = "body"> = React.ComponentProps<VariantElementMap[V]> &
   VariantProps<typeof typographyVariants> & {
     variant?: V;
     as?: React.ElementType;
@@ -52,6 +66,9 @@ const defaultElements: VariantElementMap = {
 
 const Typography = <V extends Variant = "body">({
   variant = "body" as V,
+  fontWeight = "default",
+  color = "default",
+  leading = "default",
   as,
   className,
   ...props
@@ -62,7 +79,7 @@ const Typography = <V extends Variant = "body">({
     <Component
       data-slot="typography"
       data-variant={variant}
-      className={cn(typographyVariants({ variant, className }))}
+      className={cn(typographyVariants({ variant, fontWeight, color, leading, className }))}
       {...props}
     />
   );

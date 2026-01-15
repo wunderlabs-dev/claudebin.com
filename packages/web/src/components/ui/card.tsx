@@ -1,21 +1,26 @@
 import type * as React from "react";
 
+import { Typography } from "@/components/ui/typography";
+
 import { cn } from "@/utils/helpers";
 
 type CardProps = React.ComponentProps<"article">;
 
-const Card = ({ className, ...props }: CardProps) => {
+const Card = ({ className, children, ...props }: CardProps) => {
   return (
     <article
       data-slot="card"
       className={cn(
-        "flex flex-col",
-        "border border-gray-200",
         "px-2 py-2",
-        className,
+        "border border-gray-200",
+        "transition ease-in-out",
+        "hover:border-orange-50",
+        className
       )}
       {...props}
-    />
+    >
+      <div className="flex flex-col justify-between">{children}</div>
+    </article>
   );
 };
 
@@ -23,17 +28,9 @@ type CardHeaderProps = React.ComponentProps<"header">;
 
 const CardHeader = ({ className, ...props }: CardHeaderProps) => {
   return (
-    <header data-slot="card-header" className={cn("", className)} {...props} />
-  );
-};
-
-type CardMetaProps = React.ComponentProps<"div">;
-
-const CardMeta = ({ className, ...props }: CardMetaProps) => {
-  return (
-    <div
-      data-slot="card-meta"
-      className={cn("flex items-center gap-2 text-sm text-gray-400", className)}
+    <header
+      data-slot="card-header"
+      className={cn("flex items-center self-end gap-4 bg-gray-100 pl-4 pb-4 pr-2 pt-2", className)}
       {...props}
     />
   );
@@ -45,25 +42,55 @@ const CardContent = ({ className, ...props }: CardContentProps) => {
   return (
     <div
       data-slot="card-content"
-      className={cn("flex flex-col gap-1 p-4", className)}
+      className={cn("flex flex-col self-start gap-4 bg-gray-100 px-2 py-2", className)}
       {...props}
     />
   );
 };
 
-type CardFooterProps = React.ComponentProps<"footer">;
+type CardTitleProps = Omit<React.ComponentProps<"p">, "color">;
 
-const CardFooter = ({ className, ...props }: CardFooterProps) => {
+const CardTitle = ({ className, ...props }: CardTitleProps) => {
   return (
-    <footer
-      data-slot="card-footer"
-      className={cn(
-        "flex items-center gap-4 px-4 pb-4 text-sm text-gray-400",
-        className,
-      )}
+    <Typography
+      data-slot="card-title"
+      variant="small"
+      fontWeight="semibold"
+      leading="normal"
+      className={className}
       {...props}
     />
   );
 };
 
-export { Card, CardHeader, CardMeta, CardContent, CardFooter };
+type CardDescriptionProps = Omit<React.ComponentProps<"p">, "color">;
+
+const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
+  return (
+    <Typography
+      data-slot="card-description"
+      variant="small"
+      color="muted"
+      leading="normal"
+      className={className}
+      {...props}
+    />
+  );
+};
+
+type CardMetaProps = {
+  icon: React.ReactNode;
+} & React.ComponentProps<"div">;
+
+const CardMeta = ({ icon, children, className, ...props }: CardMetaProps) => {
+  return (
+    <div data-slot="card-meta" className={cn("flex items-center gap-1", className)} {...props}>
+      {icon}
+      <Typography variant="caption" color="muted" leading="normal">
+        {children}
+      </Typography>
+    </div>
+  );
+};
+
+export { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta };

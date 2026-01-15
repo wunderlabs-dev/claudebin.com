@@ -35,11 +35,13 @@ const CopyInput = ({
       data-slot="copy-input"
       data-disabled={disabled}
       className={cn(
-        "group flex items-center gap-5",
-        "transition ease-in-out",
-        "bg-gray-150 border border-gray-50 hover:border-orange-50/60 active:border-orange-50",
-        "p-1",
+        "group flex items-center",
+        "p-1 gap-5",
         "rounded-full",
+        "bg-gray-150 border border-gray-50",
+        "transition ease-in-out",
+        "hover:border-orange-50/60",
+        "active:border-orange-50",
         className,
       )}
       {...props}

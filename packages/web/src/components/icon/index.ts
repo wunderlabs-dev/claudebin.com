@@ -1,7 +1,9 @@
 export {
   SvgIcon,
   SvgIconSizes,
+  SvgIconColors,
   type SvgIconSize,
+  type SvgIconColor,
   type SvgIconProps,
 } from "./svg-icon";
 export { SvgIconArrowBottom } from "./svg-icon-arrow-bottom";
@@ -11,6 +13,7 @@ export { SvgIconArrowRight } from "./svg-icon-arrow-right";
 export { SvgIconArrowTop } from "./svg-icon-arrow-top";
 export { SvgIconBash } from "./svg-icon-bash";
 export { SvgIconCalendar } from "./svg-icon-calendar";
+export { SvgIconChat } from "./svg-icon-chat";
 export { SvgIconCheck } from "./svg-icon-check";
 export { SvgIconClock } from "./svg-icon-clock";
 export { SvgIconCopy } from "./svg-icon-copy";

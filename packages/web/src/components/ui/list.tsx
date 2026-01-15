@@ -14,9 +14,10 @@ const List = ({ className, ...props }: ListProps) => {
 const listItemVariants = cva(
   [
     "group",
-    "flex items-center gap-3",
-    "text-white font-medium whitespace-nowrap",
-    "select-none cursor-pointer",
+    "flex items-center",
+    "gap-3",
+    "font-medium text-white whitespace-nowrap",
+    "cursor-pointer select-none",
   ],
   {
     variants: {
@@ -53,7 +54,8 @@ const listItemLabelVariants = cva(
   [
     "relative",
     "after:absolute after:inset-x-0 after:top-full",
-    "after:h-px after:bg-orange-50",
+    "after:h-px",
+    "after:bg-orange-50",
     "after:origin-left after:scale-x-0",
     "after:transition-transform after:ease-in-out",
   ],

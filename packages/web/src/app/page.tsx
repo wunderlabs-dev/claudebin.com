@@ -4,19 +4,11 @@ import { Typography } from "@/components/ui/typography";
 import { Steps, StepsItem } from "@/components/ui/steps";
 import { FormControl, Input, InputLabel } from "@/components/ui/form-control";
 import { CopyInput } from "@/components/ui/copy-input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsListItem, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import {
-  Card,
-  CardHeader,
-  CardMeta,
-  CardContent,
-  CardTitle,
-  CardAuthor,
-  CardFooter,
-  CardStat,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
+
 import {
   SvgIconArrowBottom,
   SvgIconArrowLeft,
@@ -40,6 +32,7 @@ import {
   SvgIconLoading,
   SvgIconRefresh,
   SvgIconShield,
+  SvgIconChat,
   SvgIconSkull,
   SvgIconTalk,
   SvgIconUser,
@@ -52,11 +45,11 @@ const HomePage = () => {
         <h2 className="text-lg font-medium">Tabs</h2>
         <Tabs defaultValue="option1">
           <TabsList>
-            <TabsTrigger value="option1">Option</TabsTrigger>
-            <TabsTrigger value="option2">Option</TabsTrigger>
-            <TabsTrigger value="option3">Option</TabsTrigger>
-            <TabsTrigger value="option4">Option</TabsTrigger>
-            <TabsTrigger value="option5">Option</TabsTrigger>
+            <TabsListItem value="option1">Option</TabsListItem>
+            <TabsListItem value="option2">Option</TabsListItem>
+            <TabsListItem value="option3">Option</TabsListItem>
+            <TabsListItem value="option4">Option</TabsListItem>
+            <TabsListItem value="option5">Option</TabsListItem>
           </TabsList>
 
           <TabsContent value="option1">Content for option 1</TabsContent>
@@ -64,6 +57,16 @@ const HomePage = () => {
           <TabsContent value="option3">Content for option 3</TabsContent>
           <TabsContent value="option4">Content for option 4</TabsContent>
           <TabsContent value="option5">Content for option 5</TabsContent>
+        </Tabs>
+
+        <Tabs defaultValue="option1" variant="transparent">
+          <TabsList>
+            <TabsListItem value="option1">Option</TabsListItem>
+            <TabsListItem value="option2">Option</TabsListItem>
+          </TabsList>
+
+          <TabsContent value="option1">Content for option 1</TabsContent>
+          <TabsContent value="option2">Content for option 2</TabsContent>
         </Tabs>
       </section>
 
@@ -88,25 +91,25 @@ const HomePage = () => {
 
       <section className="flex flex-col items-start gap-4">
         <h2 className="text-lg font-medium">Card</h2>
+
         <Card>
-          {/* <CardHeader>
-            <CardMeta>
+          <CardHeader>
+            <div className="flex items-center gap-1">
               <SvgIconClock size="sm" />
-              <span>2h ago</span>
-              <SvgIconArrowLink size="sm" className="ml-auto text-orange-50" />
-            </CardMeta>
-          </CardHeader> */}
-          <CardContent></CardContent>
-          {/* <CardFooter>
-            <CardStat>
-              <SvgIconTalk size="sm" />
-              <span>10 prompts</span>
-            </CardStat>
-            <CardStat>
-              <SvgIconFile size="sm" />
-              <span>2 files</span>
-            </CardStat>
-          </CardFooter> */}
+              <Typography variant="caption">2h ago</Typography>
+            </div>
+            <SvgIconArrowLink size="sm" color="primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-1">
+              <CardTitle>React hooks optimization patterns</CardTitle>
+              <CardDescription>@sarah</CardDescription>
+            </div>
+            <div className="flex flex-col gap-1">
+              <CardMeta icon={<SvgIconChat size="sm" color="muted" />}>89 prompts</CardMeta>
+              <CardMeta icon={<SvgIconFile size="sm" color="muted" />}>2 files</CardMeta>
+            </div>
+          </CardContent>
         </Card>
       </section>
 

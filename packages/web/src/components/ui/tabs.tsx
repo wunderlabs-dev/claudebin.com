@@ -1,69 +1,87 @@
 "use client";
 
+import { createContext, useContext } from "react";
 import type * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/utils/helpers";
 
-const Tabs = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof TabsPrimitive.Root>) => {
+const TabsVariants = ["default", "transparent"] as const;
+
+type TabsVariant = (typeof TabsVariants)[number];
+
+const TabsContext = createContext<TabsVariant>("default");
+
+type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root> & {
+  variant?: TabsVariant;
+};
+
+const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
   return (
-    <TabsPrimitive.Root
-      data-slot="tabs"
-      className={cn("flex flex-col", className)}
-      {...props}
-    />
+    <TabsContext.Provider value={variant}>
+      <TabsPrimitive.Root
+        data-slot="tabs"
+        data-variant={variant}
+        className={cn("flex flex-col", className)}
+        {...props}
+      />
+    </TabsContext.Provider>
   );
 };
 
-const TabsList = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof TabsPrimitive.List>) => {
+const tabsListVariantClassNames: Record<TabsVariant, string> = {
+  default: "p-1 rounded-full bg-gray-150 border border-gray-50",
+  transparent: "p-1 border border-transparent",
+};
+
+const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) => {
+  const variant = useContext(TabsContext);
+
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        "inline-flex h-14 w-fit items-center gap-1 p-1",
-        "rounded-full",
-        "bg-gray-150 border border-gray-50",
-        className,
+        "inline-flex items-center",
+        "h-14 w-fit",
+        "gap-1",
+        tabsListVariantClassNames[variant],
+        className
       )}
       {...props}
     />
   );
 };
 
-const TabsTrigger = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
+const tabsListItemVariantClassNames: Record<TabsVariant, string> = {
+  default: "data-[state=active]:bg-gray-100 data-[state=active]:text-white",
+  transparent: "border border-transparent data-[state=active]:border-gray-50 data-[state=active]:text-white",
+};
+
+const TabsListItem = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
+  const variant = useContext(TabsContext);
+
   return (
     <TabsPrimitive.Trigger
-      data-slot="tabs-trigger"
+      data-slot="tabs-list-item"
       className={cn(
-        "inline-flex h-full items-center justify-center",
+        "inline-flex items-center justify-center",
+        "h-full",
         "px-6 py-2",
         "rounded-full",
         "text-base font-normal text-gray-400",
         "cursor-pointer select-none",
         "transition ease-in-out",
         "hover:text-white",
-        "data-[state=active]:bg-gray-100 data-[state=active]:text-white",
         "disabled:pointer-events-none disabled:opacity-50",
-        className,
+        tabsListItemVariantClassNames[variant],
+        className
       )}
       {...props}
     />
   );
 };
 
-const TabsContent = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) => {
+const TabsContent = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) => {
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
@@ -73,4 +91,4 @@ const TabsContent = ({
   );
 };
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+export { Tabs, TabsList, TabsListItem, TabsContent };

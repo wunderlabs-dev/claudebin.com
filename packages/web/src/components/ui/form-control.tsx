@@ -45,11 +45,12 @@ const FormControl = ({
 
 const inputVariants = cva(
   [
-    "flex w-full",
-    "h-12 px-7 py-3",
+    "flex",
+    "h-12 w-full",
+    "px-7 py-3",
     "rounded-full",
-    "bg-gray-150 outline outline-gray-50",
     "font-mono text-base text-white placeholder:text-gray-400",
+    "bg-gray-150 outline outline-gray-50",
     "transition ease-in-out",
     "focus:outline-orange-50",
     "disabled:pointer-events-none disabled:opacity-50",
@@ -58,9 +59,7 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: [],
-        error: [
-          "text-red-50 placeholder:text-red-50 outline-red-50 focus:outline-red-50",
-        ],
+        error: "text-red-50 placeholder:text-red-50 outline-red-50 focus:outline-red-50",
       },
     },
     defaultVariants: {
