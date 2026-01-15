@@ -12,6 +12,7 @@ const typographyVariants = cva([], {
       h4: "text-xl font-semibold leading-normal",
       body: "text-xl font-normal leading-6",
       small: "text-base font-normal leading-6",
+      overline: "text-base font-normal font-mono leading-6",
       caption: "text-xs font-normal leading-6",
     },
     fontWeight: {
@@ -43,6 +44,7 @@ type VariantElementMap = {
   h4: "h4";
   body: "p";
   small: "p";
+  overline: "span";
   caption: "span";
 };
 
@@ -61,6 +63,7 @@ const defaultElements: VariantElementMap = {
   h4: "h4",
   body: "p",
   small: "p",
+  overline: "span",
   caption: "span",
 };
 

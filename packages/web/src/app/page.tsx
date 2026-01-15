@@ -16,14 +16,8 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardMeta,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
+import { Chip } from "@/components/ui/chip";
 
 import {
   SvgIconArrowBottom,
@@ -73,30 +67,10 @@ const HomePage = () => {
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger>
-              <AccordionIcon>
-                <SvgIconFile size="md" />
-              </AccordionIcon>
-              <AccordionLabel>Read</AccordionLabel>
+              <SvgIconGear size="md" color="accent" />
+              <Typography variant="overline">Read</Typography>
             </AccordionTrigger>
             <AccordionContent>253 lines</AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2">
-            <AccordionTrigger>
-              <AccordionIcon>
-                <SvgIconGear size="md" />
-              </AccordionIcon>
-              <AccordionLabel>Settings</AccordionLabel>
-            </AccordionTrigger>
-            <AccordionContent>Configuration options</AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-3">
-            <AccordionTrigger>
-              <AccordionIcon>
-                <SvgIconUser size="md" />
-              </AccordionIcon>
-              <AccordionLabel>Profile</AccordionLabel>
-            </AccordionTrigger>
-            <AccordionContent>User information</AccordionContent>
           </AccordionItem>
         </Accordion>
       </Section>
@@ -202,6 +176,18 @@ const HomePage = () => {
           <Badge variant="error">
             <SvgIconSkull size="sm" /> Failed
           </Badge>
+        </div>
+      </Section>
+
+      {/* Chip */}
+      <Section>
+        <SectionTitle>Chip</SectionTitle>
+        <div className="flex flex-wrap items-center gap-4">
+          <Chip icon={<SvgIconFile size="sm" />} label="html.py" />
+          <Chip icon={<SvgIconFile size="sm" />} label="index.ts" />
+          <Chip icon={<SvgIconFolder size="sm" />} label="components" />
+          <Chip label="253 lines" />
+          <Chip label="v1.0.0" />
         </div>
       </Section>
 
@@ -344,6 +330,7 @@ const HomePage = () => {
           <Typography variant="h4">Heading 4</Typography>
           <Typography variant="body">Body text</Typography>
           <Typography variant="small">Small text</Typography>
+          <Typography variant="overline">Overline text</Typography>
           <Typography variant="caption">Caption text</Typography>
           <Typography variant="small" color="neutral">
             Neutral color

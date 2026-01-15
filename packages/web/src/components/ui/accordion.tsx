@@ -47,11 +47,11 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
           "cursor-pointer",
           "disabled:pointer-events-none disabled:opacity-50",
           "[&[data-state=open]>span]:rotate-180",
-          className,
+          className
         )}
         {...props}
       >
-        {children}
+        <div className="flex flex-1 items-center gap-4">{children}</div>
         <span className="text-gray-350 transition-all duration-200 ease-in-out group-hover:text-white">
           <SvgIconArrowBottom size="md" />
         </span>
