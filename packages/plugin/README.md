@@ -1,6 +1,6 @@
-# Claudebin Share Plugin
+# Claudebin Plugin
 
-A Claude Code plugin that extracts the current session as raw JSONL for sharing to claudebin.com.
+A Claude Code plugin for publishing sessions to claudebin.com.
 
 ## Installation
 
@@ -10,22 +10,53 @@ Add the plugin to your Claude Code configuration:
 claude plugin add /path/to/packages/plugin
 ```
 
-## Usage
+## Commands
 
-In a Claude Code session:
+### /share
+
+Publish the current session to claudebin.com and get a shareable URL.
 
 ```
 /share
 ```
 
-This extracts the current session's JSONL and outputs it for sharing.
+Returns a URL like `https://claudebin.com/s/abc123` that anyone can view.
+
+**Note:** Requires authentication. Run `/auth` first if not logged in.
+
+### /auth
+
+Authenticate with claudebin.com via GitHub OAuth.
+
+```
+/auth
+```
+
+Opens browser for GitHub sign-in, then saves credentials locally.
+
+### /whoami
+
+Check current authentication status.
+
+```
+/whoami
+```
+
+### /logout
+
+Clear saved credentials.
+
+```
+/logout
+```
 
 ## Architecture
 
-The plugin uses an MCP server to handle session extraction. Claude acts as a thin pass-through:
-
 ```
-/share command → Claude calls → MCP tool extract_session → Returns raw JSONL
+/share → Claude calls → MCP publish tool → Upload to Supabase
+                                         → Background processing
+                                         → Poll for completion
+                                         → Return URL
 ```
 
 ## Development
@@ -34,11 +65,11 @@ Build the MCP server:
 
 ```bash
 cd mcp
-pnpm build
+bun build
 ```
 
 ## Files
 
-- `.claude-plugin/manifest.json` - Plugin metadata and MCP server configuration
-- `commands/share.md` - Slash command definition
-- `mcp/` - MCP server that implements the extract_session tool
+- `.claude-plugin/plugin.json` - Plugin metadata
+- `commands/` - Slash command definitions
+- `mcp/` - MCP server implementing tools
