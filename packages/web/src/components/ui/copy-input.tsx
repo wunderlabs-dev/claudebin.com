@@ -30,14 +30,14 @@ const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => 
       data-slot="copy-input"
       data-disabled={disabled}
       className={cn(
-        "group flex items-center",
+        "group flex items-center justify-between",
         "p-1 gap-5",
         "rounded-full",
         "bg-gray-150 border border-gray-50",
         "transition ease-in-out",
         "hover:border-orange-50/60",
         "active:border-orange-50",
-        className,
+        className
       )}
       {...props}
     >
