@@ -30,7 +30,13 @@ const TableHeader = ({ className, ...props }: TableHeaderProps) => {
 type TableBodyProps = React.ComponentProps<"tbody">;
 
 const TableBody = ({ className, ...props }: TableBodyProps) => {
-  return <tbody data-slot="table-body" className={cn("[&_tr:last-child]:border-0", className)} {...props} />;
+  return (
+    <tbody
+      data-slot="table-body"
+      className={cn("[&_tr:last-child]:border-0", className)}
+      {...props}
+    />
+  );
 };
 
 type TableFooterProps = React.ComponentProps<"tfoot">;
@@ -39,7 +45,10 @@ const TableFooter = ({ className, ...props }: TableFooterProps) => {
   return (
     <tfoot
       data-slot="table-footer"
-      className={cn("border-t border-gray-150 bg-gray-100 font-medium [&>tr]:last:border-b-0", className)}
+      className={cn(
+        "border-t border-gray-150 bg-gray-100 font-medium [&>tr]:last:border-b-0",
+        className,
+      )}
       {...props}
     />
   );
@@ -53,7 +62,7 @@ const TableRow = ({ className, ...props }: TableRowProps) => {
       data-slot="table-row"
       className={cn(
         "group border-b border-gray-150 transition-colors hover:border-gray-100 hover:bg-gray-450/10 data-[state=selected]:bg-gray-100",
-        className
+        className,
       )}
       {...props}
     />
@@ -69,7 +78,7 @@ const TableHead = ({ className, ...props }: TableHeadProps) => {
       className={cn(
         "px-4 py-3 text-left align-middle text-xl font-medium text-white whitespace-nowrap",
         "border-r border-gray-150 last:border-r-0 transition-colors group-hover:border-gray-100",
-        className
+        className,
       )}
       {...props}
     />
@@ -85,7 +94,7 @@ const TableCell = ({ className, ...props }: TableCellProps) => {
       className={cn(
         "px-4 py-3 align-middle text-base text-white whitespace-nowrap",
         "border-r border-gray-150 last:border-r-0 transition-colors group-hover:border-gray-100",
-        className
+        className,
       )}
       {...props}
     />
@@ -96,7 +105,11 @@ type TableCaptionProps = React.ComponentProps<"caption">;
 
 const TableCaption = ({ className, ...props }: TableCaptionProps) => {
   return (
-    <caption data-slot="table-caption" className={cn("mt-4 text-sm text-gray-350", className)} {...props} />
+    <caption
+      data-slot="table-caption"
+      className={cn("mt-4 text-sm text-gray-350", className)}
+      {...props}
+    />
   );
 };
 
