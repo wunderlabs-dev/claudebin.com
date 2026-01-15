@@ -73,21 +73,27 @@ const HomePage = () => {
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger>
-              <AccordionIcon><SvgIconFile size="md" /></AccordionIcon>
+              <AccordionIcon>
+                <SvgIconFile size="md" />
+              </AccordionIcon>
               <AccordionLabel>Read</AccordionLabel>
             </AccordionTrigger>
             <AccordionContent>253 lines</AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
             <AccordionTrigger>
-              <AccordionIcon><SvgIconGear size="md" /></AccordionIcon>
+              <AccordionIcon>
+                <SvgIconGear size="md" />
+              </AccordionIcon>
               <AccordionLabel>Settings</AccordionLabel>
             </AccordionTrigger>
             <AccordionContent>Configuration options</AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
             <AccordionTrigger>
-              <AccordionIcon><SvgIconUser size="md" /></AccordionIcon>
+              <AccordionIcon>
+                <SvgIconUser size="md" />
+              </AccordionIcon>
               <AccordionLabel>Profile</AccordionLabel>
             </AccordionTrigger>
             <AccordionContent>User information</AccordionContent>
