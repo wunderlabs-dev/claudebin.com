@@ -229,10 +229,26 @@ export interface RawJsonlMessage {
   };
 }
 
-export type RawContentBlock =
-  | { type: "text"; text: string }
-  | { type: "tool_use"; id: string; name: string; input: Record<string, unknown> }
-  | { type: "tool_result"; tool_use_id: string; content: string; is_error?: boolean };
+export interface RawTextBlock {
+  type: "text";
+  text: string;
+}
+
+export interface RawToolUseBlock {
+  type: "tool_use";
+  id: string;
+  name: string;
+  input: Record<string, unknown>;
+}
+
+export interface RawToolResultBlock {
+  type: "tool_result";
+  tool_use_id: string;
+  content: string;
+  is_error?: boolean;
+}
+
+export type RawContentBlock = RawTextBlock | RawToolUseBlock | RawToolResultBlock;
 
 // =============================================================================
 // Display Helpers
@@ -288,8 +304,9 @@ export const isTextBlock = (block: ContentBlock): block is TextBlock =>
 export const isToolUseBlock = (block: ContentBlock): block is ToolUseBlock =>
   block.type === "tool_use";
 
-export const isToolResultBlock = (block: ContentBlock): block is ToolResultBlock =>
-  block.type === "tool_result";
+export const isToolResultBlock = (
+  block: ContentBlock,
+): block is ToolResultBlock => block.type === "tool_result";
 
 export const isMcpTool = (name: string): name is McpTool =>
   name.startsWith("mcp__");

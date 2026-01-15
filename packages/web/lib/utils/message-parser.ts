@@ -47,7 +47,7 @@ export const parseRawMessage = (raw: RawJsonlMessage): Message | null => {
  * Normalize content to always be an array of ContentBlocks
  */
 const normalizeContent = (
-  content: string | RawContentBlock[] | undefined
+  content: string | RawContentBlock[] | undefined,
 ): ContentBlock[] => {
   if (!content) {
     return [];
@@ -95,7 +95,9 @@ const normalizeContentBlock = (block: RawContentBlock): ContentBlock => {
  */
 export const extractTextContent = (content: ContentBlock[]): string => {
   return content
-    .filter((block): block is { type: "text"; text: string } => block.type === "text")
+    .filter(
+      (block): block is { type: "text"; text: string } => block.type === "text",
+    )
     .map((block) => block.text)
     .join("\n");
 };
@@ -104,12 +106,18 @@ export const extractTextContent = (content: ContentBlock[]): string => {
  * Get tool calls from content blocks
  */
 export const extractToolCalls = (
-  content: ContentBlock[]
+  content: ContentBlock[],
 ): Array<{ id: string; name: string; input: Record<string, unknown> }> => {
   return content
     .filter(
-      (block): block is { type: "tool_use"; id: string; name: string; input: Record<string, unknown> } =>
-        block.type === "tool_use"
+      (
+        block,
+      ): block is {
+        type: "tool_use";
+        id: string;
+        name: string;
+        input: Record<string, unknown>;
+      } => block.type === "tool_use",
     )
     .map((block) => ({
       id: block.id,
