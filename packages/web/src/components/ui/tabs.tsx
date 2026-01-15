@@ -45,7 +45,7 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
         "h-14 w-fit",
         "gap-1",
         tabsListVariantClassNames[variant],
-        className
+        className,
       )}
       {...props}
     />
@@ -54,10 +54,14 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
 
 const tabsListItemVariantClassNames: Record<TabsVariant, string> = {
   default: "data-[state=active]:bg-gray-100 data-[state=active]:text-white",
-  transparent: "border border-transparent data-[state=active]:border-gray-50 data-[state=active]:text-white",
+  transparent:
+    "border border-transparent data-[state=active]:border-gray-50 data-[state=active]:text-white",
 };
 
-const TabsListItem = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
+const TabsListItem = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
   const variant = useContext(TabsContext);
 
   return (
@@ -74,14 +78,17 @@ const TabsListItem = ({ className, ...props }: React.ComponentProps<typeof TabsP
         "hover:text-white",
         "disabled:pointer-events-none disabled:opacity-50",
         tabsListItemVariantClassNames[variant],
-        className
+        className,
       )}
       {...props}
     />
   );
 };
 
-const TabsContent = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) => {
+const TabsContent = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Content>) => {
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"

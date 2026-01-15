@@ -26,8 +26,7 @@ const badgeVariants = cva(
   },
 );
 
-type BadgeProps = React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants>;
+type BadgeProps = React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>;
 
 const Badge = ({ className, variant = "default", ...props }: BadgeProps) => {
   return (

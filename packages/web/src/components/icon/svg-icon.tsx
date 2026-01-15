@@ -43,11 +43,7 @@ const SvgIcon = ({
       aria-hidden="true"
       viewBox={viewBox}
       fill="currentColor"
-      className={cn(
-        svgIconSizeClassNames[size],
-        svgIconColorClassNames[color],
-        className
-      )}
+      className={cn(svgIconSizeClassNames[size], svgIconColorClassNames[color], className)}
       {...props}
     >
       {children}

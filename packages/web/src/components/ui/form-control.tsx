@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  use,
-  type HTMLAttributes,
-  type ComponentProps,
-} from "react";
+import { createContext, use, type HTMLAttributes, type ComponentProps } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/utils/helpers";
@@ -26,11 +21,7 @@ type FormControlProps = HTMLAttributes<HTMLDivElement> & {
   variant?: FormControlVariant;
 };
 
-const FormControl = ({
-  variant = "default",
-  className,
-  ...props
-}: FormControlProps) => {
+const FormControl = ({ variant = "default", className, ...props }: FormControlProps) => {
   return (
     <FormControlContext.Provider value={{ variant }}>
       <div
@@ -106,11 +97,7 @@ const InputLabel = ({ className, ...props }: InputLabelProps) => {
     // biome-ignore lint/a11y/noLabelWithoutControl: htmlFor is passed via props
     <label
       data-slot="input-label"
-      className={cn(
-        "px-3",
-        inputLabelVariants({ variant: context.variant }),
-        className,
-      )}
+      className={cn("px-3", inputLabelVariants({ variant: context.variant }), className)}
       {...props}
     />
   );

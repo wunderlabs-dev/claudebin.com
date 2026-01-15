@@ -52,8 +52,7 @@ const writeConfig = async (config: Config): Promise<void> => {
 const POLL_INTERVAL_MS = 2000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
-const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 interface AuthStartResponse {
   code: string;
@@ -97,9 +96,7 @@ const getFilesWithStats = async (files: string[], directoryPath: string) => {
   );
 };
 
-const findMostRecentSession = (
-  files: { file: string; mtime: Date }[],
-): string | null => {
+const findMostRecentSession = (files: { file: string; mtime: Date }[]): string | null => {
   const sessions = files
     .filter((entry) => entry.file.endsWith(".jsonl"))
     .filter((entry) => !entry.file.startsWith("agent-"))
@@ -155,9 +152,7 @@ const main = async () => {
     "extract_session",
     "Extract the most recent Claude Code session for a project as raw JSONL",
     {
-      project_path: z
-        .string()
-        .describe("Absolute path to the project directory"),
+      project_path: z.string().describe("Absolute path to the project directory"),
     },
     async ({ project_path }) => {
       const result = await extractSession(project_path);
@@ -228,9 +223,7 @@ const main = async () => {
         await sleep(POLL_INTERVAL_MS);
 
         try {
-          const pollResponse = await fetch(
-            `${baseUrl}/api/auth/poll?code=${startResponse.code}`,
-          );
+          const pollResponse = await fetch(`${baseUrl}/api/auth/poll?code=${startResponse.code}`);
 
           if (!pollResponse.ok) {
             continue;
@@ -301,38 +294,33 @@ const main = async () => {
     },
   );
 
-  server.tool(
-    "whoami",
-    "Check current Claudebin authentication status",
-    {},
-    async () => {
-      const config = await readConfig();
+  server.tool("whoami", "Check current Claudebin authentication status", {}, async () => {
+    const config = await readConfig();
 
-      if (!config.auth?.token || !config.user) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({ authenticated: false }),
-            },
-          ],
-        };
-      }
-
+    if (!config.auth?.token || !config.user) {
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({
-              authenticated: true,
-              username: config.user.username,
-              avatar_url: config.user.avatar_url,
-            }),
+            text: JSON.stringify({ authenticated: false }),
           },
         ],
       };
-    },
-  );
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify({
+            authenticated: true,
+            username: config.user.username,
+            avatar_url: config.user.avatar_url,
+          }),
+        },
+      ],
+    };
+  });
 
   server.tool("logout", "Clear Claudebin credentials", {}, async () => {
     try {

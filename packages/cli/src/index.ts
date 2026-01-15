@@ -16,14 +16,8 @@ program
   .option("-s, --session-id <session-id>", "Session ID to publish")
   .action(publish);
 
-program
-  .command("list")
-  .description("List sessions for current project")
-  .action(list);
+program.command("list").description("List sessions for current project").action(list);
 
-program
-  .command("whoami")
-  .description("Show current authenticated user")
-  .action(whoami);
+program.command("whoami").description("Show current authenticated user").action(whoami);
 
 program.parse();
