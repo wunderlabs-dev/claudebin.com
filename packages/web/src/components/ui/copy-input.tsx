@@ -37,7 +37,7 @@ const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => 
         "transition ease-in-out",
         "hover:border-orange-50/60",
         "active:border-orange-50",
-        className
+        className,
       )}
       {...props}
     >
