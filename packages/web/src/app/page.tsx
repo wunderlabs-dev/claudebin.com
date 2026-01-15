@@ -1,3 +1,4 @@
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -5,17 +6,10 @@ import { Typography } from "@/components/ui/typography";
 import { Steps, StepsItem } from "@/components/ui/steps";
 import { FormControl, Input, InputLabel } from "@/components/ui/form-control";
 import { CopyInput } from "@/components/ui/copy-input";
-import { Tabs, TabsList, TabsListItem, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardMeta,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
 
 import {
   SvgIconArrowBottom,
@@ -59,6 +53,32 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 const HomePage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center gap-12 p-12">
+      {/* Accordion */}
+      <Section>
+        <SectionTitle>Accordion</SectionTitle>
+
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Is it accessible?</AccordionTrigger>
+            <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Is it accessible?</AccordionTrigger>
+            <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Is it accessible?</AccordionTrigger>
+            <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Section>
+
       {/* Buttons */}
       <Section>
         <SectionTitle>Buttons</SectionTitle>
@@ -204,9 +224,9 @@ const HomePage = () => {
             </Typography>
             <Tabs defaultValue="tab1">
               <TabsList>
-                <TabsListItem value="tab1">Overview</TabsListItem>
-                <TabsListItem value="tab2">Settings</TabsListItem>
-                <TabsListItem value="tab3">Activity</TabsListItem>
+                <TabsTrigger value="tab1">Overview</TabsTrigger>
+                <TabsTrigger value="tab2">Settings</TabsTrigger>
+                <TabsTrigger value="tab3">Activity</TabsTrigger>
               </TabsList>
               <TabsContent value="tab1" className="pt-4">
                 Overview content
@@ -225,8 +245,8 @@ const HomePage = () => {
             </Typography>
             <Tabs defaultValue="tab1" variant="transparent">
               <TabsList>
-                <TabsListItem value="tab1">All</TabsListItem>
-                <TabsListItem value="tab2">Published</TabsListItem>
+                <TabsTrigger value="tab1">All</TabsTrigger>
+                <TabsTrigger value="tab2">Published</TabsTrigger>
               </TabsList>
               <TabsContent value="tab1" className="pt-4">
                 All items

@@ -52,13 +52,13 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
   );
 };
 
-const tabsListItemVariantClassNames: Record<TabsVariant, string> = {
+const tabsTriggerVariantClassNames: Record<TabsVariant, string> = {
   default: "data-[state=active]:bg-gray-100 data-[state=active]:text-white",
   transparent:
     "border border-transparent data-[state=active]:border-gray-50 data-[state=active]:text-white",
 };
 
-const TabsListItem = ({
+const TabsTrigger = ({
   className,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
@@ -66,7 +66,7 @@ const TabsListItem = ({
 
   return (
     <TabsPrimitive.Trigger
-      data-slot="tabs-list-item"
+      data-slot="tabs-trigger"
       className={cn(
         "inline-flex items-center justify-center",
         "h-full",
@@ -77,7 +77,7 @@ const TabsListItem = ({
         "transition ease-in-out",
         "hover:text-white",
         "disabled:pointer-events-none disabled:opacity-50",
-        tabsListItemVariantClassNames[variant],
+        tabsTriggerVariantClassNames[variant],
         className,
       )}
       {...props}
@@ -98,4 +98,4 @@ const TabsContent = ({
   );
 };
 
-export { Tabs, TabsList, TabsListItem, TabsContent };
+export { Tabs, TabsList, TabsTrigger, TabsContent };
