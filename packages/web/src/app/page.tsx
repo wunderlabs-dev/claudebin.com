@@ -32,6 +32,8 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
+import { Todo, TodoItem, TodoItemIcon, TodoItemLabel } from "@/components/ui/todo";
+import { Code } from "@/components/ui/code";
 
 import {
   SvgIconArrowBottom,
@@ -42,6 +44,8 @@ import {
   SvgIconBash,
   SvgIconCalendar,
   SvgIconCheck,
+  SvgIconCircle,
+  SvgIconCircleLine,
   SvgIconClock,
   SvgIconCopy,
   SvgIconFile,
@@ -72,7 +76,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
   </section>
 );
 
-const HomePage = () => {
+const HomePage = async () => {
   return (
     <main className="flex min-h-screen flex-col items-center gap-12 p-12">
       {/* Accordion */}
@@ -368,6 +372,44 @@ const HomePage = () => {
         </Table>
       </Section>
 
+      {/* Todo */}
+      <Section>
+        <SectionTitle>Todo</SectionTitle>
+        <Todo>
+          <TodoItem variant="pending">
+            <TodoItemIcon>
+              <SvgIconCircle size="md" />
+            </TodoItemIcon>
+            <TodoItemLabel>Todo list item</TodoItemLabel>
+          </TodoItem>
+          <TodoItem variant="progress">
+            <TodoItemIcon>
+              <SvgIconCircleLine size="md" color="accent" />
+            </TodoItemIcon>
+            <TodoItemLabel>Todo list item</TodoItemLabel>
+          </TodoItem>
+          <TodoItem variant="completed">
+            <TodoItemIcon>
+              <SvgIconCheck size="md" className="text-green-50" />
+            </TodoItemIcon>
+            <TodoItemLabel>Todo list item</TodoItemLabel>
+          </TodoItem>
+        </Todo>
+      </Section>
+
+      {/* Code */}
+      <Section>
+        <SectionTitle>Code</SectionTitle>
+        <Code
+          lang="typescript"
+          code={`const greet = (name: string) => {
+  console.log(\`Hello, \${name}!\`);
+};
+
+greet("World");`}
+        />
+      </Section>
+
       {/* List */}
       <Section>
         <SectionTitle>List</SectionTitle>
@@ -441,6 +483,8 @@ const HomePage = () => {
           <SvgIconBash size="lg" />
           <SvgIconCalendar size="lg" />
           <SvgIconCheck size="lg" />
+          <SvgIconCircle size="lg" />
+          <SvgIconCircleLine size="lg" />
           <SvgIconChat size="lg" />
           <SvgIconClock size="lg" />
           <SvgIconCopy size="lg" />

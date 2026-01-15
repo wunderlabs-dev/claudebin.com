@@ -1,0 +1,36 @@
+import { createHighlighter } from "shiki";
+
+import { cn } from "@/utils/helpers";
+
+type CodeProps = {
+  code: string;
+  lang?: string;
+  className?: string;
+};
+
+const Code = async ({ code, lang = "typescript", className }: CodeProps) => {
+  const highlighter = await createHighlighter({
+    themes: ["github-dark"],
+    langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html"],
+  });
+
+  const html = highlighter.codeToHtml(code, {
+    lang,
+    theme: "github-dark",
+  });
+
+  return (
+    <div
+      data-slot="code"
+      className={cn(
+        "overflow-x-auto rounded-lg",
+        "[&_pre]:px-4 [&_pre]:py-3 [&_pre]:bg-gray-150",
+        className,
+      )}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+};
+
+export { Code };
