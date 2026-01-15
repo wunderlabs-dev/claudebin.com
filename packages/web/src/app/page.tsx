@@ -1,11 +1,4 @@
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionIcon,
-  AccordionLabel,
-  AccordionContent,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,15 +9,9 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { List, ListItem, ListItemLabel } from "@/components/ui/list";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardMeta,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
+import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 
 import {
   SvgIconArrowBottom,
@@ -76,10 +63,36 @@ const HomePage = () => {
             <AccordionTrigger>
               <SvgIconGear size="md" color="accent" />
               <Typography variant="overline">Read</Typography>
+              <Chip icon={<SvgIconFile size="sm" />} label="html.py" />
             </AccordionTrigger>
             <AccordionContent>253 lines</AccordionContent>
           </AccordionItem>
         </Accordion>
+      </Section>
+
+      {/* Chat */}
+      <Section>
+        <SectionTitle>Chat</SectionTitle>
+        <Chat>
+          <ChatItem>
+            <ChatContent variant="user">User message</ChatContent>
+            <Avatar size="sm">
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+          </ChatItem>
+          <ChatItem>
+            <Avatar size="sm">
+              <AvatarFallback>A</AvatarFallback>
+            </Avatar>
+            <ChatContent variant="assistant">Assistant message</ChatContent>
+          </ChatItem>
+          <ChatItem>
+            <ChatContent variant="user">User message</ChatContent>
+            <Avatar size="sm">
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+          </ChatItem>
+        </Chat>
       </Section>
 
       {/* Buttons */}

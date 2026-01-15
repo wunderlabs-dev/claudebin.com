@@ -15,9 +15,9 @@ const Chip = ({ icon, label, className, ...props }: ChipProps) => {
         "inline-flex items-center gap-2",
         "px-2 py-1",
         "rounded-full",
-        "border border-gray-200 bg-transparent",
+        "border border-gray-200 bg-gray-100",
         "text-xs text-gray-350",
-        className,
+        className
       )}
       {...props}
     >
