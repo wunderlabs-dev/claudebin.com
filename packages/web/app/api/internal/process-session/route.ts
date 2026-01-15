@@ -1,7 +1,126 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import type {
+  RawJsonlMessage,
+  RawContentBlock,
+  ContentBlock,
+  ToolUseBlock,
+} from "@/lib/types/message";
+import { isSkippedMessageType, isToolUseBlock } from "@/lib/types/message";
 
 const BATCH_SIZE = 100;
+const TEXT_PREVIEW_LENGTH = 500;
+
+interface NormalizedMessage {
+  session_id: string;
+  idx: number;
+  uuid: string;
+  parent_uuid: string | null;
+  type: string;
+  role: string | null;
+  model: string | null;
+  timestamp: string;
+  is_meta: boolean;
+  is_sidechain: boolean;
+  content: ContentBlock[];
+  has_tool_calls: boolean;
+  tool_names: string[];
+  text_preview: string;
+  raw_message: RawJsonlMessage;
+}
+
+/**
+ * Normalize raw content to ContentBlock array
+ */
+const normalizeContent = (
+  content: string | RawContentBlock[] | undefined,
+): ContentBlock[] => {
+  if (!content) return [];
+
+  if (typeof content === "string") {
+    return [{ type: "text" as const, text: content }];
+  }
+
+  return content.map((block): ContentBlock => {
+    switch (block.type) {
+      case "text":
+        return { type: "text" as const, text: block.text };
+      case "tool_use":
+        return {
+          type: "tool_use" as const,
+          id: block.id,
+          name: block.name,
+          input: block.input,
+        };
+      case "tool_result":
+        return {
+          type: "tool_result" as const,
+          tool_use_id: block.tool_use_id,
+          content: block.content,
+          is_error: block.is_error,
+        };
+      default:
+        return { type: "text" as const, text: JSON.stringify(block) };
+    }
+  });
+};
+
+/**
+ * Extract text content for preview
+ */
+const extractTextPreview = (content: ContentBlock[]): string => {
+  const text = content
+    .filter((b): b is { type: "text"; text: string } => b.type === "text")
+    .map((b) => b.text)
+    .join("\n");
+
+  return text.slice(0, TEXT_PREVIEW_LENGTH);
+};
+
+/**
+ * Extract tool names from content blocks
+ */
+const extractToolNames = (content: ContentBlock[]): string[] => {
+  return content.filter(isToolUseBlock).map((b: ToolUseBlock) => b.name);
+};
+
+/**
+ * Parse and normalize a raw JSONL message
+ */
+const normalizeMessage = (
+  raw: RawJsonlMessage,
+  sessionId: string,
+  idx: number,
+): NormalizedMessage | null => {
+  // Skip non-conversation message types
+  if (isSkippedMessageType(raw.type)) {
+    return null;
+  }
+
+  const inner = raw.message;
+  if (!inner) return null;
+
+  const content = normalizeContent(inner.message?.content);
+  const toolNames = extractToolNames(content);
+
+  return {
+    session_id: sessionId,
+    idx,
+    uuid: inner.uuid,
+    parent_uuid: inner.parentUuid,
+    type: raw.type,
+    role: inner.message?.role || null,
+    model: inner.model || null,
+    timestamp: inner.timestamp,
+    is_meta: inner.isMeta || false,
+    is_sidechain: inner.isSidechain || false,
+    content,
+    has_tool_calls: toolNames.length > 0,
+    tool_names: toolNames,
+    text_preview: extractTextPreview(content),
+    raw_message: raw,
+  };
+};
 
 export const POST = async (request: Request): Promise<Response> => {
   // Verify internal request
@@ -53,24 +172,17 @@ export const POST = async (request: Request): Promise<Response> => {
     const jsonlContent = await fileData.text();
     const lines = jsonlContent.split("\n").filter((line) => line.trim());
 
-    // Parse and prepare messages
-    const messages: {
-      session_id: string;
-      idx: number;
-      type: string;
-      message: unknown;
-    }[] = [];
+    // Parse and normalize messages
+    const messages: NormalizedMessage[] = [];
 
     for (let idx = 0; idx < lines.length; idx++) {
       const line = lines[idx];
       try {
-        const parsed = JSON.parse(line);
-        messages.push({
-          session_id,
-          idx,
-          type: parsed.type || "unknown",
-          message: parsed,
-        });
+        const parsed = JSON.parse(line) as RawJsonlMessage;
+        const normalized = normalizeMessage(parsed, session_id, idx);
+        if (normalized) {
+          messages.push(normalized);
+        }
       } catch (parseError) {
         // Log but continue - don't fail entire session for one bad line
         console.error(`Line ${idx} parse error:`, parseError);

@@ -248,7 +248,10 @@ export interface RawToolResultBlock {
   is_error?: boolean;
 }
 
-export type RawContentBlock = RawTextBlock | RawToolUseBlock | RawToolResultBlock;
+export type RawContentBlock =
+  | RawTextBlock
+  | RawToolUseBlock
+  | RawToolResultBlock;
 
 // =============================================================================
 // Display Helpers
