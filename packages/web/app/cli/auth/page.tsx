@@ -1,7 +1,4 @@
-import {
-  completeCliAuthSession,
-  getCliAuthSessionByToken,
-} from "@/lib/repos/cli-auth.repo";
+import { cliAuth } from "@/lib/repos/cli-auth.repo";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 
@@ -23,7 +20,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   }
 
   const serviceSupabase = createServiceClient();
-  const cliSession = await getCliAuthSessionByToken(serviceSupabase, code);
+  const cliSession = await cliAuth.getByToken(serviceSupabase, code);
 
   if (!cliSession) {
     return (
@@ -70,7 +67,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   }
 
   try {
-    await completeCliAuthSession(serviceSupabase, code, {
+    await cliAuth.complete(serviceSupabase, code, {
       userId: session.user.id,
       accessToken: session.access_token,
       refreshToken: session.refresh_token,

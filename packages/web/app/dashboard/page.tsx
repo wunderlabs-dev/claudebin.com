@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { getProfileById } from "@/lib/repos/profiles.repo";
+import { profiles } from "@/lib/repos/profiles.repo";
 import { createClient } from "@/lib/supabase/server";
 
 const DashboardPage = async () => {
@@ -13,7 +13,7 @@ const DashboardPage = async () => {
     redirect("/auth/login");
   }
 
-  const profile = await getProfileById(supabase, user.id);
+  const profile = await profiles.getById(supabase, user.id);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">

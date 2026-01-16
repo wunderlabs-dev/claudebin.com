@@ -1,9 +1,6 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import {
-  createCliAuthSession,
-  getCliAuthSessionByToken,
-} from "@/lib/repos/cli-auth.repo";
+import { cliAuth } from "@/lib/repos/cli-auth.repo";
 import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
@@ -42,7 +39,7 @@ export const authRouter = router({
     const sessionToken = nanoid(21);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    await createCliAuthSession(supabase, {
+    await cliAuth.create(supabase, {
       sessionToken,
       expiresAt: expiresAt.toISOString(),
     });
@@ -60,7 +57,7 @@ export const authRouter = router({
     .input(z.object({ code: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
       const supabase = createServiceClient();
-      const session = await getCliAuthSessionByToken(supabase, input.code);
+      const session = await cliAuth.getByToken(supabase, input.code);
 
       if (!session) {
         return { status: PollStatus.EXPIRED };

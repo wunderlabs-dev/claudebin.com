@@ -9,95 +9,96 @@ type SessionsUpdate = Database["public"]["Tables"]["sessions"]["Update"];
 
 export type Session = SessionsRow;
 
-export const getSessionById = async (
-  supabase: SupabaseClient<Database>,
-  id: string,
-): Promise<Session | null> => {
-  const { data, error } = await supabase
-    .from("sessions")
-    .select("*")
-    .eq("id", id)
-    .single();
+export const sessions = {
+  getById: async (
+    supabase: SupabaseClient<Database>,
+    id: string,
+  ): Promise<Session | null> => {
+    const { data, error } = await supabase
+      .from("sessions")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-  if (error) {
-    if (error.code === "PGRST116") return null; // Not found
-    throw new Error(`Failed to fetch session: ${error.message}`);
-  }
+    if (error) {
+      if (error.code === "PGRST116") return null; // Not found
+      throw new Error(`Failed to fetch session: ${error.message}`);
+    }
 
-  return data;
-};
+    return data;
+  },
 
-export const createSession = async (
-  supabase: SupabaseClient<Database>,
-  session: SessionsInsert,
-): Promise<void> => {
-  const { error } = await supabase.from("sessions").insert(session);
+  create: async (
+    supabase: SupabaseClient<Database>,
+    session: SessionsInsert,
+  ): Promise<void> => {
+    const { error } = await supabase.from("sessions").insert(session);
 
-  if (error) {
-    console.error("Session insert failed:", error);
-    throw new Error("Failed to create session. Please try again.");
-  }
-};
+    if (error) {
+      console.error("Session insert failed:", error);
+      throw new Error("Failed to create session. Please try again.");
+    }
+  },
 
-export const updateSession = async (
-  supabase: SupabaseClient<Database>,
-  id: string,
-  updates: SessionsUpdate,
-): Promise<void> => {
-  const { error } = await supabase
-    .from("sessions")
-    .update(updates)
-    .eq("id", id);
+  update: async (
+    supabase: SupabaseClient<Database>,
+    id: string,
+    updates: SessionsUpdate,
+  ): Promise<void> => {
+    const { error } = await supabase
+      .from("sessions")
+      .update(updates)
+      .eq("id", id);
 
-  if (error) {
-    console.error("Session update failed:", error);
-    throw new Error("Failed to update session.");
-  }
-};
+    if (error) {
+      console.error("Session update failed:", error);
+      throw new Error("Failed to update session.");
+    }
+  },
 
-// Storage operations
-export const uploadSessionJsonl = async (
-  supabase: SupabaseClient<Database>,
-  storagePath: string,
-  content: string,
-): Promise<void> => {
-  const { error } = await supabase.storage
-    .from("sessions")
-    .upload(storagePath, content, {
-      contentType: "application/jsonl",
-      upsert: false,
-    });
+  uploadJsonl: async (
+    supabase: SupabaseClient<Database>,
+    storagePath: string,
+    content: string,
+  ): Promise<void> => {
+    const { error } = await supabase.storage
+      .from("sessions")
+      .upload(storagePath, content, {
+        contentType: "application/jsonl",
+        upsert: false,
+      });
 
-  if (error) {
-    console.error("Storage upload failed:", error);
-    throw new Error("Failed to upload session. Please try again.");
-  }
-};
+    if (error) {
+      console.error("Storage upload failed:", error);
+      throw new Error("Failed to upload session. Please try again.");
+    }
+  },
 
-export const downloadSessionJsonl = async (
-  supabase: SupabaseClient<Database>,
-  storagePath: string,
-): Promise<string> => {
-  const { data, error } = await supabase.storage
-    .from("sessions")
-    .download(storagePath);
+  downloadJsonl: async (
+    supabase: SupabaseClient<Database>,
+    storagePath: string,
+  ): Promise<string> => {
+    const { data, error } = await supabase.storage
+      .from("sessions")
+      .download(storagePath);
 
-  if (error || !data) {
-    throw new Error(`Download failed: ${error?.message}`);
-  }
+    if (error || !data) {
+      throw new Error(`Download failed: ${error?.message}`);
+    }
 
-  return data.text();
-};
+    return data.text();
+  },
 
-export const deleteSessionFile = async (
-  supabase: SupabaseClient<Database>,
-  storagePath: string,
-): Promise<void> => {
-  const { error } = await supabase.storage
-    .from("sessions")
-    .remove([storagePath]);
+  deleteFile: async (
+    supabase: SupabaseClient<Database>,
+    storagePath: string,
+  ): Promise<void> => {
+    const { error } = await supabase.storage
+      .from("sessions")
+      .remove([storagePath]);
 
-  if (error) {
-    console.error("Storage delete failed:", error);
-  }
+    if (error) {
+      console.error("Storage delete failed:", error);
+    }
+  },
 };

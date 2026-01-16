@@ -1,12 +1,7 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { upsertProfile } from "@/lib/repos/profiles.repo";
-import {
-  createSession,
-  deleteSessionFile,
-  getSessionById,
-  uploadSessionJsonl,
-} from "@/lib/repos/sessions.repo";
+import { profiles } from "@/lib/repos/profiles.repo";
+import { sessions } from "@/lib/repos/sessions.repo";
 import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
@@ -50,7 +45,7 @@ export const sessionsRouter = router({
       }
 
       // Ensure profile exists (handles users created before trigger was added)
-      await upsertProfile(serviceSupabase, {
+      await profiles.upsert(serviceSupabase, {
         id: user.id,
         email: user.email,
         name: user.user_metadata?.name || user.user_metadata?.full_name,
@@ -73,7 +68,7 @@ export const sessionsRouter = router({
       const storagePath = `${user.id}/${id}.jsonl`;
 
       // Upload to Storage
-      await uploadSessionJsonl(
+      await sessions.uploadJsonl(
         serviceSupabase,
         storagePath,
         input.conversation_data,
@@ -81,7 +76,7 @@ export const sessionsRouter = router({
 
       // Insert session record with processing status
       try {
-        await createSession(serviceSupabase, {
+        await sessions.create(serviceSupabase, {
           id,
           userId: user.id,
           title: input.title,
@@ -91,7 +86,7 @@ export const sessionsRouter = router({
         });
       } catch (error) {
         // Cleanup uploaded file on failure
-        await deleteSessionFile(serviceSupabase, storagePath);
+        await sessions.deleteFile(serviceSupabase, storagePath);
         throw error;
       }
 
@@ -118,7 +113,7 @@ export const sessionsRouter = router({
     .input(z.object({ id: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
       const supabase = createServiceClient();
-      const session = await getSessionById(supabase, input.id);
+      const session = await sessions.getById(supabase, input.id);
 
       if (!session) {
         return {

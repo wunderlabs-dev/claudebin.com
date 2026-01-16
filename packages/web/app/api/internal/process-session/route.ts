@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
-import { insertMessagesBatch } from "@/lib/repos/messages.repo";
-import {
-  downloadSessionJsonl,
-  getSessionById,
-  updateSession,
-} from "@/lib/repos/sessions.repo";
+import { messages } from "@/lib/repos/messages.repo";
+import { sessions } from "@/lib/repos/sessions.repo";
 import type { Database } from "@/lib/supabase/database.types";
 import { createServiceClient } from "@/lib/supabase/service";
 import type {
@@ -274,7 +270,7 @@ export const POST = async (request: Request): Promise<Response> => {
 
   try {
     // Fetch session metadata
-    const session = await getSessionById(supabase, session_id);
+    const session = await sessions.getById(supabase, session_id);
 
     if (!session) {
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
@@ -292,14 +288,14 @@ export const POST = async (request: Request): Promise<Response> => {
     }
 
     // Download JSONL from Storage
-    const jsonlContent = await downloadSessionJsonl(
+    const jsonlContent = await sessions.downloadJsonl(
       supabase,
       session.storagePath,
     );
     const lines = jsonlContent.split("\n").filter((line) => line.trim());
 
     // Parse and normalize messages
-    const messages: NormalizedMessage[] = [];
+    const parsedMessages: NormalizedMessage[] = [];
 
     for (let idx = 0; idx < lines.length; idx++) {
       const line = lines[idx];
@@ -307,7 +303,7 @@ export const POST = async (request: Request): Promise<Response> => {
         const parsed = JSON.parse(line) as RawJsonlMessage;
         const normalized = normalizeMessage(parsed, session_id, idx);
         if (normalized) {
-          messages.push(normalized);
+          parsedMessages.push(normalized);
         }
       } catch (parseError) {
         // Log but continue - don't fail entire session for one bad line
@@ -316,8 +312,8 @@ export const POST = async (request: Request): Promise<Response> => {
     }
 
     // Insert in batches
-    for (let i = 0; i < messages.length; i += BATCH_SIZE) {
-      const batch: MessagesInsert[] = messages
+    for (let i = 0; i < parsedMessages.length; i += BATCH_SIZE) {
+      const batch: MessagesInsert[] = parsedMessages
         .slice(i, i + BATCH_SIZE)
         .map((m) => ({
           sessionId: m.sessionId,
@@ -336,23 +332,23 @@ export const POST = async (request: Request): Promise<Response> => {
           textPreview: m.textPreview,
           rawMessage: m.rawMessage as MessagesInsert["rawMessage"],
         }));
-      await insertMessagesBatch(supabase, batch);
+      await messages.insertBatch(supabase, batch);
     }
 
     // Update session to ready
-    await updateSession(supabase, session_id, {
+    await sessions.update(supabase, session_id, {
       status: "ready",
-      messageCount: messages.length,
+      messageCount: parsedMessages.length,
     });
 
     return NextResponse.json({
       success: true,
-      message_count: messages.length,
+      message_count: parsedMessages.length,
     });
   } catch (error) {
     // Mark session as failed
     try {
-      await updateSession(supabase, session_id, {
+      await sessions.update(supabase, session_id, {
         status: "failed",
         errorMessage: error instanceof Error ? error.message : String(error),
       });

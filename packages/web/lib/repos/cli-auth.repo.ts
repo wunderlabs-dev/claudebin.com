@@ -12,51 +12,53 @@ type ProfilesRow = Database["public"]["Tables"]["profiles"]["Row"];
 
 export type CliAuthSession = CliAuthRow;
 
-export const createCliAuthSession = async (
-  supabase: SupabaseClient<Database>,
-  session: CliAuthInsert,
-): Promise<void> => {
-  const { error } = await supabase.from("cli_auth_sessions").insert(session);
+export const cliAuth = {
+  create: async (
+    supabase: SupabaseClient<Database>,
+    session: CliAuthInsert,
+  ): Promise<void> => {
+    const { error } = await supabase.from("cli_auth_sessions").insert(session);
 
-  if (error) {
-    console.error("Failed to create auth session:", error);
-    throw new Error("Failed to create auth session");
-  }
-};
+    if (error) {
+      console.error("Failed to create auth session:", error);
+      throw new Error("Failed to create auth session");
+    }
+  },
 
-export const getCliAuthSessionByToken = async (
-  supabase: SupabaseClient<Database>,
-  sessionToken: string,
-): Promise<(CliAuthSession & { profile: ProfilesRow | null }) | null> => {
-  const { data, error } = await supabase
-    .from("cli_auth_sessions")
-    .select("*, profiles(*)")
-    .eq("sessionToken", sessionToken)
-    .single();
+  getByToken: async (
+    supabase: SupabaseClient<Database>,
+    sessionToken: string,
+  ): Promise<(CliAuthSession & { profile: ProfilesRow | null }) | null> => {
+    const { data, error } = await supabase
+      .from("cli_auth_sessions")
+      .select("*, profiles(*)")
+      .eq("sessionToken", sessionToken)
+      .single();
 
-  if (error) {
-    if (error.code === "PGRST116") return null; // Not found
-    throw new Error(`Failed to fetch auth session: ${error.message}`);
-  }
+    if (error) {
+      if (error.code === "PGRST116") return null; // Not found
+      throw new Error(`Failed to fetch auth session: ${error.message}`);
+    }
 
-  return {
-    ...data,
-    profile: data.profiles as ProfilesRow | null,
-  };
-};
+    return {
+      ...data,
+      profile: data.profiles as ProfilesRow | null,
+    };
+  },
 
-export const completeCliAuthSession = async (
-  supabase: SupabaseClient<Database>,
-  sessionToken: string,
-  updates: CliAuthUpdate,
-): Promise<void> => {
-  const { error } = await supabase
-    .from("cli_auth_sessions")
-    .update(updates)
-    .eq("sessionToken", sessionToken);
+  complete: async (
+    supabase: SupabaseClient<Database>,
+    sessionToken: string,
+    updates: CliAuthUpdate,
+  ): Promise<void> => {
+    const { error } = await supabase
+      .from("cli_auth_sessions")
+      .update(updates)
+      .eq("sessionToken", sessionToken);
 
-  if (error) {
-    console.error("Failed to complete auth session:", error);
-    throw new Error("Failed to complete auth session");
-  }
+    if (error) {
+      console.error("Failed to complete auth session:", error);
+      throw new Error("Failed to complete auth session");
+    }
+  },
 };

@@ -1,9 +1,6 @@
 import { notFound } from "next/navigation";
-import {
-  getMessagesBySessionId,
-  type Message,
-} from "@/lib/repos/messages.repo";
-import { getSessionById } from "@/lib/repos/sessions.repo";
+import { type Message, messages } from "@/lib/repos/messages.repo";
+import { sessions } from "@/lib/repos/sessions.repo";
 import { createServiceClient } from "@/lib/supabase/service";
 import { BlockType } from "@/lib/types/message";
 
@@ -13,18 +10,18 @@ interface PageProps {
 
 const getSession = async (id: string) => {
   const supabase = createServiceClient();
-  const session = await getSessionById(supabase, id);
+  const session = await sessions.getById(supabase, id);
 
   if (!session) {
     return null;
   }
 
-  const messages = await getMessagesBySessionId(supabase, id, {
+  const sessionMessages = await messages.getBySessionId(supabase, id, {
     excludeMeta: true,
     excludeSidechain: true,
   });
 
-  return { session, messages };
+  return { session, messages: sessionMessages };
 };
 
 const TextContent = ({ text }: { text: string }) => (
