@@ -5,7 +5,12 @@
 // Core Message Types
 // =============================================================================
 
-export type Role = "user" | "assistant";
+export const MessageRole = {
+  USER: "user",
+  ASSISTANT: "assistant",
+} as const;
+
+export type Role = (typeof MessageRole)[keyof typeof MessageRole];
 
 export interface Message {
   id: string;

@@ -1,5 +1,5 @@
 import type { Message } from "@/lib/repos/messages.repo";
-import { BlockType } from "@/lib/types/message";
+import { BlockType, MessageRole } from "@/lib/types/message";
 import {
   BashContent,
   FileEditContent,
@@ -23,7 +23,7 @@ export const MessageContent = ({ message }: { message: Message }) => {
   return (
     <div
       className={`p-4 rounded-lg mb-4 ${
-        role === "user"
+        role === MessageRole.USER
           ? "bg-blue-50 border border-blue-200"
           : "bg-gray-50 border border-gray-200"
       }`}
