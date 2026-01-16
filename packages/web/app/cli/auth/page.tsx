@@ -1,3 +1,7 @@
+import {
+  completeCliAuthSession,
+  getCliAuthSessionByToken,
+} from "@/lib/repos/cli-auth.repo";
 import { createClient } from "@/lib/supabase/server";
 
 interface Props {
@@ -17,15 +21,9 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
-  const supabase = await createClient();
+  const cliSession = await getCliAuthSessionByToken(code);
 
-  const { data: cliSession, error: sessionLookupError } = await supabase
-    .from("cli_auth_sessions")
-    .select("*")
-    .eq("code", code)
-    .single();
-
-  if (sessionLookupError || !cliSession) {
+  if (!cliSession) {
     return (
       <Layout>
         <ErrorState title="Invalid Code">
@@ -35,7 +33,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
-  if (cliSession.completed_at) {
+  if (cliSession.completedAt) {
     return (
       <Layout>
         <SuccessState />
@@ -43,7 +41,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
-  if (new Date(cliSession.expires_at) < new Date()) {
+  if (cliSession.expiresAt && cliSession.expiresAt < new Date()) {
     return (
       <Layout>
         <ErrorState title="Code Expired">
@@ -54,6 +52,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
+  const supabase = await createClient();
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -68,18 +67,14 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
-  const { error: updateError } = await supabase
-    .from("cli_auth_sessions")
-    .update({
-      user_id: session.user.id,
-      access_token: session.access_token,
-      refresh_token: session.refresh_token,
-      completed_at: new Date().toISOString(),
-    })
-    .eq("code", code)
-    .is("completed_at", null);
-
-  if (updateError) {
+  try {
+    await completeCliAuthSession(
+      code,
+      session.user.id,
+      session.access_token,
+      session.refresh_token,
+    );
+  } catch {
     return (
       <Layout>
         <ErrorState title="Authentication Failed">
