@@ -42,6 +42,18 @@ export const sessionsRouter = router({
         throw new Error("Invalid or expired token");
       }
 
+      // Ensure profile exists (handles users created before trigger was added)
+      await serviceSupabase.from("profiles").upsert(
+        {
+          id: user.id,
+          email: user.email,
+          name: user.user_metadata?.name || user.user_metadata?.full_name,
+          avatar_url:
+            user.user_metadata?.avatar_url || user.user_metadata?.picture,
+        },
+        { onConflict: "id", ignoreDuplicates: true },
+      );
+
       // Validate size
       const sizeBytes = new TextEncoder().encode(
         input.conversation_data,
@@ -65,7 +77,8 @@ export const sessionsRouter = router({
         });
 
       if (uploadError) {
-        throw new Error(`Upload failed: ${uploadError.message}`);
+        console.error("Storage upload failed:", uploadError);
+        throw new Error("Failed to upload session. Please try again.");
       }
 
       // Insert session record with processing status
@@ -83,7 +96,8 @@ export const sessionsRouter = router({
       if (insertError) {
         // Cleanup uploaded file on failure
         await serviceSupabase.storage.from("sessions").remove([storagePath]);
-        throw new Error(`Failed to create session: ${insertError.message}`);
+        console.error("Session insert failed:", insertError);
+        throw new Error("Failed to create session. Please try again.");
       }
 
       // Fire-and-forget background processing
