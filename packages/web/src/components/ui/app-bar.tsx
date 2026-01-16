@@ -1,6 +1,10 @@
+"use client";
+
 import type * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useEventListener } from "usehooks-ts";
 
 import { cn } from "@/utils/helpers";
 
@@ -15,9 +19,18 @@ type AppBarProps = React.ComponentProps<"header">;
 
 const AppBar = ({ className, ...props }: AppBarProps) => {
   const t = useTranslations();
+  const [isScrolled, setIsScrolled] = useState<number>();
+
+  useEventListener("scroll", () => {
+    setIsScrolled(window.scrollY);
+  });
 
   return (
-    <header data-slot="app-bar" className={cn("sticky top-0", className)} {...props}>
+    <header
+      data-slot="app-bar"
+      className={cn("sticky top-0", isScrolled && "bg-gray-100/25 backdrop-blur-md", className)}
+      {...props}
+    >
       <Container>
         <div className="flex items-center justify-between pt-3 pb-2">
           <div className="flex items-center gap-24">
