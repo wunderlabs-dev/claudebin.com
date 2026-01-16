@@ -1,5 +1,12 @@
 import { AppBar } from "@/components/ui/app-bar";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardMeta } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+  CardMeta,
+} from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
 

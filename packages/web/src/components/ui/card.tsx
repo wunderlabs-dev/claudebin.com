@@ -12,6 +12,7 @@ const Card = ({ className, children, ...props }: CardProps) => {
       data-slot="card"
       className={cn(
         "px-2 py-2",
+        "flex items-stretch",
         "border border-gray-200",
         "transition ease-in-out",
         "hover:border-orange-50",
@@ -19,7 +20,7 @@ const Card = ({ className, children, ...props }: CardProps) => {
       )}
       {...props}
     >
-      <div className="flex flex-col justify-between">{children}</div>
+      <div className="flex flex-col flex-1 justify-between">{children}</div>
     </article>
   );
 };

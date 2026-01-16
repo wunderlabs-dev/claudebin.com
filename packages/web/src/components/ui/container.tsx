@@ -8,7 +8,7 @@ const Container = ({ className, children, ...props }: ContainerProps) => {
   return (
     <div
       data-slot="container"
-      className={cn("mx-auto w-full max-w-1440 px-4", className)}
+      className={cn("mx-auto w-full max-w-container px-4", className)}
       {...props}
     >
       {children}

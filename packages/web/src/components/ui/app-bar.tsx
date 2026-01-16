@@ -28,7 +28,11 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
   return (
     <header
       data-slot="app-bar"
-      className={cn("sticky top-0", isScrolled && "bg-gray-100/25 backdrop-blur-md", className)}
+      className={cn(
+        "sticky top-0",
+        isScrolled ? "bg-gray-100/25 backdrop-blur-md" : undefined,
+        className,
+      )}
       {...props}
     >
       <Container>
@@ -39,7 +43,7 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
             </Link>
 
             <Nav>
-              <NavLink href="/">
+              <NavLink variant="active" href="/">
                 <SvgIconHome size="sm" />
                 <NavLabel>{t("appBar.claudebin")}</NavLabel>
               </NavLink>
