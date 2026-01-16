@@ -32,12 +32,13 @@ const getByToken = async (
     .from("cli_auth_sessions")
     .select("*, profiles(*)")
     .eq("sessionToken", sessionToken)
-    .single();
+    .maybeSingle();
 
   if (error) {
-    if (error.code === "PGRST116") return null; // Not found
     throw new Error(`Failed to fetch auth session: ${error.message}`);
   }
+
+  if (!data) return null;
 
   return {
     ...data,

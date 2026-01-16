@@ -16,10 +16,9 @@ const getById = async (
     .from("profiles")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) {
-    if (error.code === "PGRST116") return null; // Not found
     throw new Error(`Failed to fetch profile: ${error.message}`);
   }
 
