@@ -1,7 +1,8 @@
 import { nanoid } from "nanoid";
+import { after } from "next/server";
 import { z } from "zod";
-import { profiles } from "@/lib/repos/profiles.repo";
 import { sessions } from "@/lib/repos/sessions.repo";
+import { processSession } from "@/lib/services/processor";
 import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
@@ -12,9 +13,6 @@ export const SessionStatus = {
   READY: "ready",
   FAILED: "failed",
 } as const;
-
-export type SessionStatusType =
-  (typeof SessionStatus)[keyof typeof SessionStatus];
 
 export type PollResponse =
   | { status: typeof SessionStatus.PROCESSING }
@@ -43,15 +41,6 @@ export const sessionsRouter = router({
       if (authError || !user) {
         throw new Error("Invalid or expired token");
       }
-
-      // Ensure profile exists (handles users created before trigger was added)
-      await profiles.upsert(serviceSupabase, {
-        id: user.id,
-        email: user.email,
-        name: user.user_metadata?.name || user.user_metadata?.full_name,
-        avatarUrl:
-          user.user_metadata?.avatar_url || user.user_metadata?.picture,
-      });
 
       // Validate size
       const sizeBytes = new TextEncoder().encode(
@@ -90,22 +79,11 @@ export const sessionsRouter = router({
         throw error;
       }
 
-      // Fire-and-forget background processing
-      const internalUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/internal/process-session`;
-      fetch(internalUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-internal-secret": process.env.INTERNAL_API_SECRET || "",
-        },
-        body: JSON.stringify({ session_id: id }),
-      }).catch((err) => {
-        console.error("Failed to trigger session processing:", id, err);
-      });
+      after(() => processSession(serviceSupabase, id));
 
       return {
         id,
-        status: "processing" as const,
+        status: SessionStatus.PROCESSING,
       };
     }),
 
