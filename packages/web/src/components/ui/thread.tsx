@@ -17,7 +17,7 @@ const Thread = ({ className, children, ...props }: ThreadProps) => {
         "border border-gray-200",
         "transition ease-in-out",
         "hover:border-orange-50",
-        className
+        className,
       )}
       {...props}
     >
