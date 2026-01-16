@@ -38,10 +38,14 @@ export type PollResponse =
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
+    const supabase = createServiceClient();
     const sessionToken = nanoid(21);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    await createCliAuthSession(sessionToken, expiresAt);
+    await createCliAuthSession(supabase, {
+      sessionToken,
+      expiresAt: expiresAt.toISOString(),
+    });
 
     const baseUrl = getBaseUrl();
 
@@ -55,7 +59,8 @@ export const authRouter = router({
   poll: publicProcedure
     .input(z.object({ code: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      const session = await getCliAuthSessionByToken(input.code);
+      const supabase = createServiceClient();
+      const session = await getCliAuthSessionByToken(supabase, input.code);
 
       if (!session) {
         return { status: PollStatus.EXPIRED };

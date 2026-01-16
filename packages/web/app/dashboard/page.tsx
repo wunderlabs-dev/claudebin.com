@@ -13,7 +13,7 @@ const DashboardPage = async () => {
     redirect("/auth/login");
   }
 
-  const profile = await getProfileById(user.id);
+  const profile = await getProfileById(supabase, user.id);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">

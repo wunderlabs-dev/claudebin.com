@@ -1,23 +1,29 @@
-import type { Tables, TablesInsert } from "@/lib/supabase/database.types";
-import { createServiceClient } from "@/lib/supabase/service";
+import "server-only";
+
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 import type { ContentBlock } from "@/lib/types/message";
 
-// DB row with typed content instead of Json
-export type Message = Omit<Tables<"messages">, "content" | "rawMessage"> & {
+type MessagesRow = Database["public"]["Tables"]["messages"]["Row"];
+type MessagesInsert = Database["public"]["Tables"]["messages"]["Insert"];
+
+// Message with typed content for UI consumption
+export type Message = Omit<MessagesRow, "content" | "rawMessage"> & {
   content: ContentBlock[];
 };
 
+const mapRowToMessage = (row: MessagesRow): Message => ({
+  ...row,
+  // content is Json in DB, we trust it's ContentBlock[] at runtime
+  content: row.content as unknown as ContentBlock[],
+});
+
 export const getMessagesBySessionId = async (
+  supabase: SupabaseClient<Database>,
   sessionId: string,
   options?: { excludeMeta?: boolean; excludeSidechain?: boolean },
 ): Promise<Message[]> => {
-  const supabase = createServiceClient();
-  let query = supabase
-    .from("messages")
-    .select(
-      "id, idx, role, model, content, hasToolCalls, toolNames, textPreview",
-    )
-    .eq("sessionId", sessionId);
+  let query = supabase.from("messages").select("*").eq("sessionId", sessionId);
 
   if (options?.excludeMeta) {
     query = query.eq("isMeta", false);
@@ -28,35 +34,18 @@ export const getMessagesBySessionId = async (
 
   const { data, error } = await query.order("idx", { ascending: true });
 
-  if (error || !data) return [];
-  // Content is stored as Json but we know it's ContentBlock[]
-  return data as unknown as Message[];
+  if (error) {
+    throw new Error(`Failed to fetch messages: ${error.message}`);
+  }
+
+  return (data ?? []).map(mapRowToMessage);
 };
 
 export const insertMessagesBatch = async (
-  messages: Array<{
-    sessionId: string;
-    idx: number;
-    uuid: string;
-    parentUuid: string | null;
-    type: string;
-    role: string | null;
-    model: string | null;
-    timestamp: string;
-    isMeta: boolean;
-    isSidechain: boolean;
-    content: ContentBlock[];
-    hasToolCalls: boolean;
-    toolNames: string[];
-    textPreview: string;
-    rawMessage: unknown;
-  }>,
+  supabase: SupabaseClient<Database>,
+  messages: MessagesInsert[],
 ): Promise<void> => {
-  const supabase = createServiceClient();
-
-  const { error } = await supabase
-    .from("messages")
-    .insert(messages as unknown as TablesInsert<"messages">[]);
+  const { error } = await supabase.from("messages").insert(messages);
 
   if (error) {
     throw new Error(`Message insert failed: ${error.message}`);

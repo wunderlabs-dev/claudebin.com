@@ -2,15 +2,19 @@ import { NextResponse } from "next/server";
 import { insertMessagesBatch } from "@/lib/repos/messages.repo";
 import {
   downloadSessionJsonl,
-  getSessionByIdWithStoragePath,
-  updateSessionStatus,
+  getSessionById,
+  updateSession,
 } from "@/lib/repos/sessions.repo";
+import type { Database } from "@/lib/supabase/database.types";
+import { createServiceClient } from "@/lib/supabase/service";
 import type {
   ContentBlock,
   RawContentBlock,
   RawJsonlMessage,
 } from "@/lib/types/message";
 import { BlockType, isSkippedMessageType } from "@/lib/types/message";
+
+type MessagesInsert = Database["public"]["Tables"]["messages"]["Insert"];
 
 const BATCH_SIZE = 100;
 const TEXT_PREVIEW_LENGTH = 500;
@@ -266,9 +270,11 @@ export const POST = async (request: Request): Promise<Response> => {
     return NextResponse.json({ error: "Invalid session_id" }, { status: 400 });
   }
 
+  const supabase = createServiceClient();
+
   try {
     // Fetch session metadata
-    const session = await getSessionByIdWithStoragePath(session_id);
+    const session = await getSessionById(supabase, session_id);
 
     if (!session) {
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
@@ -286,7 +292,10 @@ export const POST = async (request: Request): Promise<Response> => {
     }
 
     // Download JSONL from Storage
-    const jsonlContent = await downloadSessionJsonl(session.storagePath);
+    const jsonlContent = await downloadSessionJsonl(
+      supabase,
+      session.storagePath,
+    );
     const lines = jsonlContent.split("\n").filter((line) => line.trim());
 
     // Parse and normalize messages
@@ -308,12 +317,31 @@ export const POST = async (request: Request): Promise<Response> => {
 
     // Insert in batches
     for (let i = 0; i < messages.length; i += BATCH_SIZE) {
-      const batch = messages.slice(i, i + BATCH_SIZE);
-      await insertMessagesBatch(batch);
+      const batch: MessagesInsert[] = messages
+        .slice(i, i + BATCH_SIZE)
+        .map((m) => ({
+          sessionId: m.sessionId,
+          idx: m.idx,
+          uuid: m.uuid,
+          parentUuid: m.parentUuid,
+          type: m.type,
+          role: m.role,
+          model: m.model,
+          timestamp: m.timestamp,
+          isMeta: m.isMeta,
+          isSidechain: m.isSidechain,
+          content: m.content as unknown as MessagesInsert["content"],
+          hasToolCalls: m.hasToolCalls,
+          toolNames: m.toolNames,
+          textPreview: m.textPreview,
+          rawMessage: m.rawMessage as MessagesInsert["rawMessage"],
+        }));
+      await insertMessagesBatch(supabase, batch);
     }
 
     // Update session to ready
-    await updateSessionStatus(session_id, "ready", {
+    await updateSession(supabase, session_id, {
+      status: "ready",
       messageCount: messages.length,
     });
 
@@ -324,7 +352,8 @@ export const POST = async (request: Request): Promise<Response> => {
   } catch (error) {
     // Mark session as failed
     try {
-      await updateSessionStatus(session_id, "failed", {
+      await updateSession(supabase, session_id, {
+        status: "failed",
         errorMessage: error instanceof Error ? error.message : String(error),
       });
     } catch (updateError) {

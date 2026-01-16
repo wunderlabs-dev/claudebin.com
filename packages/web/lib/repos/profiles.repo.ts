@@ -1,25 +1,40 @@
-import type { Tables, TablesInsert } from "@/lib/supabase/database.types";
-import { createServiceClient } from "@/lib/supabase/service";
+import "server-only";
 
-export type Profile = Tables<"profiles">;
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 
-export const getProfileById = async (id: string): Promise<Profile | null> => {
-  const supabase = createServiceClient();
+type ProfilesRow = Database["public"]["Tables"]["profiles"]["Row"];
+type ProfilesInsert = Database["public"]["Tables"]["profiles"]["Insert"];
+
+export type Profile = ProfilesRow;
+
+export const getProfileById = async (
+  supabase: SupabaseClient<Database>,
+  id: string,
+): Promise<Profile | null> => {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (error || !data) return null;
+  if (error) {
+    if (error.code === "PGRST116") return null; // Not found
+    throw new Error(`Failed to fetch profile: ${error.message}`);
+  }
+
   return data;
 };
 
 export const upsertProfile = async (
-  profile: TablesInsert<"profiles">,
+  supabase: SupabaseClient<Database>,
+  profile: ProfilesInsert,
 ): Promise<void> => {
-  const supabase = createServiceClient();
-  await supabase
+  const { error } = await supabase
     .from("profiles")
     .upsert(profile, { onConflict: "id", ignoreDuplicates: true });
+
+  if (error) {
+    throw new Error(`Failed to upsert profile: ${error.message}`);
+  }
 };

@@ -50,7 +50,7 @@ export const sessionsRouter = router({
       }
 
       // Ensure profile exists (handles users created before trigger was added)
-      await upsertProfile({
+      await upsertProfile(serviceSupabase, {
         id: user.id,
         email: user.email,
         name: user.user_metadata?.name || user.user_metadata?.full_name,
@@ -73,11 +73,15 @@ export const sessionsRouter = router({
       const storagePath = `${user.id}/${id}.jsonl`;
 
       // Upload to Storage
-      await uploadSessionJsonl(storagePath, input.conversation_data);
+      await uploadSessionJsonl(
+        serviceSupabase,
+        storagePath,
+        input.conversation_data,
+      );
 
       // Insert session record with processing status
       try {
-        await createSession({
+        await createSession(serviceSupabase, {
           id,
           userId: user.id,
           title: input.title,
@@ -87,7 +91,7 @@ export const sessionsRouter = router({
         });
       } catch (error) {
         // Cleanup uploaded file on failure
-        await deleteSessionFile(storagePath);
+        await deleteSessionFile(serviceSupabase, storagePath);
         throw error;
       }
 
@@ -113,7 +117,8 @@ export const sessionsRouter = router({
   poll: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      const session = await getSessionById(input.id);
+      const supabase = createServiceClient();
+      const session = await getSessionById(supabase, input.id);
 
       if (!session) {
         return {

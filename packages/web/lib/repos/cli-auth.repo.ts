@@ -1,18 +1,22 @@
-import type { Tables } from "@/lib/supabase/database.types";
-import { createServiceClient } from "@/lib/supabase/service";
+import "server-only";
 
-export type CliAuthSession = Tables<"cli_auth_sessions">;
-type Profile = Tables<"profiles">;
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
+
+type CliAuthRow = Database["public"]["Tables"]["cli_auth_sessions"]["Row"];
+type CliAuthInsert =
+  Database["public"]["Tables"]["cli_auth_sessions"]["Insert"];
+type CliAuthUpdate =
+  Database["public"]["Tables"]["cli_auth_sessions"]["Update"];
+type ProfilesRow = Database["public"]["Tables"]["profiles"]["Row"];
+
+export type CliAuthSession = CliAuthRow;
 
 export const createCliAuthSession = async (
-  sessionToken: string,
-  expiresAt: Date,
+  supabase: SupabaseClient<Database>,
+  session: CliAuthInsert,
 ): Promise<void> => {
-  const supabase = createServiceClient();
-  const { error } = await supabase.from("cli_auth_sessions").insert({
-    sessionToken,
-    expiresAt: expiresAt.toISOString(),
-  });
+  const { error } = await supabase.from("cli_auth_sessions").insert(session);
 
   if (error) {
     console.error("Failed to create auth session:", error);
@@ -21,38 +25,34 @@ export const createCliAuthSession = async (
 };
 
 export const getCliAuthSessionByToken = async (
+  supabase: SupabaseClient<Database>,
   sessionToken: string,
-): Promise<(CliAuthSession & { profile: Profile | null }) | null> => {
-  const supabase = createServiceClient();
+): Promise<(CliAuthSession & { profile: ProfilesRow | null }) | null> => {
   const { data, error } = await supabase
     .from("cli_auth_sessions")
     .select("*, profiles(*)")
     .eq("sessionToken", sessionToken)
     .single();
 
-  if (error || !data) return null;
+  if (error) {
+    if (error.code === "PGRST116") return null; // Not found
+    throw new Error(`Failed to fetch auth session: ${error.message}`);
+  }
 
   return {
     ...data,
-    profile: data.profiles as Profile | null,
+    profile: data.profiles as ProfilesRow | null,
   };
 };
 
 export const completeCliAuthSession = async (
+  supabase: SupabaseClient<Database>,
   sessionToken: string,
-  userId: string,
-  accessToken: string,
-  refreshToken: string,
+  updates: CliAuthUpdate,
 ): Promise<void> => {
-  const supabase = createServiceClient();
   const { error } = await supabase
     .from("cli_auth_sessions")
-    .update({
-      userId,
-      accessToken,
-      refreshToken,
-      completedAt: new Date().toISOString(),
-    })
+    .update(updates)
     .eq("sessionToken", sessionToken);
 
   if (error) {

@@ -1,27 +1,36 @@
-import type { Tables, TablesInsert } from "@/lib/supabase/database.types";
-import { createServiceClient } from "@/lib/supabase/service";
+import "server-only";
 
-export type Session = Tables<"sessions">;
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 
-export const getSessionById = async (id: string): Promise<Session | null> => {
-  const supabase = createServiceClient();
+type SessionsRow = Database["public"]["Tables"]["sessions"]["Row"];
+type SessionsInsert = Database["public"]["Tables"]["sessions"]["Insert"];
+type SessionsUpdate = Database["public"]["Tables"]["sessions"]["Update"];
+
+export type Session = SessionsRow;
+
+export const getSessionById = async (
+  supabase: SupabaseClient<Database>,
+  id: string,
+): Promise<Session | null> => {
   const { data, error } = await supabase
     .from("sessions")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (error || !data) return null;
+  if (error) {
+    if (error.code === "PGRST116") return null; // Not found
+    throw new Error(`Failed to fetch session: ${error.message}`);
+  }
+
   return data;
 };
 
-// Alias for backwards compat - storagePath is already in Session
-export const getSessionByIdWithStoragePath = getSessionById;
-
 export const createSession = async (
-  session: TablesInsert<"sessions">,
+  supabase: SupabaseClient<Database>,
+  session: SessionsInsert,
 ): Promise<void> => {
-  const supabase = createServiceClient();
   const { error } = await supabase.from("sessions").insert(session);
 
   if (error) {
@@ -30,19 +39,14 @@ export const createSession = async (
   }
 };
 
-export const updateSessionStatus = async (
+export const updateSession = async (
+  supabase: SupabaseClient<Database>,
   id: string,
-  status: string,
-  extra?: { messageCount?: number; errorMessage?: string },
+  updates: SessionsUpdate,
 ): Promise<void> => {
-  const supabase = createServiceClient();
   const { error } = await supabase
     .from("sessions")
-    .update({
-      status,
-      messageCount: extra?.messageCount,
-      errorMessage: extra?.errorMessage,
-    })
+    .update(updates)
     .eq("id", id);
 
   if (error) {
@@ -53,10 +57,10 @@ export const updateSessionStatus = async (
 
 // Storage operations
 export const uploadSessionJsonl = async (
+  supabase: SupabaseClient<Database>,
   storagePath: string,
   content: string,
 ): Promise<void> => {
-  const supabase = createServiceClient();
   const { error } = await supabase.storage
     .from("sessions")
     .upload(storagePath, content, {
@@ -71,9 +75,9 @@ export const uploadSessionJsonl = async (
 };
 
 export const downloadSessionJsonl = async (
+  supabase: SupabaseClient<Database>,
   storagePath: string,
 ): Promise<string> => {
-  const supabase = createServiceClient();
   const { data, error } = await supabase.storage
     .from("sessions")
     .download(storagePath);
@@ -85,7 +89,15 @@ export const downloadSessionJsonl = async (
   return data.text();
 };
 
-export const deleteSessionFile = async (storagePath: string): Promise<void> => {
-  const supabase = createServiceClient();
-  await supabase.storage.from("sessions").remove([storagePath]);
+export const deleteSessionFile = async (
+  supabase: SupabaseClient<Database>,
+  storagePath: string,
+): Promise<void> => {
+  const { error } = await supabase.storage
+    .from("sessions")
+    .remove([storagePath]);
+
+  if (error) {
+    console.error("Storage delete failed:", error);
+  }
 };
