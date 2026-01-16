@@ -1,23 +1,23 @@
-import type { Message } from "@/lib/repos/messages.repo";
+import type { Message as MessageDb } from "@/lib/repos/messages.repo";
 import { BlockType, MessageRole } from "@/lib/types/message";
 import {
-  BashContent,
-  FileEditContent,
-  FileReadContent,
-  FileWriteContent,
-  GenericToolContent,
-  GlobContent,
-  GrepContent,
-  QuestionContent,
-  TaskContent,
-  TextContent,
-  TodoContent,
-  ToolResultContent,
-  WebFetchContent,
-  WebSearchContent,
-} from "./content-blocks";
+  BashBlock,
+  FileEditBlock,
+  FileReadBlock,
+  FileWriteBlock,
+  GenericToolBlock,
+  GlobBlock,
+  GrepBlock,
+  QuestionBlock,
+  TaskBlock,
+  TextBlock,
+  TodoBlock,
+  ToolResultBlock,
+  WebFetchBlock,
+  WebSearchBlock,
+} from "./blocks";
 
-export const MessageContent = ({ message }: { message: Message }) => {
+export const Message = ({ message }: { message: MessageDb }) => {
   const { role, content, model } = message;
 
   return (
@@ -41,10 +41,10 @@ export const MessageContent = ({ message }: { message: Message }) => {
         const key = "id" in block ? block.id : `${block.type}-${i}`;
         switch (block.type) {
           case BlockType.TEXT:
-            return <TextContent key={key} text={block.text} />;
+            return <TextBlock key={key} text={block.text} />;
           case BlockType.TOOL_RESULT:
             return (
-              <ToolResultContent
+              <ToolResultBlock
                 key={key}
                 content={block.content}
                 isError={block.is_error}
@@ -52,7 +52,7 @@ export const MessageContent = ({ message }: { message: Message }) => {
             );
           case BlockType.TOOL_USE:
             return (
-              <GenericToolContent
+              <GenericToolBlock
                 key={key}
                 name={block.name}
                 input={block.input}
@@ -60,21 +60,21 @@ export const MessageContent = ({ message }: { message: Message }) => {
             );
           case BlockType.BASH:
             return (
-              <BashContent
+              <BashBlock
                 key={key}
                 command={block.command}
                 description={block.description}
               />
             );
           case BlockType.FILE_READ:
-            return <FileReadContent key={key} file_path={block.file_path} />;
+            return <FileReadBlock key={key} file_path={block.file_path} />;
           case BlockType.FILE_WRITE:
-            return <FileWriteContent key={key} file_path={block.file_path} />;
+            return <FileWriteBlock key={key} file_path={block.file_path} />;
           case BlockType.FILE_EDIT:
-            return <FileEditContent key={key} file_path={block.file_path} />;
+            return <FileEditBlock key={key} file_path={block.file_path} />;
           case BlockType.GLOB:
             return (
-              <GlobContent
+              <GlobBlock
                 key={key}
                 pattern={block.pattern}
                 path={block.path}
@@ -82,28 +82,28 @@ export const MessageContent = ({ message }: { message: Message }) => {
             );
           case BlockType.GREP:
             return (
-              <GrepContent
+              <GrepBlock
                 key={key}
                 pattern={block.pattern}
                 path={block.path}
               />
             );
           case BlockType.TODO:
-            return <TodoContent key={key} todos={block.todos} />;
+            return <TodoBlock key={key} todos={block.todos} />;
           case BlockType.QUESTION:
-            return <QuestionContent key={key} questions={block.questions} />;
+            return <QuestionBlock key={key} questions={block.questions} />;
           case BlockType.TASK:
             return (
-              <TaskContent
+              <TaskBlock
                 key={key}
                 description={block.description}
                 subagent_type={block.subagent_type}
               />
             );
           case BlockType.WEB_SEARCH:
-            return <WebSearchContent key={key} query={block.query} />;
+            return <WebSearchBlock key={key} query={block.query} />;
           case BlockType.WEB_FETCH:
-            return <WebFetchContent key={key} url={block.url} />;
+            return <WebFetchBlock key={key} url={block.url} />;
           default:
             return null;
         }

@@ -1,8 +1,8 @@
-const TextContent = ({ text }: { text: string }) => (
+const TextBlock = ({ text }: { text: string }) => (
   <div className="whitespace-pre-wrap text-sm">{text}</div>
 );
 
-const ToolResultContent = ({
+const ToolResultBlock = ({
   content,
   isError,
 }: {
@@ -23,7 +23,7 @@ const ToolResultContent = ({
   </div>
 );
 
-const GenericToolContent = ({
+const GenericToolBlock = ({
   name,
   input,
 }: {
@@ -38,7 +38,7 @@ const GenericToolContent = ({
   </div>
 );
 
-const BashContent = ({
+const BashBlock = ({
   command,
   description,
 }: {
@@ -55,28 +55,28 @@ const BashContent = ({
   </div>
 );
 
-const FileReadContent = ({ file_path }: { file_path: string }) => (
+const FileReadBlock = ({ file_path }: { file_path: string }) => (
   <div className="mt-2 p-3 bg-green-50 rounded border border-green-200">
     <div className="text-xs text-green-600 mb-1">Read</div>
     <code className="text-sm font-mono text-green-800">{file_path}</code>
   </div>
 );
 
-const FileWriteContent = ({ file_path }: { file_path: string }) => (
+const FileWriteBlock = ({ file_path }: { file_path: string }) => (
   <div className="mt-2 p-3 bg-blue-50 rounded border border-blue-200">
     <div className="text-xs text-blue-600 mb-1">Write</div>
     <code className="text-sm font-mono text-blue-800">{file_path}</code>
   </div>
 );
 
-const FileEditContent = ({ file_path }: { file_path: string }) => (
+const FileEditBlock = ({ file_path }: { file_path: string }) => (
   <div className="mt-2 p-3 bg-yellow-50 rounded border border-yellow-200">
     <div className="text-xs text-yellow-600 mb-1">Edit</div>
     <code className="text-sm font-mono text-yellow-800">{file_path}</code>
   </div>
 );
 
-const GlobContent = ({ pattern, path }: { pattern: string; path?: string }) => (
+const GlobBlock = ({ pattern, path }: { pattern: string; path?: string }) => (
   <div className="mt-2 p-3 bg-cyan-50 rounded border border-cyan-200">
     <div className="text-xs text-cyan-600 mb-1">Glob</div>
     <code className="text-sm font-mono text-cyan-800">
@@ -86,7 +86,7 @@ const GlobContent = ({ pattern, path }: { pattern: string; path?: string }) => (
   </div>
 );
 
-const GrepContent = ({ pattern, path }: { pattern: string; path?: string }) => (
+const GrepBlock = ({ pattern, path }: { pattern: string; path?: string }) => (
   <div className="mt-2 p-3 bg-cyan-50 rounded border border-cyan-200">
     <div className="text-xs text-cyan-600 mb-1">Grep</div>
     <code className="text-sm font-mono text-cyan-800">
@@ -95,7 +95,7 @@ const GrepContent = ({ pattern, path }: { pattern: string; path?: string }) => (
   </div>
 );
 
-const TodoContent = ({
+const TodoBlock = ({
   todos,
 }: {
   todos: Array<{
@@ -133,7 +133,7 @@ const TodoContent = ({
   </div>
 );
 
-const QuestionContent = ({
+const QuestionBlock = ({
   questions,
 }: {
   questions: Array<{
@@ -162,7 +162,7 @@ const QuestionContent = ({
   </div>
 );
 
-const TaskContent = ({
+const TaskBlock = ({
   description,
   subagent_type,
 }: {
@@ -175,14 +175,14 @@ const TaskContent = ({
   </div>
 );
 
-const WebSearchContent = ({ query }: { query: string }) => (
+const WebSearchBlock = ({ query }: { query: string }) => (
   <div className="mt-2 p-3 bg-indigo-50 rounded border border-indigo-200">
     <div className="text-xs text-indigo-600 mb-1">Web Search</div>
     <div className="text-sm text-indigo-800">{query}</div>
   </div>
 );
 
-const WebFetchContent = ({ url }: { url: string }) => (
+const WebFetchBlock = ({ url }: { url: string }) => (
   <div className="mt-2 p-3 bg-indigo-50 rounded border border-indigo-200">
     <div className="text-xs text-indigo-600 mb-1">Web Fetch</div>
     <code className="text-sm font-mono text-indigo-800">{url}</code>
@@ -190,18 +190,18 @@ const WebFetchContent = ({ url }: { url: string }) => (
 );
 
 export {
-  TextContent,
-  ToolResultContent,
-  GenericToolContent,
-  BashContent,
-  FileReadContent,
-  FileWriteContent,
-  FileEditContent,
-  GlobContent,
-  GrepContent,
-  TodoContent,
-  QuestionContent,
-  TaskContent,
-  WebSearchContent,
-  WebFetchContent,
+  TextBlock,
+  ToolResultBlock,
+  GenericToolBlock,
+  BashBlock,
+  FileReadBlock,
+  FileWriteBlock,
+  FileEditBlock,
+  GlobBlock,
+  GrepBlock,
+  TodoBlock,
+  QuestionBlock,
+  TaskBlock,
+  WebSearchBlock,
+  WebFetchBlock,
 };

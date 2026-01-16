@@ -38,7 +38,9 @@ export const processSession = async (
     // Insert in parallel batches
     const inserts = [];
     for (let i = 0; i < parsedMessages.length; i += batchSize) {
-      inserts.push(messages.insertBatch(supabase, parsedMessages.slice(i, i + batchSize)));
+      inserts.push(
+        messages.insertBatch(supabase, parsedMessages.slice(i, i + batchSize)),
+      );
     }
     await Promise.all(inserts);
 
@@ -47,10 +49,9 @@ export const processSession = async (
       messageCount: parsedMessages.length,
     });
   } catch (error) {
-    await sessions
-      .update(supabase, sessionId, {
-        status: SessionStatus.FAILED,
-        errorMessage: error instanceof Error ? error.message : String(error),
-      })
+    await sessions.update(supabase, sessionId, {
+      status: SessionStatus.FAILED,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    });
   }
 };

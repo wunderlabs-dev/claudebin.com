@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { messages } from "@/lib/repos/messages.repo";
 import { sessions } from "@/lib/repos/sessions.repo";
 import { createServiceClient } from "@/lib/supabase/service";
-import { MessageContent } from "./_components/message-content";
+import { Message } from "./_components/message";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -49,7 +49,7 @@ const SessionPage = async ({ params }: PageProps) => {
 
         <div className="space-y-4">
           {sessionMessages.map((msg) => (
-            <MessageContent key={msg.id} message={msg} />
+            <Message key={msg.id} message={msg} />
           ))}
         </div>
 
