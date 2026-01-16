@@ -1,20 +1,24 @@
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/service";
+import type { Tables } from "@/lib/supabase/database.types";
 import type { ContentBlock } from "@/lib/types/message";
 import { BlockType } from "@/lib/types/message";
 
-interface DbMessage {
-  id: number;
-  idx: number;
-  role: string | null;
-  model: string | null;
-  is_meta: boolean;
-  is_sidechain: boolean;
+// Selected columns from messages table with typed content
+type DbMessage = Pick<
+  Tables<"messages">,
+  | "id"
+  | "idx"
+  | "role"
+  | "model"
+  | "is_meta"
+  | "is_sidechain"
+  | "has_tool_calls"
+  | "tool_names"
+  | "text_preview"
+> & {
   content: ContentBlock[];
-  has_tool_calls: boolean;
-  tool_names: string[];
-  text_preview: string;
-}
+};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -44,7 +48,8 @@ const getSession = async (id: string) => {
     .eq("is_sidechain", false)
     .order("idx", { ascending: true });
 
-  return { session, messages: (messages || []) as DbMessage[] };
+  // Content is stored as Json but we know it's ContentBlock[]
+  return { session, messages: (messages ?? []) as unknown as DbMessage[] };
 };
 
 const TextContent = ({ text }: { text: string }) => (

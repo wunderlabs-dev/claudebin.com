@@ -72,11 +72,16 @@ export const authRouter = router({
         return { status: PollStatus.EXPIRED };
       }
 
-      if (new Date(session.expires_at) < new Date()) {
+      if (!session.expires_at || new Date(session.expires_at) < new Date()) {
         return { status: PollStatus.EXPIRED };
       }
 
-      if (session.completed_at && session.user_id && session.access_token) {
+      if (
+        session.completed_at &&
+        session.user_id &&
+        session.access_token &&
+        session.refresh_token
+      ) {
         const profile = session.profiles as {
           id: string;
           name: string | null;

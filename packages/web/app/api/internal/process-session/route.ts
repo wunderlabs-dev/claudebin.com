@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import type { TablesInsert } from "@/lib/supabase/database.types";
 import type {
   ContentBlock,
   RawContentBlock,
@@ -318,9 +319,10 @@ export const POST = async (request: Request): Promise<Response> => {
     // Insert in batches
     for (let i = 0; i < messages.length; i += BATCH_SIZE) {
       const batch = messages.slice(i, i + BATCH_SIZE);
+      // Cast to TablesInsert since ContentBlock[] is stored as Json
       const { error: batchError } = await supabase
         .from("messages")
-        .insert(batch);
+        .insert(batch as unknown as TablesInsert<"messages">[]);
 
       if (batchError) {
         throw new Error(`Batch insert failed at ${i}: ${batchError.message}`);
