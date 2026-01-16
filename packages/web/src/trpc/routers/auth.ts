@@ -1,6 +1,10 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { createServiceClient } from "@/lib/supabase/service";
+import {
+  createCliAuthSession,
+  getCliAuthSessionByToken,
+} from "@/lib/repos/cli-auth.repo";
 import { publicProcedure, router } from "../init";
 
 const getBaseUrl = () => {
@@ -34,19 +38,10 @@ export type PollResponse =
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
-    const supabase = createServiceClient();
     const sessionToken = nanoid(21);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    const { error } = await supabase.from("cli_auth_sessions").insert({
-      session_token: sessionToken,
-      expires_at: expiresAt.toISOString(),
-    });
-
-    if (error) {
-      console.error("Failed to create auth session:", error);
-      throw new Error("Failed to create auth session");
-    }
+    await createCliAuthSession(sessionToken, expiresAt);
 
     const baseUrl = getBaseUrl();
 
@@ -60,43 +55,31 @@ export const authRouter = router({
   poll: publicProcedure
     .input(z.object({ code: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      const supabase = createServiceClient();
+      const session = await getCliAuthSessionByToken(input.code);
 
-      const { data: session, error } = await supabase
-        .from("cli_auth_sessions")
-        .select("*, profiles(*)")
-        .eq("session_token", input.code)
-        .single();
-
-      if (error || !session) {
+      if (!session) {
         return { status: PollStatus.EXPIRED };
       }
 
-      if (!session.expires_at || new Date(session.expires_at) < new Date()) {
+      if (!session.expiresAt || session.expiresAt < new Date()) {
         return { status: PollStatus.EXPIRED };
       }
 
       if (
-        session.completed_at &&
-        session.user_id &&
-        session.access_token &&
-        session.refresh_token
+        session.completedAt &&
+        session.userId &&
+        session.accessToken &&
+        session.refreshToken
       ) {
-        const profile = session.profiles as {
-          id: string;
-          name: string | null;
-          email: string | null;
-          avatar_url: string | null;
-        } | null;
         return {
           status: PollStatus.SUCCESS,
-          token: session.access_token,
-          refresh_token: session.refresh_token,
+          token: session.accessToken,
+          refresh_token: session.refreshToken,
           user: {
-            id: profile?.id ?? session.user_id,
-            name: profile?.name ?? null,
-            email: profile?.email ?? null,
-            avatar_url: profile?.avatar_url ?? null,
+            id: session.profile?.id ?? session.userId,
+            name: session.profile?.name ?? null,
+            email: session.profile?.email ?? null,
+            avatar_url: session.profile?.avatarUrl ?? null,
           },
         };
       }
