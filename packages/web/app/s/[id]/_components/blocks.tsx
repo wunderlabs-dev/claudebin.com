@@ -2,26 +2,43 @@ const TextBlock = ({ text }: { text: string }) => (
   <div className="whitespace-pre-wrap text-sm">{text}</div>
 );
 
+const formatToolResultContent = (content: unknown): string => {
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    return content
+      .map((block) =>
+        typeof block === "object" && block && "text" in block
+          ? block.text
+          : JSON.stringify(block),
+      )
+      .join("\n");
+  }
+  return JSON.stringify(content, null, 2);
+};
+
 const ToolResultBlock = ({
   content,
   isError,
 }: {
-  content: string;
+  content: unknown;
   isError?: boolean;
-}) => (
-  <div
-    className={`mt-2 p-3 rounded border ${
-      isError
-        ? "bg-red-50 border-red-200 text-red-800"
-        : "bg-green-50 border-green-200 text-green-800"
-    }`}
-  >
-    <pre className="text-xs whitespace-pre-wrap overflow-x-auto">
-      {content.slice(0, 1000)}
-      {content.length > 1000 && "..."}
-    </pre>
-  </div>
-);
+}) => {
+  const text = formatToolResultContent(content);
+  return (
+    <div
+      className={`mt-2 p-3 rounded border ${
+        isError
+          ? "bg-red-50 border-red-200 text-red-800"
+          : "bg-green-50 border-green-200 text-green-800"
+      }`}
+    >
+      <pre className="text-xs whitespace-pre-wrap overflow-x-auto">
+        {text.slice(0, 1000)}
+        {text.length > 1000 && "..."}
+      </pre>
+    </div>
+  );
+};
 
 const GenericToolBlock = ({
   name,
