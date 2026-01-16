@@ -22,7 +22,7 @@ const svgIconSizeClassNames: Record<SvgIconSize, string> = {
   md: "size-5",
   lg: "size-6",
   xl: "size-8",
-  auto: "",
+  auto: "size-auto",
 } as const;
 
 const svgIconColorClassNames: Record<SvgIconColor, string> = {

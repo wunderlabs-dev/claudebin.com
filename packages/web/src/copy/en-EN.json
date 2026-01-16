@@ -6,5 +6,22 @@
   "common": {
     "copy": "Copy",
     "copied": "Copied!"
+  },
+  "appBar": {
+    "claudebin": "Claudebin",
+    "threads": "Threads",
+    "login": "Login"
+  },
+  "footer": {
+    "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
+    "product": "Product",
+    "claudebin": "Claudebin",
+    "threads": "Threads",
+    "login": "Login",
+    "tutorial": "Tutorial",
+    "securityTerms": "Security & Terms",
+    "community": "Community",
+    "github": "GitHub",
+    "twitter": "X @claudebin"
   }
 }

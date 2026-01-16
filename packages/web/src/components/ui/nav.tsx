@@ -1,15 +1,16 @@
 import type * as React from "react";
+import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/utils/helpers";
 
-type ListProps = React.ComponentProps<"ul">;
+type NavProps = React.ComponentProps<"nav">;
 
-const List = ({ className, ...props }: ListProps) => {
-  return <ul data-slot="list" className={cn("flex gap-8", className)} {...props} />;
+const Nav = ({ className, ...props }: NavProps) => {
+  return <nav data-slot="nav" className={cn("flex gap-8", className)} {...props} />;
 };
 
-const listItemVariants = cva(
+const navLinkVariants = cva(
   [
     "group",
     "flex items-center",
@@ -20,7 +21,7 @@ const listItemVariants = cva(
   {
     variants: {
       variant: {
-        default: "",
+        default: [],
         active: "text-orange-50 [&>svg]:text-white",
       },
     },
@@ -30,20 +31,20 @@ const listItemVariants = cva(
   },
 );
 
-type ListItemProps = React.ComponentProps<"li"> & VariantProps<typeof listItemVariants>;
+type NavLinkProps = React.ComponentProps<typeof Link> & VariantProps<typeof navLinkVariants>;
 
-const ListItem = ({ className, variant = "default", ...props }: ListItemProps) => {
+const NavLink = ({ className, variant = "default", ...props }: NavLinkProps) => {
   return (
-    <li
-      data-slot="list-item"
+    <Link
+      data-slot="nav-link"
       data-variant={variant}
-      className={cn(listItemVariants({ variant, className }))}
+      className={cn(navLinkVariants({ variant, className }))}
       {...props}
     />
   );
 };
 
-const listItemLabelVariants = cva(
+const navLabelVariants = cva(
   [
     "relative",
     "after:absolute after:inset-x-0 after:top-full",
@@ -65,16 +66,16 @@ const listItemLabelVariants = cva(
   },
 );
 
-type ListItemLabelProps = React.ComponentProps<"span"> & VariantProps<typeof listItemLabelVariants>;
+type NavLabelProps = React.ComponentProps<"span"> & VariantProps<typeof navLabelVariants>;
 
-const ListItemLabel = ({ className, variant = "default", ...props }: ListItemLabelProps) => {
+const NavLabel = ({ className, variant = "default", ...props }: NavLabelProps) => {
   return (
     <span
-      data-slot="list-item-label"
-      className={cn(listItemLabelVariants({ variant, className }))}
+      data-slot="nav-label"
+      className={cn(navLabelVariants({ variant, className }))}
       {...props}
     />
   );
 };
 
-export { List, ListItem, listItemVariants, ListItemLabel, listItemLabelVariants };
+export { Nav, NavLink, navLinkVariants, NavLabel, navLabelVariants };
