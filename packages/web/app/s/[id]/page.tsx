@@ -1,55 +1,27 @@
 import { notFound } from "next/navigation";
-import { createServiceClient } from "@/lib/supabase/service";
-import type { Tables } from "@/lib/supabase/database.types";
-import type { ContentBlock } from "@/lib/types/message";
+import { getMessagesBySessionId } from "@/lib/repos/messages.repo";
+import { getSessionById } from "@/lib/repos/sessions.repo";
+import type { Message } from "@/lib/types/domain";
 import { BlockType } from "@/lib/types/message";
-
-// Selected columns from messages table with typed content
-type DbMessage = Pick<
-  Tables<"messages">,
-  | "id"
-  | "idx"
-  | "role"
-  | "model"
-  | "is_meta"
-  | "is_sidechain"
-  | "has_tool_calls"
-  | "tool_names"
-  | "text_preview"
-> & {
-  content: ContentBlock[];
-};
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 const getSession = async (id: string) => {
-  const supabase = createServiceClient();
+  const session = await getSessionById(id);
 
-  const { data: session, error } = await supabase
-    .from("sessions")
-    .select("id, title, status, message_count, created_at, is_public")
-    .eq("id", id)
-    .single();
-
-  if (error || !session) {
+  if (!session) {
     return null;
   }
 
   // Fetch normalized messages, excluding meta and sidechain
-  const { data: messages } = await supabase
-    .from("messages")
-    .select(
-      "id, idx, role, model, is_meta, is_sidechain, content, has_tool_calls, tool_names, text_preview",
-    )
-    .eq("session_id", id)
-    .eq("is_meta", false)
-    .eq("is_sidechain", false)
-    .order("idx", { ascending: true });
+  const messages = await getMessagesBySessionId(id, {
+    excludeMeta: true,
+    excludeSidechain: true,
+  });
 
-  // Content is stored as Json but we know it's ContentBlock[]
-  return { session, messages: (messages ?? []) as unknown as DbMessage[] };
+  return { session, messages };
 };
 
 const TextContent = ({ text }: { text: string }) => (
@@ -243,7 +215,7 @@ const WebFetchContent = ({ url }: { url: string }) => (
   </div>
 );
 
-const MessageContent = ({ message }: { message: DbMessage }) => {
+const MessageContent = ({ message }: { message: Message }) => {
   const { role, content, model } = message;
 
   return (
@@ -356,8 +328,8 @@ const SessionPage = async ({ params }: PageProps) => {
             {session.title || "Untitled Session"}
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {session.message_count} messages •{" "}
-            {new Date(session.created_at).toLocaleDateString()}
+            {session.messageCount} messages •{" "}
+            {session.createdAt.toLocaleDateString()}
           </p>
         </header>
 
