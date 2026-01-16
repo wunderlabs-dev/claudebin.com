@@ -20,22 +20,28 @@ export interface Message {
 // Content Blocks
 // =============================================================================
 
+export const BlockType = {
+  TEXT: "text",
+  TOOL_USE: "tool_use",
+  TOOL_RESULT: "tool_result",
+} as const;
+
 export type ContentBlock = TextBlock | ToolUseBlock | ToolResultBlock;
 
 export interface TextBlock {
-  type: "text";
+  type: typeof BlockType.TEXT;
   text: string;
 }
 
 export interface ToolUseBlock {
-  type: "tool_use";
+  type: typeof BlockType.TOOL_USE;
   id: string;
   name: ToolName;
   input: ToolInput;
 }
 
 export interface ToolResultBlock {
-  type: "tool_result";
+  type: typeof BlockType.TOOL_RESULT;
   tool_use_id: string;
   content: string;
   is_error?: boolean;

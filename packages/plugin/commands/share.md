@@ -1,9 +1,9 @@
 <instructions>
-Call the publish tool with:
+Call the share tool with:
 - project_path: the current working directory
 - is_public: true
 
-If the user is not authenticated, the tool will return an error asking them to run /auth first.
+The tool will automatically authenticate if needed (opens browser for login).
 </instructions>
 
 <output>

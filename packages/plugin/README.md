@@ -10,7 +10,7 @@ Add the plugin to your Claude Code configuration:
 claude plugin add /path/to/packages/plugin
 ```
 
-## Commands
+## Usage
 
 ### /share
 
@@ -22,41 +22,16 @@ Publish the current session to claudebin.com and get a shareable URL.
 
 Returns a URL like `https://claudebin.com/s/abc123` that anyone can view.
 
-**Note:** Requires authentication. Run `/auth` first if not logged in.
-
-### /auth
-
-Authenticate with claudebin.com via GitHub OAuth.
-
-```
-/auth
-```
-
-Opens browser for GitHub sign-in, then saves credentials locally.
-
-### /whoami
-
-Check current authentication status.
-
-```
-/whoami
-```
-
-### /logout
-
-Clear saved credentials.
-
-```
-/logout
-```
+Automatically authenticates via browser if not logged in.
 
 ## Architecture
 
 ```
-/share → Claude calls → MCP publish tool → Upload to Supabase
-                                         → Background processing
-                                         → Poll for completion
-                                         → Return URL
+/share → Claude calls → MCP share tool → Auth if needed (opens browser)
+                                       → Upload to Supabase
+                                       → Background processing
+                                       → Poll for completion
+                                       → Return URL
 ```
 
 ## Development
@@ -71,5 +46,5 @@ bun build
 ## Files
 
 - `.claude-plugin/plugin.json` - Plugin metadata
-- `commands/` - Slash command definitions
-- `mcp/` - MCP server implementing tools
+- `commands/share.md` - The /share command
+- `mcp/` - MCP server implementing the share tool

@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import type {
-  RawJsonlMessage,
-  RawContentBlock,
   ContentBlock,
+  RawContentBlock,
+  RawJsonlMessage,
   ToolUseBlock,
 } from "@/lib/types/message";
-import { isSkippedMessageType, isToolUseBlock } from "@/lib/types/message";
+import {
+  BlockType,
+  isSkippedMessageType,
+  isToolUseBlock,
+} from "@/lib/types/message";
 
 const BATCH_SIZE = 100;
 const TEXT_PREVIEW_LENGTH = 500;
@@ -38,29 +42,29 @@ const normalizeContent = (
   if (!content) return [];
 
   if (typeof content === "string") {
-    return [{ type: "text" as const, text: content }];
+    return [{ type: BlockType.TEXT, text: content }];
   }
 
   return content.map((block): ContentBlock => {
     switch (block.type) {
-      case "text":
-        return { type: "text" as const, text: block.text };
-      case "tool_use":
+      case BlockType.TEXT:
+        return { type: BlockType.TEXT, text: block.text };
+      case BlockType.TOOL_USE:
         return {
-          type: "tool_use" as const,
+          type: BlockType.TOOL_USE,
           id: block.id,
           name: block.name,
           input: block.input,
         };
-      case "tool_result":
+      case BlockType.TOOL_RESULT:
         return {
-          type: "tool_result" as const,
+          type: BlockType.TOOL_RESULT,
           tool_use_id: block.tool_use_id,
           content: block.content,
           is_error: block.is_error,
         };
       default:
-        return { type: "text" as const, text: JSON.stringify(block) };
+        return { type: BlockType.TEXT, text: JSON.stringify(block) };
     }
   });
 };
