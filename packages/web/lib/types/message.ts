@@ -207,26 +207,23 @@ export type RawMessageType =
 
 export interface RawJsonlMessage {
   type: RawMessageType;
+  uuid: string;
+  timestamp: string;
+  sessionId: string;
+  parentUuid: string | null;
+  isMeta?: boolean;
+  isSidechain?: boolean;
   message: {
-    type: string;
-    uuid: string;
-    timestamp: string;
-    sessionId: string;
-    parentUuid: string | null;
-    isMeta?: boolean;
-    isSidechain?: boolean;
-    message: {
-      role: Role;
-      content: string | RawContentBlock[];
-    };
-    // Metadata
-    cwd?: string;
-    version?: string;
-    gitBranch?: string;
+    role: Role;
+    content: string | RawContentBlock[];
     model?: string;
-    requestId?: string;
-    userType?: string;
   };
+  // Metadata
+  cwd?: string;
+  version?: string;
+  gitBranch?: string;
+  requestId?: string;
+  userType?: string;
 }
 
 export interface RawTextBlock {

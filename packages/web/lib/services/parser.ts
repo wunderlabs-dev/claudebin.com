@@ -221,23 +221,22 @@ const normalizeMessage = (
     return null;
   }
 
-  const inner = raw.message;
-  if (!inner) return null;
+  if (!raw.message) return null;
 
-  const content = normalizeContent(inner.message?.content);
+  const content = normalizeContent(raw.message.content);
   const toolNames = extractToolNames(content);
 
   return {
     sessionId,
     idx,
-    uuid: inner.uuid,
-    parentUuid: inner.parentUuid,
+    uuid: raw.uuid,
+    parentUuid: raw.parentUuid,
     type: raw.type,
-    role: inner.message?.role || null,
-    model: inner.model || null,
-    timestamp: inner.timestamp,
-    isMeta: inner.isMeta || false,
-    isSidechain: inner.isSidechain || false,
+    role: raw.message.role || null,
+    model: raw.message.model || null,
+    timestamp: raw.timestamp,
+    isMeta: raw.isMeta || false,
+    isSidechain: raw.isSidechain || false,
     content: contentBlocksToJson(content),
     hasToolCalls: toolNames.length > 0,
     toolNames,
