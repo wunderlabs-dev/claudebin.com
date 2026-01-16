@@ -1,50 +1,79 @@
+"use client";
+
+import { createContext, useContext } from "react";
 import type * as React from "react";
 
 import { cn } from "@/utils/helpers";
 
 import { Typography, type TypographyVariant } from "@/components/ui/typography";
 
-type ThreadProps = React.ComponentProps<"article">;
+const ThreadVariants = ["card", "detailed", "grid"] as const;
+type ThreadVariant = (typeof ThreadVariants)[number];
 
-const Thread = ({ className, children, ...props }: ThreadProps) => {
+const ThreadContext = createContext<ThreadVariant>("card");
+
+type ThreadProps = {
+  variant?: ThreadVariant;
+} & React.ComponentProps<"article">;
+
+const Thread = ({ variant = "card", className, children, ...props }: ThreadProps) => {
   return (
-    <article
-      data-slot="thread"
-      className={cn(
-        "relative",
-        "px-2 py-2",
-        "flex items-stretch",
-        "border border-gray-200",
-        "transition ease-in-out",
-        "hover:border-orange-50",
-        className,
-      )}
-      {...props}
-    >
-      <div className="flex flex-col flex-1 justify-between">{children}</div>
-    </article>
+    <ThreadContext.Provider value={variant}>
+      <article
+        data-slot="thread"
+        data-variant={variant}
+        className={cn(
+          "border border-gray-200",
+          "transition ease-in-out",
+          "hover:border-orange-50",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </article>
+    </ThreadContext.Provider>
   );
 };
 
-type ThreadHeaderProps = React.ComponentProps<"header">;
-
-const ThreadHeader = ({ className, ...props }: ThreadHeaderProps) => {
-  return (
-    <header
-      data-slot="thread-header"
-      className={cn("flex items-center self-end gap-4 bg-gray-100 pl-4 pb-4 pr-2 pt-2", className)}
-      {...props}
-    />
-  );
+const threadContentVariantClassNames: Record<ThreadVariant, string> = {
+  card: "px-2 py-2 flex flex-col",
+  detailed: "grid grid-cols-12",
+  grid: "grid grid-cols-3",
 };
 
 type ThreadContentProps = React.ComponentProps<"div">;
 
 const ThreadContent = ({ className, ...props }: ThreadContentProps) => {
+  const variant = useContext(ThreadContext);
+
   return (
     <div
       data-slot="thread-content"
-      className={cn("flex flex-col self-start gap-4 bg-gray-100 px-2 py-2", className)}
+      className={cn("bg-gray-100", threadContentVariantClassNames[variant], className)}
+      {...props}
+    />
+  );
+};
+
+const ThreadColumnDividers = ["left", "right", "both"] as const;
+type ThreadColumnDivider = (typeof ThreadColumnDividers)[number];
+
+const threadColumnDividerClassNames: Record<ThreadColumnDivider, string> = {
+  left: "border-l border-gray-500/30",
+  right: "border-r border-gray-500/30",
+  both: "border-x border-gray-500/30",
+};
+
+type ThreadColumnProps = {
+  divider?: ThreadColumnDivider;
+} & React.ComponentProps<"div">;
+
+const ThreadColumn = ({ divider, className, ...props }: ThreadColumnProps) => {
+  return (
+    <div
+      data-slot="thread-column"
+      className={cn(divider && threadColumnDividerClassNames[divider], className)}
       {...props}
     />
   );
@@ -84,13 +113,35 @@ const ThreadDescription = ({ className, ...props }: ThreadDescriptionProps) => {
   );
 };
 
-type ThreadMetaProps = {
+const ThreadGroupDirections = ["row", "column"] as const;
+type ThreadGroupDirection = (typeof ThreadGroupDirections)[number];
+
+const threadGroupDirectionClassNames: Record<ThreadGroupDirection, string> = {
+  row: "flex flex-row gap-3",
+  column: "flex flex-col gap-1",
+};
+
+type ThreadGroupProps = {
+  direction?: ThreadGroupDirection;
+} & React.ComponentProps<"div">;
+
+const ThreadGroup = ({ direction = "column", className, ...props }: ThreadGroupProps) => {
+  return (
+    <div
+      data-slot="thread-group"
+      className={cn(threadGroupDirectionClassNames[direction], className)}
+      {...props}
+    />
+  );
+};
+
+type ThreadGroupItemProps = {
   icon: React.ReactNode;
 } & React.ComponentProps<"div">;
 
-const ThreadMeta = ({ icon, children, className, ...props }: ThreadMetaProps) => {
+const ThreadGroupItem = ({ icon, children, className, ...props }: ThreadGroupItemProps) => {
   return (
-    <div data-slot="thread-meta" className={cn("flex items-center gap-1", className)} {...props}>
+    <div data-slot="thread-group-item" className={cn("flex items-center gap-1", className)} {...props}>
       {icon}
       <Typography variant="caption" color="neutral" leading="normal">
         {children}
@@ -99,4 +150,12 @@ const ThreadMeta = ({ icon, children, className, ...props }: ThreadMetaProps) =>
   );
 };
 
-export { Thread, ThreadHeader, ThreadContent, ThreadTitle, ThreadDescription, ThreadMeta };
+export {
+  Thread,
+  ThreadContent,
+  ThreadColumn,
+  ThreadTitle,
+  ThreadDescription,
+  ThreadGroup,
+  ThreadGroupItem,
+};

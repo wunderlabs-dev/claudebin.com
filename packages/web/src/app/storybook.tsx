@@ -16,11 +16,11 @@ import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
 import {
   Thread,
-  ThreadHeader,
   ThreadContent,
   ThreadTitle,
   ThreadDescription,
-  ThreadMeta,
+  ThreadGroup,
+  ThreadGroupItem,
 } from "@/components/ui/thread";
 import { Chip } from "@/components/ui/chip";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
@@ -328,22 +328,19 @@ const HomePage = async () => {
       <Section>
         <SectionTitle>Thread</SectionTitle>
         <Thread>
-          <ThreadHeader>
-            <div className="flex items-center gap-1">
-              <SvgIconClock size="sm" />
-              <Typography variant="caption">2h ago</Typography>
-            </div>
-            <SvgIconArrowLink size="sm" color="primary" />
-          </ThreadHeader>
           <ThreadContent>
-            <div className="flex flex-col gap-1">
+            <ThreadGroup>
               <ThreadTitle>React hooks optimization patterns</ThreadTitle>
               <ThreadDescription>@sarah</ThreadDescription>
-            </div>
-            <div className="flex flex-col gap-1">
-              <ThreadMeta icon={<SvgIconChat size="sm" color="neutral" />}>89 prompts</ThreadMeta>
-              <ThreadMeta icon={<SvgIconFile size="sm" color="neutral" />}>2 files</ThreadMeta>
-            </div>
+            </ThreadGroup>
+            <ThreadGroup>
+              <ThreadGroupItem icon={<SvgIconChat size="sm" color="neutral" />}>
+                89 prompts
+              </ThreadGroupItem>
+              <ThreadGroupItem icon={<SvgIconFile size="sm" color="neutral" />}>
+                2 files
+              </ThreadGroupItem>
+            </ThreadGroup>
           </ThreadContent>
         </Thread>
       </Section>
