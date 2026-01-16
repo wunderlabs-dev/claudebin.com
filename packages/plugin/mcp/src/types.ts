@@ -1,8 +1,9 @@
 // User config stored in ~/.claudebin/config.json
 export interface UserConfig {
   id: string;
-  username: string;
-  avatar_url: string;
+  name: string | null;
+  email: string | null;
+  avatar_url: string | null;
 }
 
 export interface AuthConfig {

@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
 const getBaseUrl = () => {
@@ -17,8 +17,9 @@ export type PollStatusType = (typeof PollStatus)[keyof typeof PollStatus];
 
 interface User {
   id: string;
-  username: string;
-  avatar_url: string;
+  name: string | null;
+  email: string | null;
+  avatar_url: string | null;
 }
 
 export type PollResponse =
@@ -33,24 +34,25 @@ export type PollResponse =
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
-    const supabase = await createClient();
-    const code = nanoid(21);
+    const supabase = createServiceClient();
+    const sessionToken = nanoid(21);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     const { error } = await supabase.from("cli_auth_sessions").insert({
-      code,
+      session_token: sessionToken,
       expires_at: expiresAt.toISOString(),
     });
 
     if (error) {
+      console.error("Failed to create auth session:", error);
       throw new Error("Failed to create auth session");
     }
 
     const baseUrl = getBaseUrl();
 
     return {
-      code,
-      url: `${baseUrl}/cli/auth?code=${code}`,
+      code: sessionToken,
+      url: `${baseUrl}/cli/auth?code=${sessionToken}`,
       expires_at: expiresAt.toISOString(),
     };
   }),
@@ -58,12 +60,12 @@ export const authRouter = router({
   poll: publicProcedure
     .input(z.object({ code: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      const supabase = await createClient();
+      const supabase = createServiceClient();
 
       const { data: session, error } = await supabase
         .from("cli_auth_sessions")
         .select("*, profiles(*)")
-        .eq("code", input.code)
+        .eq("session_token", input.code)
         .single();
 
       if (error || !session) {
@@ -75,14 +77,21 @@ export const authRouter = router({
       }
 
       if (session.completed_at && session.user_id && session.access_token) {
+        const profile = session.profiles as {
+          id: string;
+          name: string | null;
+          email: string | null;
+          avatar_url: string | null;
+        } | null;
         return {
           status: PollStatus.SUCCESS,
           token: session.access_token,
           refresh_token: session.refresh_token,
           user: {
-            id: session.profiles.id,
-            username: session.profiles.username,
-            avatar_url: session.profiles.avatar_url,
+            id: profile?.id ?? session.user_id,
+            name: profile?.name ?? null,
+            email: profile?.email ?? null,
+            avatar_url: profile?.avatar_url ?? null,
           },
         };
       }
@@ -93,7 +102,7 @@ export const authRouter = router({
   refresh: publicProcedure
     .input(z.object({ refresh_token: z.string() }))
     .mutation(async ({ input }) => {
-      const supabase = await createClient();
+      const supabase = createServiceClient();
 
       const { data, error } = await supabase.auth.refreshSession({
         refresh_token: input.refresh_token,

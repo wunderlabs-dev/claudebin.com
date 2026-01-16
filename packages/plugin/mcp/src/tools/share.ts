@@ -57,12 +57,16 @@ const pollForProcessing = async (
 };
 
 const errorResponse = (error: string) => ({
-  content: [{ type: "text" as const, text: JSON.stringify({ success: false, error }) }],
+  content: [
+    { type: "text" as const, text: JSON.stringify({ success: false, error }) },
+  ],
   isError: true,
 });
 
 const successResponse = (data: Record<string, unknown>) => ({
-  content: [{ type: "text" as const, text: JSON.stringify({ success: true, ...data }) }],
+  content: [
+    { type: "text" as const, text: JSON.stringify({ success: true, ...data }) },
+  ],
 });
 
 export const registerShare = (server: McpServer): void => {

@@ -33,7 +33,12 @@ type AuthPollResult =
       success: true;
       token: string;
       refresh_token: string;
-      user: { id: string; username: string; avatar_url: string };
+      user: {
+        id: string;
+        name: string | null;
+        email: string | null;
+        avatar_url: string | null;
+      };
     }
   | { success: false; error: string };
 
