@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
-import { createServiceClient } from "@/lib/supabase/service";
-import type { TablesInsert } from "@/lib/supabase/database.types";
+import { insertMessagesBatch } from "@/lib/repos/messages.repo";
+import {
+  downloadSessionJsonl,
+  getSessionByIdWithStoragePath,
+  updateSessionStatus,
+} from "@/lib/repos/sessions.repo";
 import type {
   ContentBlock,
   RawContentBlock,
@@ -12,21 +16,21 @@ const BATCH_SIZE = 100;
 const TEXT_PREVIEW_LENGTH = 500;
 
 interface NormalizedMessage {
-  session_id: string;
+  sessionId: string;
   idx: number;
   uuid: string;
-  parent_uuid: string | null;
+  parentUuid: string | null;
   type: string;
   role: string | null;
   model: string | null;
   timestamp: string;
-  is_meta: boolean;
-  is_sidechain: boolean;
+  isMeta: boolean;
+  isSidechain: boolean;
   content: ContentBlock[];
-  has_tool_calls: boolean;
-  tool_names: string[];
-  text_preview: string;
-  raw_message: RawJsonlMessage;
+  hasToolCalls: boolean;
+  toolNames: string[];
+  textPreview: string;
+  rawMessage: RawJsonlMessage;
 }
 
 /**
@@ -231,21 +235,21 @@ const normalizeMessage = (
   const toolNames = extractToolNames(content);
 
   return {
-    session_id: sessionId,
+    sessionId,
     idx,
     uuid: inner.uuid,
-    parent_uuid: inner.parentUuid,
+    parentUuid: inner.parentUuid,
     type: raw.type,
     role: inner.message?.role || null,
     model: inner.model || null,
     timestamp: inner.timestamp,
-    is_meta: inner.isMeta || false,
-    is_sidechain: inner.isSidechain || false,
+    isMeta: inner.isMeta || false,
+    isSidechain: inner.isSidechain || false,
     content,
-    has_tool_calls: toolNames.length > 0,
-    tool_names: toolNames,
-    text_preview: extractTextPreview(content),
-    raw_message: raw,
+    hasToolCalls: toolNames.length > 0,
+    toolNames,
+    textPreview: extractTextPreview(content),
+    rawMessage: raw,
   };
 };
 
@@ -262,17 +266,11 @@ export const POST = async (request: Request): Promise<Response> => {
     return NextResponse.json({ error: "Invalid session_id" }, { status: 400 });
   }
 
-  const supabase = createServiceClient();
-
   try {
     // Fetch session metadata
-    const { data: session, error: sessionError } = await supabase
-      .from("sessions")
-      .select("storage_path, status")
-      .eq("id", session_id)
-      .single();
+    const session = await getSessionByIdWithStoragePath(session_id);
 
-    if (sessionError || !session) {
+    if (!session) {
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
 
@@ -283,20 +281,12 @@ export const POST = async (request: Request): Promise<Response> => {
       );
     }
 
-    if (!session.storage_path) {
+    if (!session.storagePath) {
       throw new Error("Session has no storage_path");
     }
 
     // Download JSONL from Storage
-    const { data: fileData, error: downloadError } = await supabase.storage
-      .from("sessions")
-      .download(session.storage_path);
-
-    if (downloadError || !fileData) {
-      throw new Error(`Download failed: ${downloadError?.message}`);
-    }
-
-    const jsonlContent = await fileData.text();
+    const jsonlContent = await downloadSessionJsonl(session.storagePath);
     const lines = jsonlContent.split("\n").filter((line) => line.trim());
 
     // Parse and normalize messages
@@ -319,28 +309,13 @@ export const POST = async (request: Request): Promise<Response> => {
     // Insert in batches
     for (let i = 0; i < messages.length; i += BATCH_SIZE) {
       const batch = messages.slice(i, i + BATCH_SIZE);
-      // Cast to TablesInsert since ContentBlock[] is stored as Json
-      const { error: batchError } = await supabase
-        .from("messages")
-        .insert(batch as unknown as TablesInsert<"messages">[]);
-
-      if (batchError) {
-        throw new Error(`Batch insert failed at ${i}: ${batchError.message}`);
-      }
+      await insertMessagesBatch(batch);
     }
 
     // Update session to ready
-    const { error: updateError } = await supabase
-      .from("sessions")
-      .update({
-        status: "ready",
-        message_count: messages.length,
-      })
-      .eq("id", session_id);
-
-    if (updateError) {
-      throw new Error(`Failed to update session: ${updateError.message}`);
-    }
+    await updateSessionStatus(session_id, "ready", {
+      messageCount: messages.length,
+    });
 
     return NextResponse.json({
       success: true,
@@ -348,15 +323,11 @@ export const POST = async (request: Request): Promise<Response> => {
     });
   } catch (error) {
     // Mark session as failed
-    const { error: updateError } = await supabase
-      .from("sessions")
-      .update({
-        status: "failed",
-        error_message: error instanceof Error ? error.message : String(error),
-      })
-      .eq("id", session_id);
-
-    if (updateError) {
+    try {
+      await updateSessionStatus(session_id, "failed", {
+        errorMessage: error instanceof Error ? error.message : String(error),
+      });
+    } catch (updateError) {
       console.error(
         `Failed to mark session ${session_id} as failed:`,
         updateError,
