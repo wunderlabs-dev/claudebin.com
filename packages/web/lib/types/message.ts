@@ -21,23 +21,44 @@ export interface Message {
 // =============================================================================
 
 export const BlockType = {
+  // Core types
   TEXT: "text",
-  TOOL_USE: "tool_use",
   TOOL_RESULT: "tool_result",
+  TOOL_USE: "tool_use", // Fallback for unknown/MCP tools
+
+  // Specific tool types
+  QUESTION: "question",
+  TODO: "todo",
+  BASH: "bash",
+  FILE_READ: "file_read",
+  FILE_WRITE: "file_write",
+  FILE_EDIT: "file_edit",
+  GLOB: "glob",
+  GREP: "grep",
+  TASK: "task",
+  WEB_FETCH: "web_fetch",
+  WEB_SEARCH: "web_search",
 } as const;
 
-export type ContentBlock = TextBlock | ToolUseBlock | ToolResultBlock;
+export type ContentBlock =
+  | TextBlock
+  | ToolResultBlock
+  | ToolUseBlock // Fallback for unknown/MCP tools
+  | QuestionBlock
+  | TodoBlock
+  | BashBlock
+  | FileReadBlock
+  | FileWriteBlock
+  | FileEditBlock
+  | GlobBlock
+  | GrepBlock
+  | TaskBlock
+  | WebFetchBlock
+  | WebSearchBlock;
 
 export interface TextBlock {
   type: typeof BlockType.TEXT;
   text: string;
-}
-
-export interface ToolUseBlock {
-  type: typeof BlockType.TOOL_USE;
-  id: string;
-  name: ToolName;
-  input: ToolInput;
 }
 
 export interface ToolResultBlock {
@@ -47,144 +68,21 @@ export interface ToolResultBlock {
   is_error?: boolean;
 }
 
-// =============================================================================
-// Tool Names
-// =============================================================================
-
-// Built-in Claude Code tools
-export type BuiltInTool =
-  | "Bash"
-  | "Read"
-  | "Write"
-  | "Edit"
-  | "MultiEdit"
-  | "Glob"
-  | "Grep"
-  | "LS"
-  | "Task"
-  | "TodoRead"
-  | "TodoWrite"
-  | "WebFetch"
-  | "WebSearch"
-  | "NotebookEdit"
-  | "AskUserQuestion"
-  | "Skill"
-  | "KillShell"
-  | "TaskOutput";
-
-// MCP plugin tools follow pattern: mcp__{server}__{tool}
-export type McpTool = `mcp__${string}__${string}`;
-
-export type ToolName = BuiltInTool | McpTool | string;
+// Fallback for unknown tools (MCP, etc.)
+export interface ToolUseBlock {
+  type: typeof BlockType.TOOL_USE;
+  id: string;
+  name: string;
+  input: Record<string, unknown>;
+}
 
 // =============================================================================
-// Tool Inputs
+// Specific Tool Blocks
 // =============================================================================
 
-export type ToolInput =
-  | BashInput
-  | ReadInput
-  | WriteInput
-  | EditInput
-  | MultiEditInput
-  | GlobInput
-  | GrepInput
-  | LSInput
-  | TaskInput
-  | TodoWriteInput
-  | WebFetchInput
-  | WebSearchInput
-  | NotebookEditInput
-  | AskUserQuestionInput
-  | SkillInput
-  | Record<string, unknown>; // Fallback for unknown tools
-
-export interface BashInput {
-  command: string;
-  description?: string;
-  timeout?: number;
-  run_in_background?: boolean;
-}
-
-export interface ReadInput {
-  file_path: string;
-  offset?: number;
-  limit?: number;
-}
-
-export interface WriteInput {
-  file_path: string;
-  content: string;
-}
-
-export interface EditInput {
-  file_path: string;
-  old_string: string;
-  new_string: string;
-  replace_all?: boolean;
-}
-
-export interface MultiEditInput {
-  file_path: string;
-  edits: Array<{
-    old_string: string;
-    new_string: string;
-  }>;
-}
-
-export interface GlobInput {
-  pattern: string;
-  path?: string;
-}
-
-export interface GrepInput {
-  pattern: string;
-  path?: string;
-  glob?: string;
-  type?: string;
-  output_mode?: "content" | "files_with_matches" | "count";
-}
-
-export interface LSInput {
-  path: string;
-}
-
-export interface TaskInput {
-  description: string;
-  prompt: string;
-  subagent_type: string;
-  model?: string;
-  run_in_background?: boolean;
-}
-
-export interface TodoWriteInput {
-  todos: Array<{
-    content: string;
-    status: "pending" | "in_progress" | "completed";
-    activeForm: string;
-  }>;
-}
-
-export interface WebFetchInput {
-  url: string;
-  prompt: string;
-}
-
-export interface WebSearchInput {
-  query: string;
-  allowed_domains?: string[];
-  blocked_domains?: string[];
-}
-
-export interface NotebookEditInput {
-  notebook_path: string;
-  cell_id?: string;
-  cell_type?: "code" | "markdown";
-  edit_mode?: "replace" | "insert" | "delete";
-  new_source: string;
-}
-
-export interface AskUserQuestionInput {
+export interface QuestionBlock {
+  type: typeof BlockType.QUESTION;
+  id: string;
   questions: Array<{
     question: string;
     header: string;
@@ -196,10 +94,100 @@ export interface AskUserQuestionInput {
   }>;
 }
 
-export interface SkillInput {
-  skill: string;
-  args?: string;
+export interface TodoBlock {
+  type: typeof BlockType.TODO;
+  id: string;
+  todos: Array<{
+    content: string;
+    status: "pending" | "in_progress" | "completed";
+    activeForm: string;
+  }>;
 }
+
+export interface BashBlock {
+  type: typeof BlockType.BASH;
+  id: string;
+  command: string;
+  description?: string;
+  timeout?: number;
+}
+
+export interface FileReadBlock {
+  type: typeof BlockType.FILE_READ;
+  id: string;
+  file_path: string;
+  offset?: number;
+  limit?: number;
+}
+
+export interface FileWriteBlock {
+  type: typeof BlockType.FILE_WRITE;
+  id: string;
+  file_path: string;
+  content: string;
+}
+
+export interface FileEditBlock {
+  type: typeof BlockType.FILE_EDIT;
+  id: string;
+  file_path: string;
+  old_string: string;
+  new_string: string;
+}
+
+export interface GlobBlock {
+  type: typeof BlockType.GLOB;
+  id: string;
+  pattern: string;
+  path?: string;
+}
+
+export interface GrepBlock {
+  type: typeof BlockType.GREP;
+  id: string;
+  pattern: string;
+  path?: string;
+  glob?: string;
+}
+
+export interface TaskBlock {
+  type: typeof BlockType.TASK;
+  id: string;
+  description: string;
+  prompt: string;
+  subagent_type: string;
+}
+
+export interface WebFetchBlock {
+  type: typeof BlockType.WEB_FETCH;
+  id: string;
+  url: string;
+  prompt: string;
+}
+
+export interface WebSearchBlock {
+  type: typeof BlockType.WEB_SEARCH;
+  id: string;
+  query: string;
+}
+
+// =============================================================================
+// Tool Name Mapping (raw name → block type)
+// =============================================================================
+
+export const TOOL_TO_BLOCK_TYPE: Record<string, string> = {
+  AskUserQuestion: BlockType.QUESTION,
+  TodoWrite: BlockType.TODO,
+  Bash: BlockType.BASH,
+  Read: BlockType.FILE_READ,
+  Write: BlockType.FILE_WRITE,
+  Edit: BlockType.FILE_EDIT,
+  Glob: BlockType.GLOB,
+  Grep: BlockType.GREP,
+  Task: BlockType.TASK,
+  WebFetch: BlockType.WEB_FETCH,
+  WebSearch: BlockType.WEB_SEARCH,
+};
 
 // =============================================================================
 // Raw JSONL Types (what we receive from Claude Code)
@@ -308,17 +296,33 @@ export const TOOL_COLORS: Record<string, string> = {
 // =============================================================================
 
 export const isTextBlock = (block: ContentBlock): block is TextBlock =>
-  block.type === "text";
-
-export const isToolUseBlock = (block: ContentBlock): block is ToolUseBlock =>
-  block.type === "tool_use";
+  block.type === BlockType.TEXT;
 
 export const isToolResultBlock = (
   block: ContentBlock,
-): block is ToolResultBlock => block.type === "tool_result";
+): block is ToolResultBlock => block.type === BlockType.TOOL_RESULT;
 
-export const isMcpTool = (name: string): name is McpTool =>
-  name.startsWith("mcp__");
+export const isToolUseBlock = (block: ContentBlock): block is ToolUseBlock =>
+  block.type === BlockType.TOOL_USE;
+
+export const isQuestionBlock = (block: ContentBlock): block is QuestionBlock =>
+  block.type === BlockType.QUESTION;
+
+export const isTodoBlock = (block: ContentBlock): block is TodoBlock =>
+  block.type === BlockType.TODO;
+
+export const isBashBlock = (block: ContentBlock): block is BashBlock =>
+  block.type === BlockType.BASH;
+
+export const isFileReadBlock = (block: ContentBlock): block is FileReadBlock =>
+  block.type === BlockType.FILE_READ;
+
+export const isFileWriteBlock = (
+  block: ContentBlock,
+): block is FileWriteBlock => block.type === BlockType.FILE_WRITE;
+
+export const isFileEditBlock = (block: ContentBlock): block is FileEditBlock =>
+  block.type === BlockType.FILE_EDIT;
 
 export const isSkippedMessageType = (type: string): boolean =>
   type === "file-history-snapshot";

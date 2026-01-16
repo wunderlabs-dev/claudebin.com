@@ -4,13 +4,8 @@ import type {
   ContentBlock,
   RawContentBlock,
   RawJsonlMessage,
-  ToolUseBlock,
 } from "@/lib/types/message";
-import {
-  BlockType,
-  isSkippedMessageType,
-  isToolUseBlock,
-} from "@/lib/types/message";
+import { BlockType, isSkippedMessageType } from "@/lib/types/message";
 
 const BATCH_SIZE = 100;
 const TEXT_PREVIEW_LENGTH = 500;
@@ -34,6 +29,114 @@ interface NormalizedMessage {
 }
 
 /**
+ * Transform a raw tool_use block into a specific typed block
+ */
+const transformToolUse = (
+  id: string,
+  name: string,
+  input: Record<string, unknown>,
+): ContentBlock => {
+  switch (name) {
+    case "AskUserQuestion":
+      return {
+        type: BlockType.QUESTION,
+        id,
+        questions: (input.questions as QuestionInput[]) || [],
+      };
+    case "TodoWrite":
+      return {
+        type: BlockType.TODO,
+        id,
+        todos: (input.todos as TodoInput[]) || [],
+      };
+    case "Bash":
+      return {
+        type: BlockType.BASH,
+        id,
+        command: (input.command as string) || "",
+        description: input.description as string | undefined,
+        timeout: input.timeout as number | undefined,
+      };
+    case "Read":
+      return {
+        type: BlockType.FILE_READ,
+        id,
+        file_path: (input.file_path as string) || "",
+        offset: input.offset as number | undefined,
+        limit: input.limit as number | undefined,
+      };
+    case "Write":
+      return {
+        type: BlockType.FILE_WRITE,
+        id,
+        file_path: (input.file_path as string) || "",
+        content: (input.content as string) || "",
+      };
+    case "Edit":
+      return {
+        type: BlockType.FILE_EDIT,
+        id,
+        file_path: (input.file_path as string) || "",
+        old_string: (input.old_string as string) || "",
+        new_string: (input.new_string as string) || "",
+      };
+    case "Glob":
+      return {
+        type: BlockType.GLOB,
+        id,
+        pattern: (input.pattern as string) || "",
+        path: input.path as string | undefined,
+      };
+    case "Grep":
+      return {
+        type: BlockType.GREP,
+        id,
+        pattern: (input.pattern as string) || "",
+        path: input.path as string | undefined,
+        glob: input.glob as string | undefined,
+      };
+    case "Task":
+      return {
+        type: BlockType.TASK,
+        id,
+        description: (input.description as string) || "",
+        prompt: (input.prompt as string) || "",
+        subagent_type: (input.subagent_type as string) || "",
+      };
+    case "WebFetch":
+      return {
+        type: BlockType.WEB_FETCH,
+        id,
+        url: (input.url as string) || "",
+        prompt: (input.prompt as string) || "",
+      };
+    case "WebSearch":
+      return {
+        type: BlockType.WEB_SEARCH,
+        id,
+        query: (input.query as string) || "",
+      };
+    default:
+      // Fallback for unknown/MCP tools
+      return { type: BlockType.TOOL_USE, id, name, input };
+  }
+};
+
+// Input types for type casting
+interface QuestionInput {
+  question: string;
+  header: string;
+  options: Array<{ label: string; description: string }>;
+  multiSelect: boolean;
+}
+
+interface TodoInput {
+  content: string;
+  status: "pending" | "in_progress" | "completed";
+  activeForm: string;
+}
+
+/**
  * Normalize raw content to ContentBlock array
  */
 const normalizeContent = (
@@ -47,16 +150,11 @@ const normalizeContent = (
 
   return content.map((block): ContentBlock => {
     switch (block.type) {
-      case BlockType.TEXT:
+      case "text":
         return { type: BlockType.TEXT, text: block.text };
-      case BlockType.TOOL_USE:
-        return {
-          type: BlockType.TOOL_USE,
-          id: block.id,
-          name: block.name,
-          input: block.input,
-        };
-      case BlockType.TOOL_RESULT:
+      case "tool_use":
+        return transformToolUse(block.id, block.name, block.input);
+      case "tool_result":
         return {
           type: BlockType.TOOL_RESULT,
           tool_use_id: block.tool_use_id,
@@ -74,7 +172,9 @@ const normalizeContent = (
  */
 const extractTextPreview = (content: ContentBlock[]): string => {
   const text = content
-    .filter((b): b is { type: "text"; text: string } => b.type === "text")
+    .filter(
+      (b): b is { type: "text"; text: string } => b.type === BlockType.TEXT,
+    )
     .map((b) => b.text)
     .join("\n");
 
@@ -82,10 +182,32 @@ const extractTextPreview = (content: ContentBlock[]): string => {
 };
 
 /**
+ * Map block type back to tool name for indexing
+ */
+const BLOCK_TYPE_TO_TOOL: Record<string, string> = {
+  [BlockType.QUESTION]: "AskUserQuestion",
+  [BlockType.TODO]: "TodoWrite",
+  [BlockType.BASH]: "Bash",
+  [BlockType.FILE_READ]: "Read",
+  [BlockType.FILE_WRITE]: "Write",
+  [BlockType.FILE_EDIT]: "Edit",
+  [BlockType.GLOB]: "Glob",
+  [BlockType.GREP]: "Grep",
+  [BlockType.TASK]: "Task",
+  [BlockType.WEB_FETCH]: "WebFetch",
+  [BlockType.WEB_SEARCH]: "WebSearch",
+};
+
+/**
  * Extract tool names from content blocks
  */
 const extractToolNames = (content: ContentBlock[]): string[] => {
-  return content.filter(isToolUseBlock).map((b: ToolUseBlock) => b.name);
+  return content
+    .map((b) => {
+      if (b.type === BlockType.TOOL_USE) return b.name;
+      return BLOCK_TYPE_TO_TOOL[b.type];
+    })
+    .filter((name): name is string => !!name);
 };
 
 /**
