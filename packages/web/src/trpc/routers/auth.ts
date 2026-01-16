@@ -1,12 +1,9 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
+import { config } from "@/lib/config/env";
 import { cliAuth } from "@/lib/repos/cli-auth.repo";
 import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
-
-const getBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-};
 
 export const PollStatus = {
   PENDING: "pending",
@@ -44,11 +41,9 @@ export const authRouter = router({
       expiresAt: expiresAt.toISOString(),
     });
 
-    const baseUrl = getBaseUrl();
-
     return {
       code: sessionToken,
-      url: `${baseUrl}/cli/auth?code=${sessionToken}`,
+      url: `${config.appUrl}/cli/auth?code=${sessionToken}`,
       expires_at: expiresAt.toISOString(),
     };
   }),
@@ -67,18 +62,13 @@ export const authRouter = router({
         return { status: PollStatus.EXPIRED };
       }
 
-      if (
-        session.completedAt &&
-        session.userId &&
-        session.accessToken &&
-        session.refreshToken
-      ) {
+      if (session.completedAt) {
         return {
           status: PollStatus.SUCCESS,
-          token: session.accessToken,
-          refresh_token: session.refreshToken,
+          token: session.accessToken!,
+          refresh_token: session.refreshToken!,
           user: {
-            id: session.profile?.id ?? session.userId,
+            id: session.profile?.id ?? session.userId!,
             name: session.profile?.name ?? null,
             email: session.profile?.email ?? null,
             avatar_url: session.profile?.avatarUrl ?? null,
@@ -99,14 +89,11 @@ export const authRouter = router({
       });
 
       if (error || !data.session) {
-        return {
-          success: false as const,
-          error: error?.message ?? "Failed to refresh",
-        };
+        return { success: false, error: error?.message ?? "Failed to refresh" };
       }
 
       return {
-        success: true as const,
+        success: true,
         access_token: data.session.access_token,
         refresh_token: data.session.refresh_token,
         expires_at: data.session.expires_at,

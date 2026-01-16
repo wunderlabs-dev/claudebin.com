@@ -2,6 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
+import { jsonToContentBlocks } from "@/lib/types/json-cast";
 import type { ContentBlock } from "@/lib/types/message";
 
 type MessagesRow = Database["public"]["Tables"]["messages"]["Row"];
@@ -12,18 +13,34 @@ export type Message = Omit<MessagesRow, "content" | "rawMessage"> & {
   content: ContentBlock[];
 };
 
+interface GetBySessionOptions {
+  excludeMeta?: boolean;
+  excludeSidechain?: boolean;
+  limit?: number;
+  offset?: number;
+}
+
+export interface PaginatedMessages {
+  messages: Message[];
+  total: number;
+}
+
 const mapRowToMessage = (row: MessagesRow): Message => ({
   ...row,
-  // content is Json in DB, we trust it's ContentBlock[] at runtime
-  content: row.content as unknown as ContentBlock[],
+  content: jsonToContentBlocks(row.content),
 });
+
+const DEFAULT_LIMIT = 50;
 
 const getBySessionId = async (
   supabase: SupabaseClient<Database>,
   sessionId: string,
-  options?: { excludeMeta?: boolean; excludeSidechain?: boolean },
-): Promise<Message[]> => {
-  let query = supabase.from("messages").select("*").eq("sessionId", sessionId);
+  options?: GetBySessionOptions,
+): Promise<PaginatedMessages> => {
+  let query = supabase
+    .from("messages")
+    .select("*", { count: "exact" })
+    .eq("sessionId", sessionId);
 
   if (options?.excludeMeta) {
     query = query.eq("isMeta", false);
@@ -31,14 +48,24 @@ const getBySessionId = async (
   if (options?.excludeSidechain) {
     query = query.eq("isSidechain", false);
   }
+  if (options?.limit) {
+    query = query.limit(options.limit);
+  }
+  if (options?.offset) {
+    const limit = options.limit ?? DEFAULT_LIMIT;
+    query = query.range(options.offset, options.offset + limit - 1);
+  }
 
-  const { data, error } = await query.order("idx", { ascending: true });
+  const { data, error, count } = await query.order("idx", { ascending: true });
 
   if (error) {
     throw new Error(`Failed to fetch messages: ${error.message}`);
   }
 
-  return (data ?? []).map(mapRowToMessage);
+  return {
+    messages: (data ?? []).map(mapRowToMessage),
+    total: count ?? 0,
+  };
 };
 
 const insertBatch = async (

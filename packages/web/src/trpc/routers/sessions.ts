@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { after } from "next/server";
 import { z } from "zod";
+import { config } from "@/lib/config/env";
 import { sessions } from "@/lib/repos/sessions.repo";
 import { processSession } from "@/lib/services/processor";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -20,6 +21,11 @@ export type PollResponse =
   | { status: typeof SessionStatus.FAILED; error: string };
 
 export const sessionsRouter = router({
+  // Security model:
+  // - Token verified via supabase.auth.getUser() extracts authenticated user
+  // - Session created with userId from verified token
+  // - Service client used because background processing (after()) has no user context
+  // - RLS bypassed intentionally; ownership established by verified token
   publish: publicProcedure
     .input(
       z.object({
@@ -87,6 +93,10 @@ export const sessionsRouter = router({
       };
     }),
 
+  // Security model:
+  // - Session ID acts as unguessable capability token (nanoid)
+  // - Anyone with session ID can poll status (by design for CLI workflow)
+  // - Sensitive data not exposed in poll response
   poll: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
@@ -113,7 +123,7 @@ export const sessionsRouter = router({
 
       return {
         status: SessionStatus.READY,
-        url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/s/${input.id}`,
+        url: `${config.appUrl}/s/${input.id}`,
       };
     }),
 });

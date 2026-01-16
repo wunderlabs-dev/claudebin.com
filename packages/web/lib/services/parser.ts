@@ -1,4 +1,5 @@
 import type { Json } from "@/lib/supabase/database.types";
+import { contentBlocksToJson, toJson } from "@/lib/types/json-cast";
 import type {
   ContentBlock,
   RawContentBlock,
@@ -237,11 +238,11 @@ const normalizeMessage = (
     timestamp: inner.timestamp,
     isMeta: inner.isMeta || false,
     isSidechain: inner.isSidechain || false,
-    content: content as unknown as Json,
+    content: contentBlocksToJson(content),
     hasToolCalls: toolNames.length > 0,
     toolNames,
     textPreview: extractTextPreview(content),
-    rawMessage: raw as unknown as Json,
+    rawMessage: toJson(raw),
   };
 };
 
@@ -271,3 +272,47 @@ export const parseJsonlMessages = (
 
   return messages;
 };
+
+export async function* parseJsonlStream(
+  stream: ReadableStream<Uint8Array>,
+  sessionId: string,
+): AsyncGenerator<ParsedMessage> {
+  const reader = stream.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let idx = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const raw = JSON.parse(line) as RawJsonlMessage;
+          const normalized = normalizeMessage(raw, sessionId, idx++);
+          if (normalized) yield normalized;
+        } catch (e) {
+          console.error(`Line ${idx} parse error:`, e);
+        }
+      }
+    }
+
+    if (buffer.trim()) {
+      try {
+        const raw = JSON.parse(buffer) as RawJsonlMessage;
+        const normalized = normalizeMessage(raw, sessionId, idx);
+        if (normalized) yield normalized;
+      } catch (e) {
+        console.error(`Final line parse error:`, e);
+      }
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}

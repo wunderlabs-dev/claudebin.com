@@ -74,19 +74,11 @@ export const Message = ({ message }: { message: MessageDb }) => {
             return <FileEditBlock key={key} file_path={block.file_path} />;
           case BlockType.GLOB:
             return (
-              <GlobBlock
-                key={key}
-                pattern={block.pattern}
-                path={block.path}
-              />
+              <GlobBlock key={key} pattern={block.pattern} path={block.path} />
             );
           case BlockType.GREP:
             return (
-              <GrepBlock
-                key={key}
-                pattern={block.pattern}
-                path={block.path}
-              />
+              <GrepBlock key={key} pattern={block.pattern} path={block.path} />
             );
           case BlockType.TODO:
             return <TodoBlock key={key} todos={block.todos} />;

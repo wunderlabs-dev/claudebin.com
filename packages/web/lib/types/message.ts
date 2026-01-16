@@ -70,6 +70,7 @@ export interface ToolResultBlock {
   type: typeof BlockType.TOOL_RESULT;
   tool_use_id: string;
   content: string;
+  // Note: is_error uses snake_case to match Claude API response format
   is_error?: boolean;
 }
 

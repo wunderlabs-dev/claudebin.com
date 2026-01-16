@@ -16,10 +16,15 @@ const getSession = async (id: string) => {
     return null;
   }
 
-  const sessionMessages = await messages.getBySessionId(supabase, id, {
-    excludeMeta: true,
-    excludeSidechain: true,
-  });
+  const { messages: sessionMessages } = await messages.getBySessionId(
+    supabase,
+    id,
+    {
+      excludeMeta: true,
+      excludeSidechain: true,
+      limit: 100,
+    },
+  );
 
   return { session, messages: sessionMessages };
 };

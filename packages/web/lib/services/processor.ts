@@ -4,7 +4,8 @@ import { messages } from "@/lib/repos/messages.repo";
 import { sessions } from "@/lib/repos/sessions.repo";
 import type { Database } from "@/lib/supabase/database.types";
 import { SessionStatus } from "@/src/trpc/routers/sessions";
-import { parseJsonlMessages } from "./parser";
+import type { ParsedMessage } from "./parser";
+import { parseJsonlStream } from "./parser";
 
 const DEFAULT_BATCH_SIZE = 100;
 
@@ -28,25 +29,31 @@ export const processSession = async (
       throw new Error("Session has no storage_path");
     }
 
-    const jsonlContent = await sessions.downloadJsonl(
+    const stream = await sessions.downloadJsonlStream(
       supabase,
       session.storagePath,
     );
 
-    const parsedMessages = parseJsonlMessages(jsonlContent, sessionId);
+    let batch: ParsedMessage[] = [];
+    let total = 0;
 
-    // Insert in parallel batches
-    const inserts = [];
-    for (let i = 0; i < parsedMessages.length; i += batchSize) {
-      inserts.push(
-        messages.insertBatch(supabase, parsedMessages.slice(i, i + batchSize)),
-      );
+    for await (const message of parseJsonlStream(stream, sessionId)) {
+      batch.push(message);
+      if (batch.length >= batchSize) {
+        await messages.insertBatch(supabase, batch);
+        total += batch.length;
+        batch = [];
+      }
     }
-    await Promise.all(inserts);
+
+    if (batch.length > 0) {
+      await messages.insertBatch(supabase, batch);
+      total += batch.length;
+    }
 
     await sessions.update(supabase, sessionId, {
       status: SessionStatus.READY,
-      messageCount: parsedMessages.length,
+      messageCount: total,
     });
   } catch (error) {
     await sessions.update(supabase, sessionId, {
