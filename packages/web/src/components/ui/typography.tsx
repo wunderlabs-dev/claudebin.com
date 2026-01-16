@@ -22,8 +22,8 @@ const typographyVariants = cva([], {
     },
     color: {
       default: "text-inherit",
-      neutral: "text-gray-350",
-      muted: "text-gray-300",
+      neutral: "text-gray-400",
+      muted: "text-gray-350",
     },
     leading: {
       default: [],
@@ -89,4 +89,4 @@ const Typography = <V extends Variant = "body">({
   );
 };
 
-export { Typography, typographyVariants };
+export { Typography, typographyVariants, type Variant as TypographyVariant };

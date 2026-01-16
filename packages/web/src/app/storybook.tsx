@@ -15,13 +15,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
 import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardMeta,
-} from "@/components/ui/card";
+  Thread,
+  ThreadHeader,
+  ThreadContent,
+  ThreadTitle,
+  ThreadDescription,
+  ThreadMeta,
+} from "@/components/ui/thread";
 import { Chip } from "@/components/ui/chip";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 import {
@@ -70,7 +70,7 @@ import {
 } from "@/components/icon";
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-xl font-semibold text-gray-350 uppercase tracking-wider">{children}</h2>
+  <h2 className="text-xl font-semibold text-gray-400 uppercase tracking-wider">{children}</h2>
 );
 
 const Section = ({ children }: { children: React.ReactNode }) => (
@@ -324,28 +324,28 @@ const HomePage = async () => {
         </div>
       </Section>
 
-      {/* Card */}
+      {/* Thread */}
       <Section>
-        <SectionTitle>Card</SectionTitle>
-        <Card>
-          <CardHeader>
+        <SectionTitle>Thread</SectionTitle>
+        <Thread>
+          <ThreadHeader>
             <div className="flex items-center gap-1">
               <SvgIconClock size="sm" />
               <Typography variant="caption">2h ago</Typography>
             </div>
             <SvgIconArrowLink size="sm" color="primary" />
-          </CardHeader>
-          <CardContent>
+          </ThreadHeader>
+          <ThreadContent>
             <div className="flex flex-col gap-1">
-              <CardTitle>React hooks optimization patterns</CardTitle>
-              <CardDescription>@sarah</CardDescription>
+              <ThreadTitle>React hooks optimization patterns</ThreadTitle>
+              <ThreadDescription>@sarah</ThreadDescription>
             </div>
             <div className="flex flex-col gap-1">
-              <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>89 prompts</CardMeta>
-              <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>2 files</CardMeta>
+              <ThreadMeta icon={<SvgIconChat size="sm" color="neutral" />}>89 prompts</ThreadMeta>
+              <ThreadMeta icon={<SvgIconFile size="sm" color="neutral" />}>2 files</ThreadMeta>
             </div>
-          </CardContent>
-        </Card>
+          </ThreadContent>
+        </Thread>
       </Section>
 
       {/* Table */}

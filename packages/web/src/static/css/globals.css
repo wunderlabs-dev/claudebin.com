@@ -46,20 +46,19 @@
   /* ----------------------------------------
    * Color Palette: Gray (Neutral)
    * Used for backgrounds, borders, text
-   * 100 = darkest (near black), 550 = lightest
+   * 100 = darkest (near black), 600 = lightest
    * ---------------------------------------- */
   --color-gray-50: #474747;
   --color-gray-100: #191919;
-  --color-gray-125: #312726;
   --color-gray-150: #303030;
   --color-gray-200: #5e5e5e;
   --color-gray-250: #757575;
-  --color-gray-300: #8c8c8c;
-  --color-gray-350: #a3a3a3;
-  --color-gray-400: #bababa;
-  --color-gray-450: #b5b5b5;
-  --color-gray-500: #d1d1d1;
-  --color-gray-550: #e8e8e8;
+  --color-gray-350: #8c8c8c;
+  --color-gray-400: #a3a3a3;
+  --color-gray-450: #bababa;
+  --color-gray-500: #b5b5b5;
+  --color-gray-550: #d1d1d1;
+  --color-gray-600: #e8e8e8;
 }
 
 /* ----------------------------------------
@@ -68,9 +67,4 @@
 
 @utility ridge-t {
   box-shadow: inset 0 1px 0 0 color-mix(in srgb, var(--color-white) 20%, transparent);
-}
-
-@utility bg-dot {
-  background-size: 18px 18px;
-  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
 }

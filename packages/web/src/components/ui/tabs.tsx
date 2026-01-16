@@ -72,7 +72,7 @@ const TabsTrigger = ({
         "h-full",
         "px-6 py-2",
         "rounded-full",
-        "text-base font-normal text-gray-400",
+        "text-base font-normal text-gray-450",
         "cursor-pointer select-none",
         "transition ease-in-out",
         "hover:text-white",

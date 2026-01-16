@@ -15,7 +15,7 @@ const todoItemVariants = cva(["flex items-center gap-1"], {
     variant: {
       pending: "text-white",
       progress: "text-white",
-      completed: "text-gray-350",
+      completed: "text-gray-400",
     },
   },
   defaultVariants: {
