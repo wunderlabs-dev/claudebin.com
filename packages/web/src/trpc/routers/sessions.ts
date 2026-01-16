@@ -1,6 +1,13 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { createServiceClient } from "@/lib/supabase/service";
+import { upsertProfile } from "@/lib/repos/profiles.repo";
+import {
+  createSession,
+  deleteSessionFile,
+  getSessionById,
+  uploadSessionJsonl,
+} from "@/lib/repos/sessions.repo";
 import { publicProcedure, router } from "../init";
 
 const MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
@@ -43,16 +50,13 @@ export const sessionsRouter = router({
       }
 
       // Ensure profile exists (handles users created before trigger was added)
-      await serviceSupabase.from("profiles").upsert(
-        {
-          id: user.id,
-          email: user.email,
-          name: user.user_metadata?.name || user.user_metadata?.full_name,
-          avatar_url:
-            user.user_metadata?.avatar_url || user.user_metadata?.picture,
-        },
-        { onConflict: "id", ignoreDuplicates: true },
-      );
+      await upsertProfile({
+        id: user.id,
+        email: user.email,
+        name: user.user_metadata?.name || user.user_metadata?.full_name,
+        avatarUrl:
+          user.user_metadata?.avatar_url || user.user_metadata?.picture,
+      });
 
       // Validate size
       const sizeBytes = new TextEncoder().encode(
@@ -69,35 +73,22 @@ export const sessionsRouter = router({
       const storagePath = `${user.id}/${id}.jsonl`;
 
       // Upload to Storage
-      const { error: uploadError } = await serviceSupabase.storage
-        .from("sessions")
-        .upload(storagePath, input.conversation_data, {
-          contentType: "application/jsonl",
-          upsert: false,
-        });
-
-      if (uploadError) {
-        console.error("Storage upload failed:", uploadError);
-        throw new Error("Failed to upload session. Please try again.");
-      }
+      await uploadSessionJsonl(storagePath, input.conversation_data);
 
       // Insert session record with processing status
-      const { error: insertError } = await serviceSupabase
-        .from("sessions")
-        .insert({
+      try {
+        await createSession({
           id,
-          user_id: user.id,
+          userId: user.id,
           title: input.title,
-          is_public: input.is_public,
+          isPublic: input.is_public,
           status: SessionStatus.PROCESSING,
-          storage_path: storagePath,
+          storagePath,
         });
-
-      if (insertError) {
+      } catch (error) {
         // Cleanup uploaded file on failure
-        await serviceSupabase.storage.from("sessions").remove([storagePath]);
-        console.error("Session insert failed:", insertError);
-        throw new Error("Failed to create session. Please try again.");
+        await deleteSessionFile(storagePath);
+        throw error;
       }
 
       // Fire-and-forget background processing
@@ -122,15 +113,9 @@ export const sessionsRouter = router({
   poll: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      const supabase = createServiceClient();
+      const session = await getSessionById(input.id);
 
-      const { data: session, error } = await supabase
-        .from("sessions")
-        .select("status, error_message")
-        .eq("id", input.id)
-        .single();
-
-      if (error || !session) {
+      if (!session) {
         return {
           status: SessionStatus.FAILED,
           error: "Session not found",
@@ -144,7 +129,7 @@ export const sessionsRouter = router({
       if (session.status === SessionStatus.FAILED) {
         return {
           status: SessionStatus.FAILED,
-          error: session.error_message || "Processing failed",
+          error: session.errorMessage || "Processing failed",
         };
       }
 
