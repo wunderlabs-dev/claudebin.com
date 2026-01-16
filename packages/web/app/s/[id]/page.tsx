@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
-import { getMessagesBySessionId } from "@/lib/repos/messages.repo";
+import { type Message, getMessagesBySessionId } from "@/lib/repos/messages.repo";
 import { getSessionById } from "@/lib/repos/sessions.repo";
-import type { Message } from "@/lib/types/domain";
 import { BlockType } from "@/lib/types/message";
 
 interface PageProps {
@@ -329,7 +328,7 @@ const SessionPage = async ({ params }: PageProps) => {
           </h1>
           <p className="text-sm text-gray-500 mt-1">
             {session.messageCount} messages •{" "}
-            {session.createdAt.toLocaleDateString()}
+            {new Date(session.createdAt).toLocaleDateString()}
           </p>
         </header>
 

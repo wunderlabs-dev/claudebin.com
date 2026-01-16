@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { createServiceClient } from "@/lib/supabase/service";
 import { upsertProfile } from "@/lib/repos/profiles.repo";
 import {
   createSession,
@@ -8,6 +7,7 @@ import {
   getSessionById,
   uploadSessionJsonl,
 } from "@/lib/repos/sessions.repo";
+import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
 const MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB

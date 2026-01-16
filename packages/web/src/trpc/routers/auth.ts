@@ -1,10 +1,10 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { createServiceClient } from "@/lib/supabase/service";
 import {
   createCliAuthSession,
   getCliAuthSessionByToken,
 } from "@/lib/repos/cli-auth.repo";
+import { createServiceClient } from "@/lib/supabase/service";
 import { publicProcedure, router } from "../init";
 
 const getBaseUrl = () => {
@@ -61,7 +61,7 @@ export const authRouter = router({
         return { status: PollStatus.EXPIRED };
       }
 
-      if (!session.expiresAt || session.expiresAt < new Date()) {
+      if (!session.expiresAt || new Date(session.expiresAt) < new Date()) {
         return { status: PollStatus.EXPIRED };
       }
 

@@ -30,7 +30,7 @@ interface NormalizedMessage {
   hasToolCalls: boolean;
   toolNames: string[];
   textPreview: string;
-  rawMessage: RawJsonlMessage;
+  rawMessage: unknown;
 }
 
 /**

@@ -41,7 +41,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
-  if (cliSession.expiresAt && cliSession.expiresAt < new Date()) {
+  if (cliSession.expiresAt && new Date(cliSession.expiresAt) < new Date()) {
     return (
       <Layout>
         <ErrorState title="Code Expired">
