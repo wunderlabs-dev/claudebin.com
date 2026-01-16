@@ -8,15 +8,17 @@ type CodeProps = {
   className?: string;
 };
 
+const THEME = "plastic";
+
 const Code = async ({ code, lang = "typescript", className }: CodeProps) => {
   const highlighter = await createHighlighter({
-    themes: ["github-dark"],
+    themes: [THEME],
     langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html"],
   });
 
   const html = highlighter.codeToHtml(code, {
     lang,
-    theme: "github-dark",
+    theme: THEME,
   });
 
   return (

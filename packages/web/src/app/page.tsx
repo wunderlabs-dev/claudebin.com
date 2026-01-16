@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/table";
 import { Todo, TodoItem, TodoItemIcon, TodoItemLabel } from "@/components/ui/todo";
 import { Code } from "@/components/ui/code";
+import { Progress } from "@/components/ui/progress";
 
 import {
   SvgIconArrowBottom,
@@ -46,6 +47,8 @@ import {
   SvgIconCheck,
   SvgIconCircle,
   SvgIconCircleLine,
+  SvgIconClaudebin,
+  SvgIconClaudebinXs,
   SvgIconClock,
   SvgIconCopy,
   SvgIconFile,
@@ -79,6 +82,16 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 const HomePage = async () => {
   return (
     <main className="flex min-h-screen flex-col items-center gap-12 p-12">
+      {/* Progress */}
+      <Section>
+        <SectionTitle>Progress</SectionTitle>
+        <div className="flex flex-col gap-4">
+          <Progress value={33} />
+          <Progress value={66} />
+          <Progress value={100} />
+        </div>
+      </Section>
+
       {/* Accordion */}
       <Section>
         <SectionTitle>Accordion</SectionTitle>
@@ -485,6 +498,8 @@ greet("World");`}
           <SvgIconCheck size="lg" />
           <SvgIconCircle size="lg" />
           <SvgIconCircleLine size="lg" />
+          <SvgIconClaudebin size="auto" className="h-6" />
+          <SvgIconClaudebinXs size="lg" />
           <SvgIconChat size="lg" />
           <SvgIconClock size="lg" />
           <SvgIconCopy size="lg" />

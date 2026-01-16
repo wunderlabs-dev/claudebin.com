@@ -17,6 +17,8 @@ export { SvgIconChat } from "./svg-icon-chat";
 export { SvgIconCheck } from "./svg-icon-check";
 export { SvgIconCircle } from "./svg-icon-circle";
 export { SvgIconCircleLine } from "./svg-icon-circle-line";
+export { SvgIconClaudebin } from "./svg-icon-claudebin";
+export { SvgIconClaudebinXs } from "./svg-icon-claudebin-xs";
 export { SvgIconClock } from "./svg-icon-clock";
 export { SvgIconCopy } from "./svg-icon-copy";
 export { SvgIconFile } from "./svg-icon-file";

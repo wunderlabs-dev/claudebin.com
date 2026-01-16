@@ -2,7 +2,7 @@ import type { ReactNode, HTMLAttributes } from "react";
 
 import { cn } from "@/utils/helpers";
 
-const SvgIconSizes = ["xs", "sm", "md", "lg", "xl"] as const;
+const SvgIconSizes = ["xs", "sm", "md", "lg", "xl", "auto"] as const;
 const SvgIconColors = ["default", "neutral", "primary", "accent"] as const;
 
 type SvgIconSize = (typeof SvgIconSizes)[number];
@@ -22,6 +22,7 @@ const svgIconSizeClassNames: Record<SvgIconSize, string> = {
   md: "size-5",
   lg: "size-6",
   xl: "size-8",
+  auto: "",
 } as const;
 
 const svgIconColorClassNames: Record<SvgIconColor, string> = {
