@@ -30,7 +30,7 @@ const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
 };
 
 const tabsListVariantClassNames: Record<TabsVariant, string> = {
-  default: "p-1 rounded-full bg-gray-175 border border-gray-50",
+  default: "p-1 rounded-full bg-gray-200 border border-gray-50",
   transparent: "p-1 border border-transparent",
 } as const;
 
@@ -72,7 +72,7 @@ const TabsTrigger = ({
         "h-full",
         "px-6 py-2",
         "rounded-full",
-        "text-base font-normal text-gray-450",
+        "text-base font-normal text-gray-500",
         "cursor-pointer select-none",
         "transition ease-in-out",
         "hover:text-white",

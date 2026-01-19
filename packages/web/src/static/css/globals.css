@@ -57,15 +57,15 @@
   --color-gray-50: #474747;
   --color-gray-100: #191919;
   --color-gray-150: #312726;
-  --color-gray-175: #303030;
-  --color-gray-200: #5e5e5e;
-  --color-gray-250: #757575;
-  --color-gray-350: #8c8c8c;
-  --color-gray-400: #a3a3a3;
-  --color-gray-450: #bababa;
-  --color-gray-500: #b5b5b5;
-  --color-gray-550: #d1d1d1;
-  --color-gray-600: #e8e8e8;
+  --color-gray-200: #303030;
+  --color-gray-250: #5e5e5e;
+  --color-gray-300: #757575;
+  --color-gray-400: #8c8c8c;
+  --color-gray-450: #a3a3a3;
+  --color-gray-500: #bababa;
+  --color-gray-550: #b5b5b5;
+  --color-gray-600: #d1d1d1;
+  --color-gray-650: #e8e8e8;
 }
 
 /* ----------------------------------------
@@ -80,11 +80,4 @@
   background-position: center;
   background-size: calc(var(--spacing) * 4) calc(var(--spacing) * 4);
   background-image: radial-gradient(currentColor var(--spacing-px), transparent var(--spacing-px));
-}
-
-@utility bg-gradient-hero {
-  background-color: var(--color-gray-100);
-  background-image: linear-gradient(to bottom, var(--color-gray-150) -23.24%, var(--color-gray-100) 73.06%);
-  background-size: auto calc(var(--spacing) * 220);
-  background-repeat: no-repeat;
 }

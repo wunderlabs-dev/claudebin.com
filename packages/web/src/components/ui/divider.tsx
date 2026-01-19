@@ -6,7 +6,7 @@ type DividerProps = React.ComponentProps<"div">;
 
 const Divider = ({ className, ...props }: DividerProps) => {
   return (
-    <div data-slot="divider" className={cn("h-px w-full bg-gray-500/30", className)} {...props} />
+    <div data-slot="divider" className={cn("h-px w-full bg-gray-550/30", className)} {...props} />
   );
 };
 

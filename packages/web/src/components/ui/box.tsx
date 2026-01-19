@@ -6,7 +6,7 @@ type BoxProps = React.ComponentProps<"div">;
 
 const Box = ({ className, ...props }: BoxProps) => {
   return (
-    <div data-slot="box" className={cn("p-8 border border-gray-500/40", className)} {...props} />
+    <div data-slot="box" className={cn("p-8 border border-gray-550/40", className)} {...props} />
   );
 };
 

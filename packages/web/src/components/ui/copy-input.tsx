@@ -33,7 +33,7 @@ const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => 
         "group flex items-center justify-between",
         "p-1 gap-5",
         "rounded-full",
-        "bg-gray-175 border border-gray-50",
+        "bg-gray-200 border border-gray-50",
         "transition ease-in-out",
         "hover:border-orange-50/60",
         "active:border-orange-50",

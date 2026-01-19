@@ -27,7 +27,7 @@ const svgIconSizeClassNames: Record<SvgIconSize, string> = {
 
 const svgIconColorClassNames: Record<SvgIconColor, string> = {
   default: "text-current",
-  neutral: "text-gray-400",
+  neutral: "text-gray-450",
   primary: "text-orange-50",
   accent: "text-orange-50",
 } as const;
