@@ -84,7 +84,7 @@ const HomePage = () => {
                 </CardSection>
               </CardBody>
 
-              <CardBody className="col-span-1 transition-colors bg-gray-500/40 group-hover:bg-orange-50 bg-dot" />
+              <CardBody className="col-span-1 transition-colors text-gray-500/40 group-hover:text-orange-50 bg-dot" />
             </Card>
 
             <Card variant="grid">
@@ -122,7 +122,7 @@ const HomePage = () => {
                 </CardSection>
               </CardBody>
 
-              <CardBody className="transition-colors bg-gray-500/40 group-hover:bg-orange-50 bg-dot" />
+              <CardBody className="transition-colors text-gray-500/40 group-hover:text-orange-50 bg-dot" />
             </Card>
           </div>
         </Container>
