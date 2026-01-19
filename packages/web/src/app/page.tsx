@@ -1,25 +1,30 @@
 import { AppBar } from "@/components/ui/app-bar";
-import {
-  Thread,
-  ThreadColumn,
-  ThreadContent,
-  ThreadTitle,
-  ThreadDescription,
-  ThreadGroup,
-  ThreadGroupItem,
-} from "@/components/ui/thread";
 import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
+import { Divider } from "@/components/ui/divider";
 
 import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  CardDivider,
+  CardDescription,
+  CardMetaGroup,
+  CardMeta,
+  CardSection,
+} from "@/components/ui/card";
+
+import {
+  SvgIconArrowLink,
   SvgIconChat,
   SvgIconClock,
   SvgIconFile,
   SvgIconJauge,
   SvgIconFolder,
   SvgIconFork,
+  SvgIconUser,
 } from "@/components/icon";
-import { Divider } from "@/components/ui/divider";
 
 const HomePage = () => {
   return (
@@ -29,94 +34,75 @@ const HomePage = () => {
       <main className="py-12">
         <Container>
           <div className="flex flex-col gap-8">
-            <Thread>
-              <ThreadContent>
-                <ThreadGroup>
-                  <ThreadTitle>React hooks optimization patterns</ThreadTitle>
-                  <ThreadDescription>@sarah</ThreadDescription>
-                </ThreadGroup>
-                <ThreadGroup>
-                  <ThreadGroupItem icon={<SvgIconChat size="sm" color="neutral" />}>
-                    89 prompts
-                  </ThreadGroupItem>
-                  <ThreadGroupItem icon={<SvgIconFile size="sm" color="neutral" />}>
-                    2 files
-                  </ThreadGroupItem>
-                </ThreadGroup>
-              </ThreadContent>
-            </Thread>
+            <div className="max-w-xs">
+              <Card variant="card">
+                <div className="h-32 bg-dot" />
+                <CardBody>
+                  <CardHeader>
+                    <CardTitle>Title</CardTitle>
+                    <CardDescription>@author</CardDescription>
+                  </CardHeader>
+                  <CardMetaGroup direction="column">
+                    <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
+                    <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
+                  </CardMetaGroup>
+                </CardBody>
+              </Card>
+            </div>
 
-            <Thread variant="detailed">
-              <ThreadContent>
-                <ThreadColumn className="col-span-10" divider="right">
-                  <ThreadTitle variant="h4">React hooks optimization patterns</ThreadTitle>
-                  <ThreadGroup direction="row">
-                    <ThreadGroupItem icon={<SvgIconChat size="sm" color="neutral" />}>
-                      89 prompts
-                    </ThreadGroupItem>
-                    <ThreadGroupItem icon={<SvgIconFile size="sm" color="neutral" />}>
-                      2 files
-                    </ThreadGroupItem>
-                  </ThreadGroup>
+            <Card variant="list">
+              <CardBody>
+                <CardSection>
+                  <CardTitle>Title</CardTitle>
+                  <CardMetaGroup direction="row">
+                    <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
+                    <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
+                    <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10 %</CardMeta>
+                  </CardMetaGroup>
+                </CardSection>
 
-                  <Divider />
+                <CardDivider />
 
-                  <div className="flex justify-between">
-                    <ThreadGroup direction="row">
-                      <ThreadGroupItem icon={<SvgIconJauge size="sm" color="neutral" />}>
-                        10 Views
-                      </ThreadGroupItem>
-                      <ThreadGroupItem icon={<SvgIconFork size="sm" color="neutral" />}>
-                        10 forks
-                      </ThreadGroupItem>
-                      <ThreadGroupItem icon={<SvgIconFolder size="sm" color="neutral" />}>
-                        project/master
-                      </ThreadGroupItem>
-                    </ThreadGroup>
-                    <ThreadGroupItem icon={<SvgIconClock size="sm" color="neutral" />}>
-                      2h ago
-                    </ThreadGroupItem>
-                  </div>
-                </ThreadColumn>
-              </ThreadContent>
-            </Thread>
+                <CardSection>
+                  <CardMetaGroup direction="row">
+                    <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>10 views</CardMeta>
+                    <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>10 forks</CardMeta>
+                    <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>project</CardMeta>
+                  </CardMetaGroup>
+                </CardSection>
+              </CardBody>
+            </Card>
 
-            <Thread variant="grid">
-              <ThreadContent>
-                <ThreadColumn className="col-span-1">
-                  <ThreadTitle variant="h3">React hooks optimization patterns</ThreadTitle>
-                  <ThreadDescription>@author</ThreadDescription>
-                </ThreadColumn>
+            <Card variant="grid">
+              <CardBody>
+                <CardHeader>
+                  <CardTitle>Title</CardTitle>
+                  <CardDescription>@author</CardDescription>
+                </CardHeader>
+              </CardBody>
+              
+              <CardBody>
+                <CardSection>
+                  <CardMetaGroup direction="column">
+                    <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
+                    <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
+                    <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10 %</CardMeta>
+                  </CardMetaGroup>
+                </CardSection>
 
-                <ThreadColumn className="col-span-1" divider="both">
-                  <ThreadGroup>
-                    <ThreadGroupItem icon={<SvgIconJauge size="sm" color="neutral" />}>
-                      10 Views
-                    </ThreadGroupItem>
-                    <ThreadGroupItem icon={<SvgIconFork size="sm" color="neutral" />}>
-                      10 forks
-                    </ThreadGroupItem>
-                    <ThreadGroupItem icon={<SvgIconFolder size="sm" color="neutral" />}>
+                <CardDivider />
+
+                <CardSection>
+                  <CardMetaGroup direction="column">
+                    <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>10 views</CardMeta>
+                    <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>10 forks</CardMeta>
+                    <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>
                       project/master
-                    </ThreadGroupItem>
-                  </ThreadGroup>
-
-                  <Divider />
-
-                  <ThreadGroup>
-                    <ThreadGroupItem icon={<SvgIconJauge size="sm" color="neutral" />}>
-                      10 Views
-                    </ThreadGroupItem>
-                    <ThreadGroupItem icon={<SvgIconFork size="sm" color="neutral" />}>
-                      10 forks
-                    </ThreadGroupItem>
-                    <ThreadGroupItem icon={<SvgIconFolder size="sm" color="neutral" />}>
-                      project/master
-                    </ThreadGroupItem>
-                  </ThreadGroup>
-                </ThreadColumn>
-              </ThreadContent>
-            </Thread>
+                    </CardMeta>
+                  </CardMetaGroup>
+                </CardSection>
+              </CardBody>
+            </Card>
           </div>
         </Container>
       </main>

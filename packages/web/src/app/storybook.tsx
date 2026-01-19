@@ -15,13 +15,16 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
 import {
-  Thread,
-  ThreadContent,
-  ThreadTitle,
-  ThreadDescription,
-  ThreadGroup,
-  ThreadGroupItem,
-} from "@/components/ui/thread";
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardMetaGroup,
+  CardMeta,
+  CardDivider,
+  CardSection,
+} from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 import {
@@ -324,25 +327,104 @@ const HomePage = async () => {
         </div>
       </Section>
 
-      {/* Thread */}
+      {/* Card */}
       <Section>
-        <SectionTitle>Thread</SectionTitle>
-        <Thread>
-          <ThreadContent>
-            <ThreadGroup>
-              <ThreadTitle>React hooks optimization patterns</ThreadTitle>
-              <ThreadDescription>@sarah</ThreadDescription>
-            </ThreadGroup>
-            <ThreadGroup>
-              <ThreadGroupItem icon={<SvgIconChat size="sm" color="neutral" />}>
-                89 prompts
-              </ThreadGroupItem>
-              <ThreadGroupItem icon={<SvgIconFile size="sm" color="neutral" />}>
-                2 files
-              </ThreadGroupItem>
-            </ThreadGroup>
-          </ThreadContent>
-        </Thread>
+        <SectionTitle>Card</SectionTitle>
+        <div className="flex flex-col gap-8">
+          {/* Card variant */}
+          <div>
+            <Typography variant="small" color="neutral" className="mb-3">
+              Card
+            </Typography>
+            <div className="max-w-xs">
+              <Card variant="card">
+                <div className="h-32 bg-dot" />
+                <CardBody>
+                  <CardHeader>
+                    <CardTitle>Title</CardTitle>
+                    <CardDescription>@author</CardDescription>
+                  </CardHeader>
+                  <CardMetaGroup direction="column">
+                    <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
+                    <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
+                  </CardMetaGroup>
+                </CardBody>
+              </Card>
+            </div>
+          </div>
+
+          {/* List variant */}
+          <div>
+            <Typography variant="small" color="neutral" className="mb-3">
+              List
+            </Typography>
+            <Card variant="list">
+              <CardBody>
+                <CardSection>
+                  <CardHeader>
+                    <CardTitle>Title</CardTitle>
+                    <CardMetaGroup direction="row">
+                      <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
+                        10 prompts
+                      </CardMeta>
+                      <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
+                      <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10 %</CardMeta>
+                    </CardMetaGroup>
+                  </CardHeader>
+                  <SvgIconArrowLink size="sm" className="text-orange-50" />
+                </CardSection>
+                <CardDivider />
+                <CardSection>
+                  <CardMetaGroup direction="row">
+                    <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>10 views</CardMeta>
+                    <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>10 forks</CardMeta>
+                    <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>
+                      project/master
+                    </CardMeta>
+                  </CardMetaGroup>
+                  <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>2h ago</CardMeta>
+                </CardSection>
+              </CardBody>
+            </Card>
+          </div>
+
+          {/* Grid variant */}
+          <div>
+            <Typography variant="small" color="neutral" className="mb-3">
+              Grid
+            </Typography>
+            <Card variant="grid">
+              <CardBody className="flex-1">
+                <CardHeader>
+                  <CardTitle>Title</CardTitle>
+                  <CardDescription>@author</CardDescription>
+                </CardHeader>
+              </CardBody>
+              <CardBody>
+                <CardSection>
+                  <div className="flex flex-row gap-3">
+                    <CardMetaGroup direction="column">
+                      <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
+                        10 prompts
+                      </CardMeta>
+                      <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
+                      <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10 %</CardMeta>
+                    </CardMetaGroup>
+                    <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>2h ago</CardMeta>
+                  </div>
+                  <CardDivider />
+                  <CardMetaGroup direction="column">
+                    <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>10 views</CardMeta>
+                    <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>10 forks</CardMeta>
+                    <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>
+                      project/master
+                    </CardMeta>
+                  </CardMetaGroup>
+                </CardSection>
+              </CardBody>
+            </Card>
+          </div>
+        </div>
       </Section>
 
       {/* Table */}
