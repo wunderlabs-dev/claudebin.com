@@ -20,8 +20,8 @@ type CardProps = {
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex flex-col",
-  list: "flex flex-col",
-  grid: "flex flex-row divide-x divide-gray-150",
+  list: "grid grid-cols-6",
+  grid: "grid grid-cols-3",
 };
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
@@ -31,8 +31,8 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
         data-slot="card"
         data-variant={variant}
         className={cn(
-          "border border-gray-200",
           "transition ease-in-out",
+          "border border-gray-200 divide-x divide-gray-150",
           "hover:border-orange-50",
           cardVariantClassNames[variant],
           className,
@@ -47,8 +47,8 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
 
 const cardBodyVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1 p-2",
-  list: "flex flex-col gap-3 py-3",
-  grid: "flex flex-col justify-end gap-3 py-6",
+  list: "col-span-5 flex flex-col gap-3 py-3",
+  grid: "col-span-1 flex flex-col justify-end gap-3 py-6",
 };
 
 type CardBodyProps = React.ComponentProps<"div">;

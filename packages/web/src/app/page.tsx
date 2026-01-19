@@ -1,7 +1,6 @@
 import { AppBar } from "@/components/ui/app-bar";
 import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
-import { Divider } from "@/components/ui/divider";
 
 import {
   Card,
@@ -71,6 +70,8 @@ const HomePage = () => {
                   </CardMetaGroup>
                 </CardSection>
               </CardBody>
+
+              <CardBody className="col-span-1"/>
             </Card>
 
             <Card variant="grid">
@@ -80,7 +81,7 @@ const HomePage = () => {
                   <CardDescription>@author</CardDescription>
                 </CardHeader>
               </CardBody>
-              
+
               <CardBody>
                 <CardSection>
                   <CardMetaGroup direction="column">
@@ -102,6 +103,8 @@ const HomePage = () => {
                   </CardMetaGroup>
                 </CardSection>
               </CardBody>
+
+              <CardBody  />
             </Card>
           </div>
         </Container>
