@@ -14,12 +14,20 @@ const HomeTutorials = ({ className, ...props }: HomeTutorialsProps) => {
       <Tabs defaultValue="terminal" className="flex flex-col items-center gap-8 max-w-6xl mx-auto">
         <div className="w-full p-2 bg-gray-200/50 border border-gray-500/20 rounded-3xl">
           <TabsContent value="terminal">
-            <video src="https://samplelib.com/lib/preview/webm/sample-30s.webm" className="size-full rounded-2xl" controls>
+            <video
+              src="https://samplelib.com/lib/preview/webm/sample-30s.webm"
+              className="size-full rounded-2xl"
+              controls
+            >
               <track kind="captions" />
             </video>
           </TabsContent>
           <TabsContent value="editor">
-            <video src="https://samplelib.com/lib/preview/webm/sample-30s.webm" className="size-full rounded-2xl" controls>
+            <video
+              src="https://samplelib.com/lib/preview/webm/sample-30s.webm"
+              className="size-full rounded-2xl"
+              controls
+            >
               <track kind="captions" />
             </video>
           </TabsContent>
