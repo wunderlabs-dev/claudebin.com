@@ -22,7 +22,7 @@ type CardProps = {
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex flex-col",
   list: "grid grid-cols-6 divide-x divide-gray-150",
-  grid: "relative grid grid-cols-3 divide-x divide-gray-150",
+  grid: "grid grid-cols-3 divide-x divide-gray-150",
 };
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
@@ -32,10 +32,7 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
         data-slot="card"
         data-variant={variant}
         className={cn(
-          "group",
-          "transition ease-in-out",
-          "border border-gray-200",
-          "hover:border-orange-50",
+          "group border border-gray-200 transition ease-in-out hover:border-orange-50",
           cardVariantClassNames[variant],
           className,
         )}
@@ -49,8 +46,8 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
 
 const cardBodyVariantClassNames: CardVariantMapping = {
   card: "flex flex-col self-start gap-3 p-4",
-  list: "col-span-5 flex flex-col gap-3 py-3",
-  grid: "col-span-1 flex flex-col justify-end gap-3 py-6",
+  list: "flex flex-col col-span-5 gap-3 py-3",
+  grid: "flex flex-col justify-end col-span-1 gap-3 relative py-6",
 };
 
 type CardBodyProps = React.ComponentProps<"div">;
@@ -130,32 +127,64 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
 const CardMetaGroupDirections = ["row", "column"] as const;
 type CardMetaGroupDirection = (typeof CardMetaGroupDirections)[number];
 
+const CardMetaGroupAligns = ["start", "end", "between"] as const;
+type CardMetaGroupAlign = (typeof CardMetaGroupAligns)[number];
+
 const cardMetaGroupDirectionClassNames: Record<CardMetaGroupDirection, string> = {
   row: "flex flex-row items-center gap-3",
   column: "flex flex-col gap-1",
 };
 
+const cardMetaGroupAlignClassNames: Record<CardMetaGroupAlign, string> = {
+  start: "",
+  end: "ml-auto",
+  between: "justify-between",
+};
+
 type CardMetaGroupProps = {
   direction?: CardMetaGroupDirection;
+  align?: CardMetaGroupAlign;
 } & React.ComponentProps<"div">;
 
-const CardMetaGroup = ({ direction = "column", className, ...props }: CardMetaGroupProps) => {
+const CardMetaGroup = ({
+  direction = "column",
+  align = "start",
+  className,
+  ...props
+}: CardMetaGroupProps) => {
   return (
     <div
       data-slot="card-meta-group"
-      className={cn(cardMetaGroupDirectionClassNames[direction], className)}
+      className={cn(
+        cardMetaGroupDirectionClassNames[direction],
+        cardMetaGroupAlignClassNames[align],
+        className,
+      )}
       {...props}
     />
   );
 };
 
+const CardMetaAligns = ["start", "end"] as const;
+type CardMetaAlign = (typeof CardMetaAligns)[number];
+
+const cardMetaAlignClassNames: Record<CardMetaAlign, string> = {
+  start: "",
+  end: "ml-auto",
+};
+
 type CardMetaProps = {
   icon: React.ReactNode;
+  align?: CardMetaAlign;
 } & React.ComponentProps<"div">;
 
-const CardMeta = ({ icon, children, className, ...props }: CardMetaProps) => {
+const CardMeta = ({ icon, align = "start", children, className, ...props }: CardMetaProps) => {
   return (
-    <div data-slot="card-meta" className={cn("flex items-center gap-1", className)} {...props}>
+    <div
+      data-slot="card-meta"
+      className={cn("flex items-center gap-1", cardMetaAlignClassNames[align], className)}
+      {...props}
+    >
       {icon}
       <Typography variant="caption" color="neutral" leading="normal">
         {children}
@@ -188,7 +217,7 @@ type CardDividerProps = React.ComponentProps<"div">;
 
 const CardDivider = ({ className, ...props }: CardDividerProps) => {
   return (
-    <div data-slot="card-divider" className={cn("bg-gray-150 h-px w-full", className)} {...props} />
+    <div data-slot="card-divider" className={cn("h-px w-full bg-gray-150", className)} {...props} />
   );
 };
 

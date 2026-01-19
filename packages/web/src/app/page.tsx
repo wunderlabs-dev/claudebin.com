@@ -77,14 +77,14 @@ const HomePage = () => {
                     <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>
                       project/master
                     </CardMeta>
-                    <CardMeta icon={<SvgIconClock size="sm" color="neutral" />} className="ml-auto">
+                    <CardMeta icon={<SvgIconClock size="sm" color="neutral" />} align="end">
                       2h ago
                     </CardMeta>
                   </CardMetaGroup>
                 </CardSection>
               </CardBody>
 
-              <CardBody className="col-span-1" />
+              <CardBody className="col-span-1 transition-colors text-gray-500/40 group-hover:text-orange-50 bg-dot" />
             </Card>
 
             <Card variant="grid">
@@ -97,12 +97,12 @@ const HomePage = () => {
 
               <CardBody>
                 <CardSection>
-                  <CardActions className="ml-auto" />
+                  <CardActions />
 
                   <CardMetaGroup direction="column">
                     <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
                     <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
-                    <CardMetaGroup direction="row" className="justify-between">
+                    <CardMetaGroup direction="row" align="between">
                       <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10%</CardMeta>
                       <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>2h ago</CardMeta>
                     </CardMetaGroup>
@@ -122,7 +122,7 @@ const HomePage = () => {
                 </CardSection>
               </CardBody>
 
-              <CardBody />
+              <CardBody className="transition-colors text-gray-500/40 group-hover:text-orange-50 bg-dot" />
             </Card>
           </div>
         </Container>
