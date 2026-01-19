@@ -2,13 +2,17 @@ import { AppBar } from "@/components/ui/app-bar";
 import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
 
+import { HomeIntro } from "@/components/HomeIntro";
+
 const HomePage = () => {
   return (
     <>
       <AppBar />
 
       <main>
-        <Container></Container>
+        <Container>
+          <HomeIntro />
+        </Container>
       </main>
 
       <Footer />

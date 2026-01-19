@@ -12,6 +12,16 @@
     "threads": "Threads",
     "login": "Login"
   },
+  "home": {
+    "headline": "<gradient>Share AI Sessions</gradient> like never before",
+    "badge": "Get started for free",
+    "description": "ClaudeBin is the modern pastebin for developers who code with AI. Share your Claude conversations, collaborate seamlessly.",
+    "commandCli": "npm install -g claudebin",
+    "commandEditor": "brew install claudebin",
+    "cliInstall": "CLI Install",
+    "editorInstall": "Editor Install",
+    "viewDemo": "View Demo"
+  },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
     "product": "Product",
