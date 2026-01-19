@@ -61,7 +61,7 @@ const TableRow = ({ className, ...props }: TableRowProps) => {
     <tr
       data-slot="table-row"
       className={cn(
-        "group border-b border-gray-200 transition-colors hover:border-gray-100 hover:bg-gray-550/10 data-[state=selected]:bg-gray-100",
+        "group border-b border-gray-200 transition-colors hover:border-gray-100 hover:bg-gray-500/10 data-[state=selected]:bg-gray-100",
         className,
       )}
       {...props}
@@ -107,7 +107,7 @@ const TableCaption = ({ className, ...props }: TableCaptionProps) => {
   return (
     <caption
       data-slot="table-caption"
-      className={cn("mt-4 text-sm text-gray-450", className)}
+      className={cn("mt-4 text-sm text-gray-400", className)}
       {...props}
     />
   );

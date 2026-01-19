@@ -22,8 +22,8 @@ const typographyVariants = cva([], {
     },
     color: {
       default: "text-white",
-      neutral: "text-gray-450",
-      muted: "text-gray-400",
+      neutral: "text-gray-400",
+      muted: "text-gray-350",
     },
     leading: {
       default: [],
