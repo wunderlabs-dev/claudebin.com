@@ -21,8 +21,8 @@ type CardProps = {
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex flex-col",
-  list: "grid grid-cols-6",
-  grid: "grid grid-cols-3",
+  list: "grid grid-cols-6 divide-x divide-gray-150",
+  grid: "relative grid grid-cols-3 divide-x divide-gray-150",
 };
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
@@ -32,8 +32,9 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
         data-slot="card"
         data-variant={variant}
         className={cn(
+          "group",
           "transition ease-in-out",
-          "border border-gray-200 divide-x divide-gray-150",
+          "border border-gray-200",
           "hover:border-orange-50",
           cardVariantClassNames[variant],
           className,
@@ -47,9 +48,9 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
 };
 
 const cardBodyVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col gap-3 p-2",
+  card: "flex flex-col self-start gap-3 p-4",
   list: "col-span-5 flex flex-col gap-3 py-3",
-  grid: "col-span-1 flex flex-col justify-end gap-3 py-6 relative",
+  grid: "col-span-1 flex flex-col justify-end gap-3 py-6",
 };
 
 type CardBodyProps = React.ComponentProps<"div">;
@@ -192,8 +193,8 @@ const CardDivider = ({ className, ...props }: CardDividerProps) => {
 };
 
 const cardActionsVariantClassNames: CardVariantMapping = {
-  card: 'ml-auto',
-  list: 'ml-auto',
+  card: "ml-auto",
+  list: "ml-auto",
   grid: "absolute right-3 top-3",
 };
 

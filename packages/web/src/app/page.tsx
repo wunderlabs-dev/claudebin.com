@@ -35,7 +35,13 @@ const HomePage = () => {
           <div className="flex flex-col gap-8">
             <div className="max-w-xs">
               <Card variant="card">
-                <div className="h-32 bg-dot" />
+                <CardBody className="self-end">
+                  <CardMetaGroup direction="row">
+                    <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>2h ago</CardMeta>
+                    <CardActions />
+                  </CardMetaGroup>
+                </CardBody>
+
                 <CardBody>
                   <CardHeader>
                     <CardTitle>Title</CardTitle>
