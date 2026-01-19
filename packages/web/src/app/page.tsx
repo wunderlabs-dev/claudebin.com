@@ -9,13 +9,13 @@ import {
   CardTitle,
   CardDivider,
   CardDescription,
+  CardActions,
   CardMetaGroup,
   CardMeta,
   CardSection,
 } from "@/components/ui/card";
 
 import {
-  SvgIconArrowLink,
   SvgIconChat,
   SvgIconClock,
   SvgIconFile,
@@ -52,11 +52,13 @@ const HomePage = () => {
             <Card variant="list">
               <CardBody>
                 <CardSection>
-                  <CardTitle>Title</CardTitle>
+                  <CardHeader>
+                    <CardTitle>Title</CardTitle>
+                  </CardHeader>
                   <CardMetaGroup direction="row">
                     <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
                     <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
-                    <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10 %</CardMeta>
+                    <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10%</CardMeta>
                   </CardMetaGroup>
                 </CardSection>
 
@@ -66,12 +68,17 @@ const HomePage = () => {
                   <CardMetaGroup direction="row">
                     <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>10 views</CardMeta>
                     <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>10 forks</CardMeta>
-                    <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>project</CardMeta>
+                    <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>
+                      project/master
+                    </CardMeta>
+                    <CardMeta icon={<SvgIconClock size="sm" color="neutral" />} className="ml-auto">
+                      2h ago
+                    </CardMeta>
                   </CardMetaGroup>
                 </CardSection>
               </CardBody>
 
-              <CardBody className="col-span-1"/>
+              <CardBody className="col-span-1" />
             </Card>
 
             <Card variant="grid">
@@ -84,10 +91,15 @@ const HomePage = () => {
 
               <CardBody>
                 <CardSection>
+                  <CardActions className="ml-auto" />
+
                   <CardMetaGroup direction="column">
                     <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>10 prompts</CardMeta>
                     <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>10 files</CardMeta>
-                    <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10 %</CardMeta>
+                    <CardMetaGroup direction="row" className="justify-between">
+                      <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>10%</CardMeta>
+                      <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>2h ago</CardMeta>
+                    </CardMetaGroup>
                   </CardMetaGroup>
                 </CardSection>
 
@@ -104,7 +116,7 @@ const HomePage = () => {
                 </CardSection>
               </CardBody>
 
-              <CardBody  />
+              <CardBody />
             </Card>
           </div>
         </Container>

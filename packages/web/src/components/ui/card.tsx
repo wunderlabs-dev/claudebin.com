@@ -6,6 +6,7 @@ import type * as React from "react";
 import { cn } from "@/utils/helpers";
 
 import { Typography, type TypographyVariant } from "@/components/ui/typography";
+import { SvgIconArrowLink } from "@/components/icon";
 
 const CardVariants = ["card", "list", "grid"] as const;
 
@@ -46,9 +47,9 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
 };
 
 const cardBodyVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col gap-1 p-2",
+  card: "flex flex-col gap-3 p-2",
   list: "col-span-5 flex flex-col gap-3 py-3",
-  grid: "col-span-1 flex flex-col justify-end gap-3 py-6",
+  grid: "col-span-1 flex flex-col justify-end gap-3 py-6 relative",
 };
 
 type CardBodyProps = React.ComponentProps<"div">;
@@ -67,7 +68,7 @@ const CardBody = ({ className, ...props }: CardBodyProps) => {
 
 const cardHeaderVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
-  list: "flex flex-row items-center gap-3",
+  list: "flex flex-row justify-between gap-3",
   grid: "flex flex-col gap-1 px-3",
 };
 
@@ -97,12 +98,11 @@ type CardTitleProps = Omit<React.ComponentProps<"p">, "color">;
 
 const CardTitle = ({ className, ...props }: CardTitleProps) => {
   const variant = useContext(CardContext);
-  const titleVariant = cardTitleVariantMapping[variant];
 
   return (
     <Typography
       data-slot="card-title"
-      variant={titleVariant}
+      variant={cardTitleVariantMapping[variant]}
       fontWeight="semibold"
       leading="normal"
       className={className}
@@ -126,7 +126,6 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
   );
 };
 
-// ABOUTME: CardMetaGroup handles row/column layout for meta items
 const CardMetaGroupDirections = ["row", "column"] as const;
 type CardMetaGroupDirection = (typeof CardMetaGroupDirections)[number];
 
@@ -192,6 +191,29 @@ const CardDivider = ({ className, ...props }: CardDividerProps) => {
   );
 };
 
+const cardActionsVariantClassNames: CardVariantMapping = {
+  card: 'ml-auto',
+  list: 'ml-auto',
+  grid: "absolute right-3 top-3",
+};
+
+type CardActionsProps = Omit<React.ComponentProps<"button">, "children">;
+
+const CardActions = ({ className, ...props }: CardActionsProps) => {
+  const variant = useContext(CardContext);
+
+  return (
+    <button
+      type="button"
+      data-slot="card-actions"
+      className={cn("cursor-pointer", cardActionsVariantClassNames[variant], className)}
+      {...props}
+    >
+      <SvgIconArrowLink size="sm" color="accent" />
+    </button>
+  );
+};
+
 export {
   Card,
   CardBody,
@@ -202,5 +224,6 @@ export {
   CardMeta,
   CardSection,
   CardDivider,
+  CardActions,
   type CardVariant,
 };

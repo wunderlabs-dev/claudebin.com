@@ -8,6 +8,12 @@
   --max-width-container: 1440px;
 
   /* ----------------------------------------
+   * Line height
+   * Text line-height values
+   * ---------------------------------------- */
+  --leading-normal: normal;
+
+  /* ----------------------------------------
    * Color Palette: Orange (Primary/Accent)
    * Used for buttons, links, highlights
    * 50 = darkest, 500 = lightest
