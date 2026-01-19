@@ -32,7 +32,7 @@ const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
 const tabsListVariantClassNames: Record<TabsVariant, string> = {
   default: "p-1 rounded-full bg-gray-150 border border-gray-50",
   transparent: "p-1 border border-transparent",
-};
+} as const;
 
 const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) => {
   const variant = useContext(TabsContext);
@@ -56,7 +56,7 @@ const tabsTriggerVariantClassNames: Record<TabsVariant, string> = {
   default: "data-[state=active]:bg-gray-100 data-[state=active]:text-white",
   transparent:
     "border border-transparent data-[state=active]:border-gray-50 data-[state=active]:text-white",
-};
+} as const;
 
 const TabsTrigger = ({
   className,

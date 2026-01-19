@@ -20,7 +20,7 @@ const avatarSizeClassNames: Record<AvatarSize, string> = {
   sm: "size-8",
   md: "size-16",
   lg: "size-24",
-};
+} as const;
 
 const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
   return (
@@ -56,7 +56,7 @@ const avatarFallbackFontSizeClassNames: Record<AvatarSize, string> = {
   sm: "text-base",
   md: "text-5xl",
   lg: "text-7xl",
-};
+} as const;
 
 const AvatarFallback = ({
   className,

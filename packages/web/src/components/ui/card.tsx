@@ -23,7 +23,7 @@ const cardVariantClassNames: CardVariantMapping = {
   card: "flex flex-col bg-dot text-gray-500/40 hover:text-orange-50",
   list: "grid grid-cols-6 divide-x divide-gray-150",
   grid: "grid grid-cols-3 divide-x divide-gray-150",
-};
+} as const;
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
   return (
@@ -48,7 +48,7 @@ const cardBodyVariantClassNames: CardVariantMapping = {
   card: "flex flex-col self-start gap-3 p-4",
   list: "flex flex-col col-span-5 gap-3 py-3",
   grid: "flex flex-col justify-end col-span-1 gap-3 relative py-6",
-};
+} as const;
 
 type CardBodyProps = React.ComponentProps<"div">;
 
@@ -68,7 +68,7 @@ const cardHeaderVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
   list: "flex flex-row justify-between gap-3",
   grid: "flex flex-col gap-1 px-3",
-};
+} as const;
 
 type CardHeaderProps = React.ComponentProps<"div">;
 
@@ -90,7 +90,7 @@ const cardTitleVariantMapping: Record<CardVariant, CardTitleVariant> = {
   card: "small",
   list: "h4",
   grid: "h3",
-};
+} as const;
 
 type CardTitleProps = Omit<React.ComponentProps<"p">, "color">;
 
@@ -133,13 +133,13 @@ type CardMetaGroupAlign = (typeof CardMetaGroupAligns)[number];
 const cardMetaGroupDirectionClassNames: Record<CardMetaGroupDirection, string> = {
   row: "flex flex-row items-center gap-3",
   column: "flex flex-col gap-1",
-};
+} as const;
 
 const cardMetaGroupAlignClassNames: Record<CardMetaGroupAlign, string | string[]> = {
   start: [],
   end: "ml-auto",
   between: "justify-between",
-};
+} as const;
 
 type CardMetaGroupProps = {
   direction?: CardMetaGroupDirection;
@@ -171,7 +171,7 @@ type CardMetaAlign = (typeof CardMetaAligns)[number];
 const cardMetaAlignClassNames: Record<CardMetaAlign, string | string[]> = {
   start: [],
   end: "ml-auto",
-};
+} as const;
 
 type CardMetaProps = {
   icon: React.ReactNode;
@@ -197,7 +197,7 @@ const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
   list: "flex flex-col gap-1 pl-8 pr-3",
   grid: "flex flex-col gap-3 px-3",
-};
+} as const;
 
 type CardSectionProps = React.ComponentProps<"div">;
 
@@ -225,7 +225,7 @@ const cardActionsVariantClassNames: CardVariantMapping = {
   card: "ml-auto",
   list: "ml-auto",
   grid: "absolute right-3 top-3",
-};
+} as const;
 
 type CardActionsProps = Omit<React.ComponentProps<"button">, "children">;
 
