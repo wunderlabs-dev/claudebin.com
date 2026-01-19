@@ -71,6 +71,7 @@
    * Utility Variables
    * Shared values for custom @utility classes
    * ---------------------------------------- */
+  --util-full-width: 100%;
   --util-ridge-opacity: 20%;
   --util-ridge-size: 0 1px 0 0;
   --util-ridge-color: color-mix(in srgb, var(--color-white) var(--util-ridge-opacity), transparent);
@@ -79,6 +80,15 @@
   --util-fade-from: -20%;
   --util-fade-to: 75%;
   --util-fade-size: calc(var(--spacing) * 220);
+  --util-grid-start: 0;
+  --util-grid-columns: 30;
+  --util-grid-width: 1px;
+  --util-grid-opacity: 10%;
+  --util-grid-color: color-mix(
+    in srgb,
+    var(--color-gray-500) var(--util-grid-opacity),
+    transparent
+  );
 }
 
 /* ----------------------------------------
@@ -107,4 +117,22 @@
     var(--color-gray-150) var(--util-fade-from),
     var(--color-gray-100) var(--util-fade-to)
   );
+}
+
+@utility bg-grid {
+  background-size:
+    calc(var(--util-full-width) / var(--util-grid-columns)) var(--util-full-width),
+    var(--util-full-width) var(--util-full-width);
+  background-image:
+    linear-gradient(
+      to right,
+      var(--util-grid-color) var(--util-grid-start),
+      var(--util-grid-color) var(--util-grid-width),
+      transparent var(--util-grid-width)
+    ),
+    linear-gradient(
+      to right,
+      transparent calc(var(--util-full-width) - var(--util-grid-width)),
+      var(--util-grid-color) calc(var(--util-full-width) - var(--util-grid-width))
+    );
 }

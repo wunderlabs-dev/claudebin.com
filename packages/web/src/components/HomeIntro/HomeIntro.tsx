@@ -25,42 +25,40 @@ const HomeIntro = ({ className, ...props }: HomeIntroProps) => {
   };
 
   return (
-    <section
-      data-slot="home-intro"
-      className={cn("max-w-4xl", "flex flex-col gap-18", 'pt-24', className)}
-      {...props}
-    >
-      <Typography variant="h1" className="leading-none">
-        {t.rich("home.headline", renderers)}
-      </Typography>
+    <section data-slot="home-intro" className={cn("bg-grid", className)} {...props}>
+      <div className="max-w-4xl flex flex-col gap-18">
+        <Typography variant="h1" className="leading-none">
+          {t.rich("home.headline", renderers)}
+        </Typography>
 
-      <div className="flex flex-col items-start gap-6">
-        <Badge>
-          <SvgIconGlitters />
-          {t("home.badge")}
-        </Badge>
+        <div className="flex flex-col items-start gap-6">
+          <Badge>
+            <SvgIconGlitters />
+            {t("home.badge")}
+          </Badge>
 
-        <div className="flex gap-12">
-          <Typography variant="body" color="neutral" className="leading-8">
-            {t("home.description")}
-          </Typography>
+          <div className="flex gap-12">
+            <Typography variant="body" color="neutral" className="leading-8">
+              {t("home.description")}
+            </Typography>
 
-          <Tabs defaultValue="cli" className="flex flex-col gap-4 shrink-0 w-md">
-            <div className="flex justify-between">
-              <TabsList>
-                <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>
-                <TabsTrigger value="editor">{t("home.editorInstall")}</TabsTrigger>
-              </TabsList>
-              <Button variant="secondary">{t("home.viewDemo")}</Button>
-            </div>
+            <Tabs defaultValue="cli" className="flex flex-col gap-4 shrink-0 w-md">
+              <div className="flex justify-between">
+                <TabsList>
+                  <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>
+                  <TabsTrigger value="editor">{t("home.editorInstall")}</TabsTrigger>
+                </TabsList>
+                <Button variant="secondary">{t("home.viewDemo")}</Button>
+              </div>
 
-            <TabsContent value="cli">
-              <CopyInput value={t("home.commandCli")} />
-            </TabsContent>
-            <TabsContent value="editor">
-              <CopyInput value={t("home.commandEditor")} />
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="cli">
+                <CopyInput value={t("home.commandCli")} />
+              </TabsContent>
+              <TabsContent value="editor">
+                <CopyInput value={t("home.commandEditor")} />
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     </section>
