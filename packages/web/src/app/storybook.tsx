@@ -338,7 +338,7 @@ const HomePage = async () => {
             </Typography>
             <div className="max-w-xs">
               <Card variant="card">
-                <div className="h-32 bg-dot" />
+                <div className="h-32 bg-dot text-gray-500/40" />
                 <CardBody>
                   <CardHeader>
                     <CardTitle>Title</CardTitle>

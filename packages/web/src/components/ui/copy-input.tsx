@@ -15,7 +15,7 @@ type CopyInputProps = {
 } & HTMLAttributes<HTMLDivElement>;
 
 const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => {
-  const t = useTranslations("common");
+  const t = useTranslations();
   const [copiedText, copy] = useCopyToClipboard();
 
   const handleCopy = () => {
@@ -52,7 +52,7 @@ const CopyInput = ({ value, disabled, className, ...props }: CopyInputProps) => 
         onClick={handleCopy}
         disabled={disabled}
       >
-        {copiedText ? t("copied") : t("copy")}
+        {copiedText ? t("common.copied") : t("common.copy")}
         {copiedText ? <SvgIconCheck /> : <SvgIconCopy />}
       </Button>
     </div>

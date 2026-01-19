@@ -20,7 +20,7 @@ type CardProps = {
 } & React.ComponentProps<"article">;
 
 const cardVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col",
+  card: "flex flex-col bg-dot text-gray-500/40 hover:text-orange-50",
   list: "grid grid-cols-6 divide-x divide-gray-150",
   grid: "grid grid-cols-3 divide-x divide-gray-150",
 };
