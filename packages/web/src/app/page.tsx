@@ -31,8 +31,7 @@ const HomePage = () => {
       <AppBar />
 
       <main>
-        <Container>
-        </Container>
+        <Container></Container>
       </main>
 
       <Footer />

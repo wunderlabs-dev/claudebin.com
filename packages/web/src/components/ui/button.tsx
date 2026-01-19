@@ -23,10 +23,10 @@ const buttonVariants = cva(
           "disabled:bg-orange-50/20 disabled:text-gray-450",
         ],
         secondary: [
-          "bg-gray-150 border border-gray-50",
+          "bg-gray-175 border border-gray-50",
           "hover:bg-linear-to-br hover:to-gray-50",
-          "active:to-gray-150 active:border-gray-150 active:ridge-t",
-          "disabled:bg-gray-150 disabled:border-gray-150 disabled:text-gray-450",
+          "active:to-gray-175 active:border-gray-175 active:ridge-t",
+          "disabled:bg-gray-175 disabled:border-gray-175 disabled:text-gray-450",
         ],
         outline: [
           "bg-orange-50/20 border border-orange-50",
@@ -37,10 +37,10 @@ const buttonVariants = cva(
         circle: [
           "w-12",
           "px-3",
-          "bg-gray-150 border border-gray-50",
+          "bg-gray-175 border border-gray-50",
           "hover:bg-orange-50 hover:bg-linear-to-br hover:to-orange-150",
           "active:bg-orange-50 active:to-orange-50 active:ridge-t",
-          "disabled:bg-gray-150 disabled:border-transparent disabled:text-gray-450",
+          "disabled:bg-gray-175 disabled:border-transparent disabled:text-gray-450",
         ],
         danger: [
           "bg-red-50/25 border border-red-50",

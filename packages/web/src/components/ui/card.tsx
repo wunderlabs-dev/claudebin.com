@@ -21,8 +21,8 @@ type CardProps = {
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex flex-col bg-dot text-gray-500/40 hover:text-orange-50",
-  list: "grid grid-cols-6 divide-x divide-gray-150",
-  grid: "grid grid-cols-3 divide-x divide-gray-150",
+  list: "grid grid-cols-6 divide-x divide-gray-175",
+  grid: "grid grid-cols-3 divide-x divide-gray-175",
 } as const;
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
@@ -217,7 +217,7 @@ type CardDividerProps = React.ComponentProps<"div">;
 
 const CardDivider = ({ className, ...props }: CardDividerProps) => {
   return (
-    <div data-slot="card-divider" className={cn("h-px w-full bg-gray-150", className)} {...props} />
+    <div data-slot="card-divider" className={cn("h-px w-full bg-gray-175", className)} {...props} />
   );
 };
 

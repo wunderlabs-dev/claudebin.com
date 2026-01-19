@@ -11,7 +11,7 @@ const Progress = ({ className, value, ...props }: ProgressProps) => {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
-      className={cn("relative h-px w-full bg-gray-150", className)}
+      className={cn("relative h-px w-full bg-gray-175", className)}
       {...props}
     >
       <ProgressPrimitive.Indicator
