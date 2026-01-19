@@ -178,6 +178,34 @@ className={cn("base-classes", buttonVariantClassNames[variant])}
 - Use spacing scale (`gap-4`, `p-6`, `mt-8`)
 - Check `globals.css` @theme before styling anything
 
+### Tailwind Class Ordering
+
+Order classes by visual hierarchy (outside-in, structure to details):
+
+1. **Layout** - display, position, flex/grid setup (`flex`, `grid`, `absolute`, `relative`)
+2. **Flex/Grid modifiers** - alignment, justify, direction (`items-center`, `justify-between`, `flex-col`)
+3. **Sizing** - width, height, max/min (`w-full`, `max-w-6xl`, `h-screen`)
+4. **Spacing** - margin, padding, gap (`mx-auto`, `p-2`, `gap-8`)
+5. **Background** - colors, gradients, images (`bg-gray-100`, `bg-radial`)
+6. **Border** - border, rounded (`border`, `border-gray-500/20`, `rounded-3xl`)
+7. **Typography** - font, text, leading (`text-xl`, `font-bold`, `leading-normal`)
+8. **Effects** - shadow, opacity, blur (`shadow-lg`, `opacity-50`)
+9. **Transitions** - transition, duration, ease (`transition`, `duration-200`)
+10. **Selectors** - child/descendant selectors last (`[&_video]:w-full`)
+
+```tsx
+// Correct ordering
+<div className="flex items-center w-full max-w-6xl mx-auto p-2 bg-radial from-gray-100/50 to-gray-200/50 border border-gray-500/20 rounded-3xl [&_video]:w-full [&_video]:rounded-2xl" />
+
+// Categories visible:
+// flex items-center          → layout + flex modifiers
+// w-full max-w-6xl           → sizing
+// mx-auto p-2                → spacing
+// bg-radial from-* to-*      → background
+// border border-* rounded-*  → border
+// [&_video]:*                → selectors
+```
+
 ## Internationalization
 
 - ALL rendered strings MUST be in `copy/en-EN.json`

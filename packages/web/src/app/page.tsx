@@ -1,8 +1,8 @@
 import { AppBar } from "@/components/ui/app-bar";
-import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
 
 import { HomeIntro } from "@/components/HomeIntro";
+import { HomeTutorials } from "@/components/HomeTutorials";
 
 const HomePage = () => {
   return (
@@ -10,9 +10,8 @@ const HomePage = () => {
       <AppBar />
 
       <main>
-        <Container>
-          <HomeIntro />
-        </Container>
+        <HomeIntro />
+        <HomeTutorials />
       </main>
 
       <Footer />

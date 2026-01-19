@@ -2,17 +2,28 @@ import type * as React from "react";
 
 import { cn } from "@/utils/helpers";
 
-type ContainerProps = React.ComponentProps<"div">;
+type ContainerProps<T extends React.ElementType = "div"> = {
+  as?: T;
+  className?: string;
+  children?: React.ReactNode;
+} & Omit<React.ComponentPropsWithoutRef<T>, "as" | "className" | "children">;
 
-const Container = ({ className, children, ...props }: ContainerProps) => {
+const Container = <T extends React.ElementType = "div">({
+  as,
+  className,
+  children,
+  ...props
+}: ContainerProps<T>) => {
+  const Component = as || "div";
+
   return (
-    <div
+    <Component
       data-slot="container"
       className={cn("mx-auto w-full max-w-container px-4", className)}
       {...props}
     >
       {children}
-    </div>
+    </Component>
   );
 };
 

@@ -20,7 +20,9 @@
     "commandEditor": "brew install claudebin",
     "cliInstall": "CLI Install",
     "editorInstall": "Editor Install",
-    "viewDemo": "View Demo"
+    "viewDemo": "View Demo",
+    "viewDemoTerminal": "View Demo Terminal",
+    "viewDemoEditor": "View Demo Editor"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
