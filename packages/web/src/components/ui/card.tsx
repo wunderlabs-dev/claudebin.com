@@ -135,8 +135,8 @@ const cardMetaGroupDirectionClassNames: Record<CardMetaGroupDirection, string> =
   column: "flex flex-col gap-1",
 };
 
-const cardMetaGroupAlignClassNames: Record<CardMetaGroupAlign, string> = {
-  start: "",
+const cardMetaGroupAlignClassNames: Record<CardMetaGroupAlign, string | string[]> = {
+  start: [],
   end: "ml-auto",
   between: "justify-between",
 };
@@ -168,8 +168,8 @@ const CardMetaGroup = ({
 const CardMetaAligns = ["start", "end"] as const;
 type CardMetaAlign = (typeof CardMetaAligns)[number];
 
-const cardMetaAlignClassNames: Record<CardMetaAlign, string> = {
-  start: "",
+const cardMetaAlignClassNames: Record<CardMetaAlign, string | string[]> = {
+  start: [],
   end: "ml-auto",
 };
 

@@ -10,12 +10,12 @@ type CodeProps = {
 
 const THEME = "plastic";
 
-const Code = async ({ code, lang = "typescript", className }: CodeProps) => {
-  const highlighter = await createHighlighter({
-    themes: [THEME],
-    langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html"],
-  });
+const highlighter = await createHighlighter({
+  themes: [THEME],
+  langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html"],
+});
 
+const Code = ({ code, lang = "typescript", className }: CodeProps) => {
   const html = highlighter.codeToHtml(code, {
     lang,
     theme: THEME,
