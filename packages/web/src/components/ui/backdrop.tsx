@@ -1,18 +1,14 @@
 import type { ComponentProps } from "react";
 
-import { cn } from "@/utils/helpers";
+import { cn, spacingClassNames, type Spacing } from "@/utils/helpers";
 
 import { SvgIconOrbits } from "@/components/icon";
 
-const BackdropSizes = ["full", "half"] as const;
-type BackdropSize = (typeof BackdropSizes)[number];
-
-const BackdropSpacingValues = ["none", "sm", "lg"] as const;
-type BackdropSpacing = (typeof BackdropSpacingValues)[number];
+type BackdropSize = "full" | "half";
 
 type BackdropProps = {
   size?: BackdropSize;
-  spacing?: BackdropSpacing;
+  spacing?: Spacing;
 } & ComponentProps<"div">;
 
 const backdropSizeClassNames: Record<BackdropSize, string> = {
@@ -20,13 +16,13 @@ const backdropSizeClassNames: Record<BackdropSize, string> = {
   half: "top-0 h-1/2 border-b border-gray-500/10",
 };
 
-const backdropSpacingClassNames: Record<BackdropSpacing, string> = {
-  none: "pt-0",
-  sm: "pt-24",
-  lg: "pt-48",
-};
-
-const Backdrop = ({ size = "full", spacing = "none", children, className, ...props }: BackdropProps) => {
+const Backdrop = ({
+  size = "full",
+  spacing = "none",
+  children,
+  className,
+  ...props
+}: BackdropProps) => {
   return (
     <div data-slot="backdrop" className={cn("relative w-full", className)} {...props}>
       {size === "half" ? (
@@ -38,7 +34,7 @@ const Backdrop = ({ size = "full", spacing = "none", children, className, ...pro
           backdropSizeClassNames[size],
         )}
       />
-      <div className={cn("relative", backdropSpacingClassNames[spacing])}>{children}</div>
+      <div className={cn("relative", spacingClassNames[spacing])}>{children}</div>
     </div>
   );
 };

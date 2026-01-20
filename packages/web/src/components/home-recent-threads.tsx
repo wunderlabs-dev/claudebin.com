@@ -206,8 +206,8 @@ const HomeRecentThreads = ({ className, ...props }: HomeRecentThreadsProps) => {
   const handleNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   return (
-    <section className={cn("flex flex-col gap-12 pt-48", className)} {...props}>
-      <Container className="flex flex-col">
+    <section className={cn("flex flex-col gap-12", className)} {...props}>
+      <Container spacing="lg" className="flex flex-col">
         <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
 
         <div className="flex items-center justify-between">

@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
-import type * as React from "react";
+import type { ComponentProps, ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { getYear } from "date-fns";
@@ -10,7 +9,7 @@ import { Typography } from "@/components/ui/typography";
 
 import { SvgIconClaudebin } from "@/components/icon";
 
-type FooterProps = React.ComponentProps<"footer">;
+type FooterProps = ComponentProps<"footer">;
 
 const renderers = {
   year: getYear(new Date()),
