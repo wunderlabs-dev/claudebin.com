@@ -1,15 +1,15 @@
-import { exec } from "node:child_process";
-import { readConfig, writeConfig } from "./config.js";
+import { getApiBaseUrl, readConfig, writeConfig } from "./config.js";
+import {
+  AUTH_POLL_TIMEOUT_MS,
+  AUTH_TOKEN_TTL_MS,
+  DEFAULT_TOKEN_TTL_MS,
+  POLL_INTERVAL_MS,
+  PollStatus,
+  TOKEN_REFRESH_BUFFER_MS,
+} from "./constants.js";
 import { createApiClient } from "./trpc.js";
 import type { Config } from "./types.js";
-
-// Time constants
-export const TOKEN_REFRESH_BUFFER_MS = 5 * 60 * 1_000; // 5 minutes
-export const DEFAULT_TOKEN_TTL_MS = 60 * 60 * 1_000; // 1 hour
-export const AUTH_TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1_000; // 30 days
-export const POLL_INTERVAL_MS = 2_000; // 2 seconds
-export const AUTH_POLL_TIMEOUT_MS = 60_000; // 1 minute
-export const SESSION_POLL_TIMEOUT_MS = 120_000; // 2 minutes
+import { poll, safeOpenUrl } from "./utils.js";
 
 export interface AuthStartResult {
   success: true;
@@ -22,11 +22,17 @@ export interface AuthStartError {
   error: string;
 }
 
-// Matches PollStatus from @claudebin/web/trpc/routers/auth
-const PollStatus = {
-  SUCCESS: "success",
-  EXPIRED: "expired",
-} as const;
+interface AuthPollData {
+  status: string;
+  token?: string;
+  refresh_token?: string;
+  user?: {
+    id: string;
+    name: string | null;
+    email: string | null;
+    avatar_url: string | null;
+  };
+}
 
 type AuthPollResult =
   | {
@@ -42,17 +48,14 @@ type AuthPollResult =
     }
   | { success: false; error: string };
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-const openUrl = (url: string) => {
-  const platform = process.platform;
-  const cmd =
-    platform === "darwin"
-      ? "open"
-      : platform === "win32"
-        ? "start"
-        : "xdg-open";
-  exec(`${cmd} "${url}"`);
+const fetchAuthPollData = async (
+  code: string,
+  apiUrl: string,
+): Promise<AuthPollData | null> => {
+  const url = `${apiUrl}/api/trpc/auth.poll?input=${encodeURIComponent(JSON.stringify({ code }))}`;
+  const res = await fetch(url);
+  const json = await res.json();
+  return json.result?.data ?? null;
 };
 
 const pollForAuthCompletion = async (
@@ -60,35 +63,37 @@ const pollForAuthCompletion = async (
   apiUrl: string,
   timeoutMs = AUTH_POLL_TIMEOUT_MS,
 ): Promise<AuthPollResult> => {
-  const deadline = Date.now() + timeoutMs;
+  const result = await poll<AuthPollData>({
+    fn: () => fetchAuthPollData(code, apiUrl),
+    isSuccess: (data) =>
+      data.status === PollStatus.SUCCESS &&
+      data.token !== undefined &&
+      data.refresh_token !== undefined &&
+      data.user !== undefined,
+    isFailure: (data) => data.status === PollStatus.EXPIRED,
+    getFailureError: () => "Authentication code expired",
+    intervalMs: POLL_INTERVAL_MS,
+    timeoutMs,
+    timeoutError: "Authentication timed out",
+  });
 
-  while (Date.now() < deadline) {
-    try {
-      const url = `${apiUrl}/api/trpc/auth.poll?input=${encodeURIComponent(JSON.stringify({ code }))}`;
-      const res = await fetch(url);
-      const json = await res.json();
-      const result = json.result?.data;
-
-      if (result?.status === PollStatus.SUCCESS) {
-        return {
-          success: true,
-          token: result.token,
-          refresh_token: result.refresh_token,
-          user: result.user,
-        };
-      }
-
-      if (result?.status === PollStatus.EXPIRED) {
-        return { success: false, error: "Authentication code expired" };
-      }
-    } catch {
-      // Network error, continue polling
-    }
-
-    await sleep(POLL_INTERVAL_MS);
+  if (!result.success) {
+    return { success: false, error: result.error };
   }
 
-  return { success: false, error: "Authentication timed out" };
+  const { token, refresh_token, user } = result.result;
+
+  // These are guaranteed by isSuccess check, but TypeScript can't infer that
+  if (!token || !refresh_token || !user) {
+    return { success: false, error: "Invalid authentication response" };
+  }
+
+  return {
+    success: true,
+    token,
+    refresh_token,
+    user,
+  };
 };
 
 export const startAuth = async (): Promise<
@@ -118,7 +123,7 @@ export const startAuth = async (): Promise<
 export const runAuthFlow = async (): Promise<
   { success: true; token: string } | { success: false; error: string }
 > => {
-  const apiUrl = process.env.CLAUDEBIN_API_URL || "http://localhost:3000";
+  const apiUrl = getApiBaseUrl();
 
   // Start auth session
   const startResult = await startAuth();
@@ -128,7 +133,7 @@ export const runAuthFlow = async (): Promise<
   }
 
   // Open browser
-  openUrl(startResult.url);
+  safeOpenUrl(startResult.url);
 
   // Poll for completion
   const pollResult = await pollForAuthCompletion(startResult.code, apiUrl);
@@ -163,7 +168,7 @@ export const refreshAuth = async (): Promise<boolean> => {
       refresh_token: config.auth.refresh_token,
     });
 
-    if (!result.success) {
+    if (!result.success || !("access_token" in result)) {
       return false;
     }
 

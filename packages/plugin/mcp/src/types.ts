@@ -1,3 +1,8 @@
+// Generic result type for consistent error handling
+export type Result<T, E = string> =
+  | { success: true; data: T }
+  | { success: false; error: E };
+
 // User config stored in ~/.claudebin/config.json
 export interface UserConfig {
   id: string;
@@ -22,3 +27,6 @@ export interface FileWithStats {
   file: string;
   mtime: Date;
 }
+
+// Session extraction result
+export type ExtractResult = Result<{ content: string }>;
