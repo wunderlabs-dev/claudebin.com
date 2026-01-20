@@ -56,7 +56,7 @@ import { useUiState } from "@/hooks/useUiState";
 import { Button } from "@/components/ui/Button";
 
 // 5. Custom components
-import { SessionAppBar } from "@/components/SessionAppBar";
+import { HomeIntro } from "@/components/home-intro";
 
 // 6. Sections
 import { SessionSection } from "@/sections/SessionSection";
@@ -68,13 +68,14 @@ Each group separated by blank line. Always use `@/*` path alias.
 
 ### Structure
 
-Each component lives in its own directory:
+Components are single files using kebab-case naming (no directories):
 
 ```
-components/Button/
-├── Button.tsx    # Component implementation
-├── types.ts      # Types and variant definitions
-└── index.ts      # Barrel exports
+components/
+├── home-intro.tsx
+├── home-tutorials.tsx
+├── ui/           # shadcn/ui components
+└── icon/         # Icon components
 ```
 
 ### Arrow Functions Only
@@ -124,11 +125,11 @@ export type ChipProps = ChipDefaultProps | ChipOutlinedProps;
 
 ### Exports
 
-Barrel exports in `index.ts`:
+Components export directly from their file:
 
 ```typescript
-export { default as Button } from "./Button";
-export * from "./types";
+// home-intro.tsx
+export const HomeIntro = () => { ... };
 ```
 
 ### Event Handlers
@@ -151,7 +152,7 @@ Naming: `handle[Action]` (e.g., `handleSignUp`, `handleSubmit`)
 
 ### Naming Conventions
 
-- **Files**: PascalCase for components (`Button.tsx`), camelCase for utils (`helpers.ts`)
+- **Files**: kebab-case for components (`home-intro.tsx`), camelCase for utils (`helpers.ts`)
 - **Types**: `ComponentNameProps`, `ComponentNameVariant`, `ComponentNameVariantMapping`
 - **Mapping objects**: `xxxClassNames` (e.g., `buttonVariantClassNames`)
 - **Const arrays**: Plural form (`ButtonVariants`)

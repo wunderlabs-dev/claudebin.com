@@ -87,13 +87,14 @@ function myFunction() { }
 
 ### Component Structure
 
-Each component lives in its own directory:
+Components are single files using kebab-case naming (no directories):
 
 ```
-components/Button/
-├── Button.tsx    # Component implementation
-├── types.ts      # Types and variant definitions
-└── index.ts      # Barrel exports
+components/
+├── home-intro.tsx
+├── home-tutorials.tsx
+├── ui/           # shadcn/ui components
+└── icon/         # Icon components
 ```
 
 ### Type Patterns
@@ -133,7 +134,7 @@ className={cn("base-classes", buttonVariantClassNames[variant])}
 
 ### Naming Conventions
 
-- **Files**: PascalCase for components (`Button.tsx`), camelCase for utils (`helpers.ts`)
+- **Files**: kebab-case for components (`home-intro.tsx`), camelCase for utils (`helpers.ts`)
 - **Types**: `ComponentNameProps`, `ComponentNameVariant`, `ComponentNameVariantMapping`
 - **Mapping objects**: `xxxClassNames` (e.g., `buttonVariantClassNames`)
 - **Const arrays**: Plural form (`ButtonVariants`)
@@ -150,11 +151,11 @@ Always use `@/*` path alias.
 
 ### Exports
 
-Barrel exports in `index.ts`:
+Components export directly from their file:
 
 ```typescript
-export { default as Button } from "./Button";
-export * from "./types";
+// home-intro.tsx
+export const HomeIntro = () => { ... };
 ```
 
 ### Props

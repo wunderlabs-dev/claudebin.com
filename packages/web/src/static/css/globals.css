@@ -59,7 +59,8 @@
   * Sizing
   * Container max-widths and spacing values
   * ---------------------------------------- */
-  --max-width-container: 1440px;
+  --spacing-container: 1440px;
+  --max-width-container: var(--spacing-container);
 
   /* ----------------------------------------
   * Line height
@@ -120,9 +121,7 @@
 }
 
 @utility bg-grid {
-  background-size:
-    calc(var(--util-full-width) / var(--util-grid-columns)) var(--util-full-width),
-    var(--util-full-width) var(--util-full-width);
+  background-size: calc(var(--util-full-width) / var(--util-grid-columns)) var(--util-full-width);
   background-image:
     linear-gradient(
       to right,
