@@ -254,7 +254,7 @@ const HomeRecentThreads = ({ className, ...props }: HomeRecentThreadsProps) => {
               </CardBody>
             </Card>
           ))}
-          <div className="shrink-0 w-container-end" aria-hidden="true" />
+          <div className="shrink-0 w-container-start" aria-hidden="true" />
         </div>
       </div>
     </section>

@@ -21,11 +21,7 @@ const Container = <T extends React.ElementType = "div">({
   return (
     <Component
       data-slot="container"
-      className={cn(
-        "mx-auto w-full max-w-container",
-        spacingClassNames[spacing],
-        className,
-      )}
+      className={cn("mx-auto w-full max-w-container", spacingClassNames[spacing], className)}
       {...props}
     >
       {children}

@@ -61,7 +61,6 @@
   * ---------------------------------------- */
   --spacing-container: calc(var(--spacing) * 360);
   --spacing-container-start: calc((100vw - var(--spacing-container)) / 2);
-  --spacing-container-end: calc((100vw - var(--spacing-container)) / 2 - var(--spacing) * 2);
 
   --max-width-container: var(--spacing-container);
 
