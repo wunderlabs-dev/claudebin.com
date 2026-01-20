@@ -8,7 +8,7 @@ import {
   TOKEN_REFRESH_BUFFER_MS,
 } from "./constants.js";
 import { createApiClient } from "./trpc.js";
-import type { Config } from "./types.js";
+import type { AuthPollResult, Config } from "./types.js";
 import { poll, safeOpenUrl } from "./utils.js";
 
 export interface AuthStartResult {
@@ -33,20 +33,6 @@ interface AuthPollData {
     avatar_url: string | null;
   };
 }
-
-type AuthPollResult =
-  | {
-      success: true;
-      token: string;
-      refresh_token: string;
-      user: {
-        id: string;
-        name: string | null;
-        email: string | null;
-        avatar_url: string | null;
-      };
-    }
-  | { success: false; error: string };
 
 const fetchAuthPollData = async (
   code: string,

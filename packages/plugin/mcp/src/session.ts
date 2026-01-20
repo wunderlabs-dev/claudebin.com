@@ -72,5 +72,5 @@ export const extractSession = async (
   const sessionPath = path.join(claudeProjectPath, mostRecentSession);
   const content = await fs.readFile(sessionPath, "utf8");
 
-  return { success: true, data: { content } };
+  return { success: true, content };
 };

@@ -10,6 +10,7 @@ import {
 } from "../constants.js";
 import { extractSession } from "../session.js";
 import { createApiClient } from "../trpc.js";
+import type { SessionPollResult } from "../types.js";
 import { poll } from "../utils.js";
 
 interface SessionPollData {
@@ -17,10 +18,6 @@ interface SessionPollData {
   url?: string;
   error?: string;
 }
-
-type PollResult =
-  | { success: true; url: string }
-  | { success: false; error: string };
 
 const fetchSessionPollData = async (
   sessionId: string,
@@ -38,7 +35,7 @@ const pollForProcessing = async (
   sessionId: string,
   apiUrl: string,
   timeoutMs = SESSION_POLL_TIMEOUT_MS,
-): Promise<PollResult> => {
+): Promise<SessionPollResult> => {
   const result = await poll<SessionPollData>({
     fn: () => fetchSessionPollData(sessionId, apiUrl),
     isSuccess: (data) =>
@@ -113,7 +110,7 @@ export const registerShare = (server: McpServer): void => {
         return errorResponse(sessionResult.error);
       }
 
-      const { content } = sessionResult.data;
+      const { content } = sessionResult;
 
       // Check size
       const sizeBytes = new TextEncoder().encode(content).length;
