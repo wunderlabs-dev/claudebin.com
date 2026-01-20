@@ -5,7 +5,11 @@
   },
   "common": {
     "copy": "Copy",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "prompts": "{count} prompts",
+    "files": "{count} files",
+    "views": "{count} views",
+    "forks": "{count} forks"
   },
   "appBar": {
     "claudebin": "Claudebin",
@@ -24,9 +28,11 @@
     "viewDemoTerminal": "View Demo Terminal",
     "viewDemoEditor": "View Demo Editor",
     "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
-    "recentThreadsDescription": "See what the community is building\nwith Claude.",
-    "threadPrompts": "{count} prompts",
-    "threadFiles": "{count} files"
+    "recentThreadsDescription": "See what the community is building\nwith Claude."
+  },
+  "threads": {
+    "title": "<gradient>Conversations</gradient>\nThreads",
+    "description": "Browse and search through all Claude conversations"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

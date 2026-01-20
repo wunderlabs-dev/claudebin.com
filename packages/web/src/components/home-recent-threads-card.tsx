@@ -47,10 +47,10 @@ const HomeRecentThreadsCard = ({
         </CardHeader>
         <CardMetaGroup direction="column">
           <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("home.threadPrompts", { count: prompts })}
+            {t("common.prompts", { count: prompts })}
           </CardMeta>
           <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>
-            {t("home.threadFiles", { count: files })}
+            {t("common.files", { count: files })}
           </CardMeta>
         </CardMetaGroup>
       </CardBody>
