@@ -7,7 +7,6 @@ type SvgIconDividerProps = {
   variant?: SvgIconDividerVariant;
 } & Omit<SvgIconProps, "children" | "viewBox">;
 
-
 const paths: Record<SvgIconDividerVariant, JSX.Element> = {
   left: (
     <path d="M64 1C64 0.666667 64 0.333333 64 0C62.9333 0.00833324 61.8667 0.0166665 60.8 0.0249997C41.6 0.174998 22.4 0.324996 3.2 0.474995C2.13334 0.483328 1.06666 0.491661 0 0.499994C1.06666 0.508328 2.13334 0.516661 3.2 0.524995C22.4 0.674996 41.6 0.824998 60.8 0.975C61.8667 0.983333 62.9333 0.991667 64 1Z" />
@@ -25,7 +24,12 @@ const paths: Record<SvgIconDividerVariant, JSX.Element> = {
 
 const SvgIconDivider = ({ variant = "left", ...props }: SvgIconDividerProps) => {
   return (
-    <SvgIcon viewBox={variant === "left" || variant === "right" ? "0 0 64 1" : "0 0 1 64"} size="auto" className="text-gray-250 h-px" {...props}>
+    <SvgIcon
+      viewBox={variant === "left" || variant === "right" ? "0 0 64 1" : "0 0 1 64"}
+      size="auto"
+      className="text-gray-250 h-px"
+      {...props}
+    >
       {paths[variant]}
     </SvgIcon>
   );

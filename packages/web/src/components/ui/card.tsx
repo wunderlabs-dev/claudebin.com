@@ -21,8 +21,8 @@ type CardProps = {
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "size-76 shrink-0 flex flex-col justify-between bg-dot text-gray-500/40 hover:text-orange-50",
-  list: "grid grid-cols-6 divide-x divide-gray-200",
-  grid: "grid grid-cols-3 divide-x divide-gray-200",
+  list: "grid grid-cols-6 divide-x divide-gray-250",
+  grid: "grid grid-cols-3 divide-x divide-gray-250",
 } as const;
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {

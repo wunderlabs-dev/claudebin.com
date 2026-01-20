@@ -21,7 +21,11 @@ export { SvgIconClaudebin } from "./svg-icon-claudebin";
 export { SvgIconClaudebinXs } from "./svg-icon-claudebin-xs";
 export { SvgIconClock } from "./svg-icon-clock";
 export { SvgIconCopy } from "./svg-icon-copy";
-export { SvgIconDivider, SvgIconDividerVariants, type SvgIconDividerVariant } from "./svg-icon-divider";
+export {
+  SvgIconDivider,
+  SvgIconDividerVariants,
+  type SvgIconDividerVariant,
+} from "./svg-icon-divider";
 export { SvgIconFile } from "./svg-icon-file";
 export { SvgIconFolder } from "./svg-icon-folder";
 export { SvgIconFork } from "./svg-icon-fork";

@@ -11,7 +11,7 @@ import { Footer } from "@/components/ui/footer";
 import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
 
-import { SvgIconDivider } from "@/components/icon";
+import { SvgIconDivider, SvgIconUser } from "@/components/icon";
 
 const threads = [
   {
@@ -107,52 +107,52 @@ const ThreadsPage = () => {
           </div>
 
           <div className="grid grid-cols-1">
-            {threads.map((thread) => (
-              <div className="grid grid-cols-12" key={thread.id}>
-                <div className="col-span-1 flex justify-end">
-                  <SvgIconDivider variant="left" />
-                </div>
-                <div className="col-span-10">
-                  <ThreadsCard
-                    title={thread.title}
-                    author={thread.author}
-                    time={thread.time}
-                    prompts={thread.prompts}
-                    files={thread.files}
-                    views={thread.views}
-                    forks={thread.forks}
-                    project={thread.project}
-                    progress={thread.progress}
-                  />
-                </div>
-                <div className="col-span-1">
-                  <SvgIconDivider variant="right" />
-                </div>
-              </div>
-            ))}
-
-            <div className="grid grid-cols-12">
-              <div className="col-span-1 flex flex-col justify-between items-end">
-                <SvgIconDivider variant="left" />
-                <SvgIconDivider variant="left" />
+            <div className="grid grid-cols-3 border-x border-t border-gray-250 divide-x divide-gray-250">
+              <div className="col-span-2">
+                <FormControl className="flex-row">
+                  <Input type="text" placeholder={t("threads.searchPlaceholder")} />
+                  <Button variant="outline">
+                    <SvgIconUser size="sm" />
+                    {t("threads.search")}
+                  </Button>
+                </FormControl>
               </div>
 
-              <div className="col-span-10 grid grid-cols-3 border border-gray-250">
-                <div className="col-span-1 border-r border-gray-250" />
-                <div className="flex justify-center col-span-1 border-r border-gray-250">
-                  <Button variant="secondary">{t("threads.loadMore")}</Button>
-                </div>
-                <div className="col-span-1" />
-              </div>
-
-              <div className="col-span-1 flex flex-col justify-between items-start">
-                <SvgIconDivider variant="right" />
-                <SvgIconDivider variant="right" />
+              <div className="flex col-span-1 items-center justify-end px-3">
+                <Typography variant="body" color="muted">
+                  {t("threads.threadCount", { count: "92,456" })}
+                </Typography>
               </div>
             </div>
+
+            <div className="grid grid-cols-3 border-x border-t border-gray-250 divide-x divide-gray-250">
+              <div className="col-span-2 h-12" />
+              <div className="col-span-1" />
+            </div>
+
+            {threads.map((thread) => (
+              <ThreadsCard
+                key={thread.id}
+                title={thread.title}
+                author={thread.author}
+                time={thread.time}
+                prompts={thread.prompts}
+                files={thread.files}
+                views={thread.views}
+                forks={thread.forks}
+                project={thread.project}
+                progress={thread.progress}
+              />
+            ))}
+
+            <div className="grid grid-cols-3 border-x border-b border-gray-250 divide-x divide-gray-250">
+              <div className="col-span-1" />
+              <div className="flex col-span-1 justify-center">
+                <Button variant="secondary">{t("threads.loadMore")}</Button>
+              </div>
+              <div className="col-span-1" />
+            </div>
           </div>
-
-
         </Container>
       </main>
 
