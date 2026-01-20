@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 
 import { SvgIconCalendar, SvgIconChat, SvgIconFork, SvgIconUser } from "@/components/icon";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Box } from "@/components/ui/box";
 import { Typography } from "@/components/ui/typography";
 
@@ -29,11 +30,10 @@ const UserPageProfile = ({
 
   return (
     <div className="flex flex-col items-center">
-      <img
-        src={avatar}
-        alt={username}
-        className="relative z-10 size-24 rounded-full border-4 border-gray-100"
-      />
+      <Avatar size="lg" className="relative z-10">
+        <AvatarImage src={avatar} alt={username} />
+        <AvatarFallback>{username.charAt(0)}</AvatarFallback>
+      </Avatar>
 
       <Box className="-mt-12 w-full p-0">
         <div className="flex flex-col gap-6 p-8 pt-16">
