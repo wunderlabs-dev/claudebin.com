@@ -27,7 +27,7 @@ const SvgIconDivider = ({ variant = "left", ...props }: SvgIconDividerProps) => 
     <SvgIcon
       viewBox={variant === "left" || variant === "right" ? "0 0 64 1" : "0 0 1 64"}
       size="auto"
-      className="text-gray-250 h-px"
+      className="h-px text-gray-250"
       {...props}
     >
       {paths[variant]}

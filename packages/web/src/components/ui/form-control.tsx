@@ -48,10 +48,10 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: "rounded-full outline outline-gray-50 focus:outline-orange-50",
+        default: "rounded-full border border-gray-50 focus:border-orange-50",
         error:
-          "rounded-full outline outline-red-50 text-red-50 placeholder:text-red-50 focus:outline-red-50",
-        filled: "rounded-lg outline-none px-4",
+          "rounded-full border border-red-50 text-red-50 placeholder:text-red-50 focus:border-red-50",
+        filled: "px-4 rounded-lg border-none",
       },
     },
     defaultVariants: {

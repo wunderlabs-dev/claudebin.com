@@ -5,10 +5,8 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-export type Spacing = "none" | "sm" | "lg";
-
-export const spacingClassNames: Record<Spacing, string> = {
-  none: "pt-0",
-  sm: "pt-24",
-  lg: "pt-48",
+export const hashString = (str: string): number => {
+  return Math.abs(
+    Array.from(str).reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0),
+  );
 };

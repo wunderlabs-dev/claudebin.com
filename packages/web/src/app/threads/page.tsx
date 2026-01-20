@@ -5,13 +5,9 @@ import { renderers } from "@/utils/renderers";
 import { ThreadsCard } from "@/components/threads-card";
 
 import { AppBar } from "@/components/ui/app-bar";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
-import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
-
-import { SvgIconDivider, SvgIconUser } from "@/components/icon";
 
 const threads = [
   {
@@ -96,43 +92,19 @@ const ThreadsPage = () => {
       <AppBar />
 
       <main>
-        <Container size="md" spacing="sm" className="flex flex-col gap-8">
-          <div className="flex flex-col gap-18">
-            <Typography variant="h1" className="leading-none whitespace-break-spaces">
-              {t.rich("threads.title", renderers)}
-            </Typography>
-            <Typography variant="body" color="muted">
-              {t("threads.description")}
-            </Typography>
-          </div>
+        <Container size="md" spacing="sm" className="flex flex-col gap-18">
+          <Typography variant="h1" className="leading-none whitespace-break-spaces">
+            {t.rich("threads.title", renderers)}
+          </Typography>
+          <Typography variant="body" color="muted">
+            {t("threads.description")}
+          </Typography>
 
           <div className="grid grid-cols-1">
-            <div className="grid grid-cols-3 border-x border-t border-gray-250 divide-x divide-gray-250">
-              <div className="col-span-2">
-                <FormControl className="flex-row">
-                  <Input type="text" placeholder={t("threads.searchPlaceholder")} />
-                  <Button variant="outline">
-                    <SvgIconUser size="sm" />
-                    {t("threads.search")}
-                  </Button>
-                </FormControl>
-              </div>
-
-              <div className="flex col-span-1 items-center justify-end px-3">
-                <Typography variant="body" color="muted">
-                  {t("threads.threadCount", { count: "92,456" })}
-                </Typography>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 border-x border-t border-gray-250 divide-x divide-gray-250">
-              <div className="col-span-2 h-12" />
-              <div className="col-span-1" />
-            </div>
-
             {threads.map((thread) => (
               <ThreadsCard
                 key={thread.id}
+                id={thread.id}
                 title={thread.title}
                 author={thread.author}
                 time={thread.time}
@@ -144,14 +116,6 @@ const ThreadsPage = () => {
                 progress={thread.progress}
               />
             ))}
-
-            <div className="grid grid-cols-3 border-x border-b border-gray-250 divide-x divide-gray-250">
-              <div className="col-span-1" />
-              <div className="flex col-span-1 justify-center">
-                <Button variant="secondary">{t("threads.loadMore")}</Button>
-              </div>
-              <div className="col-span-1" />
-            </div>
           </div>
         </Container>
       </main>
