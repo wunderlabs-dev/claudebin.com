@@ -59,7 +59,7 @@
   * Sizing
   * Container max-widths and spacing values
   * ---------------------------------------- */
-  --spacing-container: 1440px;
+  --spacing-container: calc(var(--spacing) * 360);
   --max-width-container: var(--spacing-container);
 
   /* ----------------------------------------
