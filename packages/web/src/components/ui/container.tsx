@@ -2,8 +2,17 @@ import type * as React from "react";
 
 import { cn, spacingClassNames, type Spacing } from "@/utils/helpers";
 
+type ContainerSize = "sm" | "md" | "lg";
+
+const containerSizeClassNames: Record<ContainerSize, string> = {
+  sm: "max-w-xl",
+  md: "max-w-7xl",
+  lg: "max-w-container",
+};
+
 type ContainerProps<T extends React.ElementType = "div"> = {
   as?: T;
+  size?: ContainerSize;
   spacing?: Spacing;
   className?: string;
   children?: React.ReactNode;
@@ -11,6 +20,7 @@ type ContainerProps<T extends React.ElementType = "div"> = {
 
 const Container = <T extends React.ElementType = "div">({
   as,
+  size = "md",
   spacing = "none",
   className,
   children,
@@ -21,7 +31,7 @@ const Container = <T extends React.ElementType = "div">({
   return (
     <Component
       data-slot="container"
-      className={cn("mx-auto w-full max-w-container", spacingClassNames[spacing], className)}
+      className={cn("mx-auto w-full", containerSizeClassNames[size], spacingClassNames[spacing], className)}
       {...props}
     >
       {children}

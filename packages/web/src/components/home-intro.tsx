@@ -1,33 +1,28 @@
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
+
+import { renderers } from "@/utils/renderers";
+
+import { SvgIconGlitters } from "@/components/icon";
 
 import { Backdrop } from "@/components/ui/backdrop";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { CopyInput } from "@/components/ui/copy-input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Typography } from "@/components/ui/typography";
-import { SvgIconGlitters } from "@/components/icon";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type HomeIntroProps = ComponentProps<"section">;
 
 const HomeIntro = ({ className, ...props }: HomeIntroProps) => {
   const t = useTranslations();
 
-  const renderers = {
-    gradient: (chunks: ReactNode) => (
-      <span className="block bg-gradient-to-r from-orange-200 to-orange-50 bg-clip-text text-transparent">
-        {chunks}
-      </span>
-    ),
-  };
-
   return (
-    <Container as="section" className={className} {...props}>
+    <Container as="section" size="lg" className={className} {...props}>
       <Backdrop spacing="sm" className="px-12">
         <div className="flex flex-col max-w-4xl gap-18">
-          <Typography variant="h1" className="leading-none">
+          <Typography variant="h1" className="leading-none whitespace-break-spaces">
             {t.rich("home.headline", renderers)}
           </Typography>
 
@@ -62,7 +57,7 @@ const HomeIntro = ({ className, ...props }: HomeIntroProps) => {
           </div>
         </div>
       </Backdrop>
-    </Container>
+    </Container >
   );
 };
 

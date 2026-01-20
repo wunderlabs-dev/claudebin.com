@@ -35,7 +35,7 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
       )}
       {...props}
     >
-      <Container>
+      <Container size="lg">
         <div className="flex items-center justify-between pt-3 pb-2">
           <div className="flex items-center gap-24">
             <Link href="/">
