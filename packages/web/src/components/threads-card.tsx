@@ -62,7 +62,6 @@ const ThreadsCard = ({
       <CardBody>
         <CardSection>
           <CardActions />
-
           <CardMetaGroup direction="column">
             <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
               {t("common.prompts", { count: prompts })}
@@ -76,9 +75,7 @@ const ThreadsCard = ({
             </CardMetaGroup>
           </CardMetaGroup>
         </CardSection>
-
         <CardDivider />
-
         <CardSection>
           <CardMetaGroup direction="column">
             <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>
@@ -92,7 +89,7 @@ const ThreadsCard = ({
         </CardSection>
       </CardBody>
 
-      <CardBody className="bg-dot transition-colors text-gray-500/40 group-hover:text-orange-50" />
+      <CardBody className="bg-dot text-gray-500/40 transition-colors group-hover:text-orange-50" />
     </Card>
   );
 };

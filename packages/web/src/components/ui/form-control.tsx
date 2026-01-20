@@ -39,9 +39,10 @@ const inputVariants = cva(
     "flex",
     "h-12 w-full",
     "px-7 py-3",
-    "font-mono text-base text-white placeholder:text-gray-450",
     "bg-gray-200",
+    "font-mono text-base text-white",
     "transition ease-in-out",
+    "placeholder:text-gray-450",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {

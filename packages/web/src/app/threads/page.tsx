@@ -5,9 +5,13 @@ import { renderers } from "@/utils/renderers";
 import { ThreadsCard } from "@/components/threads-card";
 
 import { AppBar } from "@/components/ui/app-bar";
+import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
+import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
+
+import { SvgIconDivider } from "@/components/icon";
 
 const threads = [
   {
@@ -92,30 +96,63 @@ const ThreadsPage = () => {
       <AppBar />
 
       <main>
-        <Container size="md" spacing="sm" className="flex flex-col gap-18">
-          <Typography variant="h1" className="leading-none whitespace-break-spaces">
-            {t.rich("threads.title", renderers)}
-          </Typography>
-          <Typography variant="body" color="muted">
-            {t("threads.description")}
-          </Typography>
-
-          <div className="flex flex-col">
-            {threads.map((thread) => (
-              <ThreadsCard
-                key={thread.id}
-                title={thread.title}
-                author={thread.author}
-                time={thread.time}
-                prompts={thread.prompts}
-                files={thread.files}
-                views={thread.views}
-                forks={thread.forks}
-                project={thread.project}
-                progress={thread.progress}
-              />
-            ))}
+        <Container size="md" spacing="sm" className="flex flex-col gap-8">
+          <div className="flex flex-col gap-18">
+            <Typography variant="h1" className="leading-none whitespace-break-spaces">
+              {t.rich("threads.title", renderers)}
+            </Typography>
+            <Typography variant="body" color="muted">
+              {t("threads.description")}
+            </Typography>
           </div>
+
+          <div className="grid grid-cols-1">
+            {threads.map((thread) => (
+              <div className="grid grid-cols-12" key={thread.id}>
+                <div className="col-span-1 flex justify-end">
+                  <SvgIconDivider variant="left" />
+                </div>
+                <div className="col-span-10">
+                  <ThreadsCard
+                    title={thread.title}
+                    author={thread.author}
+                    time={thread.time}
+                    prompts={thread.prompts}
+                    files={thread.files}
+                    views={thread.views}
+                    forks={thread.forks}
+                    project={thread.project}
+                    progress={thread.progress}
+                  />
+                </div>
+                <div className="col-span-1">
+                  <SvgIconDivider variant="right" />
+                </div>
+              </div>
+            ))}
+
+            <div className="grid grid-cols-12">
+              <div className="col-span-1 flex flex-col justify-between items-end">
+                <SvgIconDivider variant="left" />
+                <SvgIconDivider variant="left" />
+              </div>
+
+              <div className="col-span-10 grid grid-cols-3 border border-gray-250">
+                <div className="col-span-1 border-r border-gray-250" />
+                <div className="flex justify-center col-span-1 border-r border-gray-250">
+                  <Button variant="secondary">{t("threads.loadMore")}</Button>
+                </div>
+                <div className="col-span-1" />
+              </div>
+
+              <div className="col-span-1 flex flex-col justify-between items-start">
+                <SvgIconDivider variant="right" />
+                <SvgIconDivider variant="right" />
+              </div>
+            </div>
+          </div>
+
+
         </Container>
       </main>
 

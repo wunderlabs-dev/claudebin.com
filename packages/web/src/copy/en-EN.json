@@ -32,7 +32,11 @@
   },
   "threads": {
     "title": "<gradient>Conversations</gradient>\nThreads",
-    "description": "Browse and search through all Claude conversations"
+    "description": "Browse and search through all Claude conversations",
+    "searchPlaceholder": "Search for a thread, build, optimization,...",
+    "search": "Search",
+    "threadCount": "{count} threads",
+    "loadMore": "Load more threads"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
