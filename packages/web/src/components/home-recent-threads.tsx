@@ -226,8 +226,9 @@ const HomeRecentThreads = ({ className, ...props }: HomeRecentThreadsProps) => {
         </div>
       </Container>
 
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4 pl-container-start cursor-grab active:cursor-grabbing select-none">
+      <div className="overflow-x-hidden" ref={emblaRef}>
+        <div className="flex gap-4 cursor-grab active:cursor-grabbing select-none">
+          <div className="shrink-0 w-container-start" aria-hidden="true" />
           {threads.map((thread) => (
             <Card key={thread.id} variant="card">
               <CardBody className="self-end">
