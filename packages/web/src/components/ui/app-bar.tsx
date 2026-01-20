@@ -29,7 +29,7 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
     <header
       data-slot="app-bar"
       className={cn(
-        "sticky top-0",
+        "sticky top-0 z-10",
         isScrolled ? "bg-gray-100/25 backdrop-blur-md" : undefined,
         className,
       )}

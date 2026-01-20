@@ -34,12 +34,12 @@ const buttonVariants = cva(
           "active:bg-orange-50/60",
           "disabled:bg-orange-50/10 disabled:border-transparent",
         ],
-        circle: [
+        icon: [
           "w-12",
           "px-3",
           "bg-gray-200 border border-gray-50",
-          "hover:bg-orange-50 hover:bg-linear-to-br hover:to-orange-150",
-          "active:bg-orange-50 active:to-orange-50 active:ridge-t",
+          "hover:bg-orange-50 hover:bg-linear-to-br hover:to-orange-150 hover:border-orange-50",
+          "active:bg-orange-50 active:to-orange-50 active:border-orange-50 active:ridge-t",
           "disabled:bg-gray-200 disabled:border-transparent disabled:text-gray-450",
         ],
         danger: [

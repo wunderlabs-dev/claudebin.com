@@ -22,7 +22,11 @@
     "editorInstall": "Editor Install",
     "viewDemo": "View Demo",
     "viewDemoTerminal": "View Demo Terminal",
-    "viewDemoEditor": "View Demo Editor"
+    "viewDemoEditor": "View Demo Editor",
+    "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
+    "recentThreadsDescription": "See what the community is building\nwith Claude.",
+    "threadPrompts": "{count} prompts",
+    "threadFiles": "{count} files"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
