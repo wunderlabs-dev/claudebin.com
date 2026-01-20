@@ -7,8 +7,12 @@ import { SvgIconOrbits } from "@/components/icon";
 const BackdropSizes = ["full", "half"] as const;
 type BackdropSize = (typeof BackdropSizes)[number];
 
+const BackdropSpacingValues = ["none", "sm", "lg"] as const;
+type BackdropSpacing = (typeof BackdropSpacingValues)[number];
+
 type BackdropProps = {
   size?: BackdropSize;
+  spacing?: BackdropSpacing;
 } & ComponentProps<"div">;
 
 const backdropSizeClassNames: Record<BackdropSize, string> = {
@@ -16,7 +20,13 @@ const backdropSizeClassNames: Record<BackdropSize, string> = {
   half: "top-0 h-1/2 border-b border-gray-500/10",
 };
 
-const Backdrop = ({ size = "full", children, className, ...props }: BackdropProps) => {
+const backdropSpacingClassNames: Record<BackdropSpacing, string> = {
+  none: "pt-0",
+  sm: "pt-24",
+  lg: "pt-48",
+};
+
+const Backdrop = ({ size = "full", spacing = "none", children, className, ...props }: BackdropProps) => {
   return (
     <div data-slot="backdrop" className={cn("relative w-full", className)} {...props}>
       {size === "half" ? (
@@ -28,7 +38,7 @@ const Backdrop = ({ size = "full", children, className, ...props }: BackdropProp
           backdropSizeClassNames[size],
         )}
       />
-      <div className="relative">{children}</div>
+      <div className={cn("relative", backdropSpacingClassNames[spacing])}>{children}</div>
     </div>
   );
 };

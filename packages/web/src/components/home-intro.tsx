@@ -25,7 +25,7 @@ const HomeIntro = ({ className, ...props }: HomeIntroProps) => {
 
   return (
     <Container as="section" className={className} {...props}>
-      <Backdrop className="px-12">
+      <Backdrop spacing="sm" className="px-12">
         <div className="flex flex-col max-w-4xl gap-18">
           <Typography variant="h1" className="leading-none">
             {t.rich("home.headline", renderers)}

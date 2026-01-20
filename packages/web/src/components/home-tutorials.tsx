@@ -10,12 +10,12 @@ type HomeTutorialsProps = ComponentProps<"section">;
 const tutorials = [
   {
     id: "terminal",
-    label: "home.viewDemoTerminal",
+    title: "home.viewDemoTerminal",
     src: "https://samplelib.com/lib/preview/webm/sample-30s.webm",
   },
   {
     id: "editor",
-    label: "home.viewDemoEditor",
+    title: "home.viewDemoEditor",
     src: "https://samplelib.com/lib/preview/webm/sample-30s.webm",
   },
 ] as const;
@@ -26,7 +26,7 @@ const HomeTutorials = ({ className, ...props }: HomeTutorialsProps) => {
   return (
     <Container as="section" className={className} {...props}>
       <Tabs defaultValue="terminal" className="flex flex-col items-center gap-8">
-        <Backdrop size="half">
+        <Backdrop size="half" spacing="lg">
           <div className="w-full max-w-6xl mx-auto p-2 bg-gray-200/50 border border-gray-500/20 rounded-3xl">
             {tutorials.map((tutorial) => (
               <TabsContent key={tutorial.id} value={tutorial.id}>
@@ -41,7 +41,7 @@ const HomeTutorials = ({ className, ...props }: HomeTutorialsProps) => {
         <TabsList>
           {tutorials.map((tutorial) => (
             <TabsTrigger key={tutorial.id} value={tutorial.id}>
-              {t(tutorial.label)}
+              {t(tutorial.title)}
             </TabsTrigger>
           ))}
         </TabsList>

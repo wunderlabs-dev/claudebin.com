@@ -23,7 +23,7 @@ const renderers = {
 
 const sections = [
   {
-    titleKey: "footer.product",
+    title: "footer.product",
     links: [
       { href: "/", labelKey: "footer.claudebin" },
       { href: "/threads", labelKey: "footer.threads" },
@@ -33,7 +33,7 @@ const sections = [
     ],
   },
   {
-    titleKey: "footer.community",
+    title: "footer.community",
     links: [
       { href: "https://github.com/wunderlabs-dev", labelKey: "footer.github" },
       { href: "https://x.com/claudebin", labelKey: "footer.twitter" },
@@ -46,7 +46,7 @@ const Footer = ({ className, ...props }: FooterProps) => {
 
   return (
     <footer data-slot="footer" className={className} {...props}>
-      <Container>
+      <Container spacing="lg">
         <Divider />
 
         <div className="flex items-stretch justify-between gap-12 pt-3 pb-12">
@@ -61,8 +61,8 @@ const Footer = ({ className, ...props }: FooterProps) => {
 
           <div className="flex gap-12">
             {sections.map((section) => (
-              <nav key={section.titleKey} className="flex flex-col gap-3">
-                <Typography variant="h4">{t(section.titleKey)}</Typography>
+              <nav key={section.title} className="flex flex-col gap-3">
+                <Typography variant="h4">{t(section.title)}</Typography>
 
                 {section.links.map((item) => (
                   <Link key={item.href} href={item.href} className="text-base hover:text-orange-50">
