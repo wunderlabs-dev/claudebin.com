@@ -1,59 +1,64 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { getValidToken, runAuthFlow } from "../auth.js";
+import { getApiBaseUrl } from "../config.js";
 import {
-  getValidToken,
+  MAX_SESSION_SIZE_BYTES,
   POLL_INTERVAL_MS,
-  runAuthFlow,
   SESSION_POLL_TIMEOUT_MS,
-} from "../auth.js";
+  SessionStatus,
+} from "../constants.js";
 import { extractSession } from "../session.js";
 import { createApiClient } from "../trpc.js";
+import type { SessionPollResult } from "../types.js";
+import { poll } from "../utils.js";
 
-const SessionStatus = {
-  PROCESSING: "processing",
-  READY: "ready",
-  FAILED: "failed",
-} as const;
+interface SessionPollData {
+  status: string;
+  url?: string;
+  error?: string;
+}
 
-const MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
-
-type PollResult =
-  | { success: true; url: string }
-  | { success: false; error: string };
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const fetchSessionPollData = async (
+  sessionId: string,
+  apiUrl: string,
+): Promise<SessionPollData | null> => {
+  const url = `${apiUrl}/api/trpc/sessions.poll?input=${encodeURIComponent(
+    JSON.stringify({ id: sessionId }),
+  )}`;
+  const res = await fetch(url);
+  const json = await res.json();
+  return json.result?.data ?? null;
+};
 
 const pollForProcessing = async (
   sessionId: string,
   apiUrl: string,
   timeoutMs = SESSION_POLL_TIMEOUT_MS,
-): Promise<PollResult> => {
-  const deadline = Date.now() + timeoutMs;
+): Promise<SessionPollResult> => {
+  const result = await poll<SessionPollData>({
+    fn: () => fetchSessionPollData(sessionId, apiUrl),
+    isSuccess: (data) =>
+      data.status === SessionStatus.READY && data.url !== undefined,
+    isFailure: (data) => data.status === SessionStatus.FAILED,
+    getFailureError: (data) => data.error || "Processing failed",
+    intervalMs: POLL_INTERVAL_MS,
+    timeoutMs,
+    timeoutError: "Processing timed out after 2 minutes",
+  });
 
-  while (Date.now() < deadline) {
-    try {
-      const url = `${apiUrl}/api/trpc/sessions.poll?input=${encodeURIComponent(
-        JSON.stringify({ id: sessionId }),
-      )}`;
-      const res = await fetch(url);
-      const json = await res.json();
-      const result = json.result?.data;
-
-      if (result?.status === SessionStatus.READY) {
-        return { success: true, url: result.url };
-      }
-
-      if (result?.status === SessionStatus.FAILED) {
-        return { success: false, error: result.error || "Processing failed" };
-      }
-    } catch {
-      // Network error, continue polling
-    }
-
-    await sleep(POLL_INTERVAL_MS);
+  if (!result.success) {
+    return { success: false, error: result.error };
   }
 
-  return { success: false, error: "Processing timed out after 2 minutes" };
+  const { url } = result.result;
+
+  // Guaranteed by isSuccess check, but TypeScript can't infer that
+  if (!url) {
+    return { success: false, error: "Invalid session response" };
+  }
+
+  return { success: true, url };
 };
 
 const errorResponse = (error: string) => ({
@@ -101,13 +106,15 @@ export const registerShare = (server: McpServer): void => {
       // Extract session
       const sessionResult = await extractSession(project_path);
 
-      if ("error" in sessionResult) {
+      if (!sessionResult.success) {
         return errorResponse(sessionResult.error);
       }
 
+      const { content } = sessionResult;
+
       // Check size
-      const sizeBytes = new TextEncoder().encode(sessionResult.content).length;
-      if (sizeBytes > MAX_SIZE_BYTES) {
+      const sizeBytes = new TextEncoder().encode(content).length;
+      if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
         return errorResponse(
           `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
         );
@@ -115,13 +122,13 @@ export const registerShare = (server: McpServer): void => {
 
       // Publish
       const api = createApiClient();
-      const apiUrl = process.env.CLAUDEBIN_API_URL || "http://localhost:3000";
+      const apiUrl = getApiBaseUrl();
 
       try {
         const result = await api.sessions.publish.mutate({
           title,
-          conversation_data: sessionResult.content,
-          is_public: is_public ?? true,
+          conversation_data: content,
+          is_public,
           access_token: token,
         });
 

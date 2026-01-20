@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { FileWithStats } from "./types.js";
+import type { ExtractResult, FileWithStats } from "./types.js";
 
 const NON_ALPHANUMERIC_PATTERN = /[^a-zA-Z0-9]/g;
 
@@ -35,8 +35,6 @@ const findMostRecentSession = (files: FileWithStats[]): string | null => {
   return sessions.length > 0 ? sessions[0].file : null;
 };
 
-export type ExtractResult = { content: string } | { error: string };
-
 export const extractSession = async (
   projectPath: string,
 ): Promise<ExtractResult> => {
@@ -47,6 +45,7 @@ export const extractSession = async (
     await fs.access(claudeProjectPath);
   } catch {
     return {
+      success: false,
       error: `No Claude sessions found for project path: ${projectPath}`,
     };
   }
@@ -55,6 +54,7 @@ export const extractSession = async (
 
   if (files.length === 0) {
     return {
+      success: false,
       error: `No session files found in: ${claudeProjectPath}`,
     };
   }
@@ -64,6 +64,7 @@ export const extractSession = async (
 
   if (!mostRecentSession) {
     return {
+      success: false,
       error: `No valid session files found (excluding agent-* files) in: ${claudeProjectPath}`,
     };
   }
@@ -71,5 +72,5 @@ export const extractSession = async (
   const sessionPath = path.join(claudeProjectPath, mostRecentSession);
   const content = await fs.readFile(sessionPath, "utf8");
 
-  return { content };
+  return { success: true, content };
 };
