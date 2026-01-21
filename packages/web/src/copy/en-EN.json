@@ -6,6 +6,8 @@
   "common": {
     "copy": "Copy",
     "copied": "Copied!",
+    "public": "Public",
+    "private": "Private",
     "prompts": "{count} prompts",
     "files": "{count} files",
     "views": "{count} views",
@@ -51,6 +53,13 @@
     "loadMore": "Load more threads",
     "emptyTitle": "Nothing was found for <gradient>{query}</gradient>",
     "emptyDescription": "Check for typos or try different keywords."
+  },
+  "thread": {
+    "created": "Created {date}",
+    "linesWritten": "{count} lines written",
+    "openSharing": "Open sharing",
+    "fork": "Fork",
+    "continueConversation": "Continue conversation"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

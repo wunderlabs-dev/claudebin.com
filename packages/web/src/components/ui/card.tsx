@@ -124,75 +124,6 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
   );
 };
 
-const CardMetaGroupDirections = ["row", "column"] as const;
-type CardMetaGroupDirection = (typeof CardMetaGroupDirections)[number];
-
-const CardMetaGroupAligns = ["start", "end", "between"] as const;
-type CardMetaGroupAlign = (typeof CardMetaGroupAligns)[number];
-
-const cardMetaGroupDirectionClassNames: Record<CardMetaGroupDirection, string> = {
-  row: "flex flex-row items-center gap-3",
-  column: "flex flex-col gap-1",
-} as const;
-
-const cardMetaGroupAlignClassNames: Record<CardMetaGroupAlign, string | string[]> = {
-  start: [],
-  end: "ml-auto",
-  between: "justify-between",
-} as const;
-
-type CardMetaGroupProps = {
-  direction?: CardMetaGroupDirection;
-  align?: CardMetaGroupAlign;
-} & React.ComponentProps<"div">;
-
-const CardMetaGroup = ({
-  direction = "column",
-  align = "start",
-  className,
-  ...props
-}: CardMetaGroupProps) => {
-  return (
-    <div
-      data-slot="card-meta-group"
-      className={cn(
-        cardMetaGroupDirectionClassNames[direction],
-        cardMetaGroupAlignClassNames[align],
-        className,
-      )}
-      {...props}
-    />
-  );
-};
-
-const CardMetaAligns = ["start", "end"] as const;
-type CardMetaAlign = (typeof CardMetaAligns)[number];
-
-const cardMetaAlignClassNames: Record<CardMetaAlign, string | string[]> = {
-  start: [],
-  end: "ml-auto",
-} as const;
-
-type CardMetaProps = {
-  icon: React.ReactNode;
-  align?: CardMetaAlign;
-} & React.ComponentProps<"div">;
-
-const CardMeta = ({ icon, align = "start", children, className, ...props }: CardMetaProps) => {
-  return (
-    <div
-      data-slot="card-meta"
-      className={cn("flex items-center gap-1", cardMetaAlignClassNames[align], className)}
-      {...props}
-    >
-      {icon}
-      <Typography variant="caption" color="neutral" leading="normal">
-        {children}
-      </Typography>
-    </div>
-  );
-};
-
 const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
   list: "flex flex-col gap-1 pl-8 pr-3",
@@ -250,8 +181,6 @@ export {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardMetaGroup,
-  CardMeta,
   CardSection,
   CardDivider,
   CardActions,

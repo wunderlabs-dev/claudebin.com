@@ -27,6 +27,7 @@ export { SvgIconFolder } from "./svg-icon-folder";
 export { SvgIconFork } from "./svg-icon-fork";
 export { SvgIconGear } from "./svg-icon-gear";
 export { SvgIconGlitters } from "./svg-icon-glitters";
+export { SvgIconGlobe } from "./svg-icon-globe";
 export { SvgIconHome } from "./svg-icon-home";
 export { SvgIconJauge } from "./svg-icon-jauge";
 export { SvgIconKey } from "./svg-icon-key";

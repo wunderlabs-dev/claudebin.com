@@ -6,11 +6,10 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
-  CardMetaGroup,
-  CardMeta,
   CardSection,
   CardDivider,
 } from "@/components/ui/card";
+import { List, ListItem } from "@/components/ui/list";
 
 import {
   SvgIconChat,
@@ -53,32 +52,32 @@ const ProfilePageThreadListItem = ({
           <CardHeader>
             <CardTitle>{title}</CardTitle>
           </CardHeader>
-          <CardMetaGroup direction="row">
-            <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
+          <List direction="row">
+            <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
               {t("common.prompts", { count: prompts })}
-            </CardMeta>
-            <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>
+            </ListItem>
+            <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
               {t("common.files", { count: files })}
-            </CardMeta>
-            <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</CardMeta>
-          </CardMetaGroup>
+            </ListItem>
+            <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
+          </List>
         </CardSection>
 
         <CardDivider />
 
         <CardSection>
-          <CardMetaGroup direction="row">
-            <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>
+          <List direction="row">
+            <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
               {t("common.views", { count: views })}
-            </CardMeta>
-            <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>
+            </ListItem>
+            <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
               {t("common.forks", { count: forks })}
-            </CardMeta>
-            <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</CardMeta>
-            <CardMeta icon={<SvgIconClock size="sm" color="neutral" />} align="end">
+            </ListItem>
+            <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</ListItem>
+            <ListItem icon={<SvgIconClock size="sm" color="neutral" />} align="end">
               {time}
-            </CardMeta>
-          </CardMetaGroup>
+            </ListItem>
+          </List>
         </CardSection>
       </CardBody>
 

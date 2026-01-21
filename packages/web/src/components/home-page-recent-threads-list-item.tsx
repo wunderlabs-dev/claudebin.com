@@ -7,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardMetaGroup,
-  CardMeta,
   CardActions,
 } from "@/components/ui/card";
+import { List, ListItem } from "@/components/ui/list";
 
 import { SvgIconChat, SvgIconClock, SvgIconFile } from "@/components/icon";
 
@@ -35,24 +34,24 @@ const HomePageRecentThreadsListItem = ({
   return (
     <Card variant="card" {...props}>
       <CardBody className="self-end">
-        <CardMetaGroup direction="row">
-          <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>{time}</CardMeta>
+        <List direction="row">
+          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>{time}</ListItem>
           <CardActions />
-        </CardMetaGroup>
+        </List>
       </CardBody>
       <CardBody>
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <CardDescription>{author}</CardDescription>
         </CardHeader>
-        <CardMetaGroup direction="column">
-          <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
+        <List direction="column">
+          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
             {t("common.prompts", { count: prompts })}
-          </CardMeta>
-          <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>
+          </ListItem>
+          <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
             {t("common.files", { count: files })}
-          </CardMeta>
-        </CardMetaGroup>
+          </ListItem>
+        </List>
       </CardBody>
     </Card>
   );

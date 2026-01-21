@@ -10,12 +10,11 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardMetaGroup,
-  CardMeta,
   CardSection,
   CardDivider,
   CardActions,
 } from "@/components/ui/card";
+import { List, ListItem } from "@/components/ui/list";
 
 import {
   SvgIconChat,
@@ -67,30 +66,30 @@ const ThreadsPageThreadGridItem = ({
     <CardBody key="meta">
       <CardSection>
         <CardActions />
-        <CardMetaGroup direction="column">
-          <CardMeta icon={<SvgIconChat size="sm" color="neutral" />}>
+        <List direction="column">
+          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
             {t("common.prompts", { count: prompts })}
-          </CardMeta>
-          <CardMeta icon={<SvgIconFile size="sm" color="neutral" />}>
+          </ListItem>
+          <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
             {t("common.files", { count: files })}
-          </CardMeta>
-          <CardMetaGroup direction="row" align="between">
-            <CardMeta icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</CardMeta>
-            <CardMeta icon={<SvgIconClock size="sm" color="neutral" />}>{time}</CardMeta>
-          </CardMetaGroup>
-        </CardMetaGroup>
+          </ListItem>
+          <List direction="row" align="between">
+            <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
+            <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>{time}</ListItem>
+          </List>
+        </List>
       </CardSection>
       <CardDivider />
       <CardSection>
-        <CardMetaGroup direction="column">
-          <CardMeta icon={<SvgIconUser size="sm" color="neutral" />}>
+        <List direction="column">
+          <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
             {t("common.views", { count: views })}
-          </CardMeta>
-          <CardMeta icon={<SvgIconFork size="sm" color="neutral" />}>
+          </ListItem>
+          <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
             {t("common.forks", { count: forks })}
-          </CardMeta>
-          <CardMeta icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</CardMeta>
-        </CardMetaGroup>
+          </ListItem>
+          <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</ListItem>
+        </List>
       </CardSection>
     </CardBody>,
     <CardBody key="dot" className="bg-dot text-gray-500/40 group-hover:text-orange-50" />,
