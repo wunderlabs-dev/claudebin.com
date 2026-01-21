@@ -212,10 +212,17 @@ Order classes by visual hierarchy (outside-in, structure to details):
 - ALL rendered strings MUST be in `copy/en-EN.json`
 - Use `useTranslations` hook for all text
 - Add strings to translations BEFORE using in components
+- ALWAYS use a single `t` variable with fully qualified paths (explicit namespace)
 
 ```tsx
-const t = useTranslations("auth");
-<p>{t("termsAgreement")}</p>
+// Correct - always use explicit paths
+const t = useTranslations();
+<p>{t("common.prompts", { count: 10 })}</p>
+<p>{t("thread.created", { date: "12/01/2026" })}</p>
+
+// Wrong - don't use separate translation variables
+const common = useTranslations("common");
+const thread = useTranslations("thread");
 ```
 
 Rich text with inline renderers:
