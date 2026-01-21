@@ -2,26 +2,26 @@ import type { ComponentProps } from "react";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconDivider } from "@/components/icon";
-
-// DividerGrid
 type DividerGridProps = ComponentProps<"div">;
 
 const DividerGrid = ({ className, ...props }: DividerGridProps) => (
   <div className={cn("grid grid-cols-12", className)} {...props} />
 );
 
-// DividerGridRow
 type DividerGridRowProps = ComponentProps<"div">;
 
 const DividerGridRow = ({ className, ...props }: DividerGridRowProps) => (
   <div className={cn("col-span-12 grid grid-cols-12", className)} {...props} />
 );
 
-// DividerGridEdge
 type DividerGridEdgeProps = {
   position: "left" | "right";
   className?: string;
+};
+
+const edgeVariantClassNames = {
+  left: "w-16 h-px bg-gradient-to-l from-gray-250 to-transparent",
+  right: "w-16 h-px bg-gradient-to-r from-gray-250 to-transparent",
 };
 
 const DividerGridEdge = ({ position, className }: DividerGridEdgeProps) => (
@@ -32,25 +32,28 @@ const DividerGridEdge = ({ position, className }: DividerGridEdgeProps) => (
       className,
     )}
   >
-    <SvgIconDivider variant={position} />
+    <div className={edgeVariantClassNames[position]} />
   </div>
 );
 
-// DividerGridCell
 type DividerGridCellProps = ComponentProps<"div">;
 
 const DividerGridCell = ({ className, ...props }: DividerGridCellProps) => (
   <div className={cn("border-gray-250", className)} {...props} />
 );
 
-// DividerGridDivider
 type DividerGridDividerProps = {
   variant: "top" | "bottom";
   className?: string;
 };
 
+const dividerVariantClassNames = {
+  top: "h-16 w-px bg-gradient-to-t from-gray-250 to-transparent",
+  bottom: "h-16 w-px bg-gradient-to-b from-gray-250 to-transparent",
+};
+
 const DividerGridDivider = ({ variant, className }: DividerGridDividerProps) => (
-  <SvgIconDivider variant={variant} className={className} />
+  <div className={cn(dividerVariantClassNames[variant], className)} />
 );
 
 export { DividerGrid, DividerGridRow, DividerGridEdge, DividerGridCell, DividerGridDivider };
