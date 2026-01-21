@@ -36,7 +36,11 @@
     "createdOn": "Created on {date}",
     "threads": "{count} threads",
     "views": "{count} views",
-    "forks": "{count} forks"
+    "forks": "{count} forks",
+    "dangerZone": "Danger zone",
+    "dangerZoneDescription": "Deleting your account will disconnect your CLI token from Claudebin. Your published threads will remain public. This action cannot be undone.",
+    "cancel": "Cancel",
+    "deleteAccount": "Yes, delete account"
   },
   "threads": {
     "title": "<gradient>Conversations</gradient>\nThreads",

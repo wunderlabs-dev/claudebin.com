@@ -1,12 +1,27 @@
+import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
 
-import { SvgIconCalendar, SvgIconChat, SvgIconEye, SvgIconFork } from "@/components/icon";
+import { cn } from "@/utils/helpers";
+
+import {
+  SvgIconCalendar,
+  SvgIconChat,
+  SvgIconEye,
+  SvgIconFork,
+} from "@/components/icon";
+
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import {
+  DividerGrid,
+  DividerGridRow,
+  DividerGridEdge,
+  DividerGridCell,
+  DividerGridDivider,
+} from "@/components/ui/divider-grid";
 
 import { Typography } from "@/components/ui/typography";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 type ProfilePageUserInfoSidebarProps = {
-  id: string;
   username: string;
   bio: string;
   avatar: string;
@@ -14,7 +29,7 @@ type ProfilePageUserInfoSidebarProps = {
   threads: number;
   views: number;
   forks: number;
-};
+} & ComponentProps<"div">;
 
 const ProfilePageUserInfoSidebar = ({
   username,
@@ -24,6 +39,8 @@ const ProfilePageUserInfoSidebar = ({
   threads,
   views,
   forks,
+  className,
+  ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
 
@@ -46,42 +63,72 @@ const ProfilePageUserInfoSidebar = ({
   ] as const;
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="border border-b-0 border-gray-250">
-        <Avatar size="lg">
-          <AvatarImage src={avatar} alt={username} />
-        </Avatar>
-      </div>
+    <DividerGrid className={cn("flex flex-col", className)} {...props}>
+      <DividerGridRow>
+        <DividerGridEdge position="left" />
+        <DividerGridCell className="col-span-3 border-b">
+          <DividerGridDivider variant="top" />
+        </DividerGridCell>
+        <DividerGridCell className="col-span-5 flex justify-between border-b">
+          <DividerGridDivider variant="top" />
+          <DividerGridDivider variant="top" />
+        </DividerGridCell>
+        <DividerGridEdge position="right" />
+      </DividerGridRow>
 
-      <div className="flex flex-col gap-6 px-6 py-3 border border-gray-250">
-        <div className="flex flex-col gap-1">
-          <Typography variant="h4">{username}</Typography>
-          <Typography variant="small" color="muted">
-            {bio}
-          </Typography>
-        </div>
-        <div className="flex items-center gap-1">
-          <SvgIconCalendar size="sm" color="neutral" />
-          <Typography variant="caption" color="muted">
-            {t("user.createdOn", { date: createdAt })}
-          </Typography>
-        </div>
-      </div>
+      <DividerGridRow>
+        <DividerGridCell className="col-span-2" />
+        <DividerGridCell className="col-span-3 border-l">
+          <Avatar size="lg">
+            <AvatarImage src={avatar} alt={username} />
+          </Avatar>
+        </DividerGridCell>
+        <DividerGridCell className="col-span-5 border-l border-r" />
+        <DividerGridCell className="col-span-2" />
+      </DividerGridRow>
 
-      <div className="flex flex-col justify-center w-2xs">
-        {stats.map((stat) => (
-          <div
-            key={stat.key}
-            className="flex items-center justify-center gap-2 px-3 py-3 border-x border-b border-gray-250"
-          >
+      <DividerGridRow>
+        <DividerGridCell className="col-span-12 flex flex-col gap-6 border px-6 py-6">
+          <div className="flex flex-col gap-1">
+            <Typography variant="h4">{username}</Typography>
+            <Typography variant="small" color="muted">
+              {bio}
+            </Typography>
+          </div>
+          <div className="flex items-center gap-1">
+            <SvgIconCalendar size="sm" color="neutral" />
+            <Typography variant="caption" color="muted">
+              {t("user.createdOn", { date: createdAt })}
+            </Typography>
+          </div>
+        </DividerGridCell>
+      </DividerGridRow>
+
+      {stats.map((stat) => (
+        <DividerGridRow key={stat.key}>
+          <DividerGridEdge position="left" />
+          <DividerGridCell className="col-span-8 flex items-center justify-center gap-2 border-x border-b px-3 py-3">
             {stat.icon}
             <Typography variant="caption" color="accent" leading="normal">
               {stat.label}
             </Typography>
-          </div>
-        ))}
-      </div>
-    </div>
+          </DividerGridCell>
+          <DividerGridEdge position="right" />
+        </DividerGridRow>
+      ))}
+
+      <DividerGridRow>
+        <DividerGridCell className="col-span-2" />
+        <DividerGridCell className="col-span-3">
+          <DividerGridDivider variant="bottom" />
+        </DividerGridCell>
+        <DividerGridCell className="col-span-5 flex justify-between">
+          <DividerGridDivider variant="bottom" />
+          <DividerGridDivider variant="bottom" />
+        </DividerGridCell>
+        <DividerGridCell className="col-span-2" />
+      </DividerGridRow>
+    </DividerGrid>
   );
 };
 

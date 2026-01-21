@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 import { Card, CardBody } from "@/components/ui/card";
 
+import { ProfilePageDangerZone } from "@/components/profile-page-danger-zone";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
@@ -102,7 +103,6 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     <Container spacing="sm" className="grid grid-cols-12 gap-16">
       <div className="col-span-4">
         <ProfilePageUserInfoSidebar
-          id={user.id}
           username={user.username}
           bio={user.bio}
           avatar={user.avatar}
@@ -129,19 +129,24 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           </CardBody>
         </Card>
 
-        {threads.map((thread) => (
-          <ProfilePageThreadListItem
-            key={thread.id}
-            title={thread.title}
-            prompts={thread.prompts}
-            files={thread.files}
-            progress={thread.progress}
-            views={thread.views}
-            forks={thread.forks}
-            project={thread.project}
-            time={thread.time}
-          />
-        ))}
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col">
+            {threads.map((thread) => (
+              <ProfilePageThreadListItem
+                key={thread.id}
+                title={thread.title}
+                prompts={thread.prompts}
+                files={thread.files}
+                progress={thread.progress}
+                views={thread.views}
+                forks={thread.forks}
+                project={thread.project}
+                time={thread.time}
+              />
+            ))}
+          </div>
+          <ProfilePageDangerZone />
+        </div>
       </div>
     </Container>
   );

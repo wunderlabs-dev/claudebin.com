@@ -1,19 +1,20 @@
 "use client";
 
-import { useCallback, type ComponentProps } from "react";
+import type { ComponentProps } from "react";
+import { useCallback } from "react";
 import { useTranslations } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
 
 import { cn } from "@/utils/helpers";
 import { renderers } from "@/utils/renderers";
 
-import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
-import { Typography } from "@/components/ui/typography";
-
 import { HomePageRecentThreadsListItem } from "@/components/home-page-recent-threads-list-item";
 
 import { SvgIconArrowLeft, SvgIconArrowRight } from "@/components/icon";
+
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Typography } from "@/components/ui/typography";
 
 type HomePageRecentThreadsCarouselProps = ComponentProps<"section">;
 
