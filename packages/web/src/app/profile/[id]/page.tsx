@@ -100,7 +100,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   const t = await getTranslations();
 
   return (
-    <Container spacing="sm" className="grid grid-cols-12 gap-16">
+    <Container spacing="md" className="grid grid-cols-12 gap-16">
       <div className="col-span-4">
         <ProfilePageUserInfoSidebar
           username={user.username}

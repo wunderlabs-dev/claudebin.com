@@ -1,8 +1,9 @@
-export type Spacing = "none" | "sm" | "lg";
+export type Spacing = "none" | "sm" | "md" | "lg";
 
 export const spacingClassNames: Record<Spacing, string> = {
   none: "pt-0",
-  sm: "pt-24",
+  sm: "pt-9",
+  md: "pt-24",
   lg: "pt-48",
 } as const;
 
