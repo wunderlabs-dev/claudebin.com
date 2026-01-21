@@ -30,13 +30,23 @@
     "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
     "recentThreadsDescription": "See what the community is building\nwith Claude."
   },
+  "user": {
+    "recentThreads": "Recent threads",
+    "seeAllThreads": "See all threads",
+    "createdOn": "Created on {date}",
+    "threads": "{count} threads",
+    "views": "{count} views",
+    "forks": "{count} forks"
+  },
   "threads": {
     "title": "<gradient>Conversations</gradient>\nThreads",
     "description": "Browse and search through all Claude conversations",
     "searchPlaceholder": "Search for a thread, build, optimization,...",
     "search": "Search",
     "threadCount": "{count} threads",
-    "loadMore": "Load more threads"
+    "loadMore": "Load more threads",
+    "emptyTitle": "Nothing was found for <gradient>{query}</gradient>",
+    "emptyDescription": "Maybe is there a misspelling? Or try another search!"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

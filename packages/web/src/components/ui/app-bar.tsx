@@ -1,8 +1,8 @@
 "use client";
 
-import type * as React from "react";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEventListener } from "usehooks-ts";
 
@@ -15,22 +15,27 @@ import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
 
-type AppBarProps = React.ComponentProps<"header">;
+type AppBarProps = ComponentProps<"header">;
+
+const links = [
+  { href: "/", label: "appBar.claudebin", icon: <SvgIconHome size="sm" /> },
+  { href: "/threads", label: "appBar.threads", icon: null },
+] as const;
 
 const AppBar = ({ className, ...props }: AppBarProps) => {
   const t = useTranslations();
-  const [isScrolled, setIsScrolled] = useState<number>();
+  const pathname = usePathname();
 
-  useEventListener("scroll", () => {
-    setIsScrolled(window.scrollY);
-  });
+  const [isSticky, setIsSticky] = useState<number>();
+
+  useEventListener("scroll", () => setIsSticky(window.scrollY));
 
   return (
     <header
       data-slot="app-bar"
       className={cn(
         "sticky top-0 z-10",
-        isScrolled ? "bg-gray-100/25 backdrop-blur-md" : undefined,
+        isSticky ? "bg-gray-100/25 backdrop-blur-md" : undefined,
         className,
       )}
       {...props}
@@ -41,15 +46,17 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
             <Link href="/">
               <SvgIconClaudebinXs size="auto" className="w-14" />
             </Link>
-
             <Nav>
-              <NavLink variant="active" href="/">
-                <SvgIconHome size="sm" />
-                <NavLabel>{t("appBar.claudebin")}</NavLabel>
-              </NavLink>
-              <NavLink href="/threads">
-                <NavLabel>{t("appBar.threads")}</NavLabel>
-              </NavLink>
+              {links.map((link) => (
+                <NavLink
+                  key={link.href}
+                  href={link.href}
+                  variant={pathname === link.href ? "active" : "default"}
+                >
+                  {link.icon}
+                  <NavLabel>{t(link.label)}</NavLabel>
+                </NavLink>
+              ))}
             </Nav>
           </div>
 

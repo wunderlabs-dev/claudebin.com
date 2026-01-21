@@ -107,7 +107,7 @@
   background-size: var(--util-dot-size) var(--util-dot-size);
   background-image: radial-gradient(
     currentColor var(--util-dot-offset),
-    var(--color-gray-100) var(--util-dot-offset)
+    transparent var(--util-dot-offset)
   );
 }
 

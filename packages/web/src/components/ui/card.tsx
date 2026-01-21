@@ -20,9 +20,9 @@ type CardProps = {
 } & React.ComponentProps<"article">;
 
 const cardVariantClassNames: CardVariantMapping = {
-  card: "flex shrink-0 flex-col justify-between size-76 bg-dot border border-gray-250 text-gray-500/40 hover:border-orange-50 hover:text-orange-50",
-  list: "relative grid grid-cols-6 hover:z-10",
-  grid: "relative grid grid-cols-3 hover:z-10",
+  card: "flex shrink-0 flex-col justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
+  list: "relative grid grid-cols-6 divide-x divide-gray-250",
+  grid: "relative grid grid-cols-3 divide-x divide-gray-250",
 } as const;
 
 const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
@@ -31,7 +31,11 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
       <article
         data-slot="card"
         data-variant={variant}
-        className={cn("group", cardVariantClassNames[variant], className)}
+        className={cn(
+          "group border border-gray-250 hover:border-orange-50",
+          cardVariantClassNames[variant],
+          className,
+        )}
         {...props}
       >
         {children}
@@ -41,9 +45,9 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
 };
 
 const cardBodyVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col self-start gap-3 p-4",
+  card: "flex flex-col self-start gap-3 p-4 bg-gray-100",
   list: "flex flex-col col-span-5 gap-3 py-3",
-  grid: "relative flex flex-col justify-end col-span-1 gap-3 py-6 outline outline-gray-250 group-hover:outline-orange-50",
+  grid: "flex flex-col justify-end col-span-1 gap-3 py-6",
 } as const;
 
 type CardBodyProps = React.ComponentProps<"div">;
@@ -54,7 +58,7 @@ const CardBody = ({ className, ...props }: CardBodyProps) => {
   return (
     <div
       data-slot="card-body"
-      className={cn("bg-gray-100", cardBodyVariantClassNames[variant], className)}
+      className={cn(cardBodyVariantClassNames[variant], className)}
       {...props}
     />
   );

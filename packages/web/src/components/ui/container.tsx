@@ -1,6 +1,7 @@
 import type * as React from "react";
 
-import { cn, spacingClassNames, type Spacing } from "@/utils/helpers";
+import { cn } from "@/utils/helpers";
+import { spacingClassNames, type Spacing } from "@/utils/constants";
 
 type ContainerSize = "sm" | "md" | "lg";
 
@@ -31,7 +32,12 @@ const Container = <T extends React.ElementType = "div">({
   return (
     <Component
       data-slot="container"
-      className={cn("mx-auto w-full", containerSizeClassNames[size], spacingClassNames[spacing], className)}
+      className={cn(
+        "mx-auto w-full",
+        containerSizeClassNames[size],
+        spacingClassNames[spacing],
+        className,
+      )}
       {...props}
     >
       {children}

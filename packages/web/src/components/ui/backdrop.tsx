@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
-import { cn, spacingClassNames, type Spacing } from "@/utils/helpers";
+import { cn } from "@/utils/helpers";
+import { spacingClassNames, type Spacing } from "@/utils/constants";
 
 import { SvgIconOrbits } from "@/components/icon";
 

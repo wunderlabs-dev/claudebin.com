@@ -40,7 +40,7 @@ const inputVariants = cva(
     "h-12 w-full",
     "px-7 py-3",
     "bg-gray-200",
-    "font-mono text-base text-white",
+    "font-mono text-base text-white outline-none",
     "transition ease-in-out",
     "placeholder:text-gray-450",
     "disabled:pointer-events-none disabled:opacity-50",
