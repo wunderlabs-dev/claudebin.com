@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { ExtractResult, FileWithStats } from "./types.js";
+import type { FileWithStats } from "./types.js";
 
 const NON_ALPHANUMERIC_PATTERN = /[^a-zA-Z0-9]/g;
 
@@ -35,42 +35,39 @@ const findMostRecentSession = (files: FileWithStats[]): string | null => {
   return sessions.length > 0 ? sessions[0].file : null;
 };
 
-export const extractSession = async (
-  projectPath: string,
-): Promise<ExtractResult> => {
+/**
+ * Extract the most recent Claude session content for a project.
+ * Throws if no session is found.
+ */
+const extract = async (projectPath: string): Promise<string> => {
   const normalizedPath = normalizeProjectPath(projectPath);
   const claudeProjectPath = getClaudeProjectPath(normalizedPath);
 
   try {
     await fs.access(claudeProjectPath);
   } catch {
-    return {
-      success: false,
-      error: `No Claude sessions found for project path: ${projectPath}`,
-    };
+    throw new Error(
+      `No Claude sessions found for project path: ${projectPath}`,
+    );
   }
 
   const files = await fs.readdir(claudeProjectPath);
 
   if (files.length === 0) {
-    return {
-      success: false,
-      error: `No session files found in: ${claudeProjectPath}`,
-    };
+    throw new Error(`No session files found in: ${claudeProjectPath}`);
   }
 
   const filesWithStats = await getFilesWithStats(files, claudeProjectPath);
   const mostRecentSession = findMostRecentSession(filesWithStats);
 
   if (!mostRecentSession) {
-    return {
-      success: false,
-      error: `No valid session files found (excluding agent-* files) in: ${claudeProjectPath}`,
-    };
+    throw new Error(
+      `No valid session files found (excluding agent-* files) in: ${claudeProjectPath}`,
+    );
   }
 
   const sessionPath = path.join(claudeProjectPath, mostRecentSession);
-  const content = await fs.readFile(sessionPath, "utf8");
-
-  return { success: true, content };
+  return fs.readFile(sessionPath, "utf8");
 };
+
+export const session = { extract };

@@ -8,6 +8,7 @@ export const sleep = (ms: number): Promise<void> =>
 
 /**
  * Generic polling function that repeatedly checks a condition until success, failure, or timeout.
+ * Throws on failure or timeout, returns result on success.
  */
 export const poll = async <T>(options: {
   fn: () => Promise<T | null>;
@@ -17,9 +18,7 @@ export const poll = async <T>(options: {
   intervalMs: number;
   timeoutMs: number;
   timeoutError: string;
-}): Promise<
-  { success: true; result: T } | { success: false; error: string }
-> => {
+}): Promise<T> => {
   const {
     fn,
     isSuccess,
@@ -37,22 +36,26 @@ export const poll = async <T>(options: {
 
       if (result !== null) {
         if (isSuccess(result)) {
-          return { success: true, result };
+          return result;
         }
 
         if (isFailure?.(result)) {
-          const error = getFailureError?.(result) ?? "Polling failed";
-          return { success: false, error };
+          throw new Error(getFailureError?.(result) ?? "Polling failed");
         }
       }
-    } catch {
-      // Network error, continue polling
+    } catch (error) {
+      // Re-throw if it's our error, otherwise continue polling (network error)
+      if (error instanceof Error && error.message !== "Polling failed") {
+        // Network error, continue polling
+      } else {
+        throw error;
+      }
     }
 
     await sleep(intervalMs);
   }
 
-  return { success: false, error: timeoutError };
+  throw new Error(timeoutError);
 };
 
 /**

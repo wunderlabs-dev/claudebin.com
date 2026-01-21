@@ -8,30 +8,14 @@ import {
   TOKEN_REFRESH_BUFFER_MS,
 } from "./constants.js";
 import { createApiClient } from "./trpc.js";
-import type { AuthPollResult, Config } from "./types.js";
+import type { Config, UserConfig } from "./types.js";
 import { poll, safeOpenUrl } from "./utils.js";
-
-export interface AuthStartResult {
-  success: true;
-  code: string;
-  url: string;
-}
-
-export interface AuthStartError {
-  success: false;
-  error: string;
-}
 
 interface AuthPollData {
   status: string;
   token?: string;
   refresh_token?: string;
-  user?: {
-    id: string;
-    name: string | null;
-    email: string | null;
-    avatar_url: string | null;
-  };
+  user?: UserConfig;
 }
 
 const fetchAuthPollData = async (
@@ -44,11 +28,14 @@ const fetchAuthPollData = async (
   return json.result?.data ?? null;
 };
 
+/**
+ * Poll for auth completion. Returns auth data or throws.
+ */
 const pollForAuthCompletion = async (
   code: string,
   apiUrl: string,
   timeoutMs = AUTH_POLL_TIMEOUT_MS,
-): Promise<AuthPollResult> => {
+): Promise<{ token: string; refresh_token: string; user: UserConfig }> => {
   const result = await poll<AuthPollData>({
     fn: () => fetchAuthPollData(code, apiUrl),
     isSuccess: (data) =>
@@ -63,86 +50,63 @@ const pollForAuthCompletion = async (
     timeoutError: "Authentication timed out",
   });
 
-  if (!result.success) {
-    return { success: false, error: result.error };
-  }
+  const { token, refresh_token, user } = result;
 
-  const { token, refresh_token, user } = result.result;
-
-  // These are guaranteed by isSuccess check, but TypeScript can't infer that
   if (!token || !refresh_token || !user) {
-    return { success: false, error: "Invalid authentication response" };
+    throw new Error("Invalid authentication response");
   }
 
-  return {
-    success: true,
-    token,
-    refresh_token,
-    user,
-  };
+  return { token, refresh_token, user };
 };
 
-export const startAuth = async (): Promise<
-  AuthStartResult | AuthStartError
-> => {
+/**
+ * Start the auth flow by creating a session. Returns code and URL or throws.
+ */
+const start = async (): Promise<{ code: string; url: string }> => {
   const api = createApiClient();
 
   try {
     const data = await api.auth.start.mutate();
-    return {
-      success: true,
-      code: data.code,
-      url: data.url,
-    };
+    return { code: data.code, url: data.url };
   } catch (error) {
-    return {
-      success: false,
-      error: `Failed to connect to Claudebin: ${error instanceof Error ? error.message : String(error)}`,
-    };
+    throw new Error(
+      `Failed to connect to Claudebin: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 };
 
 /**
- * Run the full authentication flow: start -> open browser -> poll -> save config
- * Returns the token on success, or an error message on failure
+ * Run the full authentication flow: start -> open browser -> poll -> save config.
+ * Returns the token or throws.
  */
-export const runAuthFlow = async (): Promise<
-  { success: true; token: string } | { success: false; error: string }
-> => {
+const run = async (): Promise<string> => {
   const apiUrl = getApiBaseUrl();
 
-  // Start auth session
-  const startResult = await startAuth();
+  const { code, url } = await start();
+  safeOpenUrl(url);
 
-  if (!startResult.success) {
-    return { success: false, error: startResult.error };
-  }
+  const { token, refresh_token, user } = await pollForAuthCompletion(
+    code,
+    apiUrl,
+  );
 
-  // Open browser
-  safeOpenUrl(startResult.url);
-
-  // Poll for completion
-  const pollResult = await pollForAuthCompletion(startResult.code, apiUrl);
-
-  if (!pollResult.success) {
-    return { success: false, error: pollResult.error };
-  }
-
-  // Save config
   const config: Config = {
     auth: {
-      token: pollResult.token,
-      refresh_token: pollResult.refresh_token,
+      token,
+      refresh_token,
       expires_at: Date.now() + AUTH_TOKEN_TTL_MS,
     },
-    user: pollResult.user,
+    user,
   };
   await writeConfig(config);
 
-  return { success: true, token: pollResult.token };
+  return token;
 };
 
-export const refreshAuth = async (): Promise<boolean> => {
+/**
+ * Refresh the auth token. Returns true on success, false on failure.
+ */
+const refresh = async (): Promise<boolean> => {
   const config = await readConfig();
 
   if (!config.auth?.refresh_token) return false;
@@ -175,7 +139,11 @@ export const refreshAuth = async (): Promise<boolean> => {
   }
 };
 
-export const getValidToken = async (): Promise<string | null> => {
+/**
+ * Get a locally valid token (checking expiration, refreshing if needed).
+ * Returns token or null if not available.
+ */
+const getLocalToken = async (): Promise<string | null> => {
   const config = await readConfig();
 
   if (!config.auth?.token) {
@@ -186,7 +154,7 @@ export const getValidToken = async (): Promise<string | null> => {
     !config.auth.expires_at ||
     Date.now() > config.auth.expires_at - TOKEN_REFRESH_BUFFER_MS
   ) {
-    const refreshed = await refreshAuth();
+    const refreshed = await refresh();
     if (!refreshed) {
       return null;
     }
@@ -196,3 +164,37 @@ export const getValidToken = async (): Promise<string | null> => {
 
   return config.auth.token;
 };
+
+/**
+ * Validate token with the server. Returns true if valid.
+ */
+const validate = async (token: string): Promise<boolean> => {
+  const api = createApiClient();
+
+  try {
+    const result = await api.auth.validate.query({ token });
+    return result.valid;
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Get a validated token, running auth flow if needed. Throws on failure.
+ */
+const getToken = async (): Promise<string> => {
+  // Try existing token first
+  const localToken = await getLocalToken();
+
+  if (localToken) {
+    const isValid = await validate(localToken);
+    if (isValid) {
+      return localToken;
+    }
+  }
+
+  // No valid token, run auth flow
+  return run();
+};
+
+export const auth = { run, validate, getToken, refresh };
