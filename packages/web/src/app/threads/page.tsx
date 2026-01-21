@@ -3,13 +3,22 @@ import { useTranslations } from "next-intl";
 import { renderers } from "@/utils/renderers";
 
 import { SvgIconUser } from "@/components/icon";
-import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid-item";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardBody } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
+import { Card, CardBody } from "@/components/ui/card";
+
+import {
+  DividerGrid,
+  DividerGridRow,
+  DividerGridEdge,
+  DividerGridCell,
+  DividerGridDivider,
+} from "@/components/ui/divider-grid";
+
+import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid-item";
 
 const threads = [
   {
@@ -90,17 +99,32 @@ const ThreadsPage = () => {
   const t = useTranslations();
 
   return (
-    <Container size="md" spacing="sm" className="flex flex-col gap-18">
-      <Typography variant="h1" className="leading-none whitespace-break-spaces">
-        {t.rich("threads.title", renderers)}
-      </Typography>
-      <Typography variant="body" color="muted">
-        {t("threads.description")}
-      </Typography>
+    <Container size="md" spacing="sm" className="flex flex-col gap-8">
+      <div className="flex flex-col gap-18">
+        <Typography variant="h1" className="leading-none whitespace-break-spaces">
+          {t.rich("threads.title", renderers)}
+        </Typography>
+        <Typography variant="body" color="muted">
+          {t("threads.description")}
+        </Typography>
+      </div>
 
-      <div className="grid grid-cols-1">
-        <Card variant="grid">
-          <CardBody className="col-span-2 p-0">
+      <DividerGrid>
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-6 border-b">
+            <DividerGridDivider variant="top" />
+          </DividerGridCell>
+          <DividerGridCell className="flex justify-between col-span-4 border-b">
+            <DividerGridDivider variant="top" />
+            <DividerGridDivider variant="top" />
+          </DividerGridCell>
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
+
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-6 border-b border-l border-r">
             <FormControl className="flex-row items-center">
               <Input placeholder={t("threads.searchPlaceholder")} />
               <Button variant="outline">
@@ -108,38 +132,57 @@ const ThreadsPage = () => {
                 {t("threads.search")}
               </Button>
             </FormControl>
-          </CardBody>
-          <CardBody className="justify-center items-end px-3 py-0">
+          </DividerGridCell>
+          <DividerGridCell className="flex items-center justify-end col-span-4 px-3 border-b border-r">
             <Typography variant="small" color="muted">
               {t("threads.threadCount", { count: threads.length })}
             </Typography>
-          </CardBody>
-        </Card>
+          </DividerGridCell>
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
+
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-6 py-6 border-b border-l border-r" />
+          <DividerGridCell className="flex items-center justify-end col-span-4 py-6 border-b border-r" />
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
 
         {threads.map((thread) => (
-          <ThreadsPageThreadGridItem
-            key={thread.id}
-            id={thread.id}
-            title={thread.title}
-            author={thread.author}
-            time={thread.time}
-            prompts={thread.prompts}
-            files={thread.files}
-            views={thread.views}
-            forks={thread.forks}
-            project={thread.project}
-            progress={thread.progress}
-          />
+          <DividerGridRow key={thread.id}>
+            <DividerGridEdge position="left" className="col-span-1" />
+            <DividerGridCell className="col-span-10">
+              <ThreadsPageThreadGridItem
+                id={thread.id}
+                title={thread.title}
+                author={thread.author}
+                time={thread.time}
+                prompts={thread.prompts}
+                files={thread.files}
+                views={thread.views}
+                forks={thread.forks}
+                project={thread.project}
+                progress={thread.progress}
+              />
+            </DividerGridCell>
+            <DividerGridEdge position="right" className="col-span-1" />
+          </DividerGridRow>
         ))}
 
-        <Card variant="grid">
-          <CardBody />
-          <CardBody className="justify-center items-center p-0">
-            <Button variant="secondary">{t("threads.loadMore")}</Button>
-          </CardBody>
-          <CardBody />
-        </Card>
-      </div>
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-10">
+            <Card variant="grid">
+              <CardBody />
+              <CardBody className="justify-center items-center p-0">
+                <Button variant="secondary">{t("threads.loadMore")}</Button>
+              </CardBody>
+              <CardBody />
+            </Card>
+          </DividerGridCell>
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
+      </DividerGrid>
     </Container>
   );
 };

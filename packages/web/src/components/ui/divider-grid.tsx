@@ -29,7 +29,7 @@ const DividerGridEdge = ({ position, className }: DividerGridEdgeProps) => (
     className={cn(
       "col-span-2 flex items-end",
       position === "left" ? "justify-end" : "justify-start",
-      className
+      className,
     )}
   >
     <SvgIconDivider variant={position} />
@@ -53,10 +53,4 @@ const DividerGridDivider = ({ variant, className }: DividerGridDividerProps) => 
   <SvgIconDivider variant={variant} className={className} />
 );
 
-export {
-  DividerGrid,
-  DividerGridRow,
-  DividerGridEdge,
-  DividerGridCell,
-  DividerGridDivider,
-};
+export { DividerGrid, DividerGridRow, DividerGridEdge, DividerGridCell, DividerGridDivider };

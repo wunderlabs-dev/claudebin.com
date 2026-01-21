@@ -3,12 +3,7 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
-import {
-  SvgIconCalendar,
-  SvgIconChat,
-  SvgIconEye,
-  SvgIconFork,
-} from "@/components/icon";
+import { SvgIconCalendar, SvgIconChat, SvgIconEye, SvgIconFork } from "@/components/icon";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {

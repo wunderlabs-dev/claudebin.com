@@ -14,7 +14,10 @@ const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZonePro
   const t = useTranslations();
 
   return (
-    <div className={cn("flex flex-col items-start gap-3 p-8 border border-gray-250", className)} {...props}>
+    <div
+      className={cn("flex flex-col items-start gap-3 p-8 border border-gray-250", className)}
+      {...props}
+    >
       <div className="flex items-center gap-3">
         <SvgIconSkull size="md" color="accent" />
         <Typography variant="h4">{t("user.dangerZone")}</Typography>
