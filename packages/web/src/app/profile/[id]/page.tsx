@@ -95,7 +95,7 @@ type ProfilePageProps = {
 };
 
 const ProfilePage = async ({ params }: ProfilePageProps) => {
-  const { id } = await params;
+  const { id: _id } = await params;
   const t = await getTranslations();
 
   return (
