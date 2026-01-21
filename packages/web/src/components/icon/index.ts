@@ -26,6 +26,7 @@ export {
   SvgIconDividerVariants,
   type SvgIconDividerVariant,
 } from "./svg-icon-divider";
+export { SvgIconEye } from "./svg-icon-eye";
 export { SvgIconFile } from "./svg-icon-file";
 export { SvgIconFolder } from "./svg-icon-folder";
 export { SvgIconFork } from "./svg-icon-fork";

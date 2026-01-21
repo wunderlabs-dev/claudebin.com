@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-import { SvgIconCalendar, SvgIconChat, SvgIconCircle, SvgIconFork } from "@/components/icon";
+import { SvgIconCalendar, SvgIconChat, SvgIconEye, SvgIconFork } from "@/components/icon";
 
 import { Typography } from "@/components/ui/typography";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -36,7 +36,7 @@ const ProfilePageUserInfoSidebar = ({
     {
       key: "views",
       label: t("user.views", { count: views }),
-      icon: <SvgIconCircle size="sm" color="accent" />,
+      icon: <SvgIconEye size="sm" color="accent" />,
     },
     {
       key: "forks",
