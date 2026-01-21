@@ -14,7 +14,7 @@ import {
 
 import { SvgIconChat, SvgIconClock, SvgIconFile } from "@/components/icon";
 
-type HomeRecentThreadsCardProps = {
+type HomePageRecentThreadsListItemProps = {
   title: string;
   author: string;
   time: string;
@@ -22,14 +22,14 @@ type HomeRecentThreadsCardProps = {
   files: number;
 } & ComponentProps<typeof Card>;
 
-const HomeRecentThreadsCard = ({
+const HomePageRecentThreadsListItem = ({
   title,
   author,
   time,
   prompts,
   files,
   ...props
-}: HomeRecentThreadsCardProps) => {
+}: HomePageRecentThreadsListItemProps) => {
   const t = useTranslations();
 
   return (
@@ -58,4 +58,4 @@ const HomeRecentThreadsCard = ({
   );
 };
 
-export { HomeRecentThreadsCard };
+export { HomePageRecentThreadsListItem };

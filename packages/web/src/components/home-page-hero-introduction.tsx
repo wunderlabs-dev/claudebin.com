@@ -13,9 +13,9 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-type HomeIntroProps = ComponentProps<"section">;
+type HomePageHeroIntroductionProps = ComponentProps<"section">;
 
-const HomeIntro = ({ className, ...props }: HomeIntroProps) => {
+const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroductionProps) => {
   const t = useTranslations();
 
   return (
@@ -57,8 +57,8 @@ const HomeIntro = ({ className, ...props }: HomeIntroProps) => {
           </div>
         </div>
       </Backdrop>
-    </Container >
+    </Container>
   );
 };
 
-export { HomeIntro };
+export { HomePageHeroIntroduction };

@@ -27,7 +27,7 @@ import {
   SvgIconFolder,
 } from "@/components/icon";
 
-type ThreadsCardProps = {
+type ThreadsPageThreadGridItemProps = {
   id: string;
   title: string;
   author: string;
@@ -40,7 +40,7 @@ type ThreadsCardProps = {
   progress: number;
 } & Omit<ComponentProps<typeof Card>, "id">;
 
-const ThreadsCard = ({
+const ThreadsPageThreadGridItem = ({
   id,
   title,
   author,
@@ -52,9 +52,9 @@ const ThreadsCard = ({
   project,
   progress,
   ...props
-}: ThreadsCardProps) => {
+}: ThreadsPageThreadGridItemProps) => {
   const t = useTranslations();
-  const hash = hashString(id)
+  const hash = hashString(id);
   const positions = THREAD_CARD_LAYOUTS[hash % THREAD_CARD_LAYOUTS.length];
 
   const columns: ReactNode[] = [
@@ -94,7 +94,7 @@ const ThreadsCard = ({
       </CardSection>
     </CardBody>,
     <CardBody key="dot" className="bg-dot text-gray-500/40 group-hover:text-orange-50" />,
-  ];
+  ] as const;
 
   return (
     <Card variant="grid" {...props}>
@@ -103,4 +103,4 @@ const ThreadsCard = ({
   );
 };
 
-export { ThreadsCard };
+export { ThreadsPageThreadGridItem };

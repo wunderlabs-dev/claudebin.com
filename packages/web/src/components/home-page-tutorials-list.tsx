@@ -5,7 +5,7 @@ import { Backdrop } from "@/components/ui/backdrop";
 import { Container } from "@/components/ui/container";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-type HomeTutorialsProps = ComponentProps<"section">;
+type HomePageTutorialsListProps = ComponentProps<"section">;
 
 const tutorials = [
   {
@@ -20,7 +20,7 @@ const tutorials = [
   },
 ] as const;
 
-const HomeTutorials = ({ className, ...props }: HomeTutorialsProps) => {
+const HomePageTutorialsList = ({ className, ...props }: HomePageTutorialsListProps) => {
   const t = useTranslations();
 
   return (
@@ -50,4 +50,4 @@ const HomeTutorials = ({ className, ...props }: HomeTutorialsProps) => {
   );
 };
 
-export { HomeTutorials };
+export { HomePageTutorialsList };

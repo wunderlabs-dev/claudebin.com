@@ -1,22 +1,13 @@
-import { AppBar } from "@/components/ui/app-bar";
-import { Footer } from "@/components/ui/footer";
-
-import { HomeIntro } from "@/components/home-intro";
-import { HomeRecentThreads } from "@/components/home-recent-threads";
-import { HomeTutorials } from "@/components/home-tutorials";
+import { HomePageHeroIntroduction } from "@/components/home-page-hero-introduction";
+import { HomePageRecentThreadsCarousel } from "@/components/home-page-recent-threads-carousel";
+import { HomePageTutorialsList } from "@/components/home-page-tutorials-list";
 
 const HomePage = () => {
   return (
     <>
-      <AppBar />
-
-      <main>
-        <HomeIntro />
-        <HomeTutorials />
-        <HomeRecentThreads />
-      </main>
-
-      <Footer />
+      <HomePageHeroIntroduction />
+      <HomePageTutorialsList />
+      <HomePageRecentThreadsCarousel />
     </>
   );
 };
