@@ -101,7 +101,7 @@ const ThreadsPage = () => {
   return (
     <Container size="md" spacing="sm" className="flex flex-col gap-8">
       <div className="flex flex-col gap-18">
-        <Typography variant="h1" className="leading-none whitespace-break-spaces">
+        <Typography variant="h1" leading="none" className="whitespace-break-spaces">
           {t.rich("threads.title", renderers)}
         </Typography>
         <Typography variant="body" color="muted">
@@ -145,6 +145,21 @@ const ThreadsPage = () => {
           <DividerGridEdge position="left" className="col-span-1" />
           <DividerGridCell className="col-span-6 py-6 border-b border-l border-r" />
           <DividerGridCell className="flex items-center justify-end col-span-4 py-6 border-b border-r" />
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
+
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-10 py-24 px-12 border-b border-l border-r">
+            <div className="flex flex-col gap-6 max-w-lg mx-auto">
+              <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
+                {t.rich("threads.emptyTitle", { ...renderers, query: "Croissant" })}
+              </Typography>
+              <Typography variant="body" color="muted">
+                {t("threads.emptyDescription")}
+              </Typography>
+            </div>
+          </DividerGridCell>
           <DividerGridEdge position="right" className="col-span-1" />
         </DividerGridRow>
 

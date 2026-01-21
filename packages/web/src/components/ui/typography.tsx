@@ -28,6 +28,7 @@ const typographyVariants = cva([], {
     },
     leading: {
       default: [],
+      none: "leading-none",
       normal: "leading-normal",
     },
   },

@@ -22,7 +22,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
     <Container as="section" size="lg" className={className} {...props}>
       <Backdrop spacing="sm" className="px-12">
         <div className="flex flex-col max-w-4xl gap-18">
-          <Typography variant="h1" className="leading-none whitespace-break-spaces">
+          <Typography variant="h1" leading="none" className="whitespace-break-spaces">
             {t.rich("home.headline", renderers)}
           </Typography>
 

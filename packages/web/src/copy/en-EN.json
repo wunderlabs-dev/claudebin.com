@@ -50,7 +50,7 @@
     "threadCount": "{count} threads",
     "loadMore": "Load more threads",
     "emptyTitle": "Nothing was found for <gradient>{query}</gradient>",
-    "emptyDescription": "Maybe is there a misspelling? Or try another search!"
+    "emptyDescription": "Check for typos or try different keywords."
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
