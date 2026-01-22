@@ -18,15 +18,19 @@ export const GET = async (request: NextRequest) => {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    console.log("[auth/callback] Exchanging code for session...");
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error) {
+    if (!error && data.session) {
+      console.log("[auth/callback] Exchange successful, user:", data.session.user.email);
+      console.log("[auth/callback] Redirecting to:", redirect);
       return NextResponse.redirect(`${origin}${redirect}`);
     }
 
-    console.error("Session exchange error:", error.message);
+    console.error("[auth/callback] Session exchange error:", error?.message);
+    console.error("[auth/callback] Data:", data);
     return NextResponse.redirect(
-      `${origin}/auth/login?error=exchange_failed&error_description=${encodeURIComponent(error.message)}`,
+      `${origin}/auth/login?error=exchange_failed&error_description=${encodeURIComponent(error?.message || "No session returned")}`,
     );
   }
 
