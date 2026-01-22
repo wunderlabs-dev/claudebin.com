@@ -1,6 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { getValidToken, runAuthFlow } from "../auth.js";
+import { auth } from "../auth.js";
 import { getApiBaseUrl } from "../config.js";
 import {
   MAX_SESSION_SIZE_BYTES,
@@ -8,9 +8,8 @@ import {
   SESSION_POLL_TIMEOUT_MS,
   SessionStatus,
 } from "../constants.js";
-import { extractSession } from "../session.js";
+import { session } from "../session.js";
 import { createApiClient } from "../trpc.js";
-import type { SessionPollResult } from "../types.js";
 import { poll } from "../utils.js";
 
 interface SessionPollData {
@@ -31,11 +30,14 @@ const fetchSessionPollData = async (
   return json.result?.data ?? null;
 };
 
+/**
+ * Poll for session processing completion. Returns URL or throws.
+ */
 const pollForProcessing = async (
   sessionId: string,
   apiUrl: string,
   timeoutMs = SESSION_POLL_TIMEOUT_MS,
-): Promise<SessionPollResult> => {
+): Promise<string> => {
   const result = await poll<SessionPollData>({
     fn: () => fetchSessionPollData(sessionId, apiUrl),
     isSuccess: (data) => data.status === SessionStatus.READY && data.url !== undefined,
@@ -46,28 +48,12 @@ const pollForProcessing = async (
     timeoutError: "Processing timed out after 2 minutes",
   });
 
-  if (!result.success) {
-    return { success: false, error: result.error };
+  if (!result.url) {
+    throw new Error("Invalid session response");
   }
 
-  const { url } = result.result;
-
-  // Guaranteed by isSuccess check, but TypeScript can't infer that
-  if (!url) {
-    return { success: false, error: "Invalid session response" };
-  }
-
-  return { success: true, url };
+  return result.url;
 };
-
-const errorResponse = (error: string) => ({
-  content: [{ type: "text" as const, text: JSON.stringify({ success: false, error }) }],
-  isError: true,
-});
-
-const successResponse = (data: Record<string, unknown>) => ({
-  content: [{ type: "text" as const, text: JSON.stringify({ success: true, ...data }) }],
-});
 
 export const registerShare = (server: McpServer): void => {
   server.registerTool(
@@ -82,39 +68,22 @@ export const registerShare = (server: McpServer): void => {
       },
     },
     async ({ project_path, title, is_public }) => {
-      // Get token, or run auth flow if not authenticated
-      let token = await getValidToken();
-
-      if (!token) {
-        const authResult = await runAuthFlow();
-        if (!authResult.success) {
-          return errorResponse(authResult.error);
-        }
-        token = authResult.token;
-      }
-
-      // Extract session
-      const sessionResult = await extractSession(project_path);
-
-      if (!sessionResult.success) {
-        return errorResponse(sessionResult.error);
-      }
-
-      const { content } = sessionResult;
-
-      // Check size
-      const sizeBytes = new TextEncoder().encode(content).length;
-      if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
-        return errorResponse(
-          `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
-        );
-      }
-
-      // Publish
-      const api = createApiClient();
-      const apiUrl = getApiBaseUrl();
-
       try {
+        const token = await auth.getToken();
+        const content = await session.extract(project_path);
+
+        // Check size
+        const sizeBytes = new TextEncoder().encode(content).length;
+        if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
+          throw new Error(
+            `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
+          );
+        }
+
+        // Publish
+        const api = createApiClient();
+        const apiUrl = getApiBaseUrl();
+
         const result = await api.sessions.publish.mutate({
           title,
           conversation_data: content,
@@ -122,15 +91,21 @@ export const registerShare = (server: McpServer): void => {
           access_token: token,
         });
 
-        const pollResult = await pollForProcessing(result.id, apiUrl);
+        const url = await pollForProcessing(result.id, apiUrl);
 
-        if (!pollResult.success) {
-          return errorResponse(pollResult.error);
-        }
-
-        return successResponse({ id: result.id, url: pollResult.url });
+        return {
+          content: [{ type: "text" as const, text: url }],
+        };
       } catch (error) {
-        return errorResponse(error instanceof Error ? error.message : String(error));
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: error instanceof Error ? error.message : String(error),
+            },
+          ],
+          isError: true,
+        };
       }
     },
   );

@@ -99,4 +99,14 @@ export const authRouter = router({
         expires_at: data.session.expires_at,
       };
     }),
+
+  validate: publicProcedure
+    .input(z.object({ token: z.string() }))
+    .query(async ({ input }) => {
+      const supabase = createServiceClient();
+
+      const { data, error } = await supabase.auth.getUser(input.token);
+
+      return { valid: !error && !!data.user };
+    }),
 });
