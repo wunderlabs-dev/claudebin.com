@@ -18,8 +18,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { List, ListItem } from "@/components/ui/list";
-import { Progress } from "@/components/ui/progress";
-import { Typography } from "@/components/ui/typography";
 
 type ThreadPageSidebarProps = {
   public: boolean;
@@ -27,9 +25,6 @@ type ThreadPageSidebarProps = {
   project: string;
   prompts: number;
   linesWritten: number;
-  additions: number;
-  deletions: number;
-  modifications: number;
   files: number;
   views: number;
   forks: number;
@@ -42,9 +37,6 @@ const ThreadPageSidebar = ({
   project,
   prompts,
   linesWritten,
-  additions,
-  deletions,
-  modifications,
   files,
   views,
   forks,

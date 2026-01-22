@@ -23,9 +23,6 @@ const thread = {
   project: "directory/project_name",
   prompts: 10,
   linesWritten: 2345,
-  additions: 2000,
-  deletions: 23,
-  modifications: 234,
   files: 2,
   views: 1234,
   forks: 2,
@@ -38,7 +35,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
-      <div className="col-span-9 flex flex-col gap-9 pt-9">
+      <div className="flex flex-col col-span-9 gap-9 pt-9">
         <Link href="/threads" className="flex items-center gap-3">
           <SvgIconArrowLeft size="sm" />
           <Typography variant="small">{t("thread.backToThreads")}</Typography>
@@ -54,9 +51,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           project={thread.project}
           prompts={thread.prompts}
           linesWritten={thread.linesWritten}
-          additions={thread.additions}
-          deletions={thread.deletions}
-          modifications={thread.modifications}
           files={thread.files}
           views={thread.views}
           forks={thread.forks}
