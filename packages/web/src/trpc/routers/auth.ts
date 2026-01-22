@@ -100,13 +100,11 @@ export const authRouter = router({
       };
     }),
 
-  validate: publicProcedure
-    .input(z.object({ token: z.string() }))
-    .query(async ({ input }) => {
-      const supabase = createServiceClient();
+  validate: publicProcedure.input(z.object({ token: z.string() })).query(async ({ input }) => {
+    const supabase = createServiceClient();
 
-      const { data, error } = await supabase.auth.getUser(input.token);
+    const { data, error } = await supabase.auth.getUser(input.token);
 
-      return { valid: !error && !!data.user };
-    }),
+    return { valid: !error && !!data.user };
+  }),
 });

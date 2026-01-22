@@ -46,9 +46,7 @@ const extract = async (projectPath: string): Promise<string> => {
   try {
     await fs.access(claudeProjectPath);
   } catch {
-    throw new Error(
-      `No Claude sessions found for project path: ${projectPath}`,
-    );
+    throw new Error(`No Claude sessions found for project path: ${projectPath}`);
   }
 
   const files = await fs.readdir(claudeProjectPath);

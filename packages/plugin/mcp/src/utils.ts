@@ -19,15 +19,8 @@ export const poll = async <T>(options: {
   timeoutMs: number;
   timeoutError: string;
 }): Promise<T> => {
-  const {
-    fn,
-    isSuccess,
-    isFailure,
-    getFailureError,
-    intervalMs,
-    timeoutMs,
-    timeoutError,
-  } = options;
+  const { fn, isSuccess, isFailure, getFailureError, intervalMs, timeoutMs, timeoutError } =
+    options;
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {

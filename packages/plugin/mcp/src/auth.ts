@@ -82,10 +82,7 @@ const run = async (): Promise<string> => {
   const { code, url } = await start();
   safeOpenUrl(url);
 
-  const { token, refresh_token, user } = await pollForAuthCompletion(
-    code,
-    apiUrl,
-  );
+  const { token, refresh_token, user } = await pollForAuthCompletion(code, apiUrl);
 
   const config: Config = {
     auth: {
@@ -147,10 +144,7 @@ const getLocalToken = async (): Promise<string | null> => {
     return null;
   }
 
-  if (
-    !config.auth.expires_at ||
-    Date.now() > config.auth.expires_at - TOKEN_REFRESH_BUFFER_MS
-  ) {
+  if (!config.auth.expires_at || Date.now() > config.auth.expires_at - TOKEN_REFRESH_BUFFER_MS) {
     const refreshed = await refresh();
     if (!refreshed) {
       return null;
