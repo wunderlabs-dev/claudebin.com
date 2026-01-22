@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, type ComponentProps } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEventListener } from "usehooks-ts";
+import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
+import Link from "next/link";
 
 import { cn } from "@/utils/helpers";
 
@@ -28,7 +28,13 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
 
   const [isSticky, setIsSticky] = useState<number>();
 
-  useEventListener("scroll", () => setIsSticky(window.scrollY));
+  useEventListener("scroll", () => {
+    setIsSticky(window.scrollY)
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    setIsSticky(window.scrollY);
+  }, []);
 
   return (
     <header

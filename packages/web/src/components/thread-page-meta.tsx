@@ -6,6 +6,7 @@ import { SvgIconClock } from "@/components/icon";
 
 import { Avatar } from "@/components/ui/avatar";
 import { Typography } from "@/components/ui/typography";
+import { List, ListItem } from "@/components/ui/list";
 
 type ThreadPageMetaProps = {
   title: string;
@@ -21,17 +22,16 @@ const ThreadPageMeta = ({ title, author, time }: ThreadPageMetaProps): ReactNode
       <div className="flex items-center gap-3">
         <Link href={`/profile/${author}`} className="flex items-center gap-3">
           <Avatar size="sm" />
-          <Typography variant="small" color="accent">
+          <Typography variant="small" color="accent" className="underline">
             @{author}
           </Typography>
         </Link>
 
-        <div className="flex items-center gap-1">
-          <SvgIconClock size="sm" color="neutral" />
-          <Typography variant="small" color="muted">
+        <List>
+          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
             {time}
-          </Typography>
-        </div>
+          </ListItem>
+        </List>
       </div>
     </div>
   );

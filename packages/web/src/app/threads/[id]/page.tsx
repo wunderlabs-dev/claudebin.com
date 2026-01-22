@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { SvgIconArrowLeft } from "@/components/icon";
 
 import { Container } from "@/components/ui/container";
-import { Typography } from "@/components/ui/typography";
+import { NavLink, NavLabel } from "@/components/ui/nav";
 
 import { ThreadPageMeta } from "@/components/thread-page-meta";
 import { ThreadPageSidebar } from "@/components/thread-page-sidebar";
@@ -36,10 +35,10 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
       <div className="flex flex-col col-span-9 gap-9 pt-9">
-        <Link href="/threads" className="flex items-center gap-3">
+        <NavLink href="/threads">
           <SvgIconArrowLeft size="sm" />
-          <Typography variant="small">{t("thread.backToThreads")}</Typography>
-        </Link>
+          <NavLabel>{t("thread.backToThreads")}</NavLabel>
+        </NavLink>
 
         <ThreadPageMeta title={thread.title} author={thread.author} time={thread.time} />
       </div>

@@ -75,14 +75,8 @@ const ThreadPageSidebar = ({
       </List>
 
       <div className="flex flex-col gap-4">
-        <Button variant="secondary">
-          <SvgIconArrowLink />
-          {t("thread.openSharing")}
-        </Button>
-        <Button variant="secondary">
-          <SvgIconFork />
-          {t("thread.fork")}
-        </Button>
+
+
         <Button variant="secondary">
           <SvgIconChat />
           {t("thread.continueConversation")}
