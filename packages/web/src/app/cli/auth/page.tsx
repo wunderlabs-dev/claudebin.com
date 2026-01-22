@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { cliAuth } from "@/lib/repos/cli-auth.repo";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -56,11 +57,8 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    return (
-      <Layout>
-        <ErrorState title="Not Authenticated">Something went wrong. Please try again.</ErrorState>
-      </Layout>
-    );
+    // Redirect to login, preserving the CLI auth code
+    redirect(`/auth/login?redirect=${encodeURIComponent(`/cli/auth?code=${code}`)}`);
   }
 
   try {
