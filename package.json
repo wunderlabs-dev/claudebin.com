@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "bun --filter web dev",
     "build": "bun --filter '*' build",
-    "cli": "bun --filter cli dev",
     "plugin": "bun --filter claudebin-mcp dev",
     "type-check": "bun --filter '*' type-check",
     "format": "biome format --write .",

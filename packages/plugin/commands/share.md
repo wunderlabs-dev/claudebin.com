@@ -1,7 +1,14 @@
 <instructions>
-Call the extract_session tool with the current working directory as project_path.
+Call the share tool with:
+- project_path: the current working directory
+- is_public: true
+
+The tool will automatically authenticate if needed (opens browser for login).
 </instructions>
 
 <output>
-Output the raw result exactly as returned. Do not summarize, format, or modify it.
+If successful, output the URL in a clear format like:
+"Session published: <url>"
+
+If there's an error, explain what went wrong and how to fix it.
 </output>

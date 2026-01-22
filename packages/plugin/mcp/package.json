@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "@trpc/client": "^11.8.1",
     "zod": "^3.25.0"
   },
   "devDependencies": {
