@@ -49,9 +49,7 @@ export const sessionsRouter = router({
       }
 
       // Validate size
-      const sizeBytes = new TextEncoder().encode(
-        input.conversation_data,
-      ).length;
+      const sizeBytes = new TextEncoder().encode(input.conversation_data).length;
       if (sizeBytes > MAX_SIZE_BYTES) {
         throw new Error(
           `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
@@ -63,11 +61,7 @@ export const sessionsRouter = router({
       const storagePath = `${user.id}/${id}.jsonl`;
 
       // Upload to Storage
-      await sessions.uploadJsonl(
-        serviceSupabase,
-        storagePath,
-        input.conversation_data,
-      );
+      await sessions.uploadJsonl(serviceSupabase, storagePath, input.conversation_data);
 
       // Insert session record with processing status
       try {

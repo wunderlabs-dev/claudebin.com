@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  /* ----------------------------------------
+   * Color Palette: Orange (Primary/Accent)
+   * Used for buttons, links, highlights
+   * 50 = darkest, 500 = lightest
+   * ---------------------------------------- */
+  --color-orange-50: #ff6900;
+  --color-orange-100: #ff781a;
+  --color-orange-150: #ff8733;
+  --color-orange-200: #ff964d;
+  --color-orange-250: #ffa566;
+  --color-orange-300: #ffb480;
+  --color-orange-350: #ffc399;
+  --color-orange-400: #ffd2b2;
+  --color-orange-450: #ffe1cc;
+  --color-orange-500: #fff0e5;
+
+  /* ----------------------------------------
+   * Color Palette: Green (Success)
+   * Used for success states, confirmations
+   * ---------------------------------------- */
+  --color-green-50: #64ffb1;
+  --color-green-100: #8bffc5;
+  --color-green-150: #b1ffd8;
+  --color-green-200: #d8ffeb;
+  --color-green-250: #effff7;
+
+  /* ----------------------------------------
+   * Color Palette: Red (Error/Danger)
+   * Used for errors, warnings, destructive actions
+   * ---------------------------------------- */
+  --color-red-50: #ff6467;
+  --color-red-100: #ff8b8d;
+  --color-red-150: #ffb1b3;
+  --color-red-200: #ffd8d9;
+  --color-red-250: #ffeff0;
+
+  /* ----------------------------------------
+   * Color Palette: Gray (Neutral)
+   * Used for backgrounds, borders, text
+   * 100 = darkest (near black), 600 = lightest
+   * ---------------------------------------- */
+  --color-gray-50: #474747;
+  --color-gray-100: #191919;
+  --color-gray-150: #312726;
+  --color-gray-200: #303030;
+  --color-gray-250: #5e5e5e;
+  --color-gray-300: #757575;
+  --color-gray-350: #8c8c8c;
+  --color-gray-400: #a3a3a3;
+  --color-gray-450: #bababa;
+  --color-gray-500: #b5b5b5;
+  --color-gray-550: #d1d1d1;
+  --color-gray-600: #e8e8e8;
+
+  /* ----------------------------------------
+  * Sizing
+  * Container max-widths and spacing values
+  * ---------------------------------------- */
+  --spacing-container: calc(var(--spacing) * 360);
+  --spacing-container-start: calc((100vw - var(--spacing-container)) / 2 - var(--spacing) * 4);
+
+  --max-width-container: var(--spacing-container);
+
+  /* ----------------------------------------
+  * Line height
+  * Text line-height values
+  * ---------------------------------------- */
+  --leading-normal: normal;
+
+  /* ----------------------------------------
+   * Utility Variables
+   * Shared values for custom @utility classes
+   * ---------------------------------------- */
+  --util-full-width: 100%;
+  --util-ridge-opacity: 20%;
+  --util-ridge-size: 0 1px 0 0;
+  --util-ridge-color: color-mix(in srgb, var(--color-white) var(--util-ridge-opacity), transparent);
+  --util-dot-offset: 1px;
+  --util-dot-size: calc(var(--spacing) * 4);
+  --util-fade-from: -20%;
+  --util-fade-to: 75%;
+  --util-fade-size: calc(var(--spacing) * 220);
+  --util-grid-start: 0;
+  --util-grid-columns: 30;
+  --util-grid-width: 1px;
+  --util-grid-opacity: 10%;
+  --util-grid-color: color-mix(
+    in srgb,
+    var(--color-gray-500) var(--util-grid-opacity),
+    transparent
+  );
+}
+
+/* ----------------------------------------
+ * Custom Utilities
+ * ---------------------------------------- */
+
+@utility ridge-t {
+  box-shadow: inset var(--util-ridge-size) var(--util-ridge-color);
+}
+
+@utility bg-dot {
+  background-position: center;
+  background-size: var(--util-dot-size) var(--util-dot-size);
+  background-image: radial-gradient(
+    currentColor var(--util-dot-offset),
+    transparent var(--util-dot-offset)
+  );
+}
+
+@utility bg-fade {
+  background-repeat: no-repeat;
+  background-color: var(--color-gray-100);
+  background-size: auto var(--util-fade-size);
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-gray-150) var(--util-fade-from),
+    var(--color-gray-100) var(--util-fade-to)
+  );
+}
+
+@utility bg-grid {
+  background-size: calc(var(--util-full-width) / var(--util-grid-columns)) var(--util-full-width);
+  background-image:
+    linear-gradient(
+      to right,
+      var(--util-grid-color) var(--util-grid-start),
+      var(--util-grid-color) var(--util-grid-width),
+      transparent var(--util-grid-width)
+    ),
+    linear-gradient(
+      to right,
+      transparent calc(var(--util-full-width) - var(--util-grid-width)),
+      var(--util-grid-color) calc(var(--util-full-width) - var(--util-grid-width))
+    );
+}

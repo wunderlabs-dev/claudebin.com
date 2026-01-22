@@ -35,9 +35,7 @@ const findMostRecentSession = (files: FileWithStats[]): string | null => {
   return sessions.length > 0 ? sessions[0].file : null;
 };
 
-export const extractSession = async (
-  projectPath: string,
-): Promise<ExtractResult> => {
+export const extractSession = async (projectPath: string): Promise<ExtractResult> => {
   const normalizedPath = normalizeProjectPath(projectPath);
   const claudeProjectPath = getClaudeProjectPath(normalizedPath);
 

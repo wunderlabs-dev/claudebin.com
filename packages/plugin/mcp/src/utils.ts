@@ -17,18 +17,9 @@ export const poll = async <T>(options: {
   intervalMs: number;
   timeoutMs: number;
   timeoutError: string;
-}): Promise<
-  { success: true; result: T } | { success: false; error: string }
-> => {
-  const {
-    fn,
-    isSuccess,
-    isFailure,
-    getFailureError,
-    intervalMs,
-    timeoutMs,
-    timeoutError,
-  } = options;
+}): Promise<{ success: true; result: T } | { success: false; error: string }> => {
+  const { fn, isSuccess, isFailure, getFailureError, intervalMs, timeoutMs, timeoutError } =
+    options;
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {

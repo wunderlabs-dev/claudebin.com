@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "title": "Claudebin - Share Your Claude Sessions",
+    "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
+  },
+  "common": {
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyLink": "Copy link",
+    "copySnippet": "Copy snippet",
+    "linkCopied": "Link copied!",
+    "public": "Public",
+    "private": "Private",
+    "prompts": "{count} prompts",
+    "files": "{count} files",
+    "views": "{count} views",
+    "forks": "{count} forks"
+  },
+  "appBar": {
+    "claudebin": "Claudebin",
+    "threads": "Threads",
+    "login": "Login"
+  },
+  "home": {
+    "headline": "<gradient>Share AI Sessions</gradient>\nlike never before",
+    "badge": "Get started for free",
+    "description": "ClaudeBin is the modern pastebin for developers who code with AI. Share your Claude conversations, collaborate seamlessly.",
+    "commandCli": "npm i -g claudebin",
+    "commandEditor": "brew install claudebin",
+    "cliInstall": "CLI Install",
+    "editorInstall": "Editor Install",
+    "viewDemo": "View Demo",
+    "viewDemoTerminal": "View Demo Terminal",
+    "viewDemoEditor": "View Demo Editor",
+    "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
+    "recentThreadsDescription": "See what the community is building\nwith Claude."
+  },
+  "user": {
+    "recentThreads": "Recent threads",
+    "seeAllThreads": "See all threads",
+    "createdOn": "Created on {date}",
+    "threads": "{count} threads",
+    "views": "{count} views",
+    "forks": "{count} forks",
+    "shareGuideTitle": "How to share your first conversation?",
+    "shareGuideStep1": "Install the CLI globally",
+    "shareGuideStep2": "Run a Claude Code session",
+    "shareGuideStep3": "Share your conversation",
+    "shareGuideStep4": "Get a shareable link",
+    "dangerZone": "Danger zone",
+    "dangerZoneDescription": "Deleting your account will disconnect your CLI token from Claudebin. Your published threads will remain public. This action cannot be undone.",
+    "cancel": "Cancel",
+    "deleteAccount": "Yes, delete account"
+  },
+  "threads": {
+    "title": "<gradient>Conversations</gradient>\nThreads",
+    "description": "Browse and search through all Claude conversations",
+    "searchPlaceholder": "Search for a thread, build, optimization,...",
+    "search": "Search",
+    "threadCount": "{count} threads",
+    "loadMore": "Load more threads",
+    "emptyTitle": "Nothing was found for <gradient>{query}</gradient>",
+    "emptyDescription": "Check for typos or try different keywords."
+  },
+  "thread": {
+    "backToThreads": "Back to threads",
+    "created": "Created {date}",
+    "linesWritten": "{count} lines written",
+    "openSharing": "Open sharing",
+    "fork": "Fork",
+    "continueConversation": "Continue conversation"
+  },
+  "footer": {
+    "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
+    "product": "Product",
+    "claudebin": "Claudebin",
+    "threads": "Threads",
+    "login": "Login",
+    "tutorial": "Tutorial",
+    "securityTerms": "Security & Terms",
+    "community": "Community",
+    "github": "GitHub",
+    "twitter": "X @claudebin"
+  }
+}
