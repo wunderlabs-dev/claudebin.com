@@ -1,28 +1,31 @@
 "use client";
 
 import { useState, type ComponentProps } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
-import Link from "next/link";
+
+import type { User } from "@supabase/supabase-js";
 
 import { cn } from "@/utils/helpers";
 
 import { SvgIconClaudebinXs, SvgIconHome, SvgIconUser } from "@/components/icon";
-
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
 
-type AppBarProps = ComponentProps<"header">;
+type AppBarProps = ComponentProps<"header"> & {
+  user: User | null;
+};
 
 const links = [
   { href: "/", label: "appBar.claudebin", icon: <SvgIconHome size="sm" /> },
   { href: "/threads", label: "appBar.threads", icon: null },
 ] as const;
 
-const AppBar = ({ className, ...props }: AppBarProps) => {
+const AppBar = ({ user, className, ...props }: AppBarProps) => {
   const t = useTranslations();
   const pathname = usePathname();
 
@@ -31,7 +34,6 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
   useEventListener("scroll", () => {
     setIsSticky(window.scrollY);
   });
-
   useIsomorphicLayoutEffect(() => {
     setIsSticky(window.scrollY);
   }, []);
@@ -66,10 +68,17 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
             </Nav>
           </div>
 
-          <Button variant="default">
-            <SvgIconUser size="sm" />
-            {t("appBar.login")}
-          </Button>
+          {user ? (
+            <Button>
+              <SvgIconUser size="sm" />
+              {t("appBar.logout")}
+            </Button>
+          ) : (
+            <Button>
+              <SvgIconUser size="sm" />
+              {t("appBar.login")}
+            </Button>
+          )}
         </div>
 
         <Divider />

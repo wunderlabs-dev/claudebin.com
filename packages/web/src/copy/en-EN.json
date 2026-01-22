@@ -19,7 +19,8 @@
   "appBar": {
     "claudebin": "Claudebin",
     "threads": "Threads",
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout"
   },
   "home": {
     "headline": "<gradient>Share AI Sessions</gradient>\nlike never before",
