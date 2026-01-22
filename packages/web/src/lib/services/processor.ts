@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { messages } from "@/lib/repos/messages.repo";
 import { sessions } from "@/lib/repos/sessions.repo";
 import type { Database } from "@/lib/supabase/database.types";
-import { SessionStatus } from "@/src/trpc/routers/sessions";
+import { SessionStatus } from "@/trpc/routers/sessions";
 import type { ParsedMessage } from "./parser";
 import { parseJsonlStream } from "./parser";
 
