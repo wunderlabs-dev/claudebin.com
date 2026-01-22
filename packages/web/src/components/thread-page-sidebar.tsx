@@ -73,9 +73,7 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
           {t("common.forks", { count: forks })}
         </ListItem>
-        <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>
-          {progress}
-        </ListItem>
+        <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}</ListItem>
       </List>
 
       <div className="w-full flex flex-col gap-8">
