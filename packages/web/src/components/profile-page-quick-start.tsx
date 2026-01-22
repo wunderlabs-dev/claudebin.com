@@ -26,20 +26,20 @@ const ProfilePageQuickStart = ({ className, ...props }: ProfilePageQuickStartPro
       </div>
 
       <Steps>
-        <StepsItem number={1}>{t("user.shareGuideStep1")}</StepsItem>
+        <StepsItem>{t("user.shareGuideStep1")}</StepsItem>
 
         <div className="pl-11">
           <CopyInput variant="terminal" value="npm i -g claudebin" />
         </div>
 
-        <StepsItem number={2}>{t("user.shareGuideStep2")}</StepsItem>
-        <StepsItem number={3}>{t("user.shareGuideStep3")}</StepsItem>
+        <StepsItem>{t("user.shareGuideStep2")}</StepsItem>
+        <StepsItem>{t("user.shareGuideStep3")}</StepsItem>
 
         <div className="pl-11">
           <CopyInput variant="terminal" value="/claudebin:share" />
         </div>
 
-        <StepsItem number={4}>{t("user.shareGuideStep4")}</StepsItem>
+        <StepsItem>{t("user.shareGuideStep4")}</StepsItem>
       </Steps>
     </div>
   );

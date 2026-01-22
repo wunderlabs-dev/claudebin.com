@@ -220,9 +220,9 @@ const HomePageRecentThreadsCarousel = ({
               <HomePageRecentThreadsListItem
                 time={thread.time}
                 files={thread.files}
+                prompts={thread.prompts}
                 title={thread.title}
                 author={thread.author}
-                prompts={thread.prompts}
               />
             </div>
           ))}
