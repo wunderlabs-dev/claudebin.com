@@ -1,5 +1,5 @@
-import type { Json } from "@/supabase/types";
 import type { ContentBlock } from "@/supabase/types/message";
+import type { Json } from "@/supabase/types";
 
 export const contentBlocksToJson = (blocks: ContentBlock[]): Json => blocks as unknown as Json;
 
