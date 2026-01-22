@@ -55,6 +55,7 @@
     "emptyDescription": "Check for typos or try different keywords."
   },
   "thread": {
+    "backToThreads": "Back to threads",
     "created": "Created {date}",
     "linesWritten": "{count} lines written",
     "openSharing": "Open sharing",

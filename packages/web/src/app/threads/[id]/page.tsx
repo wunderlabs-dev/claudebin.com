@@ -1,6 +1,10 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { SvgIconArrowLeft } from "@/components/icon";
+
 import { Container } from "@/components/ui/container";
+import { Typography } from "@/components/ui/typography";
 
 import { ThreadPageSidebar } from "@/components/thread-page-sidebar";
 
@@ -26,11 +30,17 @@ const thread = {
 
 const ThreadPage = async ({ params }: ThreadPageProps) => {
   const { id: _id } = await params;
-  const _t = await getTranslations();
+  const t = await getTranslations();
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
-      <div className="col-span-9">#</div>
+      <div className="col-span-9 pt-9">
+        <Link href="/threads" className="inline-flex items-center gap-2 px-4 py-2 border border-gray-250 rounded-full">
+          <SvgIconArrowLeft size="sm" />
+          <Typography variant="small">{t("thread.backToThreads")}</Typography>
+        </Link>
+      </div>
+
       <div className="flex flex-col justify-between col-span-3 pt-24 pb-12 px-6 border-l border-gray-250">
         <ThreadPageSidebar
           public={thread.public}
