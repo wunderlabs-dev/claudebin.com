@@ -30,7 +30,7 @@ const thread = {
 };
 
 const ThreadPage = async ({ params }: ThreadPageProps) => {
-  const { id: _id } = await params;
+  const { id } = await params;
   const t = await getTranslations();
 
   return (
