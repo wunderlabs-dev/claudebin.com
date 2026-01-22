@@ -1,4 +1,4 @@
-import { SvgIcon, type SvgIconProps } from "./svg-icon";
+import { SvgIcon, type SvgIconProps } from "@/components/icon/svg-icon";
 
 const SvgIconArrowLeft = (props: Omit<SvgIconProps, "children">) => {
   return (

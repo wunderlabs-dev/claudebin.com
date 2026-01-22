@@ -1,11 +1,12 @@
 import { nanoid } from "nanoid";
 import { after } from "next/server";
 import { z } from "zod";
+
 import { config } from "@/supabase/config/env";
 import { sessions } from "@/supabase/repos/sessions";
 import { processSession } from "@/supabase/services/processor";
 import { createServiceClient } from "@/supabase/service";
-import { publicProcedure, router } from "../init";
+import { publicProcedure, router } from "@/trpc/init";
 
 const MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
 

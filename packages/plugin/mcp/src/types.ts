@@ -1,24 +1,22 @@
-// User config stored in ~/.claudebin/config.json
-export interface UserConfig {
+export type UserConfig = {
   id: string;
   name: string | null;
   email: string | null;
   avatar_url: string | null;
-}
+};
 
-export interface AuthConfig {
+export type AuthConfig = {
   token: string;
   refresh_token?: string;
   expires_at: number;
-}
+};
 
-export interface Config {
+export type Config = {
   auth?: AuthConfig;
   user?: UserConfig;
-}
+};
 
-// Session types
-export interface FileWithStats {
+export type FileWithStats = {
   file: string;
   mtime: Date;
-}
+};
