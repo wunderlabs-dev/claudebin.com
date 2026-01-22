@@ -115,7 +115,7 @@ const ThreadsPage = () => {
           <DividerGridCell className="col-span-6 border-b">
             <DividerGridDivider variant="top" />
           </DividerGridCell>
-          <DividerGridCell className="flex justify-between col-span-4 border-b">
+          <DividerGridCell className="col-span-4 flex justify-between border-b">
             <DividerGridDivider variant="top" />
             <DividerGridDivider variant="top" />
           </DividerGridCell>
@@ -124,7 +124,7 @@ const ThreadsPage = () => {
 
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-6 border-b border-l border-r">
+          <DividerGridCell className="col-span-6 border-r border-b border-l">
             <FormControl className="flex-row items-center">
               <Input placeholder={t("threads.searchPlaceholder")} />
               <Button variant="outline">
@@ -133,7 +133,7 @@ const ThreadsPage = () => {
               </Button>
             </FormControl>
           </DividerGridCell>
-          <DividerGridCell className="flex items-center justify-end col-span-4 px-3 border-b border-r">
+          <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b px-3">
             <Typography variant="small" color="muted">
               {t("threads.threadCount", { count: threads.length })}
             </Typography>
@@ -143,15 +143,15 @@ const ThreadsPage = () => {
 
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-6 py-6 border-b border-l border-r" />
-          <DividerGridCell className="flex items-center justify-end col-span-4 py-6 border-b border-r" />
+          <DividerGridCell className="col-span-6 border-r border-b border-l py-6" />
+          <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b py-6" />
           <DividerGridEdge position="right" className="col-span-1" />
         </DividerGridRow>
 
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-10 py-24 px-12 border-b border-l border-r">
-            <div className="flex flex-col gap-6 max-w-lg mx-auto">
+          <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">
+            <div className="mx-auto flex max-w-lg flex-col gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { ...renderers, query: "Croissant" })}
               </Typography>
@@ -189,7 +189,7 @@ const ThreadsPage = () => {
           <DividerGridCell className="col-span-10">
             <Card variant="grid">
               <CardBody />
-              <CardBody className="justify-center items-center p-0">
+              <CardBody className="items-center justify-center p-0">
                 <Button variant="secondary">{t("threads.loadMore")}</Button>
               </CardBody>
               <CardBody />
@@ -202,14 +202,14 @@ const ThreadsPage = () => {
           <DividerGridCell className="col-span-1" />
           <DividerGridCell className="col-span-10">
             <DividerGridRow>
-              <DividerGridCell className="flex justify-between col-span-4">
+              <DividerGridCell className="col-span-4 flex justify-between">
                 <DividerGridDivider variant="bottom" />
                 <DividerGridDivider variant="bottom" />
               </DividerGridCell>
-              <DividerGridCell className="flex justify-end col-span-4">
+              <DividerGridCell className="col-span-4 flex justify-end">
                 <DividerGridDivider variant="bottom" />
               </DividerGridCell>
-              <DividerGridCell className="flex justify-end col-span-4">
+              <DividerGridCell className="col-span-4 flex justify-end">
                 <DividerGridDivider variant="bottom" />
               </DividerGridCell>
             </DividerGridRow>

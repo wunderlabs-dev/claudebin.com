@@ -92,7 +92,7 @@ const ThreadPageSidebar = ({
         <Progress value={progress} />
       </List>
 
-      <div className="flex flex-col w-full gap-8">
+      <div className="flex w-full flex-col gap-8">
         <CopyInput variant="link" value="https://claudebin.com/threads/" />
         <CopyInput variant="snippet" value="https://claudebin.com/threads/V1StGXR8_Z5jdHi6B-myT" />
         <Button variant="secondary">

@@ -115,20 +115,18 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
       </div>
 
       <div className="col-span-8 grid grid-cols-1">
-        <Card variant="list">
-          <CardBody className="col-span-12 flex-row items-center justify-between p-8">
-            <div className="flex items-center gap-3">
-              <SvgIconLine size="md" color="accent" />
-              <Typography variant="h4">{t("user.recentThreads")}</Typography>
-            </div>
-            <Link href="/threads" className="flex items-center gap-3">
-              <Typography variant="small" fontWeight="semibold">
-                {t("user.seeAllThreads")}
-              </Typography>
-              <SvgIconArrowRight size="sm" />
-            </Link>
-          </CardBody>
-        </Card>
+        <div className="col-span-12 flex items-center justify-between border border-gray-250 p-8">
+          <div className="flex items-center gap-3">
+            <SvgIconLine size="md" color="accent" />
+            <Typography variant="h4">{t("user.recentThreads")}</Typography>
+          </div>
+          <Link href="/threads" className="flex items-center gap-3">
+            <Typography variant="small" fontWeight="semibold">
+              {t("user.seeAllThreads")}
+            </Typography>
+            <SvgIconArrowRight size="sm" />
+          </Link>
+        </div>
 
         <div className="flex flex-col gap-8">
           <div className="flex flex-col">

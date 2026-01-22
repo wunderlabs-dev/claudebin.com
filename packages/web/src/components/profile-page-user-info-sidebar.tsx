@@ -78,7 +78,7 @@ const ProfilePageUserInfoSidebar = ({
             <AvatarImage src={avatar} alt={username} />
           </Avatar>
         </DividerGridCell>
-        <DividerGridCell className="col-span-5 border-l border-r" />
+        <DividerGridCell className="col-span-5 border-r border-l" />
         <DividerGridCell className="col-span-2" />
       </DividerGridRow>
 

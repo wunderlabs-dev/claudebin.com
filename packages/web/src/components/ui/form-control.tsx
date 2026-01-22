@@ -51,7 +51,7 @@ const inputVariants = cva(
         default: "rounded-full border border-gray-50 focus:border-orange-50",
         error:
           "rounded-full border border-red-50 text-red-50 placeholder:text-red-50 focus:border-red-50",
-        filled: "px-4 rounded-lg border-none",
+        filled: "rounded-lg border-none px-4",
       },
     },
     defaultVariants: {
@@ -107,11 +107,11 @@ const InputLabel = ({ className, ...props }: InputLabelProps) => {
 const textareaVariants = cva(
   [
     "w-full",
-    "py-3 px-4",
-    "bg-gray-200 rounded-lg",
-    "outline-none resize-none",
+    "px-4 py-3",
+    "rounded-lg bg-gray-200",
+    "resize-none outline-none",
     "transition ease-in-out",
-    "text-base placeholder:text-white font-normal font-mono leading-6",
+    "font-mono font-normal text-base leading-6 placeholder:text-white",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {

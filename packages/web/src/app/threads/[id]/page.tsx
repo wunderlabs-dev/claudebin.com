@@ -34,7 +34,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
-      <div className="flex flex-col col-span-9 gap-9 pt-9">
+      <div className="col-span-9 flex flex-col gap-9 pt-9">
         <NavLink href="/threads">
           <SvgIconArrowLeft size="sm" />
           <NavLabel>{t("thread.backToThreads")}</NavLabel>
@@ -43,7 +43,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         <ThreadPageMeta title={thread.title} author={thread.author} time={thread.time} />
       </div>
 
-      <div className="flex flex-col justify-between col-span-3 pt-24 pb-12 px-6 border-l border-gray-250">
+      <div className="col-span-3 flex flex-col justify-between border-gray-250 border-l px-6 pt-24 pb-12">
         <ThreadPageSidebar
           visibility={thread.visibility}
           createdAt={thread.createdAt}

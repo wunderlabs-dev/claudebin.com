@@ -16,7 +16,7 @@ const Progress = ({ className, value, ...props }: ProgressProps) => {
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className="absolute left-0 -inset-y-px bg-orange-250 rounded-full transition-all"
+        className="-inset-y-px absolute left-0 rounded-full bg-orange-250 transition-all"
         style={{
           width: `${value}%`,
         }}

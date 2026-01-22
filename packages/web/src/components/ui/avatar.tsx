@@ -29,7 +29,7 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
         data-slot="avatar"
         className={cn(
           "relative flex shrink-0 overflow-hidden rounded-full",
-          "outline outline-orange-150 bg-orange-50/10",
+          "bg-orange-50/10 outline outline-orange-150",
           avatarSizeClassNames[size],
           className,
         )}
@@ -69,7 +69,7 @@ const AvatarFallback = ({
       data-slot="avatar-fallback"
       className={cn(
         "flex size-full items-center justify-center rounded-full",
-        "text-orange-50 font-bold",
+        "font-bold text-orange-50",
         avatarFallbackFontSizeClassNames[size],
         className,
       )}

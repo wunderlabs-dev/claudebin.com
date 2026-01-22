@@ -197,7 +197,7 @@ const HomePageRecentThreadsCarousel = ({
         <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
 
         <div className="flex items-center justify-between">
-          <Typography variant="body" color="neutral" className="leading-8 whitespace-break-spaces">
+          <Typography variant="body" color="neutral" className="whitespace-break-spaces leading-8">
             {t("home.recentThreadsDescription")}
           </Typography>
 
@@ -213,8 +213,8 @@ const HomePageRecentThreadsCarousel = ({
       </Container>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4 cursor-grab active:cursor-grabbing select-none border-y border-transparent">
-          <div className="shrink-0 w-container-start" aria-hidden="true" />
+        <div className="flex cursor-grab select-none gap-4 border-transparent border-y active:cursor-grabbing">
+          <div className="w-container-start shrink-0" aria-hidden="true" />
           {threads.map((thread) => (
             <div key={thread.id} className="bg-gray-100">
               <HomePageRecentThreadsListItem
@@ -226,7 +226,7 @@ const HomePageRecentThreadsCarousel = ({
               />
             </div>
           ))}
-          <div className="shrink-0 w-container-start" aria-hidden="true" />
+          <div className="w-container-start shrink-0" aria-hidden="true" />
         </div>
       </div>
     </section>

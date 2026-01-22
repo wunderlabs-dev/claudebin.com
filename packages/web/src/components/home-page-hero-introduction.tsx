@@ -21,7 +21,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
   return (
     <Container as="section" size="lg" className={className} {...props}>
       <Backdrop spacing="md" className="px-12">
-        <div className="flex flex-col max-w-4xl gap-18">
+        <div className="flex max-w-4xl flex-col gap-18">
           <Typography variant="h1" leading="none" className="whitespace-break-spaces">
             {t.rich("home.headline", renderers)}
           </Typography>
@@ -37,7 +37,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                 {t("home.description")}
               </Typography>
 
-              <Tabs defaultValue="cli" className="flex flex-col shrink-0 w-md gap-4">
+              <Tabs defaultValue="cli" className="flex w-md shrink-0 flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <TabsList>
                     <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>

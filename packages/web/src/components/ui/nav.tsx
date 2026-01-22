@@ -15,7 +15,7 @@ const navLinkVariants = cva(
     "group",
     "flex items-center",
     "gap-3",
-    "font-medium text-white whitespace-nowrap",
+    "whitespace-nowrap font-medium text-white",
     "cursor-pointer select-none",
   ],
   {

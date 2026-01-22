@@ -42,7 +42,7 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
           "group",
           "flex flex-1 items-center justify-between gap-4",
           "py-3",
-          "text-left text-base font-medium",
+          "text-left font-medium text-base",
           "transition ease-in-out",
           "cursor-pointer",
           "disabled:pointer-events-none disabled:opacity-50",

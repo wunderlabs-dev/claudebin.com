@@ -17,7 +17,7 @@ const ChatItem = ({ className, ...props }: ChatItemProps) => {
   );
 };
 
-const chatContentVariants = cva(["border border-gray-250 rounded-xl px-4 py-3"], {
+const chatContentVariants = cva(["rounded-xl border border-gray-250 px-4 py-3"], {
   variants: {
     variant: {
       user: "rounded-tr-none bg-gray-200",
