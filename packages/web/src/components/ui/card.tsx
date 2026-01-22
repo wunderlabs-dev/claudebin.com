@@ -47,7 +47,7 @@ const Card = ({ variant = "card", className, children, ...props }: CardProps) =>
 const cardBodyVariantClassNames: CardVariantMapping = {
   card: "flex flex-col self-start gap-3 p-4 bg-gray-100",
   list: "flex flex-col col-span-5 gap-3 py-3",
-  grid: "flex flex-col justify-end col-span-1 gap-3 py-6",
+  grid: "relative flex flex-col justify-end col-span-1 gap-3 py-6",
 } as const;
 
 type CardBodyProps = React.ComponentProps<"div">;
