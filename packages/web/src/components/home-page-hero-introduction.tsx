@@ -38,7 +38,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
               </Typography>
 
               <Tabs defaultValue="cli" className="flex flex-col shrink-0 w-md gap-4">
-                <div className="flex justify-between">
+                <div className="flex items-center justify-between">
                   <TabsList>
                     <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>
                     <TabsTrigger value="editor">{t("home.editorInstall")}</TabsTrigger>

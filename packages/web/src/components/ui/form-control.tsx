@@ -104,4 +104,39 @@ const InputLabel = ({ className, ...props }: InputLabelProps) => {
   );
 };
 
-export { FormControl, Input, InputLabel, inputVariants };
+const textareaVariants = cva(
+  [
+    "w-full",
+    "py-3 px-4",
+    "bg-gray-200 rounded-lg",
+    "outline-none resize-none",
+    "transition ease-in-out",
+    "text-base placeholder:text-white font-normal font-mono leading-6",
+    "disabled:pointer-events-none disabled:opacity-50",
+  ],
+  {
+    variants: {
+      variant: {
+        default: [],
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
+
+type TextareaProps = ComponentProps<"textarea"> & VariantProps<typeof textareaVariants>;
+
+const Textarea = ({ className, variant, ...props }: TextareaProps) => {
+  return (
+    <textarea
+      data-slot="textarea"
+      data-variant={variant}
+      className={cn(textareaVariants({ variant, className }))}
+      {...props}
+    />
+  );
+};
+
+export { FormControl, Input, InputLabel, Textarea, inputVariants, textareaVariants };

@@ -29,7 +29,7 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
   const [isSticky, setIsSticky] = useState<number>();
 
   useEventListener("scroll", () => {
-    setIsSticky(window.scrollY)
+    setIsSticky(window.scrollY);
   });
 
   useIsomorphicLayoutEffect(() => {

@@ -28,9 +28,7 @@ const ThreadPageMeta = ({ title, author, time }: ThreadPageMetaProps): ReactNode
         </Link>
 
         <List>
-          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
-            {time}
-          </ListItem>
+          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>{time}</ListItem>
         </List>
       </div>
     </div>

@@ -17,7 +17,7 @@ const thread = {
   title: "Building a CLI tool with node.js",
   author: "marius",
   time: "2h ago",
-  public: true,
+  visibility: "public" as const,
   createdAt: "12/01/2026",
   project: "directory/project_name",
   prompts: 10,
@@ -45,7 +45,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
       <div className="flex flex-col justify-between col-span-3 pt-24 pb-12 px-6 border-l border-gray-250">
         <ThreadPageSidebar
-          public={thread.public}
+          id={thread.id}
+          visibility={thread.visibility}
           createdAt={thread.createdAt}
           project={thread.project}
           prompts={thread.prompts}

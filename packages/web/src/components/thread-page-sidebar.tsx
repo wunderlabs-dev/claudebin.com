@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
 import {
-  SvgIconArrowLink,
   SvgIconCalendar,
   SvgIconChat,
   SvgIconEye,
@@ -17,10 +16,12 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CopyInput } from "@/components/ui/copy-input";
 import { List, ListItem } from "@/components/ui/list";
 
 type ThreadPageSidebarProps = {
-  public: boolean;
+  id: string;
+  visibility: "public" | "private";
   createdAt: string;
   project: string;
   prompts: number;
@@ -32,7 +33,8 @@ type ThreadPageSidebarProps = {
 };
 
 const ThreadPageSidebar = ({
-  public: isPublic,
+  id,
+  visibility,
   createdAt,
   project,
   prompts,
@@ -48,7 +50,7 @@ const ThreadPageSidebar = ({
     <div className="flex flex-col items-start gap-6">
       <Badge variant="neutral">
         <SvgIconGlobe size="sm" />
-        {isPublic ? t("common.public") : t("common.private")}
+        {visibility === "public" ? t("common.public") : t("common.private")}
       </Badge>
 
       <List className="gap-3">
@@ -74,9 +76,9 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}</ListItem>
       </List>
 
-      <div className="flex flex-col gap-4">
-
-
+      <div className="flex flex-col gap-8">
+        <CopyInput variant="link" value="https://claudebin.com/threads/" />
+        <CopyInput variant="snippet" value="https://claudebin.com/threads/" />
         <Button variant="secondary">
           <SvgIconChat />
           {t("thread.continueConversation")}

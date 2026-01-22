@@ -6,6 +6,9 @@
   "common": {
     "copy": "Copy",
     "copied": "Copied!",
+    "copyLink": "Copy link",
+    "copySnippet": "Copy snippet",
+    "linkCopied": "Link copied!",
     "public": "Public",
     "private": "Private",
     "prompts": "{count} prompts",
