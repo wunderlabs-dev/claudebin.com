@@ -29,6 +29,9 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: copy.metadata.title,
   description: copy.metadata.description,
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 const RootLayout = async ({ children }: RootLayoutProps) => {
