@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/client";
 const LoginContent = () => {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/dashboard";
+  const error = searchParams.get("error");
+  const errorDescription = searchParams.get("error_description");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = async () => {
@@ -30,6 +32,13 @@ const LoginContent = () => {
     <div className="text-center">
       <h1 className="mb-2 font-bold text-2xl">Sign in to Claudebin</h1>
       <p className="mb-8 text-neutral-400">Sign in to publish and manage your sessions.</p>
+
+      {error && (
+        <div className="mb-6 rounded-lg bg-red-900/50 p-4 text-left text-red-200">
+          <p className="font-medium">Authentication failed</p>
+          <p className="text-red-300 text-sm">{errorDescription || error}</p>
+        </div>
+      )}
 
       <button
         type="button"
