@@ -9,6 +9,7 @@ import { Card, CardBody } from "@/components/ui/card";
 
 import { ProfilePageDangerZone } from "@/components/profile-page-danger-zone";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
+import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
 const user = {
@@ -145,6 +146,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               />
             ))}
           </div>
+          <ProfilePageQuickStart />
           <ProfilePageDangerZone />
         </div>
       </div>

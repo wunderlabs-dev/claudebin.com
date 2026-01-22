@@ -13,7 +13,7 @@ type StepsItemProps = {
 
 const Steps = ({ className, children, ...props }: StepsProps) => {
   return (
-    <ol className={cn("flex flex-col gap-4", className)} {...props}>
+    <ol className={cn("flex flex-col items-start gap-4 w-full", className)} {...props}>
       {children}
     </ol>
   );
@@ -22,8 +22,10 @@ const Steps = ({ className, children, ...props }: StepsProps) => {
 const StepsItem = ({ number, children, className, ...props }: StepsItemProps) => {
   return (
     <li className={cn("flex items-center gap-3", className)} {...props}>
-      <span className="flex shrink-0 items-center justify-center size-8 rounded-full text-orange-50 border border-orange-50">
-        <Typography variant="small">{number}</Typography>
+      <span className="flex shrink-0 items-center justify-center size-8 rounded-full bg-orange-50/10 border border-orange-50">
+        <Typography variant="small" color="accent">
+          {number}
+        </Typography>
       </span>
       <Typography variant="small">{children}</Typography>
     </li>
