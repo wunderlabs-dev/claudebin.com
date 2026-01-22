@@ -6,6 +6,7 @@ import { SvgIconArrowLeft } from "@/components/icon";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
+import { ThreadPageMeta } from "@/components/thread-page-meta";
 import { ThreadPageSidebar } from "@/components/thread-page-sidebar";
 
 type ThreadPageProps = {
@@ -14,6 +15,9 @@ type ThreadPageProps = {
 
 const thread = {
   id: "1",
+  title: "Building a CLI tool with node.js",
+  author: "marius",
+  time: "2h ago",
   public: true,
   createdAt: "12/01/2026",
   project: "directory/project_name",
@@ -34,11 +38,13 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
-      <div className="col-span-9 pt-9">
-        <Link href="/threads" className="inline-flex items-center gap-2 px-4 py-2 border border-gray-250 rounded-full">
+      <div className="col-span-9 flex flex-col gap-9 pt-9">
+        <Link href="/threads" className="flex items-center gap-3">
           <SvgIconArrowLeft size="sm" />
           <Typography variant="small">{t("thread.backToThreads")}</Typography>
         </Link>
+
+        <ThreadPageMeta title={thread.title} author={thread.author} time={thread.time} />
       </div>
 
       <div className="flex flex-col justify-between col-span-3 pt-24 pb-12 px-6 border-l border-gray-250">
