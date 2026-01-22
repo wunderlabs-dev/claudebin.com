@@ -5,7 +5,6 @@ import { SvgIconLine, SvgIconArrowRight } from "@/components/icon";
 
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
-import { Card, CardBody } from "@/components/ui/card";
 
 import { ProfilePageDangerZone } from "@/components/profile-page-danger-zone";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
