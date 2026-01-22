@@ -216,14 +216,15 @@ const HomePageRecentThreadsCarousel = ({
         <div className="flex gap-4 cursor-grab active:cursor-grabbing select-none border-y border-transparent">
           <div className="shrink-0 w-container-start" aria-hidden="true" />
           {threads.map((thread) => (
-            <HomePageRecentThreadsListItem
-              key={thread.id}
-              time={thread.time}
-              files={thread.files}
-              title={thread.title}
-              author={thread.author}
-              prompts={thread.prompts}
-            />
+            <div key={thread.id} className="bg-gray-100">
+              <HomePageRecentThreadsListItem
+                time={thread.time}
+                files={thread.files}
+                title={thread.title}
+                author={thread.author}
+                prompts={thread.prompts}
+              />
+            </div>
           ))}
           <div className="shrink-0 w-container-start" aria-hidden="true" />
         </div>
