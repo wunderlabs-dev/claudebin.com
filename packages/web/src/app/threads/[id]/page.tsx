@@ -45,7 +45,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
       <div className="flex flex-col justify-between col-span-3 pt-24 pb-12 px-6 border-l border-gray-250">
         <ThreadPageSidebar
-          id={thread.id}
           visibility={thread.visibility}
           createdAt={thread.createdAt}
           project={thread.project}

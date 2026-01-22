@@ -17,10 +17,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
+import { Typography } from "@/components/ui/typography";
 import { List, ListItem } from "@/components/ui/list";
+import { Progress } from "@/components/ui/progress";
 
 type ThreadPageSidebarProps = {
-  id: string;
   visibility: "public" | "private";
   createdAt: string;
   project: string;
@@ -33,7 +34,6 @@ type ThreadPageSidebarProps = {
 };
 
 const ThreadPageSidebar = ({
-  id,
   visibility,
   createdAt,
   project,
@@ -61,9 +61,18 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
           {t("common.prompts", { count: prompts })}
         </ListItem>
-        <ListItem icon={<SvgIconLine size="sm" color="neutral" />}>
-          {t("thread.linesWritten", { count: linesWritten })}
-        </ListItem>
+
+        <div className="flex flex-col gap-1">
+          <ListItem icon={<SvgIconLine size="sm" color="neutral" />}>
+            {t("thread.linesWritten", { count: linesWritten })}
+          </ListItem>
+          <div className="flex items-center gap-2 pl-5">
+            <Typography variant="caption" className="text-green-50">+32</Typography>
+            <Typography variant="caption" className="text-red-50">-26</Typography>
+            <Typography variant="caption" className="text-orange-250">~11</Typography>
+          </div>
+        </div>
+
         <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
           {t("common.files", { count: files })}
         </ListItem>
@@ -74,9 +83,10 @@ const ThreadPageSidebar = ({
           {t("common.forks", { count: forks })}
         </ListItem>
         <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}</ListItem>
+        <Progress value={progress} />
       </List>
 
-      <div className="w-full flex flex-col gap-8">
+      <div className="flex flex-col w-full gap-8">
         <CopyInput variant="link" value="https://claudebin.com/threads/" />
         <CopyInput variant="snippet" value="https://claudebin.com/threads/V1StGXR8_Z5jdHi6B-myT" />
         <Button variant="secondary">
