@@ -67,9 +67,15 @@ const ThreadPageSidebar = ({
             {t("thread.linesWritten", { count: linesWritten })}
           </ListItem>
           <div className="flex items-center gap-2 pl-5">
-            <Typography variant="caption" className="text-green-50">+32</Typography>
-            <Typography variant="caption" className="text-red-50">-26</Typography>
-            <Typography variant="caption" className="text-orange-250">~11</Typography>
+            <Typography variant="caption" className="text-green-50">
+              +32
+            </Typography>
+            <Typography variant="caption" className="text-red-50">
+              -26
+            </Typography>
+            <Typography variant="caption" className="text-orange-250">
+              ~11
+            </Typography>
           </div>
         </div>
 
