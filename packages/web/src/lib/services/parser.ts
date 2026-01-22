@@ -1,10 +1,6 @@
 import type { Json } from "@/lib/supabase/database.types";
 import { contentBlocksToJson, toJson } from "@/lib/types/json-cast";
-import type {
-  ContentBlock,
-  RawContentBlock,
-  RawJsonlMessage,
-} from "@/lib/types/message";
+import type { ContentBlock, RawContentBlock, RawJsonlMessage } from "@/lib/types/message";
 import { BlockType, isSkippedMessageType } from "@/lib/types/message";
 
 const TEXT_PREVIEW_LENGTH = 500;
@@ -156,9 +152,7 @@ const transformToolUse = (
 // Content Normalization
 // =============================================================================
 
-const normalizeContent = (
-  content: string | RawContentBlock[] | undefined,
-): ContentBlock[] => {
+const normalizeContent = (content: string | RawContentBlock[] | undefined): ContentBlock[] => {
   if (!content) return [];
 
   if (typeof content === "string") {
@@ -190,9 +184,7 @@ const normalizeContent = (
 
 const extractTextPreview = (content: ContentBlock[]): string => {
   const text = content
-    .filter(
-      (b): b is { type: "text"; text: string } => b.type === BlockType.TEXT,
-    )
+    .filter((b): b is { type: "text"; text: string } => b.type === BlockType.TEXT)
     .map((b) => b.text)
     .join("\n");
 
@@ -249,10 +241,7 @@ const normalizeMessage = (
 // Public API
 // =============================================================================
 
-export const parseJsonlMessages = (
-  jsonlContent: string,
-  sessionId: string,
-): ParsedMessage[] => {
+export const parseJsonlMessages = (jsonlContent: string, sessionId: string): ParsedMessage[] => {
   const lines = jsonlContent.split("\n").filter((line) => line.trim());
   const messages: ParsedMessage[] = [];
 

@@ -8,15 +8,8 @@ type ProfilesInsert = Database["public"]["Tables"]["profiles"]["Insert"];
 
 export type Profile = ProfilesRow;
 
-const getById = async (
-  supabase: SupabaseClient<Database>,
-  id: string,
-): Promise<Profile | null> => {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
+const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<Profile | null> => {
+  const { data, error } = await supabase.from("profiles").select("*").eq("id", id).maybeSingle();
 
   if (error) {
     throw new Error(`Failed to fetch profile: ${error.message}`);

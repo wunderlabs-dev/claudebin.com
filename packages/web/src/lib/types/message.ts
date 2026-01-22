@@ -199,11 +199,7 @@ export const TOOL_TO_BLOCK_TYPE: Record<string, string> = {
 // Raw JSONL Types (what we receive from Claude Code)
 // =============================================================================
 
-export type RawMessageType =
-  | "user"
-  | "assistant"
-  | "file-history-snapshot"
-  | "tool_result";
+export type RawMessageType = "user" | "assistant" | "file-history-snapshot" | "tool_result";
 
 export interface RawJsonlMessage {
   type: RawMessageType;
@@ -245,10 +241,7 @@ export interface RawToolResultBlock {
   is_error?: boolean;
 }
 
-export type RawContentBlock =
-  | RawTextBlock
-  | RawToolUseBlock
-  | RawToolResultBlock;
+export type RawContentBlock = RawTextBlock | RawToolUseBlock | RawToolResultBlock;
 
 // =============================================================================
 // Display Helpers
@@ -301,9 +294,8 @@ export const TOOL_COLORS: Record<string, string> = {
 export const isTextBlock = (block: ContentBlock): block is TextBlock =>
   block.type === BlockType.TEXT;
 
-export const isToolResultBlock = (
-  block: ContentBlock,
-): block is ToolResultBlock => block.type === BlockType.TOOL_RESULT;
+export const isToolResultBlock = (block: ContentBlock): block is ToolResultBlock =>
+  block.type === BlockType.TOOL_RESULT;
 
 export const isToolUseBlock = (block: ContentBlock): block is ToolUseBlock =>
   block.type === BlockType.TOOL_USE;
@@ -320,12 +312,10 @@ export const isBashBlock = (block: ContentBlock): block is BashBlock =>
 export const isFileReadBlock = (block: ContentBlock): block is FileReadBlock =>
   block.type === BlockType.FILE_READ;
 
-export const isFileWriteBlock = (
-  block: ContentBlock,
-): block is FileWriteBlock => block.type === BlockType.FILE_WRITE;
+export const isFileWriteBlock = (block: ContentBlock): block is FileWriteBlock =>
+  block.type === BlockType.FILE_WRITE;
 
 export const isFileEditBlock = (block: ContentBlock): block is FileEditBlock =>
   block.type === BlockType.FILE_EDIT;
 
-export const isSkippedMessageType = (type: string): boolean =>
-  type === "file-history-snapshot";
+export const isSkippedMessageType = (type: string): boolean => type === "file-history-snapshot";

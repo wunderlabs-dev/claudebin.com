@@ -34,10 +34,7 @@ interface AuthPollData {
   };
 }
 
-const fetchAuthPollData = async (
-  code: string,
-  apiUrl: string,
-): Promise<AuthPollData | null> => {
+const fetchAuthPollData = async (code: string, apiUrl: string): Promise<AuthPollData | null> => {
   const url = `${apiUrl}/api/trpc/auth.poll?input=${encodeURIComponent(JSON.stringify({ code }))}`;
   const res = await fetch(url);
   const json = await res.json();
@@ -82,9 +79,7 @@ const pollForAuthCompletion = async (
   };
 };
 
-export const startAuth = async (): Promise<
-  AuthStartResult | AuthStartError
-> => {
+export const startAuth = async (): Promise<AuthStartResult | AuthStartError> => {
   const api = createApiClient();
 
   try {
@@ -182,10 +177,7 @@ export const getValidToken = async (): Promise<string | null> => {
     return null;
   }
 
-  if (
-    !config.auth.expires_at ||
-    Date.now() > config.auth.expires_at - TOKEN_REFRESH_BUFFER_MS
-  ) {
+  if (!config.auth.expires_at || Date.now() > config.auth.expires_at - TOKEN_REFRESH_BUFFER_MS) {
     const refreshed = await refreshAuth();
     if (!refreshed) {
       return null;

@@ -11,15 +11,8 @@ export type Session = SessionsRow;
 
 // No ownership check - session ID is treated as capability token.
 // For owner-only operations, use getByIdForUser instead.
-const getById = async (
-  supabase: SupabaseClient<Database>,
-  id: string,
-): Promise<Session | null> => {
-  const { data, error } = await supabase
-    .from("sessions")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
+const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<Session | null> => {
+  const { data, error } = await supabase.from("sessions").select("*").eq("id", id).maybeSingle();
 
   if (error) {
     throw new Error(`Failed to fetch session: ${error.message}`);
@@ -64,10 +57,7 @@ const update = async (
   id: string,
   updates: SessionsUpdate,
 ): Promise<void> => {
-  const { error } = await supabase
-    .from("sessions")
-    .update(updates)
-    .eq("id", id);
+  const { error } = await supabase.from("sessions").update(updates).eq("id", id);
 
   if (error) {
     console.error("Session update failed:", error);
@@ -80,12 +70,10 @@ const uploadJsonl = async (
   storagePath: string,
   content: string,
 ): Promise<void> => {
-  const { error } = await supabase.storage
-    .from("sessions")
-    .upload(storagePath, content, {
-      contentType: "application/jsonl",
-      upsert: false,
-    });
+  const { error } = await supabase.storage.from("sessions").upload(storagePath, content, {
+    contentType: "application/jsonl",
+    upsert: false,
+  });
 
   if (error) {
     console.error("Storage upload failed:", error);
@@ -97,9 +85,7 @@ const downloadJsonl = async (
   supabase: SupabaseClient<Database>,
   storagePath: string,
 ): Promise<string> => {
-  const { data, error } = await supabase.storage
-    .from("sessions")
-    .download(storagePath);
+  const { data, error } = await supabase.storage.from("sessions").download(storagePath);
 
   if (error || !data) {
     throw new Error(`Download failed: ${error?.message}`);
@@ -112,9 +98,7 @@ const downloadJsonlStream = async (
   supabase: SupabaseClient<Database>,
   storagePath: string,
 ): Promise<ReadableStream<Uint8Array>> => {
-  const { data, error } = await supabase.storage
-    .from("sessions")
-    .download(storagePath);
+  const { data, error } = await supabase.storage.from("sessions").download(storagePath);
 
   if (error || !data) {
     throw new Error(`Download failed: ${error?.message}`);
@@ -127,9 +111,7 @@ const deleteFile = async (
   supabase: SupabaseClient<Database>,
   storagePath: string,
 ): Promise<void> => {
-  const { error } = await supabase.storage
-    .from("sessions")
-    .remove([storagePath]);
+  const { error } = await supabase.storage.from("sessions").remove([storagePath]);
 
   if (error) {
     console.error("Storage delete failed:", error);

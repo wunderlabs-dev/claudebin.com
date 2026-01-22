@@ -37,10 +37,7 @@ const getBySessionId = async (
   sessionId: string,
   options?: GetBySessionOptions,
 ): Promise<PaginatedMessages> => {
-  let query = supabase
-    .from("messages")
-    .select("*", { count: "exact" })
-    .eq("sessionId", sessionId);
+  let query = supabase.from("messages").select("*", { count: "exact" }).eq("sessionId", sessionId);
 
   if (options?.excludeMeta) {
     query = query.eq("isMeta", false);

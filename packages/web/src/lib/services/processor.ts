@@ -29,10 +29,7 @@ export const processSession = async (
       throw new Error("Session has no storage_path");
     }
 
-    const stream = await sessions.downloadJsonlStream(
-      supabase,
-      session.storagePath,
-    );
+    const stream = await sessions.downloadJsonlStream(supabase, session.storagePath);
 
     let batch: ParsedMessage[] = [];
     let total = 0;

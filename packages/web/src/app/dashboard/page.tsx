@@ -28,9 +28,7 @@ const DashboardPage = async () => {
               className="mx-auto mb-4 rounded-full"
             />
           )}
-          <h1 className="mb-2 text-2xl font-bold">
-            {profile?.name || "Welcome"}
-          </h1>
+          <h1 className="mb-2 font-bold text-2xl">{profile?.name || "Welcome"}</h1>
           <p className="mb-8 text-neutral-400">You are signed in.</p>
 
           <form action="/auth/logout" method="POST">

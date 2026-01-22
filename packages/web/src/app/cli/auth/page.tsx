@@ -44,8 +44,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     return (
       <Layout>
         <ErrorState title="Code Expired">
-          This authentication code has expired. Please run the auth command
-          again.
+          This authentication code has expired. Please run the auth command again.
         </ErrorState>
       </Layout>
     );
@@ -59,9 +58,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   if (!session) {
     return (
       <Layout>
-        <ErrorState title="Not Authenticated">
-          Something went wrong. Please try again.
-        </ErrorState>
+        <ErrorState title="Not Authenticated">Something went wrong. Please try again.</ErrorState>
       </Layout>
     );
   }
@@ -101,22 +98,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 const SuccessState = () => (
   <div className="text-center">
     <div className="mb-4 text-4xl">✓</div>
-    <h1 className="mb-2 text-2xl font-bold text-green-400">Authenticated!</h1>
-    <p className="text-neutral-400">
-      You can close this window and return to your terminal.
-    </p>
+    <h1 className="mb-2 font-bold text-2xl text-green-400">Authenticated!</h1>
+    <p className="text-neutral-400">You can close this window and return to your terminal.</p>
   </div>
 );
 
-const ErrorState = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => (
+const ErrorState = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="text-center">
-    <h1 className="mb-4 text-2xl font-bold text-red-400">{title}</h1>
+    <h1 className="mb-4 font-bold text-2xl text-red-400">{title}</h1>
     <p className="text-neutral-400">{children}</p>
   </div>
 );

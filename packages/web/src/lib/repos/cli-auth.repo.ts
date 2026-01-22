@@ -4,10 +4,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 
 type CliAuthRow = Database["public"]["Tables"]["cli_auth_sessions"]["Row"];
-type CliAuthInsert =
-  Database["public"]["Tables"]["cli_auth_sessions"]["Insert"];
-type CliAuthUpdate =
-  Database["public"]["Tables"]["cli_auth_sessions"]["Update"];
+type CliAuthInsert = Database["public"]["Tables"]["cli_auth_sessions"]["Insert"];
+type CliAuthUpdate = Database["public"]["Tables"]["cli_auth_sessions"]["Update"];
 type ProfilesRow = Database["public"]["Tables"]["profiles"]["Row"];
 
 export type CliAuthSession = CliAuthRow;

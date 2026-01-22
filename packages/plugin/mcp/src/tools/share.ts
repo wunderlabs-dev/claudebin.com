@@ -38,8 +38,7 @@ const pollForProcessing = async (
 ): Promise<SessionPollResult> => {
   const result = await poll<SessionPollData>({
     fn: () => fetchSessionPollData(sessionId, apiUrl),
-    isSuccess: (data) =>
-      data.status === SessionStatus.READY && data.url !== undefined,
+    isSuccess: (data) => data.status === SessionStatus.READY && data.url !== undefined,
     isFailure: (data) => data.status === SessionStatus.FAILED,
     getFailureError: (data) => data.error || "Processing failed",
     intervalMs: POLL_INTERVAL_MS,
@@ -62,16 +61,12 @@ const pollForProcessing = async (
 };
 
 const errorResponse = (error: string) => ({
-  content: [
-    { type: "text" as const, text: JSON.stringify({ success: false, error }) },
-  ],
+  content: [{ type: "text" as const, text: JSON.stringify({ success: false, error }) }],
   isError: true,
 });
 
 const successResponse = (data: Record<string, unknown>) => ({
-  content: [
-    { type: "text" as const, text: JSON.stringify({ success: true, ...data }) },
-  ],
+  content: [{ type: "text" as const, text: JSON.stringify({ success: true, ...data }) }],
 });
 
 export const registerShare = (server: McpServer): void => {
@@ -81,14 +76,9 @@ export const registerShare = (server: McpServer): void => {
       description:
         "Share the current Claude Code session to Claudebin. Authenticates automatically if needed.",
       inputSchema: {
-        project_path: z
-          .string()
-          .describe("Absolute path to the project directory"),
+        project_path: z.string().describe("Absolute path to the project directory"),
         title: z.string().optional().describe("Optional title for the session"),
-        is_public: z
-          .boolean()
-          .default(true)
-          .describe("Whether the session is public"),
+        is_public: z.boolean().default(true).describe("Whether the session is public"),
       },
     },
     async ({ project_path, title, is_public }) => {
@@ -140,9 +130,7 @@ export const registerShare = (server: McpServer): void => {
 
         return successResponse({ id: result.id, url: pollResult.url });
       } catch (error) {
-        return errorResponse(
-          error instanceof Error ? error.message : String(error),
-        );
+        return errorResponse(error instanceof Error ? error.message : String(error));
       }
     },
   );
