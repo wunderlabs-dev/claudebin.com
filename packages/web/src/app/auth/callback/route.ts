@@ -30,9 +30,7 @@ export const GET = async (request: NextRequest) => {
       {
         cookies: {
           getAll: () => cookieStore.getAll(),
-          setAll: (
-            cookiesToSet: { name: string; value: string; options: CookieOptions }[],
-          ) => {
+          setAll: (cookiesToSet: { name: string; value: string; options: CookieOptions }[]) => {
             console.log(
               "[auth/callback] Setting cookies on response:",
               cookiesToSet.map((c) => c.name).join(", "),
