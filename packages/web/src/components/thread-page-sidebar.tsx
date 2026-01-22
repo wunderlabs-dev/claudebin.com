@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
 import {
-  SvgIconCalendar,
   SvgIconChat,
   SvgIconEye,
   SvgIconFile,
@@ -12,6 +11,7 @@ import {
   SvgIconGlobe,
   SvgIconJauge,
   SvgIconLine,
+  SvgIconCalendar,
 } from "@/components/icon";
 
 import { Badge } from "@/components/ui/badge";
@@ -53,7 +53,7 @@ const ThreadPageSidebar = ({
         {visibility === "public" ? t("common.public") : t("common.private")}
       </Badge>
 
-      <List className="gap-3">
+      <List className="w-full gap-3">
         <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
           {t("thread.created", { date: createdAt })}
         </ListItem>
@@ -73,12 +73,14 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
           {t("common.forks", { count: forks })}
         </ListItem>
-        <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}</ListItem>
+        <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>
+          {progress}
+        </ListItem>
       </List>
 
-      <div className="flex flex-col gap-8">
+      <div className="w-full flex flex-col gap-8">
         <CopyInput variant="link" value="https://claudebin.com/threads/" />
-        <CopyInput variant="snippet" value="https://claudebin.com/threads/" />
+        <CopyInput variant="snippet" value="https://claudebin.com/threads/V1StGXR8_Z5jdHi6B-myT" />
         <Button variant="secondary">
           <SvgIconChat />
           {t("thread.continueConversation")}
