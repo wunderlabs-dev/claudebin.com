@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { profiles } from "@/supabase/repos/profiles";
 import { createClient } from "@/supabase/server";

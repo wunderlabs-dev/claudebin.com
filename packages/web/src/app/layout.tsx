@@ -5,9 +5,9 @@ import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
-import { cn } from "@/utils/helpers";
-
 import copy from "@/copy/en-EN.json";
+
+import { cn } from "@/utils/helpers";
 
 import { Footer } from "@/components/ui/footer";
 import { AppBar } from "@/components/ui/app-bar";
