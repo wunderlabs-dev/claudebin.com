@@ -19,6 +19,23 @@ const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<
   return data;
 };
 
+const getByUsername = async (
+  supabase: SupabaseClient<Database>,
+  username: string,
+): Promise<Profile | null> => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("username", username)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to fetch profile: ${error.message}`);
+  }
+
+  return data;
+};
+
 const upsert = async (
   supabase: SupabaseClient<Database>,
   profile: ProfilesInsert,
@@ -32,4 +49,4 @@ const upsert = async (
   }
 };
 
-export const profiles = { getById, upsert };
+export const profiles = { getById, getByUsername, upsert };

@@ -125,6 +125,7 @@ export type Database = {
           id: string;
           name: string | null;
           updatedAt: string;
+          username: string | null;
         };
         Insert: {
           avatarUrl?: string | null;
@@ -133,6 +134,7 @@ export type Database = {
           id: string;
           name?: string | null;
           updatedAt?: string;
+          username?: string | null;
         };
         Update: {
           avatarUrl?: string | null;
@@ -141,6 +143,7 @@ export type Database = {
           id?: string;
           name?: string | null;
           updatedAt?: string;
+          username?: string | null;
         };
         Relationships: [];
       };

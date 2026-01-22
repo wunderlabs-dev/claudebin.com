@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { SvgIconLine, SvgIconArrowRight } from "@/components/icon";
@@ -11,16 +12,8 @@ import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
-const user = {
-  id: "1",
-  username: "balajmarius",
-  bio: "Full-stack developer building tools for developers. Open source enthusiast.",
-  avatar: "https://avatars.githubusercontent.com/u/9300406",
-  createdAt: "Jan 2024",
-  threads: 42,
-  views: 1250,
-  forks: 89,
-};
+import { createClient } from "@/supabase/server";
+import { profiles } from "@/supabase/repos/profiles";
 
 const threads = [
   {
@@ -92,24 +85,36 @@ const threads = [
 ];
 
 type ProfilePageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ username: string }>;
 };
 
 const ProfilePage = async ({ params }: ProfilePageProps) => {
-  const { id } = await params;
+  const { username } = await params;
   const t = await getTranslations();
+
+  const supabase = await createClient();
+  const profile = await profiles.getByUsername(supabase, username);
+
+  if (!profile) {
+    notFound();
+  }
+
+  const createdAt = new Date(profile.createdAt).toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
 
   return (
     <Container spacing="md" className="grid grid-cols-12 gap-16">
       <div className="col-span-4">
         <ProfilePageUserInfoSidebar
-          username={user.username}
-          bio={user.bio}
-          avatar={user.avatar}
-          createdAt={user.createdAt}
-          threads={user.threads}
-          views={user.views}
-          forks={user.forks}
+          username={profile.username ?? ""}
+          bio=""
+          avatar={profile.avatarUrl ?? ""}
+          createdAt={createdAt}
+          threads={0}
+          views={0}
+          forks={0}
         />
       </div>
 
