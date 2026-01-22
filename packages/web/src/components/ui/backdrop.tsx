@@ -27,11 +27,11 @@ const Backdrop = ({
   return (
     <div data-slot="backdrop" className={cn("relative w-full", className)} {...props}>
       {size === "half" ? (
-        <SvgIconOrbits className="-z-10 absolute inset-x-0 top-3/4 h-auto w-container text-gray-500/40" />
+        <SvgIconOrbits className="absolute inset-x-0 top-3/4 -z-10 h-auto w-container text-gray-500/40" />
       ) : null}
       <div
         className={cn(
-          "-z-10 pointer-events-none absolute inset-x-0 bg-grid",
+          "pointer-events-none absolute inset-x-0 -z-10 bg-grid",
           backdropSizeClassNames[size],
         )}
       />

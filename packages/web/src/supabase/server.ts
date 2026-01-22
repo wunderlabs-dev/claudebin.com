@@ -18,9 +18,9 @@ export const createClient = async () => {
       cookies: {
         getAll: () => cookieStore.getAll(),
         setAll: (cookiesToSet: ReadonlyArray<CookieToSet>) => {
-          cookiesToSet.forEach(cookie => {
-            cookieStore.set(cookie.name, cookie.value, cookie.options)
-          })
+          cookiesToSet.forEach((cookie) => {
+            cookieStore.set(cookie.name, cookie.value, cookie.options);
+          });
         },
       },
     },
