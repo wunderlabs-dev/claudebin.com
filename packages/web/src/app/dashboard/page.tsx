@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { profiles } from "@/lib/repos/profiles.repo";
-import { createClient } from "@/lib/supabase/server";
+import { profiles } from "@/supabase/repos/profiles";
+import { createClient } from "@/supabase/server";
 
 const DashboardPage = async () => {
   const supabase = await createClient();
@@ -19,15 +19,6 @@ const DashboardPage = async () => {
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
       <div className="w-full max-w-md rounded-xl border border-neutral-800 bg-neutral-900 p-8">
         <div className="text-center">
-          {profile?.avatarUrl && (
-            <Image
-              src={profile.avatarUrl}
-              alt={profile.name || "User"}
-              width={64}
-              height={64}
-              className="mx-auto mb-4 rounded-full"
-            />
-          )}
           <h1 className="mb-2 font-bold text-2xl">{profile?.name || "Welcome"}</h1>
           <p className="mb-8 text-neutral-400">You are signed in.</p>
 

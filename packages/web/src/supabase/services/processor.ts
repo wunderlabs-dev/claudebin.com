@@ -1,11 +1,11 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { messages } from "@/lib/repos/messages.repo";
-import { sessions } from "@/lib/repos/sessions.repo";
-import type { Database } from "@/lib/supabase/database.types";
+import { messages } from "@/supabase/repos/messages";
+import { sessions } from "@/supabase/repos/sessions";
+import type { Database } from "@/supabase/types";
 import { SessionStatus } from "@/trpc/routers/sessions";
-import type { ParsedMessage } from "./parser";
-import { parseJsonlStream } from "./parser";
+import type { ParsedMessage } from "@/supabase/services/parser";
+import { parseJsonlStream } from "@/supabase/services/parser";
 
 const DEFAULT_BATCH_SIZE = 100;
 

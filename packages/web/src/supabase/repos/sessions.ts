@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/database.types";
+import type { Database } from "@/supabase/types";
 
 type SessionsRow = Database["public"]["Tables"]["sessions"]["Row"];
 type SessionsInsert = Database["public"]["Tables"]["sessions"]["Insert"];

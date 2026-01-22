@@ -12,7 +12,10 @@ const isPublicRoute = (pathname: string): boolean => {
 export const middleware = async (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
   const allCookies = request.cookies.getAll();
-  console.log(`[middleware] ${pathname} - cookies:`, allCookies.map((c) => c.name).join(", ") || "none");
+  console.log(
+    `[middleware] ${pathname} - cookies:`,
+    allCookies.map((c) => c.name).join(", ") || "none",
+  );
 
   let supabaseResponse = NextResponse.next({
     request,
@@ -25,7 +28,10 @@ export const middleware = async (request: NextRequest) => {
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
-          console.log(`[middleware] setAll called with:`, cookiesToSet.map((c) => c.name).join(", "));
+          console.log(
+            `[middleware] setAll called with:`,
+            cookiesToSet.map((c) => c.name).join(", "),
+          );
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
@@ -45,7 +51,11 @@ export const middleware = async (request: NextRequest) => {
     error: userError,
   } = await supabase.auth.getUser();
 
-  console.log(`[middleware] ${pathname} - getUser:`, user?.email ?? "no user", userError?.message ?? "");
+  console.log(
+    `[middleware] ${pathname} - getUser:`,
+    user?.email ?? "no user",
+    userError?.message ?? "",
+  );
 
   if (!user && !isPublicRoute(pathname)) {
     console.log(`[middleware] ${pathname} - redirecting to login (not public route)`);

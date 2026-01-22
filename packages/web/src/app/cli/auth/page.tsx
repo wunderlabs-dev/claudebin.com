@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { cliAuth } from "@/lib/repos/cli-auth.repo";
-import { createClient } from "@/lib/supabase/server";
-import { createServiceClient } from "@/lib/supabase/service";
+import { cliAuth } from "@/supabase/repos/cli-auth";
+import { createClient } from "@/supabase/server";
+import { createServiceClient } from "@/supabase/service";
 
 interface Props {
   searchParams: Promise<{ code?: string }>;

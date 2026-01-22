@@ -1,7 +1,7 @@
-import type { Json } from "@/lib/supabase/database.types";
-import { contentBlocksToJson, toJson } from "@/lib/types/json-cast";
-import type { ContentBlock, RawContentBlock, RawJsonlMessage } from "@/lib/types/message";
-import { BlockType, isSkippedMessageType } from "@/lib/types/message";
+import type { Json } from "@/supabase/types";
+import { contentBlocksToJson, toJson } from "@/supabase/types/json-cast";
+import type { ContentBlock, RawContentBlock, RawJsonlMessage } from "@/supabase/types/message";
+import { BlockType, isSkippedMessageType } from "@/supabase/types/message";
 
 const TEXT_PREVIEW_LENGTH = 500;
 

@@ -1,9 +1,9 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/database.types";
-import { jsonToContentBlocks } from "@/lib/types/json-cast";
-import type { ContentBlock } from "@/lib/types/message";
+import type { Database } from "@/supabase/types";
+import { jsonToContentBlocks } from "@/supabase/types/json-cast";
+import type { ContentBlock } from "@/supabase/types/message";
 
 type MessagesRow = Database["public"]["Tables"]["messages"]["Row"];
 type MessagesInsert = Database["public"]["Tables"]["messages"]["Insert"];

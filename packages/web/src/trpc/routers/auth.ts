@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { config } from "@/lib/config/env";
-import { cliAuth } from "@/lib/repos/cli-auth.repo";
-import { createServiceClient } from "@/lib/supabase/service";
-import { publicProcedure, router } from "../init";
+import { config } from "@/supabase/config/env";
+import { cliAuth } from "@/supabase/repos/cli-auth";
+import { createServiceClient } from "@/supabase/service";
+import { publicProcedure, router } from "@/trpc/init";
 
 export const PollStatus = {
   PENDING: "pending",
