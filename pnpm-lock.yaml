@@ -99,6 +99,9 @@ importers:
       shiki:
         specifier: ^3.21.0
         version: 3.21.0
+      source-map:
+        specifier: ^0.7.6
+        version: 0.7.6
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
