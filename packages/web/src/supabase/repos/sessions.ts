@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/supabase/types";
+import { logger } from "@/utils/logger";
 
 type SessionsRow = Database["public"]["Tables"]["sessions"]["Row"];
 type SessionsInsert = Database["public"]["Tables"]["sessions"]["Insert"];
@@ -48,7 +49,7 @@ const create = async (
   const { error } = await supabase.from("sessions").insert(session);
 
   if (error) {
-    console.error("Session insert failed:", error);
+    logger.sessions.error("Session insert failed", error);
     throw new Error("Failed to create session. Please try again.");
   }
 };
@@ -61,7 +62,7 @@ const update = async (
   const { error } = await supabase.from("sessions").update(updates).eq("id", id);
 
   if (error) {
-    console.error("Session update failed:", error);
+    logger.sessions.error("Session update failed", error);
     throw new Error("Failed to update session.");
   }
 };
@@ -77,7 +78,7 @@ const uploadJsonl = async (
   });
 
   if (error) {
-    console.error("Storage upload failed:", error);
+    logger.sessions.error("Storage upload failed", error);
     throw new Error("Failed to upload session. Please try again.");
   }
 };
@@ -115,7 +116,7 @@ const deleteFile = async (
   const { error } = await supabase.storage.from("sessions").remove([storagePath]);
 
   if (error) {
-    console.error("Storage delete failed:", error);
+    logger.sessions.error("Storage delete failed", error);
   }
 };
 

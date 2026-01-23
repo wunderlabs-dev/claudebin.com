@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { createClient } from "@/supabase/client";
+import { logger } from "@/utils/logger";
 
 const LoginContent = () => {
   const searchParams = useSearchParams();
@@ -23,7 +24,7 @@ const LoginContent = () => {
     });
 
     if (error) {
-      console.error("Sign in error:", error);
+      logger.auth.error("Sign in error", error);
       setIsLoading(false);
     }
   };

@@ -5,6 +5,7 @@ import { config } from "@/supabase/config/env";
 import { cliAuth } from "@/supabase/repos/cli-auth";
 import { createServiceClient } from "@/supabase/service";
 import { publicProcedure, router } from "@/trpc/init";
+import { AUTH_SESSION_TIMEOUT_MS, AUTH_TOKEN_LENGTH } from "@/utils/shared-constants";
 
 export const PollStatus = {
   PENDING: "pending",
@@ -34,8 +35,8 @@ export type PollResponse =
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
     const supabase = createServiceClient();
-    const sessionToken = nanoid(21);
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    const sessionToken = nanoid(AUTH_TOKEN_LENGTH);
+    const expiresAt = new Date(Date.now() + AUTH_SESSION_TIMEOUT_MS);
 
     await cliAuth.create(supabase, {
       sessionToken,
