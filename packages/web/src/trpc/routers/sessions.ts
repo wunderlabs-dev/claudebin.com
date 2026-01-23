@@ -7,7 +7,7 @@ import { sessions } from "@/supabase/repos/sessions";
 import { processSession } from "@/supabase/services/processor";
 import { createServiceClient } from "@/supabase/service";
 import { publicProcedure, router } from "@/trpc/init";
-import { MAX_SESSION_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/shared-constants";
+import { MAX_SESSION_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/constants";
 
 export const SessionStatus = {
   PROCESSING: "processing",

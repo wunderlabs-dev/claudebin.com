@@ -35,7 +35,7 @@ claude --plugin-dir ./packages/plugin   # Start with plugin loaded
 
 **Monorepo Structure (bun workspaces):**
 - `packages/cli/` - Publishable npm package (`claudebin`), built with tsup
-- `packages/web/` - Next.js 15 web app (App Router)
+- `packages/web/` - Next.js 16 web app (App Router, Turbopack)
 - `docs/` - Architecture documentation
 - `supabase/` - Database migrations
 
@@ -133,7 +133,8 @@ className={cn("base-classes", buttonVariantClassNames[variant])}
 
 ### Naming Conventions
 
-- **Files**: kebab-case for components (`home-intro.tsx`), camelCase for utils (`helpers.ts`)
+- **Files**: kebab-case for components (`home-intro.tsx`), camelCase for everything else (`helpers.ts`, `constants.ts`)
+- **NEVER use hyphens in non-component filenames** - use camelCase instead
 - **Types**: `ComponentNameProps`, `ComponentNameVariant`, `ComponentNameVariantMapping`
 - **Mapping objects**: `xxxClassNames` (e.g., `buttonVariantClassNames`)
 - **Const arrays**: Plural form (`ButtonVariants`)
