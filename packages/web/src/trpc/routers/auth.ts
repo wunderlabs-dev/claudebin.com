@@ -33,21 +33,14 @@ export type PollResponse =
 
 export const authRouter = router({
   start: publicProcedure.mutation(async () => {
-    console.log("[auth.start] Creating new CLI auth session...");
     const supabase = createServiceClient();
     const sessionToken = nanoid(21);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    try {
-      await cliAuth.create(supabase, {
-        sessionToken,
-        expiresAt: expiresAt.toISOString(),
-      });
-      console.log("[auth.start] Session created successfully:", { sessionToken, expiresAt });
-    } catch (error) {
-      console.error("[auth.start] Failed to create session:", error);
-      throw error;
-    }
+    await cliAuth.create(supabase, {
+      sessionToken,
+      expiresAt: expiresAt.toISOString(),
+    });
 
     return {
       code: sessionToken,
@@ -59,50 +52,37 @@ export const authRouter = router({
   poll: publicProcedure
     .input(z.object({ code: z.string() }))
     .query(async ({ input }): Promise<PollResponse> => {
-      console.log("[auth.poll] Polling for code:", input.code);
       const supabase = createServiceClient();
+      const session = await cliAuth.getByToken(supabase, input.code);
 
-      try {
-        const session = await cliAuth.getByToken(supabase, input.code);
-        console.log("[auth.poll] Session result:", session ? "found" : "not found");
-
-        if (!session) {
-          console.log("[auth.poll] Returning EXPIRED - no session");
-          return { status: PollStatus.EXPIRED };
-        }
-
-        if (!session.expiresAt || new Date(session.expiresAt) < new Date()) {
-          console.log("[auth.poll] Returning EXPIRED - session expired");
-          return { status: PollStatus.EXPIRED };
-        }
-
-        if (session.completedAt) {
-          console.log("[auth.poll] Returning SUCCESS - session completed");
-          return {
-            status: PollStatus.SUCCESS,
-            token: session.accessToken!,
-            refresh_token: session.refreshToken!,
-            user: {
-              id: session.profile?.id ?? session.userId!,
-              name: session.profile?.name ?? null,
-              email: session.profile?.email ?? null,
-              avatar_url: session.profile?.avatarUrl ?? null,
-            },
-          };
-        }
-
-        console.log("[auth.poll] Returning PENDING - waiting for completion");
-        return { status: PollStatus.PENDING };
-      } catch (error) {
-        console.error("[auth.poll] Error:", error);
-        throw error;
+      if (!session) {
+        return { status: PollStatus.EXPIRED };
       }
+
+      if (!session.expiresAt || new Date(session.expiresAt) < new Date()) {
+        return { status: PollStatus.EXPIRED };
+      }
+
+      if (session.completedAt) {
+        return {
+          status: PollStatus.SUCCESS,
+          token: session.accessToken!,
+          refresh_token: session.refreshToken!,
+          user: {
+            id: session.profile?.id ?? session.userId!,
+            name: session.profile?.name ?? null,
+            email: session.profile?.email ?? null,
+            avatar_url: session.profile?.avatarUrl ?? null,
+          },
+        };
+      }
+
+      return { status: PollStatus.PENDING };
     }),
 
   refresh: publicProcedure
     .input(z.object({ refresh_token: z.string() }))
     .mutation(async ({ input }) => {
-      console.log("[auth.refresh] Refreshing token...");
       const supabase = createServiceClient();
 
       const { data, error } = await supabase.auth.refreshSession({
@@ -110,11 +90,9 @@ export const authRouter = router({
       });
 
       if (error || !data.session) {
-        console.error("[auth.refresh] Failed:", error?.message);
         return { success: false, error: error?.message ?? "Failed to refresh" };
       }
 
-      console.log("[auth.refresh] Success");
       return {
         success: true,
         access_token: data.session.access_token,
@@ -124,13 +102,8 @@ export const authRouter = router({
     }),
 
   validate: publicProcedure.input(z.object({ token: z.string() })).query(async ({ input }) => {
-    console.log("[auth.validate] Validating token...");
     const supabase = createServiceClient();
-
     const { data, error } = await supabase.auth.getUser(input.token);
-
-    const isValid = !error && !!data.user;
-    console.log("[auth.validate] Result:", isValid ? "valid" : "invalid", error?.message ?? "");
-    return { valid: isValid };
+    return { valid: !error && !!data.user };
   }),
 });

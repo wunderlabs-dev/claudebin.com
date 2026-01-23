@@ -52,30 +52,20 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   }
 
   const supabase = await createClient();
-  console.log("[cli/auth] Checking session...");
 
-  // Try getUser first (more reliable than getSession for server components)
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser();
 
-  console.log("[cli/auth] getUser result:", user?.email ?? "no user", userError?.message ?? "");
-
   if (!user) {
-    console.log("[cli/auth] No user, redirecting to login");
     redirect(`/auth/login?redirect=${encodeURIComponent(`/cli/auth?code=${code}`)}`);
   }
 
-  // Get the session for tokens
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log("[cli/auth] Session:", session ? "found" : "not found");
-
   if (!session) {
-    console.log("[cli/auth] No session tokens, redirecting to login");
     redirect(`/auth/login?redirect=${encodeURIComponent(`/cli/auth?code=${code}`)}`);
   }
 

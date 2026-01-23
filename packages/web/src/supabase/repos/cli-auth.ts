@@ -15,21 +15,17 @@ const create = async (
   supabase: SupabaseClient<Database>,
   session: CliAuthInsert,
 ): Promise<void> => {
-  console.log("[cliAuth.create] Inserting session:", session.sessionToken);
   const { error } = await supabase.from("cli_auth_sessions").insert(session);
 
   if (error) {
-    console.error("[cliAuth.create] Supabase error:", error);
     throw new Error("Failed to create auth session");
   }
-  console.log("[cliAuth.create] Success");
 };
 
 const getByToken = async (
   supabase: SupabaseClient<Database>,
   sessionToken: string,
 ): Promise<(CliAuthSession & { profile: ProfilesRow | null }) | null> => {
-  console.log("[cliAuth.getByToken] Fetching session:", sessionToken);
   const { data, error } = await supabase
     .from("cli_auth_sessions")
     .select("*, profiles(*)")
@@ -37,11 +33,9 @@ const getByToken = async (
     .maybeSingle();
 
   if (error) {
-    console.error("[cliAuth.getByToken] Supabase error:", error);
     throw new Error(`Failed to fetch auth session: ${error.message}`);
   }
 
-  console.log("[cliAuth.getByToken] Result:", data ? "found" : "not found");
   if (!data) return null;
 
   return {
@@ -55,17 +49,14 @@ const complete = async (
   sessionToken: string,
   updates: CliAuthUpdate,
 ): Promise<void> => {
-  console.log("[cliAuth.complete] Completing session:", sessionToken);
   const { error } = await supabase
     .from("cli_auth_sessions")
     .update(updates)
     .eq("sessionToken", sessionToken);
 
   if (error) {
-    console.error("[cliAuth.complete] Supabase error:", error);
     throw new Error("Failed to complete auth session");
   }
-  console.log("[cliAuth.complete] Success");
 };
 
 export const cliAuth = { create, getByToken, complete };
