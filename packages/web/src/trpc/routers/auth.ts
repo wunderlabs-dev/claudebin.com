@@ -5,7 +5,7 @@ import { config } from "@/supabase/config/env";
 import { cliAuth } from "@/supabase/repos/cli-auth";
 import { createServiceClient } from "@/supabase/service";
 import { publicProcedure, router } from "@/trpc/init";
-import { AUTH_SESSION_TIMEOUT_MS, AUTH_TOKEN_LENGTH } from "@/utils/shared-constants";
+import { AUTH_SESSION_TIMEOUT_MS, AUTH_TOKEN_LENGTH } from "@/utils/constants";
 
 export const PollStatus = {
   PENDING: "pending",
