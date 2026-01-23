@@ -10,7 +10,7 @@ import {
 } from "../constants.js";
 import { session } from "../session.js";
 import { createApiClient } from "../trpc.js";
-import { poll } from "../utils.js";
+import { poll, safeOpenUrl } from "../utils.js";
 
 interface SessionPollData {
   status: string;
@@ -92,6 +92,7 @@ export const registerShare = (server: McpServer): void => {
         });
 
         const url = await pollForProcessing(result.id, apiUrl);
+        safeOpenUrl(url);
 
         return {
           content: [{ type: "text" as const, text: url }],

@@ -3,6 +3,7 @@ import type { Json } from "@/supabase/types";
 
 import { BlockType, isSkippedMessageType } from "@/supabase/types/message";
 import { contentBlocksToJson, toJson } from "@/supabase/types/json-cast";
+import { logger } from "@/utils/logger";
 
 const TEXT_PREVIEW_LENGTH = 500;
 
@@ -255,7 +256,7 @@ export const parseJsonlMessages = (jsonlContent: string, sessionId: string): Par
         messages.push(normalized);
       }
     } catch (parseError) {
-      console.error(`Line ${idx} parse error:`, parseError);
+      logger.parser.error(`Line ${idx} parse error`, parseError);
     }
   }
 
@@ -287,7 +288,7 @@ export async function* parseJsonlStream(
           const normalized = normalizeMessage(raw, sessionId, idx++);
           if (normalized) yield normalized;
         } catch (e) {
-          console.error(`Line ${idx} parse error:`, e);
+          logger.parser.error(`Line ${idx} parse error`, e);
         }
       }
     }
@@ -298,7 +299,7 @@ export async function* parseJsonlStream(
         const normalized = normalizeMessage(raw, sessionId, idx);
         if (normalized) yield normalized;
       } catch (e) {
-        console.error(`Final line parse error:`, e);
+        logger.parser.error("Final line parse error", e);
       }
     }
   } finally {

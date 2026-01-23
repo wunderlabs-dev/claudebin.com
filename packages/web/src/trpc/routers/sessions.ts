@@ -7,8 +7,7 @@ import { sessions } from "@/supabase/repos/sessions";
 import { processSession } from "@/supabase/services/processor";
 import { createServiceClient } from "@/supabase/service";
 import { publicProcedure, router } from "@/trpc/init";
-
-const MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
+import { MAX_SESSION_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/shared-constants";
 
 export const SessionStatus = {
   PROCESSING: "processing",
@@ -51,14 +50,14 @@ export const sessionsRouter = router({
 
       // Validate size
       const sizeBytes = new TextEncoder().encode(input.conversation_data).length;
-      if (sizeBytes > MAX_SIZE_BYTES) {
+      if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
         throw new Error(
           `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
         );
       }
 
       // Generate IDs and paths
-      const id = nanoid(10);
+      const id = nanoid(SESSION_ID_LENGTH);
       const storagePath = `${user.id}/${id}.jsonl`;
 
       // Upload to Storage
