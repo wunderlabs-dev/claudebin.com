@@ -5,7 +5,7 @@ import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
-import { createClient } from "@/supabase/server";
+import { createReadOnlyClient } from "@/supabase/server";
 
 import copy from "@/copy/en-EN.json";
 
@@ -38,7 +38,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   const locale = await getLocale();
   const messages = await getMessages();
 
-  const supabase = await createClient();
+  const supabase = await createReadOnlyClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
