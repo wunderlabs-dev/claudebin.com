@@ -6,10 +6,10 @@
     "packages/plugin/mcp"
   ],
   "scripts": {
-    "dev": "bun --filter web dev",
-    "build": "bun --filter '*' build",
-    "plugin": "bun --filter claudebin-mcp dev",
-    "type-check": "bun --filter '*' type-check",
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter '*' build",
+    "plugin": "pnpm --filter claudebin-mcp dev",
+    "type-check": "pnpm --filter '*' type-check",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",

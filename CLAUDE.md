@@ -10,23 +10,22 @@ Claudebin is a "pastebin for vibes" - a tool for publishing and sharing Claude C
 
 ```bash
 # Development
-bun cli               # Start CLI in watch mode
-bun dev               # Start web app in dev mode
-bun plugin            # Start MCP server in watch mode
+pnpm dev              # Start web app in dev mode
+pnpm plugin           # Start MCP server in watch mode
 
 # Build
-bun build             # Build all packages
+pnpm build            # Build all packages
 
 # Code Quality
-bun check             # Biome check (runs on pre-commit)
-bun format            # Biome format
-bun lint              # Biome lint
-bun type-check        # TypeScript check all packages
+pnpm check            # Biome check (runs on pre-commit)
+pnpm format           # Biome format
+pnpm lint             # Biome lint
+pnpm type-check       # TypeScript check all packages
 
 # Package-specific
-bun --filter cli build       # Build CLI only
-bun --filter cli type-check  # Type-check CLI only
-bun --filter web dev         # Run Next.js dev server
+pnpm --filter cli build       # Build CLI only
+pnpm --filter cli type-check  # Type-check CLI only
+pnpm --filter web dev         # Run Next.js dev server
 
 # Plugin (local development)
 claude --plugin-dir ./packages/plugin   # Start with plugin loaded
@@ -34,7 +33,7 @@ claude --plugin-dir ./packages/plugin   # Start with plugin loaded
 
 ## Architecture
 
-**Monorepo Structure (bun workspaces):**
+**Monorepo Structure (pnpm workspaces):**
 - `packages/cli/` - Publishable npm package (`claudebin`), built with tsup
 - `packages/web/` - Next.js 15 web app (App Router)
 - `docs/` - Architecture documentation
