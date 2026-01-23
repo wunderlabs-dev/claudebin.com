@@ -3,10 +3,8 @@ import { resolve } from "node:path";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: resolve(__dirname, "../../"),
-  experimental: {
-    outputFileTracingIncludes: {
-      "/*": ["./node_modules/next/dist/**/*"],
-    },
+  outputFileTracingIncludes: {
+    "/*": ["./node_modules/next/dist/**/*"],
   },
 };
 
