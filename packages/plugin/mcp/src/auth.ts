@@ -112,7 +112,7 @@ const refresh = async (): Promise<boolean> => {
       refresh_token: config.auth.refresh_token,
     });
 
-    if (!result.success || !("access_token" in result)) {
+    if (!result.success) {
       return false;
     }
 
