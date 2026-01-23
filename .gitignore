@@ -13,3 +13,6 @@ supabase/.temp/
 supabase/.branches/
 .vercel
 .env*.local
+
+# Turborepo
+.turbo/
