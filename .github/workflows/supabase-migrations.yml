@@ -1,0 +1,45 @@
+name: Supabase Migrations
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "supabase/migrations/**"
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Set environment variables
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "SUPABASE_PROJECT_REF=${{ secrets.SUPABASE_PROD_PROJECT_REF }}" >> $GITHUB_ENV
+            echo "SUPABASE_DB_PASSWORD=${{ secrets.SUPABASE_PROD_DB_PASSWORD }}" >> $GITHUB_ENV
+            echo "ENVIRONMENT=production" >> $GITHUB_ENV
+          else
+            echo "SUPABASE_PROJECT_REF=${{ secrets.SUPABASE_STAGING_PROJECT_REF }}" >> $GITHUB_ENV
+            echo "SUPABASE_DB_PASSWORD=${{ secrets.SUPABASE_STAGING_DB_PASSWORD }}" >> $GITHUB_ENV
+            echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Link Supabase project
+        run: supabase link --project-ref $SUPABASE_PROJECT_REF -p "$SUPABASE_DB_PASSWORD"
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: Run migrations
+        run: supabase db push --include-all
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: Summary
+        run: echo "✅ Migrations applied to $ENVIRONMENT"
