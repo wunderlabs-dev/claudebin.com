@@ -99,19 +99,14 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     notFound();
   }
 
-  const createdAt = new Date(profile.createdAt).toLocaleDateString("en-US", {
-    month: "short",
-    year: "numeric",
-  });
-
   return (
     <Container spacing="md" className="grid grid-cols-12 gap-16">
       <div className="col-span-4">
         <ProfilePageUserInfoSidebar
-          username={profile.username ?? ""}
+          username={""}
           bio=""
-          avatar={profile.avatarUrl ?? ""}
-          createdAt={createdAt}
+          avatar={""}
+          createdAt={"12/02/2026"}
           threads={0}
           views={0}
           forks={0}

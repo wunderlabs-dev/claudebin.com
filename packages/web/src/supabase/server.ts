@@ -19,9 +19,14 @@ export const createClient = async () => {
       cookies: {
         getAll: () => cookieStore.getAll(),
         setAll: (cookiesToSet: ReadonlyArray<CookieToSet>) => {
-          cookiesToSet.forEach((cookie) => {
-            cookieStore.set(cookie.name, cookie.value, cookie.options);
-          });
+          try {
+            cookiesToSet.forEach((cookie) => {
+              cookieStore.set(cookie.name, cookie.value, cookie.options);
+            });
+          } catch {
+            // ABOUTME: The `setAll` method is called from a Server Component.
+            // This can be ignored if you have middleware refreshing user sessions.
+          }
         },
       },
     },
