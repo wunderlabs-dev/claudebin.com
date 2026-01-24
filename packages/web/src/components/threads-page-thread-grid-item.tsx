@@ -21,9 +21,7 @@ import {
   SvgIconChat,
   SvgIconClock,
   SvgIconFile,
-  SvgIconJauge,
   SvgIconUser,
-  SvgIconFork,
   SvgIconFolder,
 } from "@/components/icon";
 
@@ -35,9 +33,7 @@ type ThreadsPageThreadGridItemProps = {
   prompts: number;
   files: number;
   views: number;
-  forks: number;
   project: string;
-  progress: number;
 } & Omit<ComponentProps<typeof Card>, "id">;
 
 const ThreadsPageThreadGridItem = ({
@@ -48,9 +44,7 @@ const ThreadsPageThreadGridItem = ({
   prompts,
   files,
   views,
-  forks,
   project,
-  progress,
   ...props
 }: ThreadsPageThreadGridItemProps) => {
   const t = useTranslations();
@@ -74,12 +68,9 @@ const ThreadsPageThreadGridItem = ({
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
             {t("common.files", { count: files })}
           </ListItem>
-          <List direction="row" align="between">
-            <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
-            <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
-              {formatDistanceToNow(new Date(createdAt))}
-            </ListItem>
-          </List>
+          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
+            {formatDistanceToNow(new Date(createdAt))}
+          </ListItem>
         </List>
       </CardSection>
       <CardDivider />
@@ -87,9 +78,6 @@ const ThreadsPageThreadGridItem = ({
         <List direction="column">
           <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
             {t("common.views", { count: views })}
-          </ListItem>
-          <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
-            {t("common.forks", { count: forks })}
           </ListItem>
           <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</ListItem>
         </List>

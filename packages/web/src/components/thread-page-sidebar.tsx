@@ -7,9 +7,7 @@ import {
   SvgIconEye,
   SvgIconFile,
   SvgIconFolder,
-  SvgIconFork,
   SvgIconGlobe,
-  SvgIconJauge,
   SvgIconLine,
   SvgIconCalendar,
 } from "@/components/icon";
@@ -19,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { List, ListItem } from "@/components/ui/list";
-import { Progress } from "@/components/ui/progress";
 
 type ThreadPageSidebarProps = {
   visibility: "public" | "private";
@@ -29,8 +26,6 @@ type ThreadPageSidebarProps = {
   linesWritten: number;
   files: number;
   views: number;
-  forks: number;
-  progress: number;
 };
 
 const ThreadPageSidebar = ({
@@ -41,8 +36,6 @@ const ThreadPageSidebar = ({
   linesWritten,
   files,
   views,
-  forks,
-  progress,
 }: ThreadPageSidebarProps): ReactNode => {
   const t = useTranslations();
 
@@ -85,11 +78,6 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: views })}
         </ListItem>
-        <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
-          {t("common.forks", { count: forks })}
-        </ListItem>
-        <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}</ListItem>
-        <Progress value={progress} />
       </List>
 
       <div className="flex w-full flex-col gap-8">

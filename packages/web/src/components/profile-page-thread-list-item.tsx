@@ -15,9 +15,7 @@ import {
   SvgIconChat,
   SvgIconClock,
   SvgIconFile,
-  SvgIconJauge,
   SvgIconUser,
-  SvgIconFork,
   SvgIconFolder,
 } from "@/components/icon";
 
@@ -25,9 +23,7 @@ type ProfilePageThreadListItemProps = {
   title: string;
   prompts: number;
   files: number;
-  progress: number;
   views: number;
-  forks: number;
   project: string;
   time: string;
 } & ComponentProps<typeof Card>;
@@ -36,9 +32,7 @@ const ProfilePageThreadListItem = ({
   title,
   prompts,
   files,
-  progress,
   views,
-  forks,
   project,
   time,
   ...props
@@ -59,7 +53,6 @@ const ProfilePageThreadListItem = ({
             <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
               {t("common.files", { count: files })}
             </ListItem>
-            <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
           </List>
         </CardSection>
 
@@ -69,9 +62,6 @@ const ProfilePageThreadListItem = ({
           <List direction="row">
             <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
               {t("common.views", { count: views })}
-            </ListItem>
-            <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
-              {t("common.forks", { count: forks })}
             </ListItem>
             <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</ListItem>
             <ListItem icon={<SvgIconClock size="sm" color="neutral" />} align="end">

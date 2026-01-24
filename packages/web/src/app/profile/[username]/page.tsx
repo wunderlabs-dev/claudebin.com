@@ -21,9 +21,7 @@ const threads = [
     title: "Building a CLI tool with node.js",
     prompts: 10,
     files: 2,
-    progress: 85,
     views: 45,
-    forks: 3,
     project: "claudebin/master",
     time: "2h ago",
   },
@@ -32,9 +30,7 @@ const threads = [
     title: "React hooks optimization patterns",
     prompts: 85,
     files: 0,
-    progress: 100,
     views: 120,
-    forks: 8,
     project: "hooks-lib/main",
     time: "3h ago",
   },
@@ -43,9 +39,7 @@ const threads = [
     title: "Auth Debugging flow",
     prompts: 88,
     files: 10,
-    progress: 45,
     views: 67,
-    forks: 2,
     project: "auth-service/dev",
     time: "1d ago",
   },
@@ -54,9 +48,7 @@ const threads = [
     title: "Database query optimization",
     prompts: 4,
     files: 0,
-    progress: 100,
     views: 23,
-    forks: 1,
     project: "db-utils/master",
     time: "2d ago",
   },
@@ -65,9 +57,7 @@ const threads = [
     title: "API rate limiting implementation",
     prompts: 23,
     files: 5,
-    progress: 70,
     views: 89,
-    forks: 12,
     project: "api-gateway/main",
     time: "3d ago",
   },
@@ -76,9 +66,7 @@ const threads = [
     title: "CI/CD pipeline setup",
     prompts: 45,
     files: 8,
-    progress: 90,
     views: 156,
-    forks: 20,
     project: "devops/master",
     time: "4d ago",
   },
@@ -109,7 +97,6 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           createdAt={"12/02/2026"}
           threads={0}
           views={0}
-          forks={0}
         />
       </div>
 
@@ -135,9 +122,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
                 title={thread.title}
                 prompts={thread.prompts}
                 files={thread.files}
-                progress={thread.progress}
                 views={thread.views}
-                forks={thread.forks}
                 project={thread.project}
                 time={thread.time}
               />

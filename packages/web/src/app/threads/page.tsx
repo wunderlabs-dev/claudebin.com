@@ -104,9 +104,7 @@ const ThreadsPage = async () => {
                 prompts={thread.messageCount ?? 0}
                 files={0}
                 views={0}
-                forks={0}
                 project={thread.storagePath ?? ""}
-                progress={100}
               />
             </DividerGridCell>
             <DividerGridEdge position="right" className="col-span-1" />

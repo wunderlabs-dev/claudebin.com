@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconCalendar, SvgIconChat, SvgIconEye, SvgIconFork } from "@/components/icon";
+import { SvgIconCalendar, SvgIconChat, SvgIconEye } from "@/components/icon";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -23,7 +23,6 @@ type ProfilePageUserInfoSidebarProps = {
   createdAt: string;
   threads: number;
   views: number;
-  forks: number;
 } & ComponentProps<"div">;
 
 const ProfilePageUserInfoSidebar = ({
@@ -33,7 +32,6 @@ const ProfilePageUserInfoSidebar = ({
   createdAt,
   threads,
   views,
-  forks,
   className,
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
@@ -49,11 +47,6 @@ const ProfilePageUserInfoSidebar = ({
       key: "views",
       label: t("user.views", { count: views }),
       icon: <SvgIconEye size="sm" color="accent" />,
-    },
-    {
-      key: "forks",
-      label: t("user.forks", { count: forks }),
-      icon: <SvgIconFork size="sm" color="accent" />,
     },
   ] as const;
 

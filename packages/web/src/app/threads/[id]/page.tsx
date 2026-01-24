@@ -24,8 +24,6 @@ const thread = {
   linesWritten: 2345,
   files: 2,
   views: 1234,
-  forks: 2,
-  progress: 65,
 };
 
 const ThreadPage = async ({ params }: ThreadPageProps) => {
@@ -52,8 +50,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           linesWritten={thread.linesWritten}
           files={thread.files}
           views={thread.views}
-          forks={thread.forks}
-          progress={thread.progress}
         />
       </div>
     </Container>
