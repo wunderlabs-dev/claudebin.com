@@ -147,42 +147,90 @@ export type Database = {
         };
         Relationships: [];
       };
+      session_likes: {
+        Row: {
+          id: string;
+          sessionId: string;
+          userId: string;
+          createdAt: string;
+        };
+        Insert: {
+          id?: string;
+          sessionId: string;
+          userId: string;
+          createdAt?: string;
+        };
+        Update: {
+          id?: string;
+          sessionId?: string;
+          userId?: string;
+          createdAt?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "session_likes_session_id_fkey";
+            columns: ["sessionId"];
+            isOneToOne: false;
+            referencedRelation: "sessions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "session_likes_user_id_fkey";
+            columns: ["userId"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       sessions: {
         Row: {
           createdAt: string;
           errorMessage: string | null;
+          fileCount: number;
           id: string;
           isPublic: boolean;
+          likeCount: number;
           messageCount: number | null;
           status: string;
           storagePath: string | null;
           title: string | null;
           updatedAt: string;
           userId: string;
+          viewCount: number;
+          workingDir: string | null;
         };
         Insert: {
           createdAt?: string;
           errorMessage?: string | null;
+          fileCount?: number;
           id: string;
           isPublic?: boolean;
+          likeCount?: number;
           messageCount?: number | null;
           status?: string;
           storagePath?: string | null;
           title?: string | null;
           updatedAt?: string;
           userId: string;
+          viewCount?: number;
+          workingDir?: string | null;
         };
         Update: {
           createdAt?: string;
           errorMessage?: string | null;
+          fileCount?: number;
           id?: string;
           isPublic?: boolean;
+          likeCount?: number;
           messageCount?: number | null;
           status?: string;
           storagePath?: string | null;
           title?: string | null;
           updatedAt?: string;
           userId?: string;
+          viewCount?: number;
+          workingDir?: string | null;
         };
         Relationships: [
           {
@@ -199,7 +247,12 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      increment_session_view_count: {
+        Args: {
+          session_id: string;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;

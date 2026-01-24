@@ -48,6 +48,23 @@ const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<
   return data;
 };
 
+const getByIdWithAuthor = async (
+  supabase: SupabaseClient<Database>,
+  id: string,
+): Promise<ThreadWithAuthor | null> => {
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("*, profiles(username, avatarUrl)")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to fetch session: ${error.message}`);
+  }
+
+  return data;
+};
+
 const getByIdForUser = async (
   supabase: SupabaseClient<Database>,
   id: string,
@@ -145,9 +162,23 @@ const deleteFile = async (
   }
 };
 
+const incrementViewCount = async (
+  supabase: SupabaseClient<Database>,
+  sessionId: string,
+): Promise<void> => {
+  const { error } = await supabase.rpc("increment_session_view_count", {
+    session_id: sessionId,
+  });
+
+  if (error) {
+    logger.sessions.error("View count increment failed", error);
+  }
+};
+
 export const sessions = {
   getPublicThreads,
   getById,
+  getByIdWithAuthor,
   getByIdForUser,
   create,
   update,
@@ -155,4 +186,5 @@ export const sessions = {
   downloadJsonl,
   downloadJsonlStream,
   deleteFile,
+  incrementViewCount,
 };

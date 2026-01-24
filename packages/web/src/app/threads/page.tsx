@@ -5,6 +5,13 @@ import { sessions } from "@/supabase/repos/sessions";
 
 import { renderers } from "@/utils/renderers";
 
+// ABOUTME: Extracts project name from working directory path (last segment)
+const getProjectName = (workingDir: string | null): string => {
+  if (!workingDir) return "Unknown";
+  const segments = workingDir.split("/").filter(Boolean);
+  return segments[segments.length - 1] || "Unknown";
+};
+
 import { SvgIconUser } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -102,10 +109,10 @@ const ThreadsPage = async () => {
                 author={thread.profiles?.username ? `@${thread.profiles.username}` : "Anonymous"}
                 createdAt={thread.createdAt}
                 prompts={thread.messageCount ?? 0}
-                files={0}
-                views={0}
+                files={thread.fileCount}
+                views={thread.viewCount}
                 forks={0}
-                project={thread.storagePath ?? ""}
+                project={getProjectName(thread.workingDir)}
                 progress={100}
               />
             </DividerGridCell>

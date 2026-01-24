@@ -1,4 +1,9 @@
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { formatDistanceToNow, format } from "date-fns";
+
+import { createClient } from "@/supabase/server";
+import { sessions } from "@/supabase/repos/sessions";
 
 import { SvgIconArrowLeft } from "@/components/icon";
 
@@ -12,25 +17,29 @@ type ThreadPageProps = {
   params: Promise<{ id: string }>;
 };
 
-const thread = {
-  id: "1",
-  title: "Building a CLI tool with node.js",
-  author: "marius",
-  time: "2h ago",
-  visibility: "public" as const,
-  createdAt: "12/01/2026",
-  project: "directory/project_name",
-  prompts: 10,
-  linesWritten: 2345,
-  files: 2,
-  views: 1234,
-  forks: 2,
-  progress: 65,
+// ABOUTME: Extracts project name from working directory path (last segment)
+const getProjectName = (workingDir: string | null): string => {
+  if (!workingDir) return "Unknown";
+  const segments = workingDir.split("/").filter(Boolean);
+  return segments[segments.length - 1] || "Unknown";
 };
 
 const ThreadPage = async ({ params }: ThreadPageProps) => {
-  const { id: _id } = await params;
+  const { id } = await params;
   const t = await getTranslations();
+  const supabase = await createClient();
+
+  const thread = await sessions.getByIdWithAuthor(supabase, id);
+
+  if (!thread) {
+    notFound();
+  }
+
+  // Track view (fire and forget)
+  sessions.incrementViewCount(supabase, id);
+
+  const author = thread.profiles?.username ?? "Anonymous";
+  const createdAt = new Date(thread.createdAt);
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
@@ -40,20 +49,23 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           <NavLabel>{t("thread.backToThreads")}</NavLabel>
         </NavLink>
 
-        <ThreadPageMeta title={thread.title} author={thread.author} time={thread.time} />
+        <ThreadPageMeta
+          title={thread.title ?? "Untitled"}
+          author={author}
+          time={formatDistanceToNow(createdAt, { addSuffix: true })}
+        />
       </div>
 
       <div className="col-span-3 flex flex-col justify-between border-gray-250 border-l px-6 pt-24 pb-12">
         <ThreadPageSidebar
-          visibility={thread.visibility}
-          createdAt={thread.createdAt}
-          project={thread.project}
-          prompts={thread.prompts}
-          linesWritten={thread.linesWritten}
-          files={thread.files}
-          views={thread.views}
-          forks={thread.forks}
-          progress={thread.progress}
+          sessionId={thread.id}
+          visibility={thread.isPublic ? "public" : "private"}
+          createdAt={format(createdAt, "MM/dd/yyyy")}
+          project={getProjectName(thread.workingDir)}
+          prompts={thread.messageCount ?? 0}
+          files={thread.fileCount}
+          views={thread.viewCount}
+          likes={thread.likeCount}
         />
       </div>
     </Container>

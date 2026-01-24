@@ -7,44 +7,40 @@ import {
   SvgIconEye,
   SvgIconFile,
   SvgIconFolder,
-  SvgIconFork,
   SvgIconGlobe,
-  SvgIconJauge,
-  SvgIconLine,
+  SvgIconHeart,
   SvgIconCalendar,
 } from "@/components/icon";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
-import { Typography } from "@/components/ui/typography";
 import { List, ListItem } from "@/components/ui/list";
-import { Progress } from "@/components/ui/progress";
 
 type ThreadPageSidebarProps = {
+  sessionId: string;
   visibility: "public" | "private";
   createdAt: string;
   project: string;
   prompts: number;
-  linesWritten: number;
   files: number;
   views: number;
-  forks: number;
-  progress: number;
+  likes: number;
 };
 
 const ThreadPageSidebar = ({
+  sessionId,
   visibility,
   createdAt,
   project,
   prompts,
-  linesWritten,
   files,
   views,
-  forks,
-  progress,
+  likes,
 }: ThreadPageSidebarProps): ReactNode => {
   const t = useTranslations();
+
+  const threadUrl = `https://claudebin.com/s/${sessionId}`;
 
   return (
     <div className="flex flex-col items-start gap-6">
@@ -61,40 +57,20 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
           {t("common.prompts", { count: prompts })}
         </ListItem>
-
-        <div className="flex flex-col gap-1">
-          <ListItem icon={<SvgIconLine size="sm" color="neutral" />}>
-            {t("thread.linesWritten", { count: linesWritten })}
-          </ListItem>
-          <div className="flex items-center gap-2 pl-5">
-            <Typography variant="caption" className="text-green-50">
-              +32
-            </Typography>
-            <Typography variant="caption" className="text-red-50">
-              -26
-            </Typography>
-            <Typography variant="caption" className="text-orange-250">
-              ~11
-            </Typography>
-          </div>
-        </div>
-
         <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
           {t("common.files", { count: files })}
         </ListItem>
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: views })}
         </ListItem>
-        <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
-          {t("common.forks", { count: forks })}
+        <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
+          {t("common.likes", { count: likes })}
         </ListItem>
-        <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}</ListItem>
-        <Progress value={progress} />
       </List>
 
       <div className="flex w-full flex-col gap-8">
-        <CopyInput variant="link" value="https://claudebin.com/threads/" />
-        <CopyInput variant="snippet" value="https://claudebin.com/threads/V1StGXR8_Z5jdHi6B-myT" />
+        <CopyInput variant="link" value={threadUrl} />
+        <CopyInput variant="snippet" value={threadUrl} />
         <Button variant="secondary">
           <SvgIconChat />
           {t("thread.continueConversation")}
