@@ -11,6 +11,31 @@ type SessionsUpdate = Database["public"]["Tables"]["sessions"]["Update"];
 
 export type Session = SessionsRow;
 
+export type ThreadWithAuthor = SessionsRow & {
+  profiles: {
+    username: string | null;
+    avatarUrl: string | null;
+  } | null;
+};
+
+const getPublicThreads = async (
+  supabase: SupabaseClient<Database>,
+  limit = 20,
+): Promise<ThreadWithAuthor[]> => {
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("*, profiles(username, avatarUrl)")
+    .eq("isPublic", true)
+    .order("createdAt", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(`Failed to fetch threads: ${error.message}`);
+  }
+
+  return data ?? [];
+};
+
 // No ownership check - session ID is treated as capability token.
 // For owner-only operations, use getByIdForUser instead.
 const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<Session | null> => {
@@ -121,6 +146,7 @@ const deleteFile = async (
 };
 
 export const sessions = {
+  getPublicThreads,
   getById,
   getByIdForUser,
   create,
