@@ -14,7 +14,12 @@ type FooterProps = ComponentProps<"footer">;
 const renderers = {
   year: getYear(new Date()),
   link: (chunks: ReactNode) => (
-    <a href="/" target="_blank" rel="noopener noreferrer" className="text-orange-50">
+    <a
+      target="_blank"
+      href="https://wunderlabs.dev"
+      rel="noopener noreferrer"
+      className="text-orange-50"
+    >
       {chunks}
     </a>
   ),
