@@ -96,16 +96,7 @@ const ThreadsPage = async () => {
           <DividerGridRow key={thread.id}>
             <DividerGridEdge position="left" className="col-span-1" />
             <DividerGridCell className="col-span-10">
-              <ThreadsPageThreadGridItem
-                id={thread.id}
-                title={thread.title}
-                author={thread.profiles?.username}
-                createdAt={thread.createdAt}
-                prompts={thread.messageCount}
-                files={0}
-                views={0}
-                project={thread.storagePath}
-              />
+              <ThreadsPageThreadGridItem thread={thread} />
             </DividerGridCell>
             <DividerGridEdge position="right" className="col-span-1" />
           </DividerGridRow>
