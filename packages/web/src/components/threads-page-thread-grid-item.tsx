@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { formatDistanceToNow } from "date-fns";
 
 import { hashString } from "@/utils/helpers";
 import { THREAD_CARD_LAYOUTS } from "@/utils/constants";
@@ -30,7 +31,7 @@ type ThreadsPageThreadGridItemProps = {
   id: string;
   title: string;
   author: string;
-  time: string;
+  createdAt: string;
   prompts: number;
   files: number;
   views: number;
@@ -43,7 +44,7 @@ const ThreadsPageThreadGridItem = ({
   id,
   title,
   author,
-  time,
+  createdAt,
   prompts,
   files,
   views,
@@ -75,7 +76,9 @@ const ThreadsPageThreadGridItem = ({
           </ListItem>
           <List direction="row" align="between">
             <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
-            <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>{time}</ListItem>
+            <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
+              {formatDistanceToNow(new Date(createdAt))}
+            </ListItem>
           </List>
         </List>
       </CardSection>

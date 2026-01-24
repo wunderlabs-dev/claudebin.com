@@ -51,7 +51,7 @@ const AppBar = ({ user, className, ...props }: AppBarProps) => {
       <Container size="lg">
         <div className="flex items-center justify-between pt-3 pb-2">
           <div className="flex items-center gap-24">
-            <Link href="/" className="hover:text-orange-50">
+            <Link href="/" className="transition-colors ease-in-out hover:text-orange-50">
               <SvgIconClaudebinXs size="auto" className="w-14" />
             </Link>
             <Nav>
