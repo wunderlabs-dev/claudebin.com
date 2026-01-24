@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { createClient } from "@/supabase/server";
+import { createReadOnlyClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 
 import { renderers } from "@/utils/renderers";
@@ -24,7 +24,7 @@ import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid
 
 const ThreadsPage = async () => {
   const t = await getTranslations();
-  const supabase = await createClient();
+  const supabase = await createReadOnlyClient();
   const threads = await sessions.getPublicThreads(supabase);
 
   return (
