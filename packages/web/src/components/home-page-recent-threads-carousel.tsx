@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
 import { formatDistanceToNow } from "date-fns";
 
+import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+
 import { cn } from "@/utils/helpers";
 import { renderers } from "@/utils/renderers";
 
@@ -17,17 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
-type Thread = {
-  id: string;
-  title: string;
-  author: string;
-  createdAt: string;
-  prompts: number;
-  files: number;
-};
-
 type HomePageRecentThreadsCarouselProps = {
-  threads: Thread[];
+  threads: ThreadWithAuthor[];
 } & ComponentProps<"section">;
 
 const HomePageRecentThreadsCarousel = ({
@@ -69,10 +62,10 @@ const HomePageRecentThreadsCarousel = ({
             <div key={thread.id} className="bg-gray-100">
               <HomePageRecentThreadsListItem
                 time={formatDistanceToNow(new Date(thread.createdAt), { addSuffix: true })}
-                files={thread.files}
-                prompts={thread.prompts}
-                title={thread.title}
-                author={thread.author}
+                files={0}
+                prompts={thread.messageCount ?? 0}
+                title={thread.title ?? "Untitled"}
+                author={thread.profiles?.username ? `@${thread.profiles.username}` : "Anonymous"}
               />
             </div>
           ))}
