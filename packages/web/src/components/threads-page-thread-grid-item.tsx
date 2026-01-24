@@ -27,13 +27,13 @@ import {
 
 type ThreadsPageThreadGridItemProps = {
   id: string;
-  title: string;
-  author: string;
+  title: string | null;
+  author: string | null;
   createdAt: string;
-  prompts: number;
-  files: number;
-  views: number;
-  project: string;
+  prompts: number | null;
+  files: number | null;
+  views: number | null;
+  project: string | null;
 } & Omit<ComponentProps<typeof Card>, "id">;
 
 const ThreadsPageThreadGridItem = ({

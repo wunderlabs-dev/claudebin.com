@@ -98,13 +98,13 @@ const ThreadsPage = async () => {
             <DividerGridCell className="col-span-10">
               <ThreadsPageThreadGridItem
                 id={thread.id}
-                title={thread.title ?? "Untitled"}
-                author={thread.profiles?.username ? `@${thread.profiles.username}` : "Anonymous"}
+                title={thread.title}
+                author={thread.profiles?.username}
                 createdAt={thread.createdAt}
-                prompts={thread.messageCount ?? 0}
+                prompts={thread.messageCount}
                 files={0}
                 views={0}
-                project={thread.storagePath ?? ""}
+                project={thread.storagePath}
               />
             </DividerGridCell>
             <DividerGridEdge position="right" className="col-span-1" />
