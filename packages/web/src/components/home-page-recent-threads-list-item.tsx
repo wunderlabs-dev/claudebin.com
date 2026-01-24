@@ -14,11 +14,11 @@ import { List, ListItem } from "@/components/ui/list";
 import { SvgIconChat, SvgIconClock, SvgIconFile } from "@/components/icon";
 
 type HomePageRecentThreadsListItemProps = {
-  title: string;
-  author: string;
+  title: string | null;
+  author: string | null;
   time: string;
-  prompts: number;
-  files: number;
+  prompts: number | null;
+  files: number | null;
 } & ComponentProps<typeof Card>;
 
 const HomePageRecentThreadsListItem = ({

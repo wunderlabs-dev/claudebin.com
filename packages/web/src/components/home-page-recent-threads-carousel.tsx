@@ -61,11 +61,11 @@ const HomePageRecentThreadsCarousel = ({
           {threads.map((thread) => (
             <div key={thread.id} className="bg-gray-100">
               <HomePageRecentThreadsListItem
-                time={formatDistanceToNow(new Date(thread.createdAt), { addSuffix: true })}
                 files={0}
-                prompts={thread.messageCount ?? 0}
-                title={thread.title ?? "Untitled"}
-                author={thread.profiles?.username ? `@${thread.profiles.username}` : "Anonymous"}
+                prompts={thread.messageCount}
+                title={thread.title}
+                author={thread.profiles?.username}
+                time={formatDistanceToNow(new Date(thread.createdAt))}
               />
             </div>
           ))}
