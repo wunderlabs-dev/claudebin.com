@@ -12,7 +12,7 @@ import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
-import { createReadOnlyClient } from "@/supabase/server";
+import { createClient } from "@/supabase/server";
 import { profiles } from "@/supabase/repos/profiles";
 
 const threads = [
@@ -80,7 +80,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   const { username } = await params;
   const t = await getTranslations();
 
-  const supabase = await createReadOnlyClient();
+  const supabase = await createClient();
   const profile = await profiles.getByUsername(supabase, username);
 
   if (!profile) {
