@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { cliAuth } from "@/supabase/repos/cli-auth";
-import { createReadOnlyClient } from "@/supabase/server";
+import { createClient } from "@/supabase/server";
 import { createServiceClient } from "@/supabase/service";
 
 interface Props {
@@ -51,7 +51,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     );
   }
 
-  const supabase = await createReadOnlyClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

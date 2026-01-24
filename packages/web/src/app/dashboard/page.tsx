@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
+
 import { profiles } from "@/supabase/repos/profiles";
-import { createReadOnlyClient } from "@/supabase/server";
+import { createClient } from "@/supabase/server";
 
 const DashboardPage = async () => {
-  const supabase = await createReadOnlyClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
