@@ -64,13 +64,13 @@ export const authRouter = router({
         return { status: PollStatus.EXPIRED };
       }
 
-      if (session.completedAt) {
+      if (session.completedAt && session.accessToken && session.refreshToken) {
         return {
           status: PollStatus.SUCCESS,
-          token: session.accessToken!,
-          refresh_token: session.refreshToken!,
+          token: session.accessToken,
+          refresh_token: session.refreshToken,
           user: {
-            id: session.profile?.id ?? session.userId!,
+            id: session.profile?.id ?? session.userId ?? "",
             name: session.profile?.name ?? null,
             email: session.profile?.email ?? null,
             avatar_url: session.profile?.avatarUrl ?? null,
