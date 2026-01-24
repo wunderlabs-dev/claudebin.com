@@ -4,20 +4,18 @@ import type { ComponentProps } from "react";
 import { useCallback } from "react";
 import { useTranslations } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
-import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
 import { cn } from "@/utils/helpers";
 import { renderers } from "@/utils/renderers";
 
-import { HomePageRecentThreadsListItem } from "@/components/home-page-recent-threads-list-item";
-
 import { SvgIconArrowLeft, SvgIconArrowRight } from "@/components/icon";
-
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
+
+import { HomePageRecentThreadsListItem } from "@/components/home-page-recent-threads-list-item";
 
 type HomePageRecentThreadsCarouselProps = {
   threads: ThreadWithAuthor[];
@@ -60,13 +58,7 @@ const HomePageRecentThreadsCarousel = ({
           <div className="w-container-start shrink-0" aria-hidden="true" />
           {threads.map((thread) => (
             <div key={thread.id} className="bg-gray-100">
-              <HomePageRecentThreadsListItem
-                files={0}
-                prompts={thread.messageCount}
-                title={thread.title}
-                author={thread.profiles?.username}
-                time={formatDistanceToNow(new Date(thread.createdAt))}
-              />
+              <HomePageRecentThreadsListItem thread={thread} />
             </div>
           ))}
           <div className="w-container-start shrink-0" aria-hidden="true" />
