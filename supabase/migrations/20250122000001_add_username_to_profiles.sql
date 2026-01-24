@@ -1,4 +1,5 @@
 -- ABOUTME: Adds username column to profiles table for URL-friendly profile access
+-- Triggered: 2026-01-24
 
 -- Add username column
 ALTER TABLE profiles ADD COLUMN username TEXT UNIQUE;
