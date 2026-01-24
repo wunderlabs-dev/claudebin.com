@@ -3,7 +3,6 @@ import { after } from "next/server";
 import { z } from "zod";
 
 import { config } from "@/supabase/config/env";
-import { sessionLikes } from "@/supabase/repos/session-likes";
 import { sessions } from "@/supabase/repos/sessions";
 import { processSession } from "@/supabase/services/processor";
 import { createServiceClient } from "@/supabase/service";
@@ -120,41 +119,5 @@ export const sessionsRouter = router({
         status: SessionStatus.READY,
         url: `${config.appUrl}/s/${input.id}`,
       };
-    }),
-
-  // Security model:
-  // - Token verified via supabase.auth.getUser() extracts authenticated user
-  // - Toggle like: if already liked, unlike; otherwise, like
-  // - Returns new liked state
-  toggleLike: publicProcedure
-    .input(
-      z.object({
-        session_id: z.string(),
-        access_token: z.string(),
-      }),
-    )
-    .mutation(async ({ input }): Promise<{ liked: boolean }> => {
-      const supabase = createServiceClient();
-
-      // Verify the token and get user
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser(input.access_token);
-
-      if (authError || !user) {
-        throw new Error("Invalid or expired token");
-      }
-
-      // Check current like status
-      const isLiked = await sessionLikes.hasUserLiked(supabase, input.session_id, user.id);
-
-      if (isLiked) {
-        await sessionLikes.unlike(supabase, input.session_id, user.id);
-        return { liked: false };
-      }
-
-      await sessionLikes.like(supabase, input.session_id, user.id);
-      return { liked: true };
     }),
 });

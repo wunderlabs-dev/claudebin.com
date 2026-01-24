@@ -3,14 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 
+import { getProjectName } from "@/utils/helpers";
 import { renderers } from "@/utils/renderers";
-
-// ABOUTME: Extracts project name from working directory path (last segment)
-const getProjectName = (workingDir: string | null): string => {
-  if (!workingDir) return "Unknown";
-  const segments = workingDir.split("/").filter(Boolean);
-  return segments[segments.length - 1] || "Unknown";
-};
 
 import { SvgIconUser } from "@/components/icon";
 import { Button } from "@/components/ui/button";
