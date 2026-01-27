@@ -20,7 +20,6 @@ import { Typography } from "@/components/ui/typography";
 type ProfilePageUserInfoSidebarProps = {
   username: string | null;
   name: string | null;
-  bio: string | null;
   avatarUrl: string | null;
   createdAt: Date;
   threads: number;
@@ -30,7 +29,6 @@ type ProfilePageUserInfoSidebarProps = {
 const ProfilePageUserInfoSidebar = ({
   username,
   name,
-  bio,
   avatarUrl,
   createdAt,
   threads,
@@ -39,7 +37,7 @@ const ProfilePageUserInfoSidebar = ({
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
-  const [fallback] = [...username];
+  const [fallback] = [...(username ?? "")];
 
   const stats = [
     {
@@ -84,11 +82,6 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-12 flex flex-col gap-6 border px-6 py-6">
           <div className="flex flex-col gap-1">
             <Typography variant="h4">{username}</Typography>
-            {bio ? (
-              <Typography variant="small" color="muted">
-                {bio}
-              </Typography>
-            ) : null}
           </div>
           <div className="flex items-center gap-1">
             <SvgIconCalendar size="sm" color="neutral" />

@@ -36,6 +36,26 @@ const getPublicThreads = async (
   return data ?? [];
 };
 
+const getByUserId = async (
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  limit = 20,
+): Promise<Session[]> => {
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("*")
+    .eq("userId", userId)
+    .eq("isPublic", true)
+    .order("createdAt", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(`Failed to fetch threads by user: ${error.message}`);
+  }
+
+  return data ?? [];
+};
+
 // No ownership check - session ID is treated as capability token.
 // For owner-only operations, use getByIdForUser instead.
 const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<Session | null> => {
@@ -147,6 +167,7 @@ const deleteFile = async (
 
 export const sessions = {
   getPublicThreads,
+  getByUserId,
   getById,
   getByIdForUser,
   create,

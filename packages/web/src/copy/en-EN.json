@@ -12,7 +12,9 @@
     "linkCopied": "Link copied!",
     "public": "Public",
     "private": "Private",
+    "untitled": "Untitled",
     "prompts": "{count} prompts",
+    "messages": "{count} messages",
     "files": "{count} files",
     "views": "{count} views",
     "forks": "{count} forks"
