@@ -35,6 +35,7 @@ export { SvgIconKey } from "./svg-icon-key";
 export { SvgIconLine } from "./svg-icon-line";
 export { SvgIconLock } from "./svg-icon-lock";
 export { SvgIconLoading } from "./svg-icon-loading";
+export { SvgIconMagnifier } from "./svg-icon-magnifier";
 export { SvgIconOrbits } from "./svg-icon-orbits";
 export { SvgIconRefresh } from "./svg-icon-refresh";
 export { SvgIconShield } from "./svg-icon-shield";
