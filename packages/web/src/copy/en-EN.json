@@ -37,6 +37,11 @@
     "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
     "recentThreadsDescription": "See what the community is building\nwith Claude."
   },
+  "profile": {
+    "notFoundTitle": "Profile <gradient>not found</gradient>",
+    "notFoundDescription": "The profile you're looking for doesn't exist or has been removed.",
+    "backToHome": "Back to home"
+  },
   "user": {
     "recentThreads": "Recent threads",
     "seeAllThreads": "See all threads",

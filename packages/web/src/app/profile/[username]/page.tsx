@@ -16,7 +16,6 @@ import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
-
 const threads = [
   {
     id: "1",
