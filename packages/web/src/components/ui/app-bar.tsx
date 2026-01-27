@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
 
-import type { User } from "@supabase/supabase-js";
-
 import { cn } from "@/utils/helpers";
+import { useAuth } from "@/context/auth";
 
 import { SvgIconClaudebinXs, SvgIconHome, SvgIconUser } from "@/components/icon";
 import { Button } from "@/components/ui/button";
@@ -16,19 +15,18 @@ import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
 
-type AppBarProps = ComponentProps<"header"> & {
-  user: User | null;
-};
+type AppBarProps = ComponentProps<"header">;
 
 const links = [
   { href: "/", label: "appBar.claudebin", icon: <SvgIconHome size="sm" /> },
   { href: "/threads", label: "appBar.threads", icon: null },
 ] as const;
 
-const AppBar = ({ user, className, ...props }: AppBarProps) => {
+const AppBar = ({ className, ...props }: AppBarProps) => {
   const t = useTranslations();
   const pathname = usePathname();
 
+  const { user, signOut } = useAuth();
   const [isSticky, setIsSticky] = useState<number>();
 
   useEventListener("scroll", () => {
@@ -69,7 +67,7 @@ const AppBar = ({ user, className, ...props }: AppBarProps) => {
           </div>
 
           {user ? (
-            <Button>
+            <Button onClick={signOut}>
               <SvgIconUser size="sm" />
               {t("appBar.logout")}
             </Button>
