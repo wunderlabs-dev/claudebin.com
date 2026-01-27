@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 
-import { getProjectName } from "@/utils/helpers";
 import { renderers } from "@/utils/renderers";
 
 import { SvgIconMagnifier } from "@/components/icon";
