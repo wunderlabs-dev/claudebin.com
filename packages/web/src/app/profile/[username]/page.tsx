@@ -1,6 +1,10 @@
 import Link from "next/link";
+import isNil from "lodash.isnil";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+
+import { createClient } from "@/supabase/server";
+import { profiles } from "@/supabase/repos/profiles";
 
 import { SvgIconLine, SvgIconArrowRight } from "@/components/icon";
 
@@ -12,8 +16,6 @@ import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
-import { createClient } from "@/supabase/server";
-import { profiles } from "@/supabase/repos/profiles";
 
 const threads = [
   {
@@ -83,7 +85,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   const supabase = await createClient();
   const profile = await profiles.getByUsername(supabase, username);
 
-  if (!profile) {
+  if (isNil(profile)) {
     notFound();
   }
 
