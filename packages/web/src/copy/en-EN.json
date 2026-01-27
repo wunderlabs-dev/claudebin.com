@@ -4,6 +4,7 @@
     "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
   },
   "common": {
+    "loading": "Loading...",
     "copy": "Copy",
     "copied": "Copied!",
     "copyLink": "Copy link",
@@ -11,7 +12,10 @@
     "linkCopied": "Link copied!",
     "public": "Public",
     "private": "Private",
+    "untitled": "Untitled",
+    "ago": "{date} ago",
     "prompts": "{count} prompts",
+    "messages": "{count} messages",
     "files": "{count} files",
     "views": "{count} views",
     "likes": "{count} likes",
@@ -36,6 +40,11 @@
     "viewDemoEditor": "View Demo Editor",
     "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
     "recentThreadsDescription": "See what the community is building\nwith Claude."
+  },
+  "profile": {
+    "notFoundTitle": "User <gradient>not found</gradient>",
+    "notFoundDescription": "The profile you're looking for doesn't exist or has been removed.",
+    "backToHome": "Back to home"
   },
   "user": {
     "recentThreads": "Recent threads",
@@ -71,6 +80,29 @@
     "openSharing": "Open sharing",
     "fork": "Fork",
     "continueConversation": "Continue conversation"
+  },
+  "login": {
+    "title": "<gradient>Authenticate</gradient>\nto Claudebin",
+    "badge": "Secure login",
+    "description": "Sign in to publish and manage your sessions",
+    "continueWithGithub": "Continue with GitHub",
+    "errorTitle": "Authentication failed",
+    "errorDescription": "Something went wrong during sign in. Please try again."
+  },
+  "cliAuth": {
+    "title": "<gradient>CLI</gradient>\nAuthentication",
+    "badge": "Safe area",
+    "description": "Securely connect your terminal to Claudebin",
+    "successTitle": "You're all set",
+    "successDescription": "Your terminal is now connected to Claudebin. You can close this window and return to your terminal.",
+    "invalidLinkTitle": "Invalid link",
+    "invalidLinkDescription": "This authentication link is missing the required code. Please use the link provided in your terminal.",
+    "invalidCodeTitle": "Code not found",
+    "invalidCodeDescription": "This authentication code doesn't exist or has already been used. Please run the auth command again.",
+    "expiredTitle": "Code expired",
+    "expiredDescription": "This authentication code has expired. Please run the auth command again to get a new link.",
+    "failedTitle": "Authentication failed",
+    "failedDescription": "Something went wrong while connecting your terminal. Please try again."
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

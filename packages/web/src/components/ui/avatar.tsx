@@ -69,7 +69,7 @@ const AvatarFallback = ({
       data-slot="avatar-fallback"
       className={cn(
         "flex size-full items-center justify-center rounded-full",
-        "font-bold text-orange-50",
+        "font-bold text-orange-50 uppercase",
         avatarFallbackFontSizeClassNames[size],
         className,
       )}

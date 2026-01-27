@@ -1,5 +1,8 @@
 import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
+import { formatDistanceToNow } from "date-fns";
+
+import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
 import {
   Card,
@@ -14,19 +17,11 @@ import { List, ListItem } from "@/components/ui/list";
 import { SvgIconChat, SvgIconClock, SvgIconFile } from "@/components/icon";
 
 type HomePageRecentThreadsListItemProps = {
-  title: string;
-  author: string;
-  time: string;
-  prompts: number;
-  files: number;
+  thread: ThreadWithAuthor;
 } & ComponentProps<typeof Card>;
 
 const HomePageRecentThreadsListItem = ({
-  title,
-  author,
-  time,
-  prompts,
-  files,
+  thread,
   ...props
 }: HomePageRecentThreadsListItemProps) => {
   const t = useTranslations();
@@ -35,21 +30,23 @@ const HomePageRecentThreadsListItem = ({
     <Card variant="card" {...props}>
       <CardBody className="self-end">
         <List direction="row">
-          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>{time}</ListItem>
+          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
+            {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
+          </ListItem>
           <CardActions />
         </List>
       </CardBody>
       <CardBody>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{author}</CardDescription>
+          <CardTitle>{thread.title ?? t("common.untitled")}</CardTitle>
+          <CardDescription>{thread.profiles?.username}</CardDescription>
         </CardHeader>
         <List direction="column">
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("common.prompts", { count: prompts })}
+            {t("common.prompts", { count: thread.messageCount ?? 0 })}
           </ListItem>
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-            {t("common.files", { count: files })}
+            {t("common.files", { count: 0 })}
           </ListItem>
         </List>
       </CardBody>

@@ -1,46 +1,22 @@
 import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
+import { formatDistanceToNow } from "date-fns";
 
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  CardSection,
-  CardDivider,
-} from "@/components/ui/card";
+import { Card, CardBody, CardHeader, CardTitle, CardSection } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import {
-  SvgIconChat,
-  SvgIconClock,
-  SvgIconFile,
-  SvgIconJauge,
-  SvgIconUser,
-  SvgIconFork,
-  SvgIconFolder,
-} from "@/components/icon";
+import { SvgIconChat, SvgIconClock } from "@/components/icon";
 
 type ProfilePageThreadListItemProps = {
-  title: string;
-  prompts: number;
-  files: number;
-  progress: number;
-  views: number;
-  forks: number;
-  project: string;
-  time: string;
-} & ComponentProps<typeof Card>;
+  title: string | null;
+  messageCount: number | null;
+  createdAt: string;
+} & Omit<ComponentProps<typeof Card>, "title">;
 
 const ProfilePageThreadListItem = ({
   title,
-  prompts,
-  files,
-  progress,
-  views,
-  forks,
-  project,
-  time,
+  messageCount,
+  createdAt,
   ...props
 }: ProfilePageThreadListItemProps) => {
   const t = useTranslations();
@@ -50,32 +26,14 @@ const ProfilePageThreadListItem = ({
       <CardBody>
         <CardSection>
           <CardHeader>
-            <CardTitle>{title}</CardTitle>
+            <CardTitle>{title ?? t("common.untitled")}</CardTitle>
           </CardHeader>
           <List direction="row">
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-              {t("common.prompts", { count: prompts })}
+              {t("common.prompts", { count: messageCount ?? 0 })}
             </ListItem>
-            <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-              {t("common.files", { count: files })}
-            </ListItem>
-            <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
-          </List>
-        </CardSection>
-
-        <CardDivider />
-
-        <CardSection>
-          <List direction="row">
-            <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
-              {t("common.views", { count: views })}
-            </ListItem>
-            <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
-              {t("common.forks", { count: forks })}
-            </ListItem>
-            <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</ListItem>
-            <ListItem icon={<SvgIconClock size="sm" color="neutral" />} align="end">
-              {time}
+            <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
+              {t("common.ago", { date: formatDistanceToNow(new Date(createdAt)) })}
             </ListItem>
           </List>
         </CardSection>

@@ -2,6 +2,8 @@ import type { ComponentProps, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
+import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+
 import { hashString } from "@/utils/helpers";
 import { THREAD_CARD_LAYOUTS } from "@/utils/constants";
 
@@ -21,47 +23,24 @@ import {
   SvgIconChat,
   SvgIconClock,
   SvgIconFile,
-  SvgIconJauge,
   SvgIconUser,
-  SvgIconFork,
   SvgIconFolder,
 } from "@/components/icon";
 
 type ThreadsPageThreadGridItemProps = {
-  id: string;
-  title: string;
-  author: string;
-  createdAt: string;
-  prompts: number;
-  files: number;
-  views: number;
-  forks: number;
-  project: string;
-  progress: number;
-} & Omit<ComponentProps<typeof Card>, "id">;
+  thread: ThreadWithAuthor;
+} & ComponentProps<typeof Card>;
 
-const ThreadsPageThreadGridItem = ({
-  id,
-  title,
-  author,
-  createdAt,
-  prompts,
-  files,
-  views,
-  forks,
-  project,
-  progress,
-  ...props
-}: ThreadsPageThreadGridItemProps) => {
+const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridItemProps) => {
   const t = useTranslations();
-  const hash = hashString(id);
+  const hash = hashString(thread.id);
   const positions = THREAD_CARD_LAYOUTS[hash % THREAD_CARD_LAYOUTS.length];
 
   const columns: ReactNode[] = [
     <CardBody key="header">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{author}</CardDescription>
+        <CardTitle>{thread.title ?? t("common.untitled")}</CardTitle>
+        <CardDescription>{thread.profiles?.username}</CardDescription>
       </CardHeader>
     </CardBody>,
     <CardBody key="meta">
@@ -69,29 +48,25 @@ const ThreadsPageThreadGridItem = ({
         <CardActions />
         <List direction="column">
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("common.prompts", { count: prompts })}
+            {t("common.prompts", { count: thread.messageCount ?? 0 })}
           </ListItem>
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-            {t("common.files", { count: files })}
+            {t("common.files", { count: 0 })}
           </ListItem>
-          <List direction="row" align="between">
-            <ListItem icon={<SvgIconJauge size="sm" color="neutral" />}>{progress}%</ListItem>
-            <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
-              {formatDistanceToNow(new Date(createdAt))}
-            </ListItem>
-          </List>
+          <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
+            {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
+          </ListItem>
         </List>
       </CardSection>
       <CardDivider />
       <CardSection>
         <List direction="column">
           <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
-            {t("common.views", { count: views })}
+            {t("common.views", { count: 0 })}
           </ListItem>
-          <ListItem icon={<SvgIconFork size="sm" color="neutral" />}>
-            {t("common.forks", { count: forks })}
+          <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>
+            {thread.storagePath}
           </ListItem>
-          <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{project}</ListItem>
         </List>
       </CardSection>
     </CardBody>,

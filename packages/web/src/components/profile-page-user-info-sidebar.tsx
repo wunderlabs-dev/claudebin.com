@@ -1,11 +1,12 @@
 import type { ComponentProps } from "react";
+import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconCalendar, SvgIconChat, SvgIconEye, SvgIconFork } from "@/components/icon";
+import { SvgIconCalendar, SvgIconChat, SvgIconEye } from "@/components/icon";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DividerGrid,
   DividerGridRow,
@@ -17,27 +18,26 @@ import {
 import { Typography } from "@/components/ui/typography";
 
 type ProfilePageUserInfoSidebarProps = {
-  username: string;
-  bio: string;
-  avatar: string;
-  createdAt: string;
+  username: string | null;
+  name: string | null;
+  avatarUrl: string | null;
+  createdAt: Date;
   threads: number;
   views: number;
-  forks: number;
 } & ComponentProps<"div">;
 
 const ProfilePageUserInfoSidebar = ({
   username,
-  bio,
-  avatar,
+  name,
+  avatarUrl,
   createdAt,
   threads,
   views,
-  forks,
   className,
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
+  const [fallback] = [...(username ?? "")];
 
   const stats = [
     {
@@ -49,11 +49,6 @@ const ProfilePageUserInfoSidebar = ({
       key: "views",
       label: t("user.views", { count: views }),
       icon: <SvgIconEye size="sm" color="accent" />,
-    },
-    {
-      key: "forks",
-      label: t("user.forks", { count: forks }),
-      icon: <SvgIconFork size="sm" color="accent" />,
     },
   ] as const;
 
@@ -75,7 +70,8 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-2" />
         <DividerGridCell className="col-span-3 border-l">
           <Avatar size="lg">
-            <AvatarImage src={avatar} alt={username} />
+            <AvatarImage src={avatarUrl ?? undefined} alt={name ?? undefined} />
+            <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
         </DividerGridCell>
         <DividerGridCell className="col-span-5 border-r border-l" />
@@ -86,14 +82,11 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-12 flex flex-col gap-6 border px-6 py-6">
           <div className="flex flex-col gap-1">
             <Typography variant="h4">{username}</Typography>
-            <Typography variant="small" color="muted">
-              {bio}
-            </Typography>
           </div>
           <div className="flex items-center gap-1">
             <SvgIconCalendar size="sm" color="neutral" />
             <Typography variant="caption" color="muted">
-              {t("user.createdOn", { date: createdAt })}
+              {t("user.createdOn", { date: format(createdAt, "dd/MM/yyyy") })}
             </Typography>
           </div>
         </DividerGridCell>

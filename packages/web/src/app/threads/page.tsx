@@ -6,7 +6,7 @@ import { sessions } from "@/supabase/repos/sessions";
 import { getProjectName } from "@/utils/helpers";
 import { renderers } from "@/utils/renderers";
 
-import { SvgIconUser } from "@/components/icon";
+import { SvgIconMagnifier } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { FormControl, Input } from "@/components/ui/form-control";
@@ -58,7 +58,7 @@ const ThreadsPage = async () => {
             <FormControl className="flex-row items-center">
               <Input placeholder={t("threads.searchPlaceholder")} />
               <Button variant="outline">
-                <SvgIconUser size="sm" />
+                <SvgIconMagnifier size="sm" />
                 {t("threads.search")}
               </Button>
             </FormControl>
@@ -97,18 +97,7 @@ const ThreadsPage = async () => {
           <DividerGridRow key={thread.id}>
             <DividerGridEdge position="left" className="col-span-1" />
             <DividerGridCell className="col-span-10">
-              <ThreadsPageThreadGridItem
-                id={thread.id}
-                title={thread.title ?? "Untitled"}
-                author={thread.profiles?.username ? `@${thread.profiles.username}` : "Anonymous"}
-                createdAt={thread.createdAt}
-                prompts={thread.messageCount ?? 0}
-                files={thread.fileCount}
-                views={thread.viewCount}
-                forks={0}
-                project={getProjectName(thread.workingDir)}
-                progress={100}
-              />
+              <ThreadsPageThreadGridItem thread={thread} />
             </DividerGridCell>
             <DividerGridEdge position="right" className="col-span-1" />
           </DividerGridRow>
