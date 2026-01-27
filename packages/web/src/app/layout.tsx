@@ -1,8 +1,6 @@
 import "@/static/css/globals.css";
 
 import type { Metadata } from "next";
-
-export const dynamic = "force-dynamic";
 import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
