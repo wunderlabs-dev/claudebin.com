@@ -4,6 +4,7 @@ import { formatDistanceToNow, format } from "date-fns";
 
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
+import { messages } from "@/supabase/repos/messages";
 
 import { getProjectName } from "@/utils/helpers";
 
@@ -14,6 +15,7 @@ import { NavLink, NavLabel } from "@/components/ui/nav";
 
 import { ThreadPageMeta } from "@/components/thread-page-meta";
 import { ThreadPageSidebar } from "@/components/thread-page-sidebar";
+import { ThreadMessageList } from "@/components/thread-message-list";
 
 type ThreadPageProps = {
   params: Promise<{ id: string }>;
@@ -33,6 +35,12 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   // Track view (fire and forget)
   sessions.incrementViewCount(supabase, id);
 
+  // Fetch messages
+  const { messages: threadMessages } = await messages.getBySessionId(supabase, id, {
+    excludeMeta: true,
+    excludeSidechain: true,
+  });
+
   const author = thread.profiles?.username ?? "Anonymous";
   const createdAt = new Date(thread.createdAt);
 
@@ -50,6 +58,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           avatarUrl={thread.profiles?.avatarUrl ?? null}
           time={formatDistanceToNow(createdAt, { addSuffix: true })}
         />
+
+        <ThreadMessageList messages={threadMessages} />
       </div>
 
       <div className="col-span-3 flex flex-col justify-between border-gray-250 border-l px-6 pt-24 pb-12">

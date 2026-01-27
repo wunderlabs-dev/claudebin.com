@@ -123,16 +123,20 @@ export const processSession = async (
       }
 
       batch.push(message);
+
+      // Only count non-meta, non-sidechain messages for display
+      if (!message.isMeta && !message.isSidechain) {
+        total += 1;
+      }
+
       if (batch.length >= batchSize) {
         await messages.insertBatch(supabase, batch);
-        total += batch.length;
         batch = [];
       }
     }
 
     if (batch.length > 0) {
       await messages.insertBatch(supabase, batch);
-      total += batch.length;
     }
 
     metadata.fileCount = seenFilePaths.size;
