@@ -20,20 +20,24 @@ const AuthLoginPageForm = () => {
   const authError = searchParams.get("error");
   const authErrorDescription = searchParams.get("error_description");
 
-  const { value, setTrue } = useBoolean();
+  const { value, setTrue, setFalse } = useBoolean();
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     setTrue();
 
     const supabase = createClient();
     const redirect = encodeURIComponent(redirectTo);
 
-    supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
         redirectTo: `${window.location.origin}/auth/callback?redirect=${redirect}`,
       },
     });
+
+    if (error) {
+      setFalse();
+    }
   };
 
   return (
