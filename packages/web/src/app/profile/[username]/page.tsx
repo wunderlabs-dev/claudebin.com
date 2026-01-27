@@ -94,7 +94,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         <ProfilePageUserInfoSidebar
           username={profile.username}
           name={profile.name}
-          bio={null}
+          bio={profile.bio}
           avatarUrl={profile.avatarUrl}
           createdAt={new Date(profile.createdAt)}
           threads={0}
