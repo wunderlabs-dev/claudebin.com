@@ -39,7 +39,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
   const columns: ReactNode[] = [
     <CardBody key="header">
       <CardHeader>
-        <CardTitle>{thread.title}</CardTitle>
+        <CardTitle>{thread.title ?? t("common.untitled")}</CardTitle>
         <CardDescription>{thread.profiles?.username}</CardDescription>
       </CardHeader>
     </CardBody>,
