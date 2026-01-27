@@ -5,7 +5,7 @@ import { sessions } from "@/supabase/repos/sessions";
 
 import { renderers } from "@/utils/renderers";
 
-import { SvgIconUser } from "@/components/icon";
+import { SvgIconArrowRight } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { FormControl, Input } from "@/components/ui/form-control";
@@ -57,7 +57,7 @@ const ThreadsPage = async () => {
             <FormControl className="flex-row items-center">
               <Input placeholder={t("threads.searchPlaceholder")} />
               <Button variant="outline">
-                <SvgIconUser size="sm" />
+                <SvgIconArrowRight size="sm" />
                 {t("threads.search")}
               </Button>
             </FormControl>
