@@ -92,10 +92,11 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     <Container spacing="md" className="grid grid-cols-12 gap-16">
       <div className="col-span-4">
         <ProfilePageUserInfoSidebar
-          username={""}
-          bio=""
-          avatar={""}
-          createdAt={"12/02/2026"}
+          username={profile.username}
+          name={profile.name}
+          bio={null}
+          avatarUrl={profile.avatarUrl}
+          createdAt={new Date(profile.createdAt)}
           threads={0}
           views={0}
         />

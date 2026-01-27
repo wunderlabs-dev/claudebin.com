@@ -1,11 +1,12 @@
 import type { ComponentProps } from "react";
+import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
 import { SvgIconCalendar, SvgIconChat, SvgIconEye } from "@/components/icon";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DividerGrid,
   DividerGridRow,
@@ -17,18 +18,20 @@ import {
 import { Typography } from "@/components/ui/typography";
 
 type ProfilePageUserInfoSidebarProps = {
-  username: string;
-  bio: string;
-  avatar: string;
-  createdAt: string;
+  username: string | null;
+  name: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
+  createdAt: Date;
   threads: number;
   views: number;
 } & ComponentProps<"div">;
 
 const ProfilePageUserInfoSidebar = ({
   username,
+  name,
   bio,
-  avatar,
+  avatarUrl,
   createdAt,
   threads,
   views,
@@ -36,6 +39,7 @@ const ProfilePageUserInfoSidebar = ({
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
+  const [fallback] = [...username];
 
   const stats = [
     {
@@ -68,7 +72,8 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-2" />
         <DividerGridCell className="col-span-3 border-l">
           <Avatar size="lg">
-            <AvatarImage src={avatar} alt={username} />
+            <AvatarImage src={avatarUrl ?? undefined} alt={name ?? undefined} />
+            <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
         </DividerGridCell>
         <DividerGridCell className="col-span-5 border-r border-l" />
@@ -79,14 +84,16 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-12 flex flex-col gap-6 border px-6 py-6">
           <div className="flex flex-col gap-1">
             <Typography variant="h4">{username}</Typography>
-            <Typography variant="small" color="muted">
-              {bio}
-            </Typography>
+            {bio ? (
+              <Typography variant="small" color="muted">
+                {bio}
+              </Typography>
+            ) : null}
           </div>
           <div className="flex items-center gap-1">
             <SvgIconCalendar size="sm" color="neutral" />
             <Typography variant="caption" color="muted">
-              {t("user.createdOn", { date: createdAt })}
+              {t("user.createdOn", { date: format(createdAt, "dd/MM/yyyy") })}
             </Typography>
           </div>
         </DividerGridCell>
