@@ -21,6 +21,7 @@ type ProfilePageUserInfoSidebarProps = {
   username: string | null;
   name: string | null;
   avatarUrl: string | null;
+  bio: string | null;
   createdAt: Date;
   threads: number;
   views: number;
@@ -30,6 +31,7 @@ const ProfilePageUserInfoSidebar = ({
   username,
   name,
   avatarUrl,
+  bio,
   createdAt,
   threads,
   views,
@@ -82,6 +84,11 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-12 flex flex-col gap-6 border px-6 py-6">
           <div className="flex flex-col gap-1">
             <Typography variant="h4">{username}</Typography>
+            {bio && (
+              <Typography variant="small" color="muted">
+                {bio}
+              </Typography>
+            )}
           </div>
           <div className="flex items-center gap-1">
             <SvgIconCalendar size="sm" color="neutral" />

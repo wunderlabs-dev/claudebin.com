@@ -127,6 +127,7 @@ export type Database = {
           name: string | null;
           updatedAt: string;
           username: string | null;
+          viewCount: number;
         };
         Insert: {
           avatarUrl?: string | null;
@@ -137,6 +138,7 @@ export type Database = {
           name?: string | null;
           updatedAt?: string;
           username?: string | null;
+          viewCount?: number;
         };
         Update: {
           avatarUrl?: string | null;
@@ -147,6 +149,7 @@ export type Database = {
           name?: string | null;
           updatedAt?: string;
           username?: string | null;
+          viewCount?: number;
         };
         Relationships: [];
       };
@@ -253,6 +256,12 @@ export type Database = {
       increment_session_view_count: {
         Args: {
           session_id: string;
+        };
+        Returns: undefined;
+      };
+      increment_profile_view_count: {
+        Args: {
+          profile_id: string;
         };
         Returns: undefined;
       };

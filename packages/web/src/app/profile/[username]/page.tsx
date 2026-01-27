@@ -34,6 +34,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   const threads = await sessions.getByUserId(supabase, profile.id);
 
+  // Track view (fire and forget)
+  profiles.incrementViewCount(supabase, profile.id);
+
   return (
     <Container spacing="md" className="grid grid-cols-12 gap-16">
       <div className="col-span-4">
@@ -41,9 +44,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           username={profile.username}
           name={profile.name}
           avatarUrl={profile.avatarUrl}
+          bio={profile.bio}
           createdAt={new Date(profile.createdAt)}
           threads={threads.length}
-          views={0}
+          views={profile.viewCount}
         />
       </div>
 

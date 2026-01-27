@@ -49,4 +49,11 @@ const upsert = async (
   }
 };
 
-export const profiles = { getById, getByUsername, upsert };
+const incrementViewCount = async (
+  supabase: SupabaseClient<Database>,
+  profileId: string,
+): Promise<void> => {
+  await supabase.rpc("increment_profile_view_count", { profile_id: profileId });
+};
+
+export const profiles = { getById, getByUsername, upsert, incrementViewCount };
