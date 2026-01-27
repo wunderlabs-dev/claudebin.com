@@ -69,17 +69,34 @@ const buttonVariants = cva(
   },
 );
 
-type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>;
+type ButtonProps<T extends React.ElementType = "button"> = {
+  as?: T;
+  variant?: VariantProps<typeof buttonVariants>["variant"];
+  color?: VariantProps<typeof buttonVariants>["color"];
+  className?: string;
+  children?: React.ReactNode;
+} & Omit<React.ComponentPropsWithoutRef<T>, "as" | "className" | "children">;
 
-const Button = ({ className, variant = "default", color = "default", ...props }: ButtonProps) => {
+const Button = <T extends React.ElementType = "button">({
+  as,
+  variant = "default",
+  color = "default",
+  className,
+  children,
+  ...props
+}: ButtonProps<T>) => {
+  const Component = as || "button";
+
   return (
-    <button
+    <Component
       data-slot="button"
       data-variant={variant}
       data-color={color}
       className={cn(buttonVariants({ variant, color, className }))}
       {...props}
-    />
+    >
+      {children}
+    </Component>
   );
 };
 

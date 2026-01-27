@@ -4,6 +4,7 @@
     "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
   },
   "common": {
+    "loading": "Loading...",
     "copy": "Copy",
     "copied": "Copied!",
     "copyLink": "Copy link",
@@ -70,6 +71,14 @@
     "openSharing": "Open sharing",
     "fork": "Fork",
     "continueConversation": "Continue conversation"
+  },
+  "login": {
+    "title": "<gradient>Authenticate</gradient>\nto Claudebin",
+    "badge": "Secure login",
+    "description": "Sign in to publish and manage your sessions",
+    "continueWithGithub": "Continue with GitHub",
+    "errorTitle": "Authentication failed",
+    "errorDescription": "Something went wrong during sign in. Please try again."
   },
   "cliAuth": {
     "title": "<gradient>CLI</gradient>\nAuthentication",

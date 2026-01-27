@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type ComponentProps } from "react";
 import Link from "next/link";
+import { useState, type ComponentProps } from "react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
@@ -74,7 +74,7 @@ const AppBar = ({ user, className, ...props }: AppBarProps) => {
               {t("appBar.logout")}
             </Button>
           ) : (
-            <Button>
+            <Button as={Link} href="/auth/login">
               <SvgIconUser size="sm" />
               {t("appBar.login")}
             </Button>
