@@ -23,6 +23,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
+    "lodash.isnil": "^4.0.0",
     "lucide-react": "^0.562.0",
     "nanoid": "^5.1.6",
     "next": "16.1.4",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+    "@types/lodash.isnil": "^4.0.9",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.0",
     "tailwindcss": "^4.1.18",

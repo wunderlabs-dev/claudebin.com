@@ -32,6 +32,7 @@ export { SvgIconHome } from "./svg-icon-home";
 export { SvgIconJauge } from "./svg-icon-jauge";
 export { SvgIconKey } from "./svg-icon-key";
 export { SvgIconLine } from "./svg-icon-line";
+export { SvgIconLock } from "./svg-icon-lock";
 export { SvgIconLoading } from "./svg-icon-loading";
 export { SvgIconOrbits } from "./svg-icon-orbits";
 export { SvgIconRefresh } from "./svg-icon-refresh";

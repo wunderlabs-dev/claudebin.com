@@ -1,53 +1,96 @@
+import isNil from "lodash.isnil";
 import { redirect } from "next/navigation";
+import { isPast } from "date-fns";
+import { getTranslations } from "next-intl/server";
+
 import { cliAuth } from "@/supabase/repos/cli-auth";
+
 import { createClient } from "@/supabase/server";
 import { createServiceClient } from "@/supabase/service";
 
-interface Props {
+import { SvgIconClock, SvgIconKey, SvgIconLock, SvgIconSkull } from "@/components/icon";
+import { Container } from "@/components/ui/container";
+import { Typography } from "@/components/ui/typography";
+
+import { CliAuthPageHeader } from "@/components/cli-auth-page-header";
+
+
+type Props = {
   searchParams: Promise<{ code?: string }>;
-}
+};
 
 const CliAuthPage = async ({ searchParams }: Props) => {
+  const t = await getTranslations();
   const { code } = await searchParams;
 
-  if (!code) {
+  if (isNil(code)) {
     return (
-      <Layout>
-        <ErrorState title="Invalid Link">
-          This authentication link is missing the required code parameter.
-        </ErrorState>
-      </Layout>
+      <Container as="main" size="sm" spacing="md">
+        <div className="flex flex-col gap-18">
+          <CliAuthPageHeader />
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+            <Typography variant="h4" className="flex items-center gap-2">
+              <SvgIconKey />
+              {t("cliAuth.invalidLinkTitle")}
+            </Typography>
+            <Typography color="neutral">{t("cliAuth.invalidLinkDescription")}</Typography>
+          </div>
+        </div>
+      </Container>
     );
   }
 
   const serviceSupabase = createServiceClient();
   const cliSession = await cliAuth.getByToken(serviceSupabase, code);
 
-  if (!cliSession) {
+  if (isNil(cliSession)) {
     return (
-      <Layout>
-        <ErrorState title="Invalid Code">
-          This authentication code was not found. It may have expired.
-        </ErrorState>
-      </Layout>
+      <Container as="main" size="sm" spacing="md">
+        <div className="flex flex-col gap-18">
+          <CliAuthPageHeader />
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+            <Typography variant="h4" className="flex items-center gap-2">
+              <SvgIconKey />
+              {t("cliAuth.invalidCodeTitle")}
+            </Typography>
+            <Typography color="neutral">{t("cliAuth.invalidCodeDescription")}</Typography>
+          </div>
+        </div>
+      </Container>
     );
   }
 
   if (cliSession.completedAt) {
     return (
-      <Layout>
-        <SuccessState />
-      </Layout>
+      <Container as="main" size="sm" spacing="md">
+        <div className="flex flex-col gap-18">
+          <CliAuthPageHeader />
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+            <Typography variant="h4" className="flex items-center gap-2">
+              <SvgIconLock />
+              {t("cliAuth.successTitle")}
+            </Typography>
+            <Typography color="neutral">{t("cliAuth.successDescription")}</Typography>
+          </div>
+        </div>
+      </Container>
     );
   }
 
-  if (cliSession.expiresAt && new Date(cliSession.expiresAt) < new Date()) {
+  if (cliSession.expiresAt && isPast(cliSession.expiresAt)) {
     return (
-      <Layout>
-        <ErrorState title="Code Expired">
-          This authentication code has expired. Please run the auth command again.
-        </ErrorState>
-      </Layout>
+      <Container as="main" size="sm" spacing="md">
+        <div className="flex flex-col gap-18">
+          <CliAuthPageHeader />
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+            <Typography variant="h4" className="flex items-center gap-2">
+              <SvgIconClock />
+              {t("cliAuth.expiredTitle")}
+            </Typography>
+            <Typography color="neutral">{t("cliAuth.expiredDescription")}</Typography>
+          </div>
+        </div>
+      </Container>
     );
   }
 
@@ -57,7 +100,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (isNil(user)) {
     redirect(`/auth/login?redirect=${encodeURIComponent(`/cli/auth?code=${code}`)}`);
   }
 
@@ -65,7 +108,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) {
+  if (isNil(session)) {
     redirect(`/auth/login?redirect=${encodeURIComponent(`/cli/auth?code=${code}`)}`);
   }
 
@@ -78,42 +121,35 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     });
   } catch {
     return (
-      <Layout>
-        <ErrorState title="Authentication Failed">
-          Failed to complete authentication. Please try again.
-        </ErrorState>
-      </Layout>
+      <Container as="main" size="sm" spacing="md">
+        <div className="flex flex-col gap-18">
+          <CliAuthPageHeader />
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+            <Typography variant="h4" className="flex items-center gap-2">
+              <SvgIconSkull />
+              {t("cliAuth.failedTitle")}
+            </Typography>
+            <Typography color="neutral">{t("cliAuth.failedDescription")}</Typography>
+          </div>
+        </div>
+      </Container>
     );
   }
 
   return (
-    <Layout>
-      <SuccessState />
-    </Layout>
+    <Container as="main" size="sm" spacing="md">
+      <div className="flex flex-col gap-18">
+        <CliAuthPageHeader />
+        <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+          <Typography variant="h4" className="flex items-center gap-2">
+            <SvgIconLock />
+            {t("cliAuth.successTitle")}
+          </Typography>
+          <Typography color="neutral">{t("cliAuth.successDescription")}</Typography>
+        </div>
+      </div>
+    </Container>
   );
 };
-
-const Layout = ({ children }: { children: React.ReactNode }) => (
-  <main className="flex min-h-screen flex-col items-center justify-center p-8">
-    <div className="w-full max-w-md rounded-xl border border-neutral-800 bg-neutral-900 p-8">
-      {children}
-    </div>
-  </main>
-);
-
-const SuccessState = () => (
-  <div className="text-center">
-    <div className="mb-4 text-4xl">✓</div>
-    <h1 className="mb-2 font-bold text-2xl text-green-400">Authenticated!</h1>
-    <p className="text-neutral-400">You can close this window and return to your terminal.</p>
-  </div>
-);
-
-const ErrorState = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="text-center">
-    <h1 className="mb-4 font-bold text-2xl text-red-400">{title}</h1>
-    <p className="text-neutral-400">{children}</p>
-  </div>
-);
 
 export default CliAuthPage;

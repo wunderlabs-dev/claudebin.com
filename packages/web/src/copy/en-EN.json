@@ -71,6 +71,21 @@
     "fork": "Fork",
     "continueConversation": "Continue conversation"
   },
+  "cliAuth": {
+    "title": "<gradient>CLI</gradient>\nAuthentication",
+    "badge": "Safe area",
+    "description": "Securely connect your terminal to Claudebin",
+    "successTitle": "You're all set",
+    "successDescription": "Your terminal is now connected to Claudebin. You can close this window and return to your terminal.",
+    "invalidLinkTitle": "Invalid link",
+    "invalidLinkDescription": "This authentication link is missing the required code. Please use the link provided in your terminal.",
+    "invalidCodeTitle": "Code not found",
+    "invalidCodeDescription": "This authentication code doesn't exist or has already been used. Please run the auth command again.",
+    "expiredTitle": "Code expired",
+    "expiredDescription": "This authentication code has expired. Please run the auth command again to get a new link.",
+    "failedTitle": "Authentication failed",
+    "failedDescription": "Something went wrong while connecting your terminal. Please try again."
+  },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
     "product": "Product",
