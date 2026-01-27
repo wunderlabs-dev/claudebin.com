@@ -4,7 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { hashString } from "@/utils/helpers";
+import { hashString, getProjectName } from "@/utils/helpers";
 import { THREAD_CARD_LAYOUTS } from "@/utils/constants";
 
 import {
@@ -22,8 +22,8 @@ import { List, ListItem } from "@/components/ui/list";
 import {
   SvgIconChat,
   SvgIconClock,
+  SvgIconEye,
   SvgIconFile,
-  SvgIconUser,
   SvgIconFolder,
 } from "@/components/icon";
 
@@ -51,7 +51,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
             {t("common.prompts", { count: thread.messageCount ?? 0 })}
           </ListItem>
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-            {t("common.files", { count: 0 })}
+            {t("common.files", { count: thread.fileCount })}
           </ListItem>
           <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
             {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
@@ -61,11 +61,11 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
       <CardDivider />
       <CardSection>
         <List direction="column">
-          <ListItem icon={<SvgIconUser size="sm" color="neutral" />}>
-            {t("common.views", { count: 0 })}
+          <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
+            {t("common.views", { count: thread.viewCount })}
           </ListItem>
           <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>
-            {thread.storagePath}
+            {getProjectName(thread.workingDir)}
           </ListItem>
         </List>
       </CardSection>
