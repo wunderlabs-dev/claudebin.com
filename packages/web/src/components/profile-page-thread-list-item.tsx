@@ -30,7 +30,7 @@ const ProfilePageThreadListItem = ({
           </CardHeader>
           <List direction="row">
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-              {t("common.messages", { count: messageCount ?? 0 })}
+              {t("common.prompts", { count: messageCount ?? 0 })}
             </ListItem>
             <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
               {t("common.ago", { date: formatDistanceToNow(new Date(createdAt)) })}
