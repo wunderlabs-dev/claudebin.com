@@ -11,7 +11,7 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
-  signOut: async () => { },
+  signOut: async () => {},
 });
 
 type AuthProviderProps = {
