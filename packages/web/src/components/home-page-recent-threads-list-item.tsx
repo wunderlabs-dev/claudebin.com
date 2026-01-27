@@ -31,7 +31,7 @@ const HomePageRecentThreadsListItem = ({
       <CardBody className="self-end">
         <List direction="row">
           <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
-            {formatDistanceToNow(new Date(thread.createdAt))}
+            {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
           </ListItem>
           <CardActions />
         </List>

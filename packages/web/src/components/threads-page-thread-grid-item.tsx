@@ -54,7 +54,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
             {t("common.files", { count: 0 })}
           </ListItem>
           <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
-            {formatDistanceToNow(new Date(thread.createdAt))}
+            {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
           </ListItem>
         </List>
       </CardSection>
