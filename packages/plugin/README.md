@@ -20,7 +20,7 @@ Publish the current session to claudebin.com and get a shareable URL.
 /share
 ```
 
-Returns a URL like `https://claudebin.com/s/abc123` that anyone can view.
+Returns a URL like `https://claudebin.com/threads/abc123` that anyone can view.
 
 Automatically authenticates via browser if not logged in.
 

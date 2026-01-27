@@ -117,7 +117,7 @@ export const sessionsRouter = router({
 
       return {
         status: SessionStatus.READY,
-        url: `${config.appUrl}/s/${input.id}`,
+        url: `${config.appUrl}/threads/${input.id}`,
       };
     }),
 });

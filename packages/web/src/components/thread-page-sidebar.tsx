@@ -40,7 +40,7 @@ const ThreadPageSidebar = ({
 }: ThreadPageSidebarProps): ReactNode => {
   const t = useTranslations();
 
-  const threadUrl = `https://claudebin.com/s/${sessionId}`;
+  const threadUrl = `https://claudebin.com/threads/${sessionId}`;
 
   return (
     <div className="flex flex-col items-start gap-6">
