@@ -47,6 +47,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         <ThreadPageMeta
           title={thread.title ?? "Untitled"}
           author={author}
+          avatarUrl={thread.profiles?.avatarUrl ?? null}
           time={formatDistanceToNow(createdAt, { addSuffix: true })}
         />
       </div>

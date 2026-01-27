@@ -4,24 +4,30 @@ import Link from "next/link";
 
 import { SvgIconClock } from "@/components/icon";
 
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Typography } from "@/components/ui/typography";
 import { List, ListItem } from "@/components/ui/list";
 
 type ThreadPageMetaProps = {
   title: string;
   author: string;
+  avatarUrl: string | null;
   time: string;
 };
 
-const ThreadPageMeta = ({ title, author, time }: ThreadPageMetaProps): ReactNode => {
+const ThreadPageMeta = ({ title, author, avatarUrl, time }: ThreadPageMetaProps): ReactNode => {
   return (
     <div className="flex flex-col gap-1 border-gray-250 border-b pb-4 pl-12">
       <Typography variant="h3">{title}</Typography>
 
       <div className="flex items-center gap-3">
         <Link href={`/profile/${author}`} className="flex items-center gap-3">
-          <Avatar size="sm" />
+          <Avatar size="sm">
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={author} />}
+            <AvatarFallback delayMs={avatarUrl ? 300 : 0}>
+              {author.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
           <Typography variant="small" color="accent" className="underline">
             @{author}
           </Typography>
