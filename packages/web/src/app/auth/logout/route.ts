@@ -5,11 +5,14 @@ import { createClient } from "@/supabase/server";
 
 export const GET = async (request: NextRequest) => {
   const supabase = await createClient();
-  const redirectTo = new URL("/", request.url);
 
   await supabase.auth.signOut();
 
   revalidatePath("/", "layout");
 
-  return NextResponse.redirect(redirectTo);
+  const response = NextResponse.redirect(new URL("/", request.url));
+
+  response.headers.set("Cache-Control", "no-store, max-age=0");
+
+  return response;
 };
