@@ -69,7 +69,7 @@ const AppBar = ({ user, className, ...props }: AppBarProps) => {
           </div>
 
           {user ? (
-            <Button as={Link} href="/auth/logout">
+            <Button>
               <SvgIconUser size="sm" />
               {t("appBar.logout")}
             </Button>
