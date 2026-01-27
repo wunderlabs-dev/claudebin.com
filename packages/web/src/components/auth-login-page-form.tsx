@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useTransition } from "react";
+import { useBoolean } from "usehooks-ts";
 
 import { createClient } from "@/supabase/client";
 
@@ -20,17 +20,19 @@ const AuthLoginPageForm = () => {
   const authError = searchParams.get("error");
   const authErrorDescription = searchParams.get("error_description");
 
-  const [isPending, startTransition] = useTransition();
+  const { value, setTrue } = useBoolean();
 
   const handleSignIn = () => {
-    startTransition(async () => {
-      const supabase = createClient();
-      await supabase.auth.signInWithOAuth({
-        provider: "github",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`,
-        },
-      });
+    setTrue();
+
+    const supabase = createClient();
+    const redirect = encodeURIComponent(redirectTo);
+
+    supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?redirect=${redirect}`,
+      },
     });
   };
 
@@ -49,9 +51,9 @@ const AuthLoginPageForm = () => {
             </Typography>
           </div>
         ) : null}
-        <Button variant="secondary" onClick={handleSignIn} disabled={isPending}>
+        <Button variant="secondary" onClick={handleSignIn} disabled={value}>
           <SvgIconGithub />
-          {isPending ? t("common.loading") : t("login.continueWithGithub")}
+          {value ? t("common.loading") : t("login.continueWithGithub")}
         </Button>
       </div>
     </div>
