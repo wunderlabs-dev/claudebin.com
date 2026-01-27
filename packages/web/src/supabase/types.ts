@@ -120,6 +120,7 @@ export type Database = {
       profiles: {
         Row: {
           avatarUrl: string | null;
+          bio: string | null;
           createdAt: string;
           email: string | null;
           id: string;
@@ -129,6 +130,7 @@ export type Database = {
         };
         Insert: {
           avatarUrl?: string | null;
+          bio?: string | null;
           createdAt?: string;
           email?: string | null;
           id: string;
@@ -138,6 +140,7 @@ export type Database = {
         };
         Update: {
           avatarUrl?: string | null;
+          bio?: string | null;
           createdAt?: string;
           email?: string | null;
           id?: string;
