@@ -16,7 +16,7 @@ CREATE POLICY "profiles_select_public"
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, name, avatar_url, username)
+  INSERT INTO public.profiles (id, email, name, "avatarUrl", username)
   VALUES (
     NEW.id,
     NEW.email,
