@@ -45,7 +45,9 @@ const AuthLoginPageForm = () => {
               <SvgIconSkull />
               {t("login.errorTitle")}
             </Typography>
-            <Typography color="neutral">{authErrorDescription || t("login.errorDescription")}</Typography>
+            <Typography color="neutral">
+              {authErrorDescription || t("login.errorDescription")}
+            </Typography>
           </div>
         ) : null}
         <Button variant="secondary" onClick={handleSignIn} disabled={isPending}>
