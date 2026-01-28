@@ -3,7 +3,7 @@
 import { createClient } from "@/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/supabase/repos/sessions";
 
-export const searchThreads = async (
+export const getPublicThreads = async (
   query: string,
   offset = 0,
   limit = 20,

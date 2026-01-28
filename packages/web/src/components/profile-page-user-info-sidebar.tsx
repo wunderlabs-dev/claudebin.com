@@ -70,8 +70,11 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-2" />
         <DividerGridCell className="col-span-3 border-l">
           <Avatar size="lg">
-            <AvatarImage src={avatarUrl ?? undefined} alt={name ?? undefined} />
-            <AvatarFallback>{fallback}</AvatarFallback>
+            {avatarUrl ? (
+              <AvatarImage src={avatarUrl} alt={name ?? undefined} />
+            ) : (
+              <AvatarFallback delayMs={0}>{fallback}</AvatarFallback>
+            )}
           </Avatar>
         </DividerGridCell>
         <DividerGridCell className="col-span-5 border-r border-l" />

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useTransition, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useDebounceValue } from "usehooks-ts";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { searchThreads } from "@/app/threads/actions";
+import { getPublicThreads } from "@/app/threads/actions";
 
 import { renderers } from "@/utils/renderers";
 import { SEARCH_INPUT_DEBOUNCE_MS } from "@/utils/constants";
@@ -42,26 +42,30 @@ const ThreadsPageContent = ({
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isFirstRender = useRef(true);
+
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [debouncedQuery] = useDebounceValue(searchQuery, SEARCH_INPUT_DEBOUNCE_MS);
 
   const [threads, setThreads] = useState(initialThreads);
   const [total, setTotal] = useState(initialTotal);
-  const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [isPending, startTransition] = useTransition();
-  const [isFetchingThreads, setIsFetchingThreads] = useState(false);
+  const [isSearching, startSearching] = useTransition();
+  const [isFetchingMore, startFetchingMore] = useTransition();
 
-  const [debouncedQuery] = useDebounceValue(searchQuery, SEARCH_INPUT_DEBOUNCE_MS);
-  const isInitialMount = useRef(true);
-
-  // Derived state
-  const isResultEmpty = !isPending && threads.length === 0 && debouncedQuery.trim() !== "";
-
-  // ABOUTME: Sync URL and perform search when debounced query changes
+  // Search when query changes
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
       return;
     }
 
+    startSearching(async () => {
+      const result = await getPublicThreads(debouncedQuery, 0);
+      setThreads(result.threads);
+      setTotal(result.total);
+    });
+
+    // Update URL
     const params = new URLSearchParams(searchParams.toString());
     if (debouncedQuery) {
       params.set("query", debouncedQuery);
@@ -69,24 +73,17 @@ const ThreadsPageContent = ({
       params.delete("query");
     }
     router.push(`/threads${params.toString() ? `?${params.toString()}` : ""}`);
-
-    startTransition(async () => {
-      const result = await searchThreads(debouncedQuery, 0);
-      setThreads(result.threads);
-      setTotal(result.total);
-    });
   }, [debouncedQuery, router, searchParams]);
 
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  }, []);
+  const handleFetchMore = () => {
+    startFetchingMore(async () => {
+      const result = await getPublicThreads(debouncedQuery, threads.length);
+      setThreads((prev) => [...prev, ...result.threads]);
+    });
+  };
 
-  const handleLoadMore = useCallback(async () => {
-    setIsFetchingThreads(true);
-    const result = await searchThreads(searchQuery, threads.length);
-    setThreads((prev) => [...prev, ...result.threads]);
-    setIsFetchingThreads(false);
-  }, [searchQuery, threads.length]);
+  const hasMoreThreads = threads.length < total;
+  const hasNoSearchResults = !isSearching && threads.length === 0 && debouncedQuery.trim() !== "";
 
   return (
     <DividerGrid>
@@ -109,11 +106,11 @@ const ThreadsPageContent = ({
             <Input
               placeholder={t("threads.searchPlaceholder")}
               value={searchQuery}
-              onChange={handleInputChange}
+              onChange={(event) => setSearchQuery(event.target.value)}
             />
-            <Button variant="outline" disabled={isPending}>
+            <Button variant="outline" disabled={isSearching}>
               <SvgIconMagnifier size="sm" />
-              {isPending ? t("threads.searching") : t("threads.search")}
+              {isSearching ? t("threads.searching") : t("threads.search")}
             </Button>
           </FormControl>
         </DividerGridCell>
@@ -132,7 +129,7 @@ const ThreadsPageContent = ({
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
-      {isResultEmpty ? (
+      {hasNoSearchResults ? (
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
           <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">
@@ -161,7 +158,7 @@ const ThreadsPageContent = ({
             </DividerGridRow>
           ))}
 
-          {threads.length < total ? (
+          {hasMoreThreads ? (
             <DividerGridRow>
               <DividerGridEdge position="left" className="col-span-1" />
               <DividerGridCell className="col-span-10">
@@ -170,10 +167,10 @@ const ThreadsPageContent = ({
                   <CardBody className="items-center justify-center p-0">
                     <Button
                       variant="secondary"
-                      onClick={handleLoadMore}
-                      disabled={isFetchingThreads}
+                      onClick={handleFetchMore}
+                      disabled={isFetchingMore}
                     >
-                      {isFetchingThreads ? t("threads.loadingMore") : t("threads.loadMore")}
+                      {isFetchingMore ? t("threads.loadingMore") : t("threads.loadMore")}
                     </Button>
                   </CardBody>
                   <CardBody />

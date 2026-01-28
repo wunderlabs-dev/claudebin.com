@@ -5,6 +5,7 @@ import type * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
 import { cn } from "@/utils/helpers";
+import { AVATAR_FALLBACK_DELAY_MS } from "@/utils/constants";
 
 const AvatarSizes = ["sm", "md", "lg"] as const;
 
@@ -60,6 +61,7 @@ const avatarFallbackFontSizeClassNames: Record<AvatarSize, string> = {
 
 const AvatarFallback = ({
   className,
+  delayMs = AVATAR_FALLBACK_DELAY_MS,
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
   const size = useContext(AvatarContext);
@@ -67,6 +69,7 @@ const AvatarFallback = ({
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
+      delayMs={delayMs}
       className={cn(
         "flex size-full items-center justify-center rounded-full",
         "font-bold text-orange-50 uppercase",
