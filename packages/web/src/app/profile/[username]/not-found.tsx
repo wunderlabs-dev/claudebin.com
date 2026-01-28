@@ -3,8 +3,6 @@ import { getTranslations } from "next-intl/server";
 
 import { renderers } from "@/utils/renderers";
 
-import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
 import {
   DividerGrid,
   DividerGridRow,
@@ -12,6 +10,9 @@ import {
   DividerGridCell,
   DividerGridDivider,
 } from "@/components/ui/divider-grid";
+
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
 const ProfileNotFound = async () => {

@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
 

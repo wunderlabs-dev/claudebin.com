@@ -83,6 +83,8 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           )}
 
           {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
+
+          <ProfilePageDangerZoneContainer />
         </div>
       </div>
     </Container>
