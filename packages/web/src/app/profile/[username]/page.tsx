@@ -71,12 +71,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           {threads.length ? (
             <div className="flex flex-col">
               {threads.map((thread) => (
-                <ProfilePageThreadListItem
-                  key={thread.id}
-                  title={thread.title}
-                  messageCount={thread.messageCount}
-                  createdAt={thread.createdAt}
-                />
+                <ProfilePageThreadListItem key={thread.id} thread={thread} />
               ))}
             </div>
           ) : (

@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext } from "react";
 import type * as React from "react";
+import Link from "next/link";
+import { createContext, useContext } from "react";
 
 import { cn } from "@/utils/helpers";
 
@@ -17,7 +18,8 @@ const CardContext = createContext<CardVariant>("card");
 
 type CardProps = {
   variant?: CardVariant;
-} & React.ComponentProps<"article">;
+  href?: string;
+} & Omit<React.ComponentProps<typeof Link>, "href">;
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex shrink-0 flex-col justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
@@ -25,21 +27,33 @@ const cardVariantClassNames: CardVariantMapping = {
   grid: "relative grid grid-cols-3 divide-x divide-gray-250 -mt-px hover:z-10",
 } as const;
 
-const Card = ({ variant = "card", className, children, ...props }: CardProps) => {
+const Card = ({ variant = "card", href, className, children, ...props }: CardProps) => {
   return (
     <CardContext.Provider value={variant}>
-      <article
-        data-slot="card"
-        data-variant={variant}
-        className={cn(
-          "group border border-gray-250 hover:border-orange-50",
-          cardVariantClassNames[variant],
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </article>
+      {href ? (
+        <Link
+          href={href}
+          data-slot="card"
+          data-variant={variant}
+          className={cn(
+            "group border border-gray-250 hover:border-orange-50",
+            cardVariantClassNames[variant],
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </Link>
+      ) : (
+        <article
+          data-slot="card"
+          data-variant={variant}
+          className={cn("group border border-gray-250", cardVariantClassNames[variant], className)}
+          {...props}
+        >
+          {children}
+        </article>
+      )}
     </CardContext.Provider>
   );
 };

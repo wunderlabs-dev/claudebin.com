@@ -1,8 +1,11 @@
 import type { ComponentProps } from "react";
+import truncate from "lodash.truncate";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+
+import { THREAD_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import {
   Card,
@@ -27,7 +30,7 @@ const HomePageRecentThreadsListItem = ({
   const t = useTranslations();
 
   return (
-    <Card variant="card" {...props}>
+    <Card variant="card" href={`/threads/${thread.id}`} {...props}>
       <CardBody className="self-end">
         <List direction="row">
           <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
@@ -38,7 +41,11 @@ const HomePageRecentThreadsListItem = ({
       </CardBody>
       <CardBody>
         <CardHeader>
-          <CardTitle>{thread.title ?? t("common.untitled")}</CardTitle>
+          <CardTitle>
+            {truncate(thread.title ?? t("common.untitled"), {
+              length: THREAD_TITLE_TRUNCATE_LENGTH,
+            })}
+          </CardTitle>
           <CardDescription>{thread.profiles?.username}</CardDescription>
         </CardHeader>
         <List direction="column">

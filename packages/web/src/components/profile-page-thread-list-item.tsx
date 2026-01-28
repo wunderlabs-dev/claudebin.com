@@ -1,6 +1,11 @@
 import type { ComponentProps } from "react";
+import truncate from "lodash.truncate";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
+
+import type { Session } from "@/supabase/repos/sessions";
+
+import { THREAD_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import { Card, CardBody, CardHeader, CardTitle, CardSection } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
@@ -8,32 +13,29 @@ import { List, ListItem } from "@/components/ui/list";
 import { SvgIconChat, SvgIconClock } from "@/components/icon";
 
 type ProfilePageThreadListItemProps = {
-  title: string | null;
-  messageCount: number | null;
-  createdAt: string;
-} & Omit<ComponentProps<typeof Card>, "title">;
+  thread: Session;
+} & ComponentProps<typeof Card>;
 
-const ProfilePageThreadListItem = ({
-  title,
-  messageCount,
-  createdAt,
-  ...props
-}: ProfilePageThreadListItemProps) => {
+const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListItemProps) => {
   const t = useTranslations();
 
   return (
-    <Card variant="list" {...props}>
+    <Card variant="list" href={`/threads/${thread.id}`} {...props}>
       <CardBody>
         <CardSection>
           <CardHeader>
-            <CardTitle className="truncate whitespace-nowrap">{title ?? t("common.untitled")}</CardTitle>
+            <CardTitle>
+              {truncate(thread.title ?? t("common.untitled"), {
+                length: THREAD_TITLE_TRUNCATE_LENGTH,
+              })}
+            </CardTitle>
           </CardHeader>
           <List direction="row">
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-              {t("common.prompts", { count: messageCount ?? 0 })}
+              {t("common.prompts", { count: thread.messageCount ?? 0 })}
             </ListItem>
             <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
-              {t("common.ago", { date: formatDistanceToNow(new Date(createdAt)) })}
+              {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
             </ListItem>
           </List>
         </CardSection>

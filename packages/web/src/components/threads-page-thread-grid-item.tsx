@@ -74,7 +74,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
   ] as const;
 
   return (
-    <Card variant="grid" {...props}>
+    <Card variant="grid" href={`/threads/${thread.id}`} {...props}>
       {positions.map((position) => columns[position])}
     </Card>
   );
