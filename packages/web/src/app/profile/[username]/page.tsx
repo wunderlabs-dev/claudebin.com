@@ -32,6 +32,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     notFound();
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const threads = await sessions.getByUserId(supabase, profile.id);
 
   // Analytics for profile views
@@ -39,7 +43,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   profiles.incrementViewCount(supabase, profile.id);
 
   return (
-    <Container spacing="md" className="grid grid-cols-12 gap-16">
+    <Container spacing="md" className="grid grid-cols-12 items-start gap-16">
       <div className="col-span-4">
         <ProfilePageUserInfoSidebar
           username={profile.username}
@@ -78,7 +82,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             <ProfilePageQuickStart />
           )}
 
-          <ProfilePageDangerZone />
+          {user?.id === profile.id ? <ProfilePageDangerZone /> : null}
         </div>
       </div>
     </Container>

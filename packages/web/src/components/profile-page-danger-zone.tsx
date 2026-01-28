@@ -1,5 +1,8 @@
+"use client";
+
 import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
+import { useBoolean } from "usehooks-ts";
 
 import { cn } from "@/utils/helpers";
 
@@ -12,6 +15,7 @@ type ProfilePageDangerZoneProps = ComponentProps<"div">;
 
 const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZoneProps) => {
   const t = useTranslations();
+  const { value, setTrue, setFalse } = useBoolean();
 
   return (
     <div
@@ -27,10 +31,18 @@ const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZonePro
         {t("user.dangerZoneDescription")}
       </Typography>
 
-      <div className="flex gap-3">
-        <Button variant="secondary">{t("user.cancel")}</Button>
-        <Button variant="danger">{t("user.deleteAccount")}</Button>
-      </div>
+      {value ? (
+        <div className="flex gap-3">
+          <Button variant="secondary" onClick={setFalse}>
+            {t("user.cancel")}
+          </Button>
+          <Button variant="danger">{t("user.confirmDeleteAccount")}</Button>
+        </div>
+      ) : (
+        <Button variant="danger" onClick={setTrue}>
+          {t("user.deleteAccount")}
+        </Button>
+      )}
     </div>
   );
 };
