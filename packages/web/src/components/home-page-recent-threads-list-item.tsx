@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import { SvgIconChat, SvgIconClock, SvgIconFile } from "@/components/icon";
+import { SvgIconChat, SvgIconClock, SvgIconFile, SvgIconHeart } from "@/components/icon";
 
 type HomePageRecentThreadsListItemProps = {
   thread: ThreadWithAuthor;
@@ -53,7 +53,10 @@ const HomePageRecentThreadsListItem = ({
             {t("common.prompts", { count: thread.messageCount ?? 0 })}
           </ListItem>
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-            {t("common.files", { count: 0 })}
+            {t("common.files", { count: thread.fileCount })}
+          </ListItem>
+          <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
+            {t("common.likes", { count: thread.likeCount })}
           </ListItem>
         </List>
       </CardBody>

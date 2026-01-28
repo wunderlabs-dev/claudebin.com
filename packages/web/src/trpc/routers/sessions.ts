@@ -4,7 +4,9 @@ import { z } from "zod";
 
 import { config } from "@/supabase/config/env";
 import { sessions } from "@/supabase/repos/sessions";
+import { sessionLikes } from "@/supabase/repos/sessionLikes";
 import { processSession } from "@/supabase/services/processor";
+import { createClient } from "@/supabase/server";
 import { createServiceClient } from "@/supabase/service";
 import { publicProcedure, router } from "@/trpc/init";
 import { MAX_SESSION_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/constants";
@@ -120,4 +122,34 @@ export const sessionsRouter = router({
         url: `${config.appUrl}/threads/${input.id}`,
       };
     }),
+
+  toggleLike: publicProcedure
+    .input(z.object({ sessionId: z.string() }))
+    .mutation(async ({ input }) => {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const liked = await sessionLikes.toggle(supabase, input.sessionId, user.id);
+      return { liked };
+    }),
+
+  hasLiked: publicProcedure.input(z.object({ sessionId: z.string() })).query(async ({ input }) => {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { liked: false };
+    }
+
+    const liked = await sessionLikes.hasLiked(supabase, input.sessionId, user.id);
+    return { liked };
+  }),
 });

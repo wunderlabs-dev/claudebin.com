@@ -26,7 +26,12 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   const t = await getTranslations();
   const supabase = await createClient();
 
-  const thread = await sessions.getByIdWithAuthor(supabase, id);
+  // Get current user for like status
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const thread = await sessions.getByIdWithAuthor(supabase, id, user?.id);
 
   if (!thread) {
     notFound();
@@ -34,6 +39,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   // Track view (fire and forget)
   sessions.incrementViewCount(supabase, id);
+
+  const isAuthenticated = !!user;
 
   // Fetch messages
   const { messages: threadMessages } = await messages.getBySessionId(supabase, id, {
@@ -72,6 +79,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           files={thread.fileCount}
           views={thread.viewCount}
           likes={thread.likeCount}
+          hasLiked={thread.hasLiked ?? false}
+          isAuthenticated={isAuthenticated}
         />
       </div>
     </Container>

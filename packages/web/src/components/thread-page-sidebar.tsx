@@ -8,7 +8,6 @@ import {
   SvgIconFile,
   SvgIconFolder,
   SvgIconGlobe,
-  SvgIconHeart,
   SvgIconCalendar,
 } from "@/components/icon";
 
@@ -16,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
 import { List, ListItem } from "@/components/ui/list";
+import { SessionLikeButton } from "@/components/session-like-button";
 
 type ThreadPageSidebarProps = {
   sessionId: string;
@@ -26,6 +26,8 @@ type ThreadPageSidebarProps = {
   files: number;
   views: number;
   likes: number;
+  hasLiked: boolean;
+  isAuthenticated: boolean;
 };
 
 const ThreadPageSidebar = ({
@@ -37,6 +39,8 @@ const ThreadPageSidebar = ({
   files,
   views,
   likes,
+  hasLiked,
+  isAuthenticated,
 }: ThreadPageSidebarProps): ReactNode => {
   const t = useTranslations();
 
@@ -63,9 +67,12 @@ const ThreadPageSidebar = ({
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: views })}
         </ListItem>
-        <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
-          {t("common.likes", { count: likes })}
-        </ListItem>
+        <SessionLikeButton
+          sessionId={sessionId}
+          initialLiked={hasLiked}
+          likeCount={likes}
+          isAuthenticated={isAuthenticated}
+        />
       </List>
 
       <div className="flex w-full flex-col gap-8">

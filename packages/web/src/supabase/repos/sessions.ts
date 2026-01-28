@@ -16,6 +16,7 @@ export type ThreadWithAuthor = SessionsRow & {
     username: string | null;
     avatarUrl: string | null;
   } | null;
+  hasLiked?: boolean;
 };
 
 const getPublicThreads = async (
@@ -71,18 +72,26 @@ const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<
 const getByIdWithAuthor = async (
   supabase: SupabaseClient<Database>,
   id: string,
+  currentUserId?: string,
 ): Promise<ThreadWithAuthor | null> => {
-  const { data, error } = await supabase
+  const query = supabase
     .from("sessions")
-    .select("*, profiles(username, avatarUrl)")
-    .eq("id", id)
-    .maybeSingle();
+    .select("*, profiles(username, avatarUrl), session_likes(id)")
+    .eq("id", id);
 
-  if (error) {
-    throw new Error(`Failed to fetch session: ${error.message}`);
+  if (currentUserId) {
+    query.eq("session_likes.userId", currentUserId);
   }
 
-  return data;
+  const { data, error } = await query.maybeSingle();
+
+  if (error) throw new Error(`Failed to fetch session: ${error.message}`);
+  if (!data) return null;
+
+  const { session_likes, ...session } = data;
+  const hasLiked = currentUserId ? (session_likes?.length ?? 0) > 0 : false;
+
+  return { ...session, hasLiked };
 };
 
 const getByIdForUser = async (

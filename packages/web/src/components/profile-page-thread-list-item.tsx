@@ -10,7 +10,7 @@ import { THREAD_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 import { Card, CardBody, CardHeader, CardTitle, CardSection } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import { SvgIconChat, SvgIconClock } from "@/components/icon";
+import { SvgIconChat, SvgIconClock, SvgIconHeart } from "@/components/icon";
 
 type ProfilePageThreadListItemProps = {
   thread: Session;
@@ -33,6 +33,9 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
           <List direction="row">
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
               {t("common.prompts", { count: thread.messageCount ?? 0 })}
+            </ListItem>
+            <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
+              {t("common.likes", { count: thread.likeCount })}
             </ListItem>
             <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
               {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}

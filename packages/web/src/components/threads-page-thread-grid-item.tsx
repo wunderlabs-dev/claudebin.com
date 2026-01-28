@@ -26,6 +26,7 @@ import {
   SvgIconEye,
   SvgIconFile,
   SvgIconFolder,
+  SvgIconHeart,
 } from "@/components/icon";
 
 type ThreadsPageThreadGridItemProps = {
@@ -68,6 +69,9 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
         <List direction="column">
           <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
             {t("common.views", { count: thread.viewCount })}
+          </ListItem>
+          <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
+            {t("common.likes", { count: thread.likeCount })}
           </ListItem>
           <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>
             {getProjectName(thread.workingDir)}
