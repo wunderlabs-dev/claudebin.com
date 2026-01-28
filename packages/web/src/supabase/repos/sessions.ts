@@ -25,9 +25,7 @@ type ProfileWithDeleted = {
   deletedAt: string | null;
 };
 
-const sanitizeProfile = (
-  profile: ProfileWithDeleted | null,
-): ThreadWithAuthor["profiles"] => {
+const sanitizeProfile = (profile: ProfileWithDeleted | null): ThreadWithAuthor["profiles"] => {
   if (!profile || profile.deletedAt) return null;
   return { username: profile.username, avatarUrl: profile.avatarUrl };
 };
