@@ -17,6 +17,6 @@ export const like = async (sessionId: string): Promise<{ liked: boolean } | { er
   }
 
   const liked = await sessionLikes.toggle(supabase, sessionId, user.id);
-  
+
   return { liked };
 };

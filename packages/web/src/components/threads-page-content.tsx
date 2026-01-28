@@ -7,7 +7,7 @@ import { useDebounceValue } from "usehooks-ts";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { getPublicThreads } from "@/app/threads/actions";
+import { getPublicThreads } from "@/actions/threads";
 
 import { renderers } from "@/utils/renderers";
 import { SEARCH_INPUT_DEBOUNCE_MS } from "@/utils/constants";
