@@ -15,6 +15,7 @@ export type ThreadWithAuthor = SessionsRow & {
   profiles: {
     username: string | null;
     avatarUrl: string | null;
+    deletedAt: string | null;
   } | null;
   hasLiked?: boolean;
 };
@@ -32,7 +33,7 @@ const getPublicThreads = async (
 
   let queryBuilder = supabase
     .from("sessions")
-    .select("*, profiles(username, avatarUrl)", { count: "exact" })
+    .select("*, profiles(username, avatarUrl, deletedAt)", { count: "exact" })
     .eq("isPublic", true)
     .order("createdAt", { ascending: false });
 
@@ -91,7 +92,7 @@ const getByIdWithAuthor = async (
 ): Promise<ThreadWithAuthor | null> => {
   const query = supabase
     .from("sessions")
-    .select("*, profiles(username, avatarUrl), session_likes(id)")
+    .select("*, profiles(username, avatarUrl, deletedAt), session_likes(id)")
     .eq("id", id);
 
   if (currentUserId) {

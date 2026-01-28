@@ -1,9 +1,11 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useBoolean } from "usehooks-ts";
 
+import { deleteAccount } from "@/actions/account";
 import { cn } from "@/utils/helpers";
 
 import { SvgIconSkull } from "@/components/icon";
@@ -16,6 +18,13 @@ type ProfilePageDangerZoneProps = ComponentProps<"div">;
 const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZoneProps) => {
   const t = useTranslations();
   const { value, setTrue, setFalse } = useBoolean();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+    await deleteAccount();
+    setIsLoading(false);
+  };
 
   return (
     <div
@@ -33,10 +42,12 @@ const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZonePro
 
       {value ? (
         <div className="flex gap-3">
-          <Button variant="secondary" onClick={setFalse}>
+          <Button variant="secondary" onClick={setFalse} disabled={isLoading}>
             {t("user.cancel")}
           </Button>
-          <Button variant="danger">{t("user.confirmDeleteAccount")}</Button>
+          <Button variant="danger" onClick={handleDelete} disabled={isLoading}>
+            {t("user.confirmDeleteAccount")}
+          </Button>
         </div>
       ) : (
         <Button variant="danger" onClick={setTrue}>

@@ -48,7 +48,9 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
     excludeSidechain: true,
   });
 
-  const author = thread.profiles?.username ?? "Anonymous";
+  const isDeletedUser = !!thread.profiles?.deletedAt;
+  const author = isDeletedUser ? "Anonymous" : (thread.profiles?.username ?? "Anonymous");
+  const avatarUrl = isDeletedUser ? null : (thread.profiles?.avatarUrl ?? null);
   const createdAt = new Date(thread.createdAt);
 
   return (
@@ -62,7 +64,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         <ThreadPageMeta
           title={thread.title ?? "Untitled"}
           author={author}
-          avatarUrl={thread.profiles?.avatarUrl ?? null}
+          avatarUrl={avatarUrl}
           time={formatDistanceToNow(createdAt, { addSuffix: true })}
         />
 

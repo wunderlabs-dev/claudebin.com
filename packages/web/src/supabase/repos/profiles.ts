@@ -27,6 +27,7 @@ const getByUsername = async (
     .from("profiles")
     .select("*")
     .eq("username", username)
+    .is("deletedAt", null)
     .maybeSingle();
 
   if (error) {
