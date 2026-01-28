@@ -2,11 +2,12 @@
 
 import { createClient } from "@/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/supabase/repos/sessions";
-import { THREADS_PAGE_SIZE } from "@/utils/constants";
+
+import { THREADS_DEFAULT_OFFSET, THREADS_PAGE_SIZE } from "@/utils/constants";
 
 export const getPublicThreads = async (
   query: string,
-  offset = 0,
+  offset = THREADS_DEFAULT_OFFSET,
   limit = THREADS_PAGE_SIZE,
 ): Promise<GetPublicThreadsResult> => {
   const supabase = await createClient();
