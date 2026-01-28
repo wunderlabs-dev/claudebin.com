@@ -157,7 +157,11 @@ const ThreadsPageContent = ({
                 <Card variant="grid">
                   <CardBody />
                   <CardBody className="items-center justify-center p-0">
-                    <Button variant="secondary" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                    <Button
+                      variant="secondary"
+                      onClick={() => fetchNextPage()}
+                      disabled={isFetchingNextPage}
+                    >
                       {isFetchingNextPage ? t("threads.loadingMore") : t("threads.loadMore")}
                     </Button>
                   </CardBody>

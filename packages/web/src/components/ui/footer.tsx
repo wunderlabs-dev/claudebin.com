@@ -62,7 +62,7 @@ const Footer = ({ className, ...props }: FooterProps) => {
               <Typography variant="small" color="muted">
                 {t.rich("footer.copyright", renderers)}
               </Typography>
-              <Typography variant="small" color="muted">
+              <Typography variant="caption" color="muted">
                 {t("footer.disclaimer")}
               </Typography>
             </div>
