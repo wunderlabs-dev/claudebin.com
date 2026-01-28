@@ -42,14 +42,13 @@ const ThreadsPageThreadsContainer = ({
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
-  const isFirstRender = useRef(true);
 
-  const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [debouncedQuery] = useDebounceValue(searchQuery, SEARCH_INPUT_DEBOUNCE_MS);
+  const [query, setQuery] = useState(initialQuery);
+  const [queryDebounced] = useDebounceValue(query, SEARCH_INPUT_DEBOUNCE_MS);
 
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ["threads", debouncedQuery],
-    queryFn: ({ pageParam }) => getPublicThreads(debouncedQuery, pageParam),
+    queryKey: ["threads", queryDebounced],
+    queryFn: ({ pageParam }) => getPublicThreads(queryDebounced, pageParam),
     initialPageParam: 0,
     initialData: {
       pages: [{ threads: initialThreads, total: initialTotal }],
@@ -61,23 +60,18 @@ const ThreadsPageThreadsContainer = ({
     },
   });
 
-  // Update URL when query changes
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
-    const url = debouncedQuery
-      ? `/threads?query=${encodeURIComponent(debouncedQuery)}`
-      : "/threads";
-    router.replace(url);
-  }, [debouncedQuery, router]);
-
   const threads = data?.pages.flatMap((page) => page.threads) ?? [];
   const total = data?.pages[0]?.total ?? 0;
   const isSearching = isFetching && !isFetchingNextPage;
-  const hasNoSearchResults = !isFetching && threads.length === 0 && debouncedQuery.trim() !== "";
+  const hasNoSearchResults = !isFetching && threads.length === 0 && queryDebounced.trim() !== "";
+
+  useEffect(() => {
+    if (queryDebounced) {
+      router.replace(`/threads?query=${encodeURIComponent(queryDebounced)}`)
+    } else {
+      router.replace('/threads');
+    }
+  }, [queryDebounced, router]);
 
   return (
     <DividerGrid>
@@ -99,8 +93,8 @@ const ThreadsPageThreadsContainer = ({
           <FormControl className="flex-row items-center">
             <Input
               placeholder={t("threads.searchPlaceholder")}
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
             />
             <Button variant="outline" disabled={isSearching}>
               <SvgIconMagnifier size="sm" />
@@ -129,7 +123,7 @@ const ThreadsPageThreadsContainer = ({
           <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">
             <div className="mx-auto flex max-w-lg flex-col gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
-                {t.rich("threads.emptyTitle", { ...renderers, query: debouncedQuery })}
+                {t.rich("threads.emptyTitle", { ...renderers, query: queryDebounced })}
               </Typography>
               <Typography variant="body" color="muted">
                 {t("threads.emptyDescription")}

@@ -33,9 +33,9 @@ const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
       </div>
 
       <ThreadsPageThreadsContainer
-        initialThreads={threads}
-        initialTotal={total}
         initialQuery={query}
+        initialTotal={total}
+        initialThreads={threads}
       />
     </Container>
   );
