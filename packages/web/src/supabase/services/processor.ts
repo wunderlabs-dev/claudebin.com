@@ -11,18 +11,17 @@ import { parseJsonlStream } from "@/supabase/services/parser";
 import { sessions } from "@/supabase/repos/sessions";
 import { SessionStatus } from "@/trpc/routers/sessions";
 import { BlockType } from "@/supabase/types/message";
+import { generateTitle } from "@/utils/openrouter";
 
 const DEFAULT_BATCH_SIZE = 100;
 const AUTO_TITLE_MAX_LENGTH = 100;
-
-// =============================================================================
-// Metadata Extraction
-// =============================================================================
+const FILE_BLOCK_TYPES = [BlockType.FILE_READ, BlockType.FILE_WRITE, BlockType.FILE_EDIT];
 
 type SessionMetadata = {
   workingDir: string | null;
   fileCount: number;
-  autoTitle: string | null;
+  messageCount: number;
+  title: string | null;
 };
 
 type ContentBlockJson = {
@@ -30,8 +29,7 @@ type ContentBlockJson = {
   file_path?: string;
 };
 
-// ABOUTME: Extracts cwd from the raw JSONL message for workingDir
-const extractWorkingDir = (rawMessage: Json): string | null => {
+const getWorkingDir = (rawMessage: Json): string | null => {
   if (typeof rawMessage === "object" && rawMessage !== null && "cwd" in rawMessage) {
     const cwd = (rawMessage as Record<string, unknown>).cwd;
     return typeof cwd === "string" ? cwd : null;
@@ -39,36 +37,109 @@ const extractWorkingDir = (rawMessage: Json): string | null => {
   return null;
 };
 
-// ABOUTME: Extracts file paths from content blocks (FILE_READ, FILE_WRITE, FILE_EDIT)
-const extractFilePaths = (content: Json): string[] => {
+const getFilePaths = (content: Json): string[] => {
   if (!Array.isArray(content)) return [];
 
-  const fileTypes = [BlockType.FILE_READ, BlockType.FILE_WRITE, BlockType.FILE_EDIT];
   const paths: string[] = [];
-
   for (const block of content as ContentBlockJson[]) {
-    if (fileTypes.includes(block.type as typeof BlockType.FILE_READ) && block.file_path) {
+    if (FILE_BLOCK_TYPES.includes(block.type as typeof BlockType.FILE_READ) && block.file_path) {
       paths.push(block.file_path);
     }
   }
-
   return paths;
 };
 
-// ABOUTME: Generates auto-title from first user message text
-const generateAutoTitle = (textPreview: string): string | null => {
-  if (!textPreview.trim()) return null;
+const truncate = (text: string, maxLength: number): string => {
+  if (text.length <= maxLength) return text;
 
-  // Take first line or first N characters
-  const firstLine = textPreview.split("\n")[0].trim();
-  if (firstLine.length <= AUTO_TITLE_MAX_LENGTH) {
-    return firstLine;
-  }
-
-  // Truncate at word boundary
-  const truncated = firstLine.slice(0, AUTO_TITLE_MAX_LENGTH);
+  const truncated = text.slice(0, maxLength);
   const lastSpace = truncated.lastIndexOf(" ");
   return lastSpace > 0 ? `${truncated.slice(0, lastSpace)}...` : `${truncated}...`;
+};
+
+const fallbackTitle = (text: string): string | null => {
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+
+  const firstLine = trimmed.split("\n")[0].trim();
+  return truncate(firstLine, AUTO_TITLE_MAX_LENGTH);
+};
+
+const createAccumulator = (existingTitle: string | null) => {
+  let workingDir: string | null = null;
+  let firstMessageText: string | null = null;
+  let messageCount = 0;
+  const filePaths = new Set<string>();
+
+  const resolveTitle = async (): Promise<string | null> => {
+    if (existingTitle) return existingTitle;
+
+    if (firstMessageText) {
+      const llmTitle = await generateTitle(firstMessageText);
+      if (llmTitle) return llmTitle;
+      return fallbackTitle(firstMessageText);
+    }
+
+    return null;
+  };
+
+  return {
+    process: (message: ParsedMessage) => {
+      if (workingDir === null) {
+        workingDir = getWorkingDir(message.rawMessage);
+      }
+
+      for (const path of getFilePaths(message.content)) {
+        filePaths.add(path);
+      }
+
+      const isCountable = !message.isMeta && !message.isSidechain;
+      if (isCountable) {
+        if (firstMessageText === null) {
+          firstMessageText = message.textPreview;
+        }
+        messageCount += 1;
+      }
+    },
+
+    getResult: async (): Promise<SessionMetadata> => ({
+      workingDir,
+      fileCount: filePaths.size,
+      messageCount,
+      title: await resolveTitle(),
+    }),
+  };
+};
+
+type ValidatedSession = {
+  title: string | null;
+  storagePath: string;
+};
+
+const validate = async (
+  supabase: SupabaseClient<Database>,
+  sessionId: string,
+): Promise<ValidatedSession | null> => {
+  const session = await sessions.getById(supabase, sessionId);
+
+  if (!session) {
+    console.error(`Session ${sessionId} not found`);
+    return null;
+  }
+
+  if (session.status !== SessionStatus.PROCESSING) {
+    return null;
+  }
+
+  if (!session.storagePath) {
+    console.error(`Session ${sessionId} has no storage_path`);
+    return null;
+  }
+
+  return {
+    title: session.title,
+    storagePath: session.storagePath,
+  };
 };
 
 export const processSession = async (
@@ -76,58 +147,18 @@ export const processSession = async (
   sessionId: string,
   batchSize = DEFAULT_BATCH_SIZE,
 ): Promise<void> => {
+  const session = await validate(supabase, sessionId);
+  if (!session) return;
+
   try {
-    const session = await sessions.getById(supabase, sessionId);
-
-    if (!session) {
-      throw new Error("Session not found");
-    }
-
-    if (session.status !== SessionStatus.PROCESSING) {
-      return; // Already processed
-    }
-
-    if (!session.storagePath) {
-      throw new Error("Session has no storage_path");
-    }
-
     const stream = await sessions.downloadJsonlStream(supabase, session.storagePath);
+    const accumulator = createAccumulator(session.title);
 
     let batch: ParsedMessage[] = [];
-    let total = 0;
-
-    // Metadata extraction state
-    const metadata: SessionMetadata = {
-      workingDir: null,
-      fileCount: 0,
-      autoTitle: null,
-    };
-    const seenFilePaths = new Set<string>();
-    let foundFirstUserMessage = false;
 
     for await (const message of parseJsonlStream(stream, sessionId)) {
-      // Extract workingDir from first message
-      if (metadata.workingDir === null) {
-        metadata.workingDir = extractWorkingDir(message.rawMessage);
-      }
-
-      // Extract auto-title from first user message
-      if (!foundFirstUserMessage && message.role === "user" && message.textPreview) {
-        metadata.autoTitle = generateAutoTitle(message.textPreview);
-        foundFirstUserMessage = true;
-      }
-
-      // Collect unique file paths
-      for (const filePath of extractFilePaths(message.content)) {
-        seenFilePaths.add(filePath);
-      }
-
+      accumulator.process(message);
       batch.push(message);
-
-      // Only count non-meta, non-sidechain messages for display
-      if (!message.isMeta && !message.isSidechain) {
-        total += 1;
-      }
 
       if (batch.length >= batchSize) {
         await messages.insertBatch(supabase, batch);
@@ -139,17 +170,14 @@ export const processSession = async (
       await messages.insertBatch(supabase, batch);
     }
 
-    metadata.fileCount = seenFilePaths.size;
-
-    // Use auto-title only if session has no title
-    const title = session.title || metadata.autoTitle;
+    const metadata = await accumulator.getResult();
 
     await sessions.update(supabase, sessionId, {
       status: SessionStatus.READY,
-      messageCount: total,
+      messageCount: metadata.messageCount,
       workingDir: metadata.workingDir,
       fileCount: metadata.fileCount,
-      title,
+      title: metadata.title,
     });
   } catch (error) {
     await sessions.update(supabase, sessionId, {
