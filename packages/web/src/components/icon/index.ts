@@ -30,6 +30,7 @@ export { SvgIconGithub } from "./svg-icon-github";
 export { SvgIconGlitters } from "./svg-icon-glitters";
 export { SvgIconGlobe } from "./svg-icon-globe";
 export { SvgIconHeart } from "./svg-icon-heart";
+export { SvgIconHeartSolid } from "./svg-icon-heart-solid";
 export { SvgIconHome } from "./svg-icon-home";
 export { SvgIconJauge } from "./svg-icon-jauge";
 export { SvgIconKey } from "./svg-icon-key";

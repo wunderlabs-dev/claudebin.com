@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { toggleLike } from "@/actions/toggleLike";
+import { like } from "@/actions/like";
 import { cn } from "@/utils/helpers";
-import { SvgIconHeart } from "@/components/icon";
+import { SvgIconHeart, SvgIconHeartSolid } from "@/components/icon";
 
 type SessionLikeButtonProps = {
   sessionId: string;
@@ -40,7 +40,7 @@ const SessionLikeButton = ({
     setIsLoading(true);
 
     try {
-      const result = await toggleLike(sessionId);
+      const result = await like(sessionId);
 
       if ("error" in result) {
         // Revert on error
@@ -67,7 +67,7 @@ const SessionLikeButton = ({
         isLoading && "opacity-50",
       )}
     >
-      <SvgIconHeart size="sm" className={cn(liked && "fill-current")} />
+      {liked ? <SvgIconHeartSolid size="sm" /> : <SvgIconHeart size="sm" />}
       <span className="text-sm">{count}</span>
     </button>
   );
