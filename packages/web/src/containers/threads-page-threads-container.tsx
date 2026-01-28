@@ -67,9 +67,9 @@ const ThreadsPageThreadsContainer = ({
 
   useEffect(() => {
     if (queryDebounced) {
-      router.replace(`/threads?query=${encodeURIComponent(queryDebounced)}`)
+      router.replace(`/threads?query=${encodeURIComponent(queryDebounced)}`);
     } else {
-      router.replace('/threads');
+      router.replace("/threads");
     }
   }, [queryDebounced, router]);
 
