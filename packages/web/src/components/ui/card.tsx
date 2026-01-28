@@ -59,7 +59,7 @@ const Card = ({ variant = "card", href, className, children, ...props }: CardPro
 };
 
 const cardBodyVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col self-start gap-3 p-4 bg-gray-100",
+  card: "flex flex-col self-start gap-3 max-w-3xs p-4 bg-gray-100",
   list: "flex flex-col col-span-5 gap-3 py-3",
   grid: "relative flex flex-col justify-end col-span-1 gap-3 py-6",
 } as const;
