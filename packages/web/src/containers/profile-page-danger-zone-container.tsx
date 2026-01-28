@@ -1,30 +1,32 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useMutation } from "@tanstack/react-query";
 import { useBoolean } from "usehooks-ts";
+import { toast } from "sonner";
 
-import { deleteAccount } from "@/actions/account";
 import { cn } from "@/utils/helpers";
+import { deleteAccount } from "@/actions/account";
 
 import { SvgIconSkull } from "@/components/icon";
-
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 
-type ProfilePageDangerZoneProps = ComponentProps<"div">;
+type ProfilePageDangerZoneContainerProps = ComponentProps<"div">;
 
-const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZoneProps) => {
+const ProfilePageDangerZoneContainer = ({
+  className,
+  ...props
+}: ProfilePageDangerZoneContainerProps) => {
   const t = useTranslations();
-  const { value, setTrue, setFalse } = useBoolean();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleDelete = async () => {
-    setIsLoading(true);
-    await deleteAccount();
-    setIsLoading(false);
-  };
+  const { value, setTrue, setFalse } = useBoolean();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteAccount,
+    onError: () => toast.error(t("user.deleteAccountError")),
+  });
 
   return (
     <div
@@ -42,10 +44,10 @@ const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZonePro
 
       {value ? (
         <div className="flex gap-3">
-          <Button variant="secondary" onClick={setFalse} disabled={isLoading}>
+          <Button variant="secondary" onClick={setFalse} disabled={isPending}>
             {t("user.cancel")}
           </Button>
-          <Button variant="danger" onClick={handleDelete} disabled={isLoading}>
+          <Button variant="danger" onClick={() => mutate()} disabled={isPending}>
             {t("user.confirmDeleteAccount")}
           </Button>
         </div>
@@ -58,4 +60,4 @@ const ProfilePageDangerZone = ({ className, ...props }: ProfilePageDangerZonePro
   );
 };
 
-export { ProfilePageDangerZone };
+export { ProfilePageDangerZoneContainer };

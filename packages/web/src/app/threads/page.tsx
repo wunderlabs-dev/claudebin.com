@@ -8,7 +8,7 @@ import { renderers } from "@/utils/renderers";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
-import { ThreadsPageContent } from "@/components/threads-page-content";
+import { ThreadsPageThreadsContainer } from "@/containers/threads-page-threads-container";
 
 type ThreadsPageProps = {
   searchParams: Promise<{ query?: string }>;
@@ -32,7 +32,11 @@ const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
         </Typography>
       </div>
 
-      <ThreadsPageContent initialThreads={threads} initialTotal={total} initialQuery={query} />
+      <ThreadsPageThreadsContainer
+        initialThreads={threads}
+        initialTotal={total}
+        initialQuery={query}
+      />
     </Container>
   );
 };

@@ -62,7 +62,8 @@
     "dangerZoneDescription": "Deleting your account will disconnect your CLI token from Claudebin. Your published threads will remain public. This action cannot be undone.",
     "cancel": "Cancel",
     "deleteAccount": "Delete account",
-    "confirmDeleteAccount": "Yes, delete account"
+    "confirmDeleteAccount": "Yes, delete account",
+    "deleteAccountError": "Failed to delete account. Please try again."
   },
   "threads": {
     "title": "<gradient>Conversations</gradient>\nThreads",

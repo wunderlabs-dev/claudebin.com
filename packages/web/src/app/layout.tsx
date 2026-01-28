@@ -15,6 +15,7 @@ import { AuthProvider } from "@/context/auth";
 import { QueryProvider } from "@/context/query";
 import { AppBar } from "@/components/ui/app-bar";
 import { Footer } from "@/components/ui/footer";
+import { Toaster } from "@/components/ui/sonner";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -54,6 +55,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
               <AppBar />
               <main>{children}</main>
               <Footer />
+              <Toaster />
             </AuthProvider>
           </NextIntlClientProvider>
         </QueryProvider>

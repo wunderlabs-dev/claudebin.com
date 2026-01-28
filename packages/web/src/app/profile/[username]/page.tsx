@@ -12,7 +12,7 @@ import { SvgIconLine, SvgIconArrowRight } from "@/components/icon";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
-import { ProfilePageDangerZone } from "@/components/profile-page-danger-zone";
+import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
@@ -82,7 +82,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             <ProfilePageQuickStart />
           )}
 
-          {user?.id === profile.id ? <ProfilePageDangerZone /> : null}
+          {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
         </div>
       </div>
     </Container>

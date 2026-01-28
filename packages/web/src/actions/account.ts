@@ -1,5 +1,6 @@
 "use server";
 
+import isNil from "lodash.isnil";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/supabase/server";
@@ -10,7 +11,7 @@ export const deleteAccount = async (): Promise<{ error: string } | never> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (isNil(user)) {
     return { error: "Unauthorized" };
   }
 

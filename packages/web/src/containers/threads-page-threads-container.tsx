@@ -29,17 +29,17 @@ import {
 
 import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid-item";
 
-type ThreadsPageContentProps = {
+type ThreadsPageThreadsContainerProps = {
   initialThreads: ThreadWithAuthor[];
   initialTotal: number;
   initialQuery?: string;
 };
 
-const ThreadsPageContent = ({
+const ThreadsPageThreadsContainer = ({
   initialThreads,
   initialTotal,
   initialQuery = "",
-}: ThreadsPageContentProps) => {
+}: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
   const isFirstRender = useRef(true);
@@ -198,4 +198,4 @@ const ThreadsPageContent = ({
   );
 };
 
-export { ThreadsPageContent };
+export { ThreadsPageThreadsContainer };
