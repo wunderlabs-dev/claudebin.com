@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
@@ -42,7 +42,7 @@ const ThreadsPageContent = ({
 }: ThreadsPageContentProps) => {
   const t = useTranslations();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const isFirstRender = useRef(true);
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [debouncedQuery] = useDebounceValue(searchQuery, SEARCH_INPUT_DEBOUNCE_MS);
@@ -63,14 +63,14 @@ const ThreadsPageContent = ({
 
   // Update URL when query changes
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (debouncedQuery) {
-      params.set("query", debouncedQuery);
-    } else {
-      params.delete("query");
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-    router.push(`/threads${params.toString() ? `?${params.toString()}` : ""}`);
-  }, [debouncedQuery, router, searchParams]);
+
+    const url = debouncedQuery ? `/threads?query=${encodeURIComponent(debouncedQuery)}` : "/threads";
+    router.replace(url);
+  }, [debouncedQuery, router]);
 
   const threads = data?.pages.flatMap((page) => page.threads) ?? [];
   const total = data?.pages[0]?.total ?? 0;
