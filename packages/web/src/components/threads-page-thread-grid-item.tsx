@@ -46,9 +46,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
             length: THREAD_GRID_TITLE_TRUNCATE_LENGTH,
           })}
         </CardTitle>
-        <CardDescription>
-          {thread.profiles?.deletedAt ? "Anonymous" : thread.profiles?.username}
-        </CardDescription>
+        <CardDescription>{thread.profiles?.username ?? "Anonymous"}</CardDescription>
       </CardHeader>
     </CardBody>,
     <CardBody key="meta">

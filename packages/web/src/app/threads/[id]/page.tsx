@@ -48,9 +48,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
     excludeSidechain: true,
   });
 
-  const isDeletedUser = !!thread.profiles?.deletedAt;
-  const author = isDeletedUser ? "Anonymous" : (thread.profiles?.username ?? "Anonymous");
-  const avatarUrl = isDeletedUser ? null : (thread.profiles?.avatarUrl ?? null);
+  const author = thread.profiles?.username ?? "Anonymous";
+  const avatarUrl = thread.profiles?.avatarUrl ?? null;
   const createdAt = new Date(thread.createdAt);
 
   return (

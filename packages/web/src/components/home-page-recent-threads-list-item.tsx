@@ -46,9 +46,7 @@ const HomePageRecentThreadsListItem = ({
               length: THREAD_TITLE_TRUNCATE_LENGTH,
             })}
           </CardTitle>
-          <CardDescription>
-            {thread.profiles?.deletedAt ? "Anonymous" : thread.profiles?.username}
-          </CardDescription>
+          <CardDescription>{thread.profiles?.username ?? "Anonymous"}</CardDescription>
         </CardHeader>
         <List direction="column">
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>

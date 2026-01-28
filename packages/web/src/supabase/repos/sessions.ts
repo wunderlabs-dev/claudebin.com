@@ -15,9 +15,21 @@ export type ThreadWithAuthor = SessionsRow & {
   profiles: {
     username: string | null;
     avatarUrl: string | null;
-    deletedAt: string | null;
   } | null;
   hasLiked?: boolean;
+};
+
+type ProfileWithDeleted = {
+  username: string | null;
+  avatarUrl: string | null;
+  deletedAt: string | null;
+};
+
+const sanitizeProfile = (
+  profile: ProfileWithDeleted | null,
+): ThreadWithAuthor["profiles"] => {
+  if (!profile || profile.deletedAt) return null;
+  return { username: profile.username, avatarUrl: profile.avatarUrl };
 };
 
 export type GetPublicThreadsResult = {
@@ -47,10 +59,12 @@ const getPublicThreads = async (
     throw new Error(`Failed to fetch threads: ${error.message}`);
   }
 
-  return {
-    threads: data ?? [],
-    total: count ?? 0,
-  };
+  const threads = (data ?? []).map((thread) => ({
+    ...thread,
+    profiles: sanitizeProfile(thread.profiles),
+  }));
+
+  return { threads, total: count ?? 0 };
 };
 
 const getByUserId = async (
@@ -104,10 +118,10 @@ const getByIdWithAuthor = async (
   if (error) throw new Error(`Failed to fetch session: ${error.message}`);
   if (!data) return null;
 
-  const { session_likes, ...session } = data;
+  const { session_likes, profiles, ...session } = data;
   const hasLiked = currentUserId ? (session_likes?.length ?? 0) > 0 : false;
 
-  return { ...session, hasLiked };
+  return { ...session, profiles: sanitizeProfile(profiles), hasLiked };
 };
 
 const getByIdForUser = async (
