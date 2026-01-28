@@ -28,3 +28,4 @@ export const AUTH_TOKEN_LENGTH = 21;
 
 // Timeouts
 export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+export const SEARCH_INPUT_DEBOUNCE_MS = 300;

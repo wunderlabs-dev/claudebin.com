@@ -68,8 +68,10 @@
     "description": "Browse and search through all Claude conversations",
     "searchPlaceholder": "Search for a thread, build, optimization,...",
     "search": "Search",
+    "searching": "Searching...",
     "threadCount": "{count} threads",
     "loadMore": "Load more threads",
+    "loadingMore": "Loading...",
     "emptyTitle": "Nothing was found for <gradient>{query}</gradient>",
     "emptyDescription": "Check for typos or try different keywords."
   },

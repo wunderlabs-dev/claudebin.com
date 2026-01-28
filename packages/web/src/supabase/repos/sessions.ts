@@ -19,22 +19,37 @@ export type ThreadWithAuthor = SessionsRow & {
   hasLiked?: boolean;
 };
 
+export type GetPublicThreadsResult = {
+  threads: ThreadWithAuthor[];
+  total: number;
+};
+
 const getPublicThreads = async (
   supabase: SupabaseClient<Database>,
-  limit = 20,
-): Promise<ThreadWithAuthor[]> => {
-  const { data, error } = await supabase
+  options: { query?: string; limit?: number; offset?: number } = {},
+): Promise<GetPublicThreadsResult> => {
+  const { query, limit = 20, offset = 0 } = options;
+
+  let queryBuilder = supabase
     .from("sessions")
-    .select("*, profiles(username, avatarUrl)")
+    .select("*, profiles(username, avatarUrl)", { count: "exact" })
     .eq("isPublic", true)
-    .order("createdAt", { ascending: false })
-    .limit(limit);
+    .order("createdAt", { ascending: false });
+
+  if (query?.trim()) {
+    queryBuilder = queryBuilder.ilike("title", `%${query}%`);
+  }
+
+  const { data, error, count } = await queryBuilder.range(offset, offset + limit - 1);
 
   if (error) {
     throw new Error(`Failed to fetch threads: ${error.message}`);
   }
 
-  return data ?? [];
+  return {
+    threads: data ?? [],
+    total: count ?? 0,
+  };
 };
 
 const getByUserId = async (

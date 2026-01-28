@@ -5,27 +5,21 @@ import { sessions } from "@/supabase/repos/sessions";
 
 import { renderers } from "@/utils/renderers";
 
-import { SvgIconMagnifier } from "@/components/icon";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
-import { Card, CardBody } from "@/components/ui/card";
 
-import {
-  DividerGrid,
-  DividerGridRow,
-  DividerGridEdge,
-  DividerGridCell,
-  DividerGridDivider,
-} from "@/components/ui/divider-grid";
+import { ThreadsPageContent } from "@/components/threads-page-content";
 
-import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid-item";
+type ThreadsPageProps = {
+  searchParams: Promise<{ query?: string }>;
+};
 
-const ThreadsPage = async () => {
+const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
   const t = await getTranslations();
   const supabase = await createClient();
-  const threads = await sessions.getPublicThreads(supabase);
+
+  const { query } = await searchParams;
+  const { threads, total } = await sessions.getPublicThreads(supabase, { query });
 
   return (
     <Container size="md" spacing="md" className="flex flex-col gap-8">
@@ -38,103 +32,7 @@ const ThreadsPage = async () => {
         </Typography>
       </div>
 
-      <DividerGrid>
-        <DividerGridRow>
-          <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-6 border-b">
-            <DividerGridDivider variant="top" />
-          </DividerGridCell>
-          <DividerGridCell className="col-span-4 flex justify-between border-b">
-            <DividerGridDivider variant="top" />
-            <DividerGridDivider variant="top" />
-          </DividerGridCell>
-          <DividerGridEdge position="right" className="col-span-1" />
-        </DividerGridRow>
-
-        <DividerGridRow>
-          <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-6 border-r border-b border-l">
-            <FormControl className="flex-row items-center">
-              <Input placeholder={t("threads.searchPlaceholder")} />
-              <Button variant="outline">
-                <SvgIconMagnifier size="sm" />
-                {t("threads.search")}
-              </Button>
-            </FormControl>
-          </DividerGridCell>
-          <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b px-3">
-            <Typography variant="small" color="muted">
-              {t("threads.threadCount", { count: threads.length })}
-            </Typography>
-          </DividerGridCell>
-          <DividerGridEdge position="right" className="col-span-1" />
-        </DividerGridRow>
-
-        <DividerGridRow>
-          <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-6 border-r border-b border-l py-6" />
-          <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b py-6" />
-          <DividerGridEdge position="right" className="col-span-1" />
-        </DividerGridRow>
-
-        <DividerGridRow>
-          <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">
-            <div className="mx-auto flex max-w-lg flex-col gap-6">
-              <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
-                {t.rich("threads.emptyTitle", { ...renderers, query: "Croissant" })}
-              </Typography>
-              <Typography variant="body" color="muted">
-                {t("threads.emptyDescription")}
-              </Typography>
-            </div>
-          </DividerGridCell>
-          <DividerGridEdge position="right" className="col-span-1" />
-        </DividerGridRow>
-
-        {threads.map((thread) => (
-          <DividerGridRow key={thread.id}>
-            <DividerGridEdge position="left" className="col-span-1" />
-            <DividerGridCell className="col-span-10">
-              <ThreadsPageThreadGridItem thread={thread} />
-            </DividerGridCell>
-            <DividerGridEdge position="right" className="col-span-1" />
-          </DividerGridRow>
-        ))}
-
-        <DividerGridRow>
-          <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-10">
-            <Card variant="grid">
-              <CardBody />
-              <CardBody className="items-center justify-center p-0">
-                <Button variant="secondary">{t("threads.loadMore")}</Button>
-              </CardBody>
-              <CardBody />
-            </Card>
-          </DividerGridCell>
-          <DividerGridEdge position="right" className="col-span-1" />
-        </DividerGridRow>
-
-        <DividerGridRow>
-          <DividerGridCell className="col-span-1" />
-          <DividerGridCell className="col-span-10">
-            <DividerGridRow>
-              <DividerGridCell className="col-span-4 flex justify-between">
-                <DividerGridDivider variant="bottom" />
-                <DividerGridDivider variant="bottom" />
-              </DividerGridCell>
-              <DividerGridCell className="col-span-4 flex justify-end">
-                <DividerGridDivider variant="bottom" />
-              </DividerGridCell>
-              <DividerGridCell className="col-span-4 flex justify-end">
-                <DividerGridDivider variant="bottom" />
-              </DividerGridCell>
-            </DividerGridRow>
-          </DividerGridCell>
-          <DividerGridCell className="col-span-1" />
-        </DividerGridRow>
-      </DividerGrid>
+      <ThreadsPageContent initialThreads={threads} initialTotal={total} initialQuery={query} />
     </Container>
   );
 };

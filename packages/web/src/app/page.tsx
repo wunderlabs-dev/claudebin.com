@@ -7,7 +7,7 @@ import { HomePageTutorialsList } from "@/components/home-page-tutorials-list";
 
 const HomePage = async () => {
   const supabase = await createClient();
-  const threads = await sessions.getPublicThreads(supabase);
+  const { threads } = await sessions.getPublicThreads(supabase);
 
   return (
     <>
