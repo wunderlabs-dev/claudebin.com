@@ -68,7 +68,9 @@ const ThreadsPageContent = ({
       return;
     }
 
-    const url = debouncedQuery ? `/threads?query=${encodeURIComponent(debouncedQuery)}` : "/threads";
+    const url = debouncedQuery
+      ? `/threads?query=${encodeURIComponent(debouncedQuery)}`
+      : "/threads";
     router.replace(url);
   }, [debouncedQuery, router]);
 
