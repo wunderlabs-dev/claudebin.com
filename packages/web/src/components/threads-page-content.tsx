@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useTransition } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
@@ -42,30 +43,26 @@ const ThreadsPageContent = ({
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isFirstRender = useRef(true);
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [debouncedQuery] = useDebounceValue(searchQuery, SEARCH_INPUT_DEBOUNCE_MS);
 
-  const [threads, setThreads] = useState(initialThreads);
-  const [total, setTotal] = useState(initialTotal);
-  const [isSearching, startSearching] = useTransition();
-  const [isFetchingMore, startFetchingMore] = useTransition();
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ["threads", debouncedQuery],
+    queryFn: ({ pageParam }) => getPublicThreads(debouncedQuery, pageParam),
+    initialPageParam: 0,
+    initialData: {
+      pages: [{ threads: initialThreads, total: initialTotal }],
+      pageParams: [0],
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalFetched = allPages.flatMap((page) => page.threads).length;
+      return totalFetched < lastPage.total ? totalFetched : undefined;
+    },
+  });
 
-  // Search when query changes
+  // Update URL when query changes
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
-    startSearching(async () => {
-      const result = await getPublicThreads(debouncedQuery, 0);
-      setThreads(result.threads);
-      setTotal(result.total);
-    });
-
-    // Update URL
     const params = new URLSearchParams(searchParams.toString());
     if (debouncedQuery) {
       params.set("query", debouncedQuery);
@@ -75,15 +72,10 @@ const ThreadsPageContent = ({
     router.push(`/threads${params.toString() ? `?${params.toString()}` : ""}`);
   }, [debouncedQuery, router, searchParams]);
 
-  const handleFetchMore = () => {
-    startFetchingMore(async () => {
-      const result = await getPublicThreads(debouncedQuery, threads.length);
-      setThreads((prev) => [...prev, ...result.threads]);
-    });
-  };
-
-  const hasMoreThreads = threads.length < total;
-  const hasNoSearchResults = !isSearching && threads.length === 0 && debouncedQuery.trim() !== "";
+  const threads = data?.pages.flatMap((page) => page.threads) ?? [];
+  const total = data?.pages[0]?.total ?? 0;
+  const isSearching = isFetching && !isFetchingNextPage;
+  const hasNoSearchResults = !isFetching && threads.length === 0 && debouncedQuery.trim() !== "";
 
   return (
     <DividerGrid>
@@ -158,15 +150,15 @@ const ThreadsPageContent = ({
             </DividerGridRow>
           ))}
 
-          {hasMoreThreads ? (
+          {hasNextPage ? (
             <DividerGridRow>
               <DividerGridEdge position="left" className="col-span-1" />
               <DividerGridCell className="col-span-10">
                 <Card variant="grid">
                   <CardBody />
                   <CardBody className="items-center justify-center p-0">
-                    <Button variant="secondary" onClick={handleFetchMore} disabled={isFetchingMore}>
-                      {isFetchingMore ? t("threads.loadingMore") : t("threads.loadMore")}
+                    <Button variant="secondary" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                      {isFetchingNextPage ? t("threads.loadingMore") : t("threads.loadMore")}
                     </Button>
                   </CardBody>
                   <CardBody />

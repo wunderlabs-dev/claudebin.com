@@ -12,6 +12,7 @@ import copy from "@/copy/en-EN.json";
 import { cn } from "@/utils/helpers";
 
 import { AuthProvider } from "@/context/auth";
+import { QueryProvider } from "@/context/query";
 import { AppBar } from "@/components/ui/app-bar";
 import { Footer } from "@/components/ui/footer";
 
@@ -47,13 +48,15 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   return (
     <html lang={locale} className={cn(sans.variable, mono.variable)}>
       <body className="min-h-screen bg-fade bg-gray-100 font-sans text-white antialiased selection:bg-orange-50 selection:text-white">
-        <NextIntlClientProvider messages={messages}>
-          <AuthProvider initialUser={user}>
-            <AppBar />
-            <main>{children}</main>
-            <Footer />
-          </AuthProvider>
-        </NextIntlClientProvider>
+        <QueryProvider>
+          <NextIntlClientProvider messages={messages}>
+            <AuthProvider initialUser={user}>
+              <AppBar />
+              <main>{children}</main>
+              <Footer />
+            </AuthProvider>
+          </NextIntlClientProvider>
+        </QueryProvider>
       </body>
     </html>
   );
