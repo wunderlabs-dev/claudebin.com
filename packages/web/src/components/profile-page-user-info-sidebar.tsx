@@ -21,7 +21,6 @@ type ProfilePageUserInfoSidebarProps = {
   username: string | null;
   name: string | null;
   avatarUrl: string | null;
-  bio: string | null;
   createdAt: Date;
   threads: number;
   views: number;
@@ -31,7 +30,6 @@ const ProfilePageUserInfoSidebar = ({
   username,
   name,
   avatarUrl,
-  bio,
   createdAt,
   threads,
   views,
