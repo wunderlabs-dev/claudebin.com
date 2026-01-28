@@ -1,11 +1,12 @@
 import type { ComponentProps, ReactNode } from "react";
+import truncate from "lodash.truncate";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
 import { hashString, getProjectName } from "@/utils/helpers";
-import { THREAD_CARD_LAYOUTS } from "@/utils/constants";
+import { THREAD_CARD_LAYOUTS, THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import {
   Card,
@@ -39,7 +40,11 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
   const columns: ReactNode[] = [
     <CardBody key="header">
       <CardHeader>
-        <CardTitle>{thread.title ?? t("common.untitled")}</CardTitle>
+        <CardTitle>
+          {truncate(thread.title ?? t("common.untitled"), {
+            length: THREAD_GRID_TITLE_TRUNCATE_LENGTH,
+          })}
+        </CardTitle>
         <CardDescription>{thread.profiles?.username}</CardDescription>
       </CardHeader>
     </CardBody>,

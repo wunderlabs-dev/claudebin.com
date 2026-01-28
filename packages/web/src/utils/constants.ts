@@ -20,6 +20,7 @@ export const THREAD_CARD_LAYOUTS = [
 // Size limits
 export const MAX_SESSION_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
 export const THREAD_TITLE_TRUNCATE_LENGTH = 56;
+export const THREAD_GRID_TITLE_TRUNCATE_LENGTH = 36;
 
 // ID lengths for nanoid
 export const SESSION_ID_LENGTH = 10;
