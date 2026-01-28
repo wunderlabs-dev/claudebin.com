@@ -34,7 +34,8 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   const threads = await sessions.getByUserId(supabase, profile.id);
 
-  // Track view (fire and forget)
+  // Analytics for profile views
+  // Fire-and-forget increment, no await needed as it doesn't affect page render
   profiles.incrementViewCount(supabase, profile.id);
 
   return (
@@ -51,18 +52,20 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
       </div>
 
       <div className="col-span-8 grid grid-cols-1">
-        {threads.length ? <div className="col-span-12 flex items-center justify-between border border-gray-250 p-8">
-          <div className="flex items-center gap-3">
-            <SvgIconLine size="md" color="accent" />
-            <Typography variant="h4">{t("user.recentThreads")}</Typography>
+        {threads.length ? (
+          <div className="col-span-12 flex items-center justify-between border border-gray-250 p-8">
+            <div className="flex items-center gap-3">
+              <SvgIconLine size="md" color="accent" />
+              <Typography variant="h4">{t("user.recentThreads")}</Typography>
+            </div>
+            <Link href="/threads" className="flex items-center gap-3">
+              <Typography variant="small" fontWeight="semibold">
+                {t("user.seeAllThreads")}
+              </Typography>
+              <SvgIconArrowRight size="sm" />
+            </Link>
           </div>
-          <Link href="/threads" className="flex items-center gap-3">
-            <Typography variant="small" fontWeight="semibold">
-              {t("user.seeAllThreads")}
-            </Typography>
-            <SvgIconArrowRight size="sm" />
-          </Link>
-        </div> : null}
+        ) : null}
 
         <div className="flex flex-col gap-8">
           {threads.length ? (

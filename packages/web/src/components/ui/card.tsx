@@ -103,7 +103,7 @@ const CardTitle = ({ className, ...props }: CardTitleProps) => {
       variant={cardTitleVariantMapping[variant]}
       fontWeight="semibold"
       leading="normal"
-      className={className}
+      className={cn(className, "break-all")}
       {...props}
     />
   );

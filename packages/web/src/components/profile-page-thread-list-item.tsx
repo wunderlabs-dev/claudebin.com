@@ -26,7 +26,7 @@ const ProfilePageThreadListItem = ({
       <CardBody>
         <CardSection>
           <CardHeader>
-            <CardTitle>{title ?? t("common.untitled")}</CardTitle>
+            <CardTitle className="truncate whitespace-nowrap">{title ?? t("common.untitled")}</CardTitle>
           </CardHeader>
           <List direction="row">
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
