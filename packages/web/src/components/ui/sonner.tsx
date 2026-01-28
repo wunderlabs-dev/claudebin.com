@@ -7,16 +7,21 @@ import { SvgIconCheck, SvgIconSkull } from "@/components/icon";
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
-      theme="light"
+      theme="dark"
       className="toaster group"
       icons={{
-        success: <SvgIconCheck size="sm" />,
-        error: <SvgIconSkull size="sm" />,
+        success: <SvgIconCheck size="sm" color="accent" />,
+        error: <SvgIconSkull size="sm" color="accent" />,
+      }}
+      toastOptions={{
+        classNames: {
+          title: "font-normal text-base leading-6",
+        },
       }}
       style={
         {
-          "--normal-bg": "var(--color-white)",
-          "--normal-text": "var(--color-gray-800)",
+          "--normal-text": "var(--color-white)",
+          "--normal-bg": "var(--color-gray-100)",
           "--normal-border": "var(--color-gray-250)",
         } as React.CSSProperties
       }
