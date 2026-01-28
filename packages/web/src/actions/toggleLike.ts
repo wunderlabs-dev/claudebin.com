@@ -3,7 +3,9 @@
 import { createClient } from "@/supabase/server";
 import { sessionLikes } from "@/supabase/repos/sessionLikes";
 
-export const toggleLike = async (sessionId: string): Promise<{ liked: boolean } | { error: string }> => {
+export const toggleLike = async (
+  sessionId: string,
+): Promise<{ liked: boolean } | { error: string }> => {
   const supabase = await createClient();
   const {
     data: { user },
