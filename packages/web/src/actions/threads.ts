@@ -3,7 +3,8 @@
 import { createClient } from "@/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/supabase/repos/sessions";
 
-import { THREADS_DEFAULT_OFFSET, THREADS_PAGE_SIZE } from "@/utils/constants";
+const THREADS_PAGE_SIZE = 20;
+const THREADS_DEFAULT_OFFSET = 0;
 
 export const getPublicThreads = async (
   query: string,
@@ -11,5 +12,10 @@ export const getPublicThreads = async (
   limit = THREADS_PAGE_SIZE,
 ): Promise<GetPublicThreadsResult> => {
   const supabase = await createClient();
-  return sessions.getPublicThreads(supabase, { query, offset, limit });
+
+  return sessions.getPublicThreads(supabase, {
+    query,
+    offset,
+    limit,
+  });
 };

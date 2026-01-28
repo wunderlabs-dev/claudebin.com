@@ -30,9 +30,5 @@ export const AUTH_TOKEN_LENGTH = 21;
 export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
 export const SEARCH_INPUT_DEBOUNCE_MS = 300;
 
-// Pagination
-export const THREADS_PAGE_SIZE = 20;
-export const THREADS_DEFAULT_OFFSET = 0;
-
 // Avatar
 export const AVATAR_FALLBACK_DELAY_MS = 0;
