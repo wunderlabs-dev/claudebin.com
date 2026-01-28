@@ -112,6 +112,7 @@
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
+    "disclaimer": "Independent project, not affiliated with Anthropic.",
     "product": "Product",
     "claudebin": "Claudebin",
     "threads": "Threads",

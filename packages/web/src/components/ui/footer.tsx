@@ -58,9 +58,14 @@ const Footer = ({ className, ...props }: FooterProps) => {
             <Link href="/">
               <SvgIconClaudebin size="auto" className="w-xl" />
             </Link>
-            <Typography variant="small" color="muted">
-              {t.rich("footer.copyright", renderers)}
-            </Typography>
+            <div className="flex flex-col gap-1">
+              <Typography variant="small" color="muted">
+                {t.rich("footer.copyright", renderers)}
+              </Typography>
+              <Typography variant="small" color="muted">
+                {t("footer.disclaimer")}
+              </Typography>
+            </div>
           </div>
 
           <div className="flex gap-12">
