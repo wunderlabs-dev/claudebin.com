@@ -41,8 +41,8 @@ const ThreadNotFound = async () => {
               <Typography variant="body" color="muted">
                 {t("thread.notFoundDescription")}
               </Typography>
-              <Button as={Link} href="/" variant="secondary">
-                {t("thread.backToHome")}
+              <Button as={Link} href="/threads" variant="secondary">
+                {t("thread.browseThreads")}
               </Button>
             </div>
           </DividerGridCell>
