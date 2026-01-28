@@ -44,7 +44,6 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           username={profile.username}
           name={profile.name}
           avatarUrl={profile.avatarUrl}
-          bio={profile.bio}
           createdAt={new Date(profile.createdAt)}
           threads={threads.length}
           views={profile.viewCount}
@@ -52,7 +51,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
       </div>
 
       <div className="col-span-8 grid grid-cols-1">
-        <div className="col-span-12 flex items-center justify-between border border-gray-250 p-8">
+        {threads.length ? <div className="col-span-12 flex items-center justify-between border border-gray-250 p-8">
           <div className="flex items-center gap-3">
             <SvgIconLine size="md" color="accent" />
             <Typography variant="h4">{t("user.recentThreads")}</Typography>
@@ -63,7 +62,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             </Typography>
             <SvgIconArrowRight size="sm" />
           </Link>
-        </div>
+        </div> : null}
 
         <div className="flex flex-col gap-8">
           {threads.length ? (
