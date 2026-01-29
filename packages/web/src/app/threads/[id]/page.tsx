@@ -3,12 +3,12 @@ import { getTranslations } from "next-intl/server";
 import { isNil } from "ramda";
 import { format } from "date-fns";
 
-import { createClient } from "@/supabase/server";
+import { getProjectName } from "@/utils/helpers";
+
 import { sessions } from "@/supabase/repos/sessions";
-import { messages } from "@/supabase/repos/messages";
+import { createClient } from "@/supabase/server";
 
 import { SvgIconArrowLeft } from "@/components/icon";
-
 import { Container } from "@/components/ui/container";
 import { NavLink, NavLabel } from "@/components/ui/nav";
 
@@ -68,7 +68,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           id={thread.id}
           isPublic={thread.isPublic}
           createdAt={format(thread.createdAt, "MM/dd/yyyy")}
-          workingDir={thread.workingDir}
+          workingDir={getProjectName(thread.workingDir)}
           fileCount={thread.fileCount}
           viewCount={thread.viewCount}
           likeCount={thread.likeCount}

@@ -37,9 +37,7 @@ const ThreadPageConversationContainer = ({
               <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
             </Avatar>
           ) : null}
-          <ChatContent variant={message.role}>
-            {message.id}
-          </ChatContent>
+          <ChatContent variant={message.role}>{message.id}</ChatContent>
           {message.role === "user" ? (
             <Avatar size="sm">
               {avatarUrl ? <AvatarImage src={avatarUrl} alt={author} /> : null}

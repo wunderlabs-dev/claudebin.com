@@ -61,6 +61,7 @@ const ThreadsPageThreadsContainer = ({
   });
 
   const threads = data?.pages.flatMap((page) => page.threads) ?? [];
+
   const hasSearchQuery = queryDebounced?.trim().length;
   const hasActiveSearch = isFetching && not(isFetchingNextPage);
   const hasNoResult = hasSearchQuery && not(isFetching) && isEmpty(threads);

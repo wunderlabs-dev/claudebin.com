@@ -5,7 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { hashString } from "@/utils/helpers";
+import { getProjectName, hashString } from "@/utils/helpers";
 import { THREAD_CARD_LAYOUTS, THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import {
@@ -76,7 +76,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
             {t("common.likes", { count: thread.likeCount })}
           </ListItem>
           <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>
-            {thread.workingDir}
+            {getProjectName(thread.workingDir)}
           </ListItem>
         </List>
       </CardSection>
