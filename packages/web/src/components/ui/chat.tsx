@@ -9,15 +9,31 @@ const Chat = ({ className, ...props }: ChatProps) => {
   return <div data-slot="chat" className={cn("flex flex-col gap-8", className)} {...props} />;
 };
 
-type ChatItemProps = React.ComponentProps<"div">;
+const chatItemVariants = cva(["flex items-start gap-3"], {
+  variants: {
+    variant: {
+      user: "justify-end",
+      assistant: "justify-start",
+    },
+  },
+  defaultVariants: {
+    variant: "assistant",
+  },
+});
 
-const ChatItem = ({ className, ...props }: ChatItemProps) => {
+type ChatItemProps = React.ComponentProps<"div"> & VariantProps<typeof chatItemVariants>;
+
+const ChatItem = ({ className, variant = "assistant", ...props }: ChatItemProps) => {
   return (
-    <div data-slot="chat-item" className={cn("flex items-start gap-3", className)} {...props} />
+    <div
+      data-slot="chat-item"
+      className={cn(chatItemVariants({ variant, className }))}
+      {...props}
+    />
   );
 };
 
-const chatContentVariants = cva(["rounded-xl border border-gray-250 px-4 py-3"], {
+const chatContentVariants = cva(["max-w-3/4 rounded-xl border border-gray-250 px-4 py-3"], {
   variants: {
     variant: {
       user: "rounded-tr-none bg-gray-200",

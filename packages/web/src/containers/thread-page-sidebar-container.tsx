@@ -1,7 +1,3 @@
-"use client";
-
-import type { ReactNode } from "react";
-
 import { useTranslations } from "next-intl";
 
 import {
@@ -11,6 +7,8 @@ import {
   SvgIconFolder,
   SvgIconGlobe,
   SvgIconCalendar,
+  SvgIconHeart,
+  SvgIconHeartSolid,
 } from "@/components/icon";
 
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +28,7 @@ type ThreadPageSidebarContainerProps = {
 };
 
 const ThreadPageSidebarContainer = ({
+  id,
   isPublic,
   createdAt,
   workingDir,
@@ -37,7 +36,7 @@ const ThreadPageSidebarContainer = ({
   fileCount,
   likeCount,
   messageCount,
-}: ThreadPageSidebarContainerProps): ReactNode => {
+}: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
 
   return (
@@ -60,6 +59,9 @@ const ThreadPageSidebarContainer = ({
         </ListItem>
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: viewCount })}
+        </ListItem>
+        <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
+          {t("common.likes", { count: likeCount })}
         </ListItem>
       </List>
 
