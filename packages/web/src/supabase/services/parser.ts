@@ -226,7 +226,7 @@ const normalizeMessage = (
     uuid: raw.uuid,
     parentUuid: raw.parentUuid,
     type: raw.type,
-    role: raw.message.role || null,
+    role: raw.type === "user" ? "user" : "assistant",
     model: raw.message.model || null,
     timestamp: raw.timestamp,
     isMeta: raw.isMeta || false,
