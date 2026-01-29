@@ -12,7 +12,6 @@ import { useAuth } from "@/context/auth";
 import { cn } from "@/utils/helpers";
 
 import { SvgIconHeart, SvgIconHeartSolid } from "@/components/icon";
-import { Typography } from "@/components/ui/typography";
 
 type ThreadPageSidebarContainerLikeProps = {
   sessionId: string;
@@ -72,12 +71,12 @@ const ThreadPageSidebarContainerLike = ({
         isPending ? "opacity-50" : "opacity-100",
       )}
     >
-      <div className="shrink-0">
+      <span className="shrink-0">
         {liked ? <SvgIconHeartSolid size="sm" /> : <SvgIconHeart size="sm" />}
-      </div>
-      <Typography variant="caption" color="neutral" leading="normal">
+      </span>
+      <span className="text-sm leading-normal">
         {t("common.likes", { count })}
-      </Typography>
+      </span>
     </button>
   );
 };
