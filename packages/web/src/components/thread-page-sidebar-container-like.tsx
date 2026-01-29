@@ -12,15 +12,16 @@ import { useAuth } from "@/context/auth";
 import { cn } from "@/utils/helpers";
 
 import { SvgIconHeart, SvgIconHeartSolid } from "@/components/icon";
+import { Typography } from "@/components/ui/typography";
 
 type ThreadPageSidebarContainerLikeProps = {
-  sessionId: string;
+  id: string;
   initialLiked?: boolean;
   likeCount: number;
 };
 
 const ThreadPageSidebarContainerLike = ({
-  sessionId,
+  id,
   initialLiked,
   likeCount,
 }: ThreadPageSidebarContainerLikeProps) => {
@@ -33,7 +34,7 @@ const ThreadPageSidebarContainerLike = ({
   const [liked, setLiked] = useState(initialLiked);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () => like(sessionId),
+    mutationFn: () => like(id),
     onMutate: () => {
       // Optimistic update — flip liked and adjust count
       // before server responds
@@ -74,9 +75,9 @@ const ThreadPageSidebarContainerLike = ({
       <span className="shrink-0">
         {liked ? <SvgIconHeartSolid size="sm" /> : <SvgIconHeart size="sm" />}
       </span>
-      <span className="text-sm leading-normal">
+      <Typography as="span" variant="caption" color="neutral" leading="normal">
         {t("common.likes", { count })}
-      </span>
+      </Typography>
     </button>
   );
 };

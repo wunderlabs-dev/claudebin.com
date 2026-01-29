@@ -66,7 +66,7 @@ const ThreadPageSidebarContainer = ({
           {t("common.views", { count: viewCount })}
         </ListItem>
         <ThreadPageSidebarContainerLike
-          sessionId={id}
+          id={id}
           initialLiked={initialLiked}
           likeCount={likeCount}
         />
