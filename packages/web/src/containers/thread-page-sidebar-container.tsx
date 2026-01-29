@@ -14,7 +14,7 @@ import { APP_THREADS_URL } from "@/utils/constants";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
-import { ThreadPageSidebarContainerLike } from "@/components/thread-page-sidebar-container-like";
+import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
 import { List, ListItem } from "@/components/ui/list";
 
 type ThreadPageSidebarContainerProps = {
@@ -65,11 +65,7 @@ const ThreadPageSidebarContainer = ({
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: viewCount })}
         </ListItem>
-        <ThreadPageSidebarContainerLike
-          id={id}
-          initialLiked={initialLiked}
-          likeCount={likeCount}
-        />
+        <ThreadPageSidebarLikeContainer id={id} initialLiked={initialLiked} likeCount={likeCount} />
       </List>
 
       <div className="flex w-full flex-col gap-8">

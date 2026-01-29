@@ -14,17 +14,17 @@ import { cn } from "@/utils/helpers";
 import { SvgIconHeart, SvgIconHeartSolid } from "@/components/icon";
 import { Typography } from "@/components/ui/typography";
 
-type ThreadPageSidebarContainerLikeProps = {
+type ThreadPageSidebarLikeContainerProps = {
   id: string;
   initialLiked?: boolean;
   likeCount: number;
 };
 
-const ThreadPageSidebarContainerLike = ({
+const ThreadPageSidebarLikeContainer = ({
   id,
   initialLiked,
   likeCount,
-}: ThreadPageSidebarContainerLikeProps) => {
+}: ThreadPageSidebarLikeContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
 
@@ -82,4 +82,4 @@ const ThreadPageSidebarContainerLike = ({
   );
 };
 
-export { ThreadPageSidebarContainerLike };
+export { ThreadPageSidebarLikeContainer };
