@@ -56,17 +56,18 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           />
         </div>
 
-        <ThreadPageConversationContainer
+        {/* <ThreadPageConversationContainer
           id={thread.id}
           author={thread.profiles?.username ?? t("common.deactivated")}
           avatarUrl={thread.profiles?.avatarUrl}
-        />
+        /> */}
       </div>
 
       <div className="col-span-3 flex flex-col justify-between border-gray-250 border-l px-6 pt-24 pb-12">
         <ThreadPageSidebarContainer
           id={thread.id}
           isPublic={thread.isPublic}
+          initialLiked={thread.hasLiked}
           createdAt={format(thread.createdAt, "MM/dd/yyyy")}
           workingDir={getProjectName(thread.workingDir)}
           fileCount={thread.fileCount}

@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import type { ContentBlock } from "@/supabase/types/message";
 import { BlockType } from "@/supabase/types/message";
+import type { ContentBlock } from "@/supabase/types/message";
 
 import { getMessagesBySessionId } from "@/actions/messages";
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
@@ -68,7 +68,7 @@ const renderers = {
         return null;
       }
     }
-  }
+  },
 };
 
 const ThreadPageConversationContainer = ({
@@ -81,21 +81,18 @@ const ThreadPageConversationContainer = ({
     queryFn: () => getMessagesBySessionId(id),
   });
 
-  const messages = data?.messages ?? [];
   const [fallback] = [...author];
 
   return (
     <Chat className="pr-14">
-      {messages.map((message) => (
+      {data?.messages?.map((message) => (
         <ChatItem key={message.id} variant={message.role}>
           {message.role === "assistant" ? (
             <Avatar size="sm">
               <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
             </Avatar>
           ) : null}
-          <ChatContent variant={message.role}>
-            {message.content.map(renderers.block)}
-          </ChatContent>
+          <ChatContent variant={message.role}>{message.content.map(renderers.block)}</ChatContent>
           {message.role === "user" ? (
             <Avatar size="sm">
               {avatarUrl ? <AvatarImage src={avatarUrl} alt={author} /> : null}

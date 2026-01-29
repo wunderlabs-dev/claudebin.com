@@ -5,7 +5,7 @@ import { isNil } from "ramda";
 import { createClient } from "@/supabase/server";
 import { sessionLikes } from "@/supabase/repos/sessionLikes";
 
-export const like = async (sessionId: string): Promise<{ liked: boolean } | { error: string }> => {
+export const like = async (sessionId: string) => {
   const supabase = await createClient();
 
   const {
@@ -13,10 +13,8 @@ export const like = async (sessionId: string): Promise<{ liked: boolean } | { er
   } = await supabase.auth.getUser();
 
   if (isNil(user)) {
-    return { error: "Unauthorized" };
+    throw new Error("Unauthorized");
   }
 
-  const liked = await sessionLikes.toggle(supabase, sessionId, user.id);
-
-  return { liked };
+  return sessionLikes.toggle(supabase, sessionId, user.id);
 };

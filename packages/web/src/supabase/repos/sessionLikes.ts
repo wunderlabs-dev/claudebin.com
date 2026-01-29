@@ -19,20 +19,27 @@ const hasLiked = async (
   return !!data;
 };
 
+type ToggleResult = {
+  liked: boolean;
+  likeCount: number;
+};
+
 const toggle = async (
   supabase: SupabaseClient<Database>,
   sessionId: string,
   userId: string,
-): Promise<boolean> => {
+): Promise<ToggleResult> => {
   const liked = await hasLiked(supabase, sessionId, userId);
 
   if (liked) {
     await supabase.from("session_likes").delete().eq("sessionId", sessionId).eq("userId", userId);
-    return false;
+  } else {
+    await supabase.from("session_likes").insert({ sessionId, userId });
   }
 
-  await supabase.from("session_likes").insert({ sessionId, userId });
-  return true;
+  const { data } = await supabase.from("sessions").select("likeCount").eq("id", sessionId).single();
+
+  return { liked: !liked, likeCount: data?.likeCount ?? 0 };
 };
 
 export const sessionLikes = {

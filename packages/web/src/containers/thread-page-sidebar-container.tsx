@@ -7,29 +7,32 @@ import {
   SvgIconFolder,
   SvgIconGlobe,
   SvgIconCalendar,
-  SvgIconHeart,
-  SvgIconHeartSolid,
 } from "@/components/icon";
+
+import { APP_THREADS_URL } from "@/utils/constants";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
+import { ThreadPageSidebarContainerLike } from "@/components/thread-page-sidebar-container-like";
 import { List, ListItem } from "@/components/ui/list";
 
 type ThreadPageSidebarContainerProps = {
   id: string;
   createdAt: string;
-  workingDir: string;
   fileCount: number;
   viewCount: number;
   likeCount: number;
-  messageCount: number;
+  workingDir?: string | null;
+  messageCount?: number | null;
   isPublic: boolean;
+  initialLiked?: boolean;
 };
 
 const ThreadPageSidebarContainer = ({
   id,
   isPublic,
+  initialLiked,
   createdAt,
   workingDir,
   viewCount,
@@ -51,23 +54,28 @@ const ThreadPageSidebarContainer = ({
           {t("thread.created", { date: createdAt })}
         </ListItem>
         <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
-        <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-          {t("common.prompts", { count: messageCount })}
-        </ListItem>
+        {messageCount ? (
+          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
+            {t("common.prompts", { count: messageCount })}
+          </ListItem>
+        ) : null}
         <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
           {t("common.files", { count: fileCount })}
         </ListItem>
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: viewCount })}
         </ListItem>
-        <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
-          {t("common.likes", { count: likeCount })}
-        </ListItem>
+        <ThreadPageSidebarContainerLike
+          sessionId={id}
+          initialLiked={initialLiked}
+          likeCount={likeCount}
+        />
       </List>
 
       <div className="flex w-full flex-col gap-8">
-        <CopyInput variant="link" />
+        <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
         <CopyInput variant="snippet" />
+
         <Button variant="secondary">
           <SvgIconChat />
           {t("thread.continueConversation")}
