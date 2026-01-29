@@ -23,8 +23,8 @@ type ProfilePageProps = {
 
 const ProfilePage = async ({ params }: ProfilePageProps) => {
   const { username } = await params;
-  const t = await getTranslations();
 
+  const t = await getTranslations();
   const supabase = await createClient();
   const profile = await profiles.getByUsername(supabase, username);
 
@@ -83,8 +83,6 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           )}
 
           {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
-
-          <ProfilePageDangerZoneContainer />
         </div>
       </div>
     </Container>
