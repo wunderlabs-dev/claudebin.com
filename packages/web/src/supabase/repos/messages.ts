@@ -2,7 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import type { ContentBlock } from "@/supabase/types/message";
+import type { ContentBlock, Role } from "@/supabase/types/message";
 import type { Database } from "@/supabase/types";
 
 import { jsonToContentBlocks } from "@/supabase/types/json-cast";
@@ -11,7 +11,8 @@ type MessagesRow = Database["public"]["Tables"]["messages"]["Row"];
 type MessagesInsert = Database["public"]["Tables"]["messages"]["Insert"];
 
 // Message with typed content for UI consumption
-export type Message = Omit<MessagesRow, "content" | "rawMessage"> & {
+export type Message = Omit<MessagesRow, "content" | "rawMessage" | "role"> & {
+  role: Role;
   content: ContentBlock[];
 };
 
