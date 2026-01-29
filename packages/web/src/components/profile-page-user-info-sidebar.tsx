@@ -37,7 +37,7 @@ const ProfilePageUserInfoSidebar = ({
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
-  const [fallback] = [...(username ?? "")];
+  const [fallback] = [...username];
 
   const stats = [
     {
@@ -73,7 +73,7 @@ const ProfilePageUserInfoSidebar = ({
             {avatarUrl ? (
               <AvatarImage src={avatarUrl} alt={name ?? undefined} />
             ) : (
-              <AvatarFallback delayMs={0}>{fallback}</AvatarFallback>
+              <AvatarFallback>{fallback}</AvatarFallback>
             )}
           </Avatar>
         </DividerGridCell>

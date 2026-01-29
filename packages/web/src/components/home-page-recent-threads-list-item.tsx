@@ -49,9 +49,11 @@ const HomePageRecentThreadsListItem = ({
           <CardDescription>{thread.profiles?.username ?? "Anonymous"}</CardDescription>
         </CardHeader>
         <List direction="column">
-          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("common.prompts", { count: thread.messageCount ?? 0 })}
-          </ListItem>
+          {thread.messageCount ? (
+            <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
+              {t("common.prompts", { count: thread.messageCount })}
+            </ListItem>
+          ) : null}
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
             {t("common.files", { count: thread.fileCount })}
           </ListItem>

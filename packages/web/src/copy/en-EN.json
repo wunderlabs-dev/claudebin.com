@@ -19,7 +19,8 @@
     "files": "{count} files",
     "views": "{count} views",
     "likes": "{count} likes",
-    "forks": "{count} forks"
+    "forks": "{count} forks",
+    "deactivated": "Deactivated"
   },
   "appBar": {
     "claudebin": "Claudebin",

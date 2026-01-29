@@ -5,7 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { hashString, getProjectName } from "@/utils/helpers";
+import { hashString } from "@/utils/helpers";
 import { THREAD_CARD_LAYOUTS, THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import {
@@ -53,9 +53,11 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
       <CardSection>
         <CardActions />
         <List direction="column">
-          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("common.prompts", { count: thread.messageCount ?? 0 })}
-          </ListItem>
+          {thread.messageCount ? (
+            <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
+              {t("common.prompts", { count: thread.messageCount })}
+            </ListItem>
+          ) : null}
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
             {t("common.files", { count: thread.fileCount })}
           </ListItem>
@@ -74,7 +76,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
             {t("common.likes", { count: thread.likeCount })}
           </ListItem>
           <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>
-            {getProjectName(thread.workingDir)}
+            {thread.workingDir}
           </ListItem>
         </List>
       </CardSection>

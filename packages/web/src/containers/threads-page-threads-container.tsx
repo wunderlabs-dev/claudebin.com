@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
-import { isEmpty, not, trim } from "ramda";
+import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
 import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 
 import { renderers } from "@/utils/renderers";
-import { SEARCH_INPUT_DEBOUNCE_MS } from "@/utils/constants";
+import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
@@ -47,7 +47,7 @@ const ThreadsPageThreadsContainer = ({
   const router = useRouter();
 
   const [query, setQuery] = useState(initialQuery);
-  const [queryDebounced] = useDebounceValue(query, SEARCH_INPUT_DEBOUNCE_MS);
+  const [queryDebounced] = useDebounceValue(query, SEARCH_DEBOUNCE_MS);
 
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["threads", queryDebounced],
@@ -61,7 +61,7 @@ const ThreadsPageThreadsContainer = ({
   });
 
   const threads = data?.pages.flatMap((page) => page.threads) ?? [];
-  const hasSearchQuery = trim(queryDebounced).length;
+  const hasSearchQuery = queryDebounced?.trim().length;
   const hasActiveSearch = isFetching && not(isFetchingNextPage);
   const hasNoResult = hasSearchQuery && not(isFetching) && isEmpty(threads);
 
@@ -80,7 +80,7 @@ const ThreadsPageThreadsContainer = ({
         <DividerGridCell className="col-span-6 border-b">
           <DividerGridDivider variant="top" />
         </DividerGridCell>
-        <DividerGridCell className="flex col-span-4 justify-between border-b">
+        <DividerGridCell className="col-span-4 flex justify-between border-b">
           <DividerGridDivider variant="top" />
           <DividerGridDivider variant="top" />
         </DividerGridCell>
@@ -89,7 +89,7 @@ const ThreadsPageThreadsContainer = ({
 
       <DividerGridRow>
         <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-6 border-l border-r border-b">
+        <DividerGridCell className="col-span-6 border-r border-b border-l">
           <FormControl className="flex-row items-center">
             <Input
               placeholder={t("threads.searchPlaceholder")}
@@ -102,7 +102,7 @@ const ThreadsPageThreadsContainer = ({
             </Button>
           </FormControl>
         </DividerGridCell>
-        <DividerGridCell className="flex col-span-4 items-center justify-end px-3 border-r border-b">
+        <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b px-3">
           {hasSearchQuery ? (
             <Typography variant="small" color="muted">
               {t("threads.threadCount", { count: threads.length })}
@@ -114,16 +114,16 @@ const ThreadsPageThreadsContainer = ({
 
       <DividerGridRow>
         <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-6 py-6 border-l border-r border-b" />
-        <DividerGridCell className="flex col-span-4 items-center justify-end py-6 border-r border-b" />
+        <DividerGridCell className="col-span-6 border-r border-b border-l py-6" />
+        <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b py-6" />
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
       {hasNoResult ? (
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-10 px-12 py-24 border-l border-r border-b">
-            <div className="flex flex-col max-w-lg mx-auto gap-6">
+          <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">
+            <div className="mx-auto flex max-w-lg flex-col gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { ...renderers, query: queryDebounced })}
               </Typography>
@@ -176,14 +176,14 @@ const ThreadsPageThreadsContainer = ({
         <DividerGridCell className="col-span-1" />
         <DividerGridCell className="col-span-10">
           <DividerGridRow>
-            <DividerGridCell className="flex col-span-4 justify-between">
+            <DividerGridCell className="col-span-4 flex justify-between">
               <DividerGridDivider variant="bottom" />
               <DividerGridDivider variant="bottom" />
             </DividerGridCell>
-            <DividerGridCell className="flex col-span-4 justify-end">
+            <DividerGridCell className="col-span-4 flex justify-end">
               <DividerGridDivider variant="bottom" />
             </DividerGridCell>
-            <DividerGridCell className="flex col-span-4 justify-end">
+            <DividerGridCell className="col-span-4 flex justify-end">
               <DividerGridDivider variant="bottom" />
             </DividerGridCell>
           </DividerGridRow>

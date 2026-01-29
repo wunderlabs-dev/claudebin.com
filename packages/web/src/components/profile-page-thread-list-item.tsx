@@ -31,9 +31,11 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
             </CardTitle>
           </CardHeader>
           <List direction="row">
-            <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-              {t("common.prompts", { count: thread.messageCount ?? 0 })}
-            </ListItem>
+            {thread.messageCount ? (
+              <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
+                {t("common.prompts", { count: thread.messageCount })}
+              </ListItem>
+            ) : null}
             <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
               {t("common.likes", { count: thread.likeCount })}
             </ListItem>

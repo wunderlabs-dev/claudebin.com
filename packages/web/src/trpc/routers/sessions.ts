@@ -9,7 +9,7 @@ import { processSession } from "@/supabase/services/processor";
 import { createClient } from "@/supabase/server";
 import { createServiceClient } from "@/supabase/service";
 import { publicProcedure, router } from "@/trpc/init";
-import { MAX_SESSION_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/constants";
+import { SESSION_MAX_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/constants";
 
 export const SessionStatus = {
   PROCESSING: "processing",
@@ -52,7 +52,7 @@ export const sessionsRouter = router({
 
       // Validate size
       const sizeBytes = new TextEncoder().encode(input.conversation_data).length;
-      if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
+      if (sizeBytes > SESSION_MAX_SIZE_BYTES) {
         throw new Error(
           `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
         );

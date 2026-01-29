@@ -56,7 +56,7 @@ const ListItem = ({ icon, align = "start", children, className, ...props }: List
       className={cn("flex items-center gap-1", listItemAlignClassNames[align], className)}
       {...props}
     >
-      {icon}
+      <div className="shrink-0">{icon}</div>
       <Typography variant="caption" color="neutral" leading="normal">
         {children}
       </Typography>
