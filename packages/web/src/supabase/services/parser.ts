@@ -167,13 +167,24 @@ const normalizeContent = (content: string | RawContentBlock[] | undefined): Cont
         return { type: BlockType.TEXT, text: block.text };
       case "tool_use":
         return transformToolUse(block.id, block.name, block.input);
-      case "tool_result":
+      case "tool_result": {
+        // Content can be string, array of content blocks, or single content block
+        const extractText = (c: unknown): string => {
+          if (typeof c === "string") return c;
+          if (Array.isArray(c)) return c.map(extractText).join("\n");
+          if (c && typeof c === "object" && "type" in c) {
+            const block = c as { type: string; text?: string };
+            return block.type === "text" && block.text ? block.text : JSON.stringify(c);
+          }
+          return JSON.stringify(c);
+        };
         return {
           type: BlockType.TOOL_RESULT,
           tool_use_id: block.tool_use_id,
-          content: block.content,
+          content: extractText(block.content),
           is_error: block.is_error,
         };
+      }
       default:
         return { type: BlockType.TEXT, text: JSON.stringify(block) };
     }
