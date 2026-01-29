@@ -5,14 +5,14 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/supabase/server";
 
-export const deleteAccount = async (): Promise<{ error: string } | never> => {
+export const deleteAccount = async () => {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (isNil(user)) {
-    return { error: "Unauthorized" };
+    throw new Error("Unauthorized");
   }
 
   const { error } = await supabase
@@ -21,7 +21,7 @@ export const deleteAccount = async (): Promise<{ error: string } | never> => {
     .eq("id", user.id);
 
   if (error) {
-    return { error: "Failed to delete account" };
+    throw new Error("Failed to delete account");
   }
 
   await supabase.auth.signOut();
