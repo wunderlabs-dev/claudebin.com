@@ -61,10 +61,9 @@ const ThreadsPageThreadsContainer = ({
   });
 
   const threads = data?.pages.flatMap((page) => page.threads) ?? [];
-
-  const isSearchQuerySet = trim(queryDebounced).length;
-  const isSearching = isFetching && not(isFetchingNextPage);
-  const isNoResult = isSearchQuerySet && not(isFetching) && isEmpty(threads);
+  const hasSearchQuery = trim(queryDebounced).length;
+  const hasActiveSearch = isFetching && not(isFetchingNextPage);
+  const hasNoResult = hasSearchQuery && not(isFetching) && isEmpty(threads);
 
   useEffect(() => {
     if (queryDebounced) {
@@ -97,14 +96,14 @@ const ThreadsPageThreadsContainer = ({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
-            <Button variant="outline" disabled={isSearching}>
+            <Button variant="outline" disabled={hasActiveSearch}>
               <SvgIconMagnifier size="sm" />
-              {isSearching ? t("threads.searching") : t("threads.search")}
+              {hasActiveSearch ? t("threads.searching") : t("threads.search")}
             </Button>
           </FormControl>
         </DividerGridCell>
         <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b px-3">
-          {isSearchQuerySet ? (
+          {hasSearchQuery ? (
             <Typography variant="small" color="muted">
               {t("threads.threadCount", { count: threads.length })}
             </Typography>
@@ -120,7 +119,7 @@ const ThreadsPageThreadsContainer = ({
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
-      {isNoResult ? (
+      {hasNoResult ? (
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
           <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">
