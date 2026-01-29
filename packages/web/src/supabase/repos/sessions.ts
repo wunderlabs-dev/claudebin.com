@@ -33,6 +33,7 @@ const sanitizeProfile = (profile: ProfileWithDeleted | null): ThreadWithAuthor["
 export type GetPublicThreadsResult = {
   threads: ThreadWithAuthor[];
   total: number;
+  nextOffset: number | null;
 };
 
 const getPublicThreads = async (
@@ -62,7 +63,10 @@ const getPublicThreads = async (
     profiles: sanitizeProfile(thread.profiles),
   }));
 
-  return { threads, total: count ?? 0 };
+  const total = count ?? 0;
+  const nextOffset = offset + threads.length < total ? offset + threads.length : null;
+
+  return { threads, total, nextOffset };
 };
 
 const getByUserId = async (

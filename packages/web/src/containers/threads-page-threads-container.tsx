@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
+import { isEmpty, not, trim } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { getPublicThreads } from "@/actions/threads";
+import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 
 import { renderers } from "@/utils/renderers";
 import { SEARCH_INPUT_DEBOUNCE_MS } from "@/utils/constants";
@@ -32,12 +33,14 @@ import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid
 type ThreadsPageThreadsContainerProps = {
   initialThreads: ThreadWithAuthor[];
   initialTotal: number;
+  initialNextOffset: number | null;
   initialQuery?: string;
 };
 
 const ThreadsPageThreadsContainer = ({
   initialThreads,
   initialTotal,
+  initialNextOffset,
   initialQuery = "",
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
@@ -49,21 +52,19 @@ const ThreadsPageThreadsContainer = ({
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["threads", queryDebounced],
     queryFn: ({ pageParam }) => getPublicThreads(queryDebounced, pageParam),
-    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextOffset,
+    initialPageParam: THREADS_PAGE_INITIAL,
     initialData: {
-      pages: [{ threads: initialThreads, total: initialTotal }],
-      pageParams: [0],
-    },
-    getNextPageParam: (lastPage, allPages) => {
-      const totalFetched = allPages.flatMap((page) => page.threads).length;
-      return totalFetched < lastPage.total ? totalFetched : undefined;
+      pageParams: [THREADS_PAGE_INITIAL],
+      pages: [{ threads: initialThreads, total: initialTotal, nextOffset: initialNextOffset }],
     },
   });
 
   const threads = data?.pages.flatMap((page) => page.threads) ?? [];
-  const total = data?.pages[0]?.total ?? 0;
-  const isSearching = isFetching && !isFetchingNextPage;
-  const hasNoSearchResults = !isFetching && threads.length === 0 && queryDebounced.trim() !== "";
+
+  const isSearchQuerySet = trim(queryDebounced).length;
+  const isSearching = isFetching && not(isFetchingNextPage);
+  const isNoResult = isSearchQuerySet && not(isFetching) && isEmpty(threads);
 
   useEffect(() => {
     if (queryDebounced) {
@@ -103,9 +104,11 @@ const ThreadsPageThreadsContainer = ({
           </FormControl>
         </DividerGridCell>
         <DividerGridCell className="col-span-4 flex items-center justify-end border-r border-b px-3">
-          <Typography variant="small" color="muted">
-            {t("threads.threadCount", { count: total })}
-          </Typography>
+          {isSearchQuerySet ? (
+            <Typography variant="small" color="muted">
+              {t("threads.threadCount", { count: threads.length })}
+            </Typography>
+          ) : null}
         </DividerGridCell>
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
@@ -117,7 +120,7 @@ const ThreadsPageThreadsContainer = ({
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
-      {hasNoSearchResults ? (
+      {isNoResult ? (
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
           <DividerGridCell className="col-span-10 border-r border-b border-l px-12 py-24">

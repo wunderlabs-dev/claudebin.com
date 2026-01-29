@@ -1,4 +1,4 @@
-import isNil from "lodash.isnil";
+import { isNil } from "ramda";
 import { redirect } from "next/navigation";
 import { isPast } from "date-fns";
 import { getTranslations } from "next-intl/server";

@@ -19,7 +19,7 @@ const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
   const supabase = await createClient();
 
   const { query } = await searchParams;
-  const { threads, total } = await sessions.getPublicThreads(supabase, { query });
+  const { threads, total, nextOffset } = await sessions.getPublicThreads(supabase, { query });
 
   return (
     <Container size="md" spacing="md" className="flex flex-col gap-8">
@@ -35,6 +35,7 @@ const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
       <ThreadsPageThreadsContainer
         initialQuery={query}
         initialTotal={total}
+        initialNextOffset={nextOffset}
         initialThreads={threads}
       />
     </Container>

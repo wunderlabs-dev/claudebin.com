@@ -1,5 +1,5 @@
 import Link from "next/link";
-import isNil from "lodash.isnil";
+import { isNil } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 

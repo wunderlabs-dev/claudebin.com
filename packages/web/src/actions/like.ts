@@ -1,6 +1,6 @@
 "use server";
 
-import isNil from "lodash.isnil";
+import { isNil } from "ramda";
 
 import { createClient } from "@/supabase/server";
 import { sessionLikes } from "@/supabase/repos/sessionLikes";
