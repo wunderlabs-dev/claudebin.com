@@ -37,7 +37,7 @@ const TodoItem = ({ className, variant = "pending", ...props }: TodoItemProps) =
 };
 
 const TodoItemIcon = ({ className, ...props }: React.ComponentProps<"span">) => {
-  return <span data-slot="todo-item-icon" className={cn("flex-shrink-0", className)} {...props} />;
+  return <span data-slot="todo-item-icon" className={cn("flex shrink-0", className)} {...props} />;
 };
 
 type TodoItemLabelProps = {
