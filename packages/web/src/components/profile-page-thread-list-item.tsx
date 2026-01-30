@@ -30,7 +30,7 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
               })}
             </CardTitle>
           </CardHeader>
-          <List direction="row">
+          <List direction="row" className="flex-col items-start gap-1 lg:flex-row lg:items-center lg:gap-3">
             {thread.messageCount ? (
               <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
                 {t("common.prompts", { count: thread.messageCount })}
@@ -46,7 +46,7 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
         </CardSection>
       </CardBody>
 
-      <CardBody className="col-span-1 bg-dot text-gray-500/40 transition-colors group-hover:text-orange-50" />
+      <CardBody className="col-span-12 min-h-12 bg-dot text-gray-500/40 transition-colors lg:col-span-1 lg:min-h-auto group-hover:text-orange-50" />
     </Card>
   );
 };
