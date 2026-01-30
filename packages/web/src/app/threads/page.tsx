@@ -23,7 +23,7 @@ const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
 
   return (
     <Container size="md" spacing="md" className="flex flex-col gap-8">
-      <div className="flex flex-col gap-18">
+      <div className="flex flex-col gap-12 xl:gap-18">
         <Typography variant="h1" leading="none" className="whitespace-break-spaces">
           {t.rich("threads.title", renderers)}
         </Typography>

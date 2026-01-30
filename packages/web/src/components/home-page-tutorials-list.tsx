@@ -20,13 +20,13 @@ const tutorials = [
   },
 ] as const;
 
-const HomePageTutorialsList = ({ className, ...props }: HomePageTutorialsListProps) => {
+const HomePageTutorialsList = ({ ...props }: HomePageTutorialsListProps) => {
   const t = useTranslations();
 
   return (
-    <Container as="section" size="lg" className={className} {...props}>
+    <Container as="section" size="lg" {...props}>
       <Tabs defaultValue="terminal" className="flex flex-col items-center gap-8">
-        <Backdrop size="half" spacing="lg">
+        <Backdrop size="half" spacing="lg" className="px-6 lg:px-12">
           <div className="mx-auto w-full max-w-6xl rounded-3xl border border-gray-500/20 bg-gray-200/50 p-2">
             {tutorials.map((tutorial) => (
               <TabsContent key={tutorial.id} value={tutorial.id}>

@@ -43,7 +43,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   profiles.incrementViewCount(supabase, profile.id);
 
   return (
-    <Container spacing="md" className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 xl:gap-18">
+    <Container
+      spacing="md"
+      className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 xl:gap-18"
+    >
       <div className="col-span-1 lg:col-span-4">
         <ProfilePageUserInfoSidebar
           username={profile.username}
@@ -55,9 +58,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 col-span-1 lg:col-span-8">
+      <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
         {threads.length ? (
-          <div className="flex col-span-12 justify-between p-8 border border-gray-250 lg:items-center">
+          <div className="col-span-12 flex justify-between border border-gray-250 p-8 lg:items-center">
             <div className="flex items-center gap-3">
               <SvgIconLine size="md" color="accent" />
               <Typography variant="h4">{t("user.recentThreads")}</Typography>
