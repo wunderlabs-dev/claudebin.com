@@ -123,7 +123,7 @@ const ThreadsPageThreadsContainer = ({
       {hasNoResult ? (
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-10 border-r border-b border-l px-8 py-24 lg:px-12">
+          <DividerGridCell className="col-span-12 border-r border-b border-l px-8 py-24 lg:px-12">
             <div className="mx-auto flex max-w-lg flex-col gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { ...renderers, query: queryDebounced })}
