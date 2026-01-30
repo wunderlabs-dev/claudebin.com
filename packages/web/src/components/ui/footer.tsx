@@ -53,22 +53,17 @@ const Footer = ({ className, ...props }: FooterProps) => {
       <Container size="lg" spacing="lg">
         <Divider />
 
-        <div className="flex items-stretch justify-between gap-12 pt-3 pb-12">
-          <div className="flex flex-col justify-between">
+        <div className="flex flex-col-reverse items-stretch justify-between gap-12 pt-3 pb-12 lg:flex-row">
+          <div className="flex flex-col justify-between gap-6">
             <Link href="/">
               <SvgIconClaudebin size="auto" className="w-xl" />
             </Link>
-            <div className="flex flex-col gap-1">
-              <Typography variant="small" color="muted">
-                {t.rich("footer.copyright", renderers)}
-              </Typography>
-              <Typography variant="caption" color="muted">
-                {t("footer.disclaimer")}
-              </Typography>
-            </div>
+            <Typography variant="small" color="muted">
+              {t.rich("footer.copyright", renderers)}
+            </Typography>
           </div>
 
-          <div className="flex gap-12">
+          <div className="flex gap-6 lg:gap-12">
             {sections.map((section) => (
               <nav key={section.title} className="flex flex-col gap-3">
                 <Typography variant="h4">{t(section.title)}</Typography>

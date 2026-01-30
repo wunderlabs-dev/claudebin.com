@@ -33,7 +33,7 @@ const Container = <T extends React.ElementType = "div">({
     <Component
       data-slot="container"
       className={cn(
-        "mx-auto w-full",
+        "mx-auto w-full px-8 2xl:px-0",
         containerSizeClassNames[size],
         spacingClassNames[spacing],
         className,

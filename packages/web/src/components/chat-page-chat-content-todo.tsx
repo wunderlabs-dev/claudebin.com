@@ -12,7 +12,10 @@ const todoStatusIconMap: Record<TodoBlock["todos"][number]["status"], string> = 
   pending: "○",
 };
 
-const todoStatusVariantMap: Record<TodoBlock["todos"][number]["status"], "completed" | "progress" | "pending"> = {
+const todoStatusVariantMap: Record<
+  TodoBlock["todos"][number]["status"],
+  "completed" | "progress" | "pending"
+> = {
   completed: "completed",
   in_progress: "progress",
   pending: "pending",

@@ -26,10 +26,10 @@ const components = {
     </Typography>
   ),
   em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
-  strong: ({ children }: { children?: ReactNode }) => <strong className="font-semibold">{children}</strong>,
-  pre: ({ children }: { children?: ReactNode }) => (
-    <pre>{children}</pre>
+  strong: ({ children }: { children?: ReactNode }) => (
+    <strong className="font-semibold">{children}</strong>
   ),
+  pre: ({ children }: { children?: ReactNode }) => <pre>{children}</pre>,
   code: ({ children }: { children?: ReactNode }) => <code>{children}</code>,
   ul: ({ children }: { children?: ReactNode }) => <ul>{children}</ul>,
   ol: ({ children }: { children?: ReactNode }) => <ol>{children}</ol>,
