@@ -352,10 +352,16 @@ const normalizeBlock = (block: RawContentBlock): ContentBlock => {
   }
 };
 
+const isFilteredBlock = (block: ContentBlock): boolean => {
+  if (block.type === BlockType.TEXT) return !block.text.trim();
+  if (block.type === BlockType.THINKING) return true;
+  return false;
+};
+
 const normalizeContent = (content: string | RawContentBlock[] | undefined): ContentBlock[] => {
   if (!content) return [];
   if (typeof content === "string") return [{ type: BlockType.TEXT, text: content }];
-  return content.map(normalizeBlock);
+  return content.map(normalizeBlock).filter((block) => !isFilteredBlock(block));
 };
 
 type IntermediateMessage = { raw: RawJsonlMessage; content: ContentBlock[] };
@@ -399,10 +405,12 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   // Phase 3: Build final messages
   const tasksList = Array.from(tasks.values());
 
-  return intermediate.map(({ raw, content }, idx) => {
+  return intermediate.flatMap(({ raw, content }, idx) => {
     const taskToolIds = taskToolIdsByMessage.get(idx);
     const isLastTaskMessage = idx === lastTaskMessageIdx && tasks.size > 0;
     const finalContent = processTaskBlocks(content, taskToolIds, isLastTaskMessage, tasksList);
+
+    if (finalContent.length === 0) return [];
 
     const { toolNames, textPreview } = summarizeContent(finalContent);
 
