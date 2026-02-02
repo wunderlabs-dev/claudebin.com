@@ -375,13 +375,18 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   // Phase 2: Build task state
   const { tasks, taskToolIdsByMessage } = buildTaskState(intermediate);
 
+  // Find the last message with task tools (to show final state there)
+  const lastTaskMessageIdx = Math.max(...Array.from(taskToolIdsByMessage.keys()), -1);
+
   // Phase 3: Build final messages
   return intermediate.map(({ raw, content }, idx) => {
     const taskToolIds = taskToolIdsByMessage.get(idx);
-    const finalContent =
-      taskToolIds && tasks.size > 0
+    const shouldInsertSummary = idx === lastTaskMessageIdx && tasks.size > 0;
+    const finalContent = taskToolIds
+      ? shouldInsertSummary
         ? replaceTaskBlocksWithSummary(content, taskToolIds, Array.from(tasks.values()))
-        : content;
+        : content.filter((block) => !isTaskToolBlock(block, taskToolIds))
+      : content;
 
     const { toolNames, textPreview } = summarizeContent(finalContent);
 
