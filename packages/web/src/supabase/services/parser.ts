@@ -76,6 +76,8 @@ const ToolName = {
   WEB_SEARCH: "WebSearch",
   TASK_CREATE: "TaskCreate",
   TASK_UPDATE: "TaskUpdate",
+  TASK_GET: "TaskGet",
+  TASK_LIST: "TaskList",
 } as const;
 
 const BLOCK_TYPE_TO_TOOL: Record<string, string> = {
@@ -91,7 +93,12 @@ const BLOCK_TYPE_TO_TOOL: Record<string, string> = {
   [BlockType.WEB_SEARCH]: ToolName.WEB_SEARCH,
 };
 
-const TASK_TOOLS: string[] = [ToolName.TASK_CREATE, ToolName.TASK_UPDATE];
+const TASK_TOOLS: string[] = [
+  ToolName.TASK_CREATE,
+  ToolName.TASK_UPDATE,
+  ToolName.TASK_GET,
+  ToolName.TASK_LIST,
+];
 
 const ToolInputSchema = {
   AskUserQuestion: z.object({
@@ -222,6 +229,17 @@ const replaceTaskBlocksWithSummary = (
   }
 
   return result;
+};
+
+const processTaskBlocks = (
+  content: ContentBlock[],
+  taskToolIds: Set<string> | undefined,
+  isLastTaskMessage: boolean,
+  tasksList: TaskItem[],
+): ContentBlock[] => {
+  if (!taskToolIds) return content;
+  if (isLastTaskMessage) return replaceTaskBlocksWithSummary(content, taskToolIds, tasksList);
+  return content.filter((block) => !isTaskToolBlock(block, taskToolIds));
 };
 
 type ContentSummary = {
@@ -379,14 +397,12 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   const lastTaskMessageIdx = Math.max(...Array.from(taskToolIdsByMessage.keys()), -1);
 
   // Phase 3: Build final messages
+  const tasksList = Array.from(tasks.values());
+
   return intermediate.map(({ raw, content }, idx) => {
     const taskToolIds = taskToolIdsByMessage.get(idx);
-    const shouldInsertSummary = idx === lastTaskMessageIdx && tasks.size > 0;
-    const finalContent = taskToolIds
-      ? shouldInsertSummary
-        ? replaceTaskBlocksWithSummary(content, taskToolIds, Array.from(tasks.values()))
-        : content.filter((block) => !isTaskToolBlock(block, taskToolIds))
-      : content;
+    const isLastTaskMessage = idx === lastTaskMessageIdx && tasks.size > 0;
+    const finalContent = processTaskBlocks(content, taskToolIds, isLastTaskMessage, tasksList);
 
     const { toolNames, textPreview } = summarizeContent(finalContent);
 
