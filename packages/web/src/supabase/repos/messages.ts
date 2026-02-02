@@ -28,10 +28,14 @@ export interface PaginatedMessages {
   total: number;
 }
 
-const mapRowToMessage = (row: MessagesRow): Message => ({
-  ...row,
-  content: jsonToContentBlocks(row.content),
-});
+const mapRowToMessage = (row: MessagesRow): Message => {
+  const { content, rawMessage, role, ...rest } = row;
+  return {
+    ...rest,
+    role: (role ?? "assistant") as Role,
+    content: jsonToContentBlocks(content),
+  };
+};
 
 const DEFAULT_LIMIT = 50;
 

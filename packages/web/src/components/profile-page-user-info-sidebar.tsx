@@ -37,7 +37,7 @@ const ProfilePageUserInfoSidebar = ({
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
-  const [fallback] = [...username];
+  const [fallback] = username ?? "?";
 
   const stats = [
     {

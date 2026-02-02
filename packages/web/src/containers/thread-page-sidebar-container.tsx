@@ -70,7 +70,7 @@ const ThreadPageSidebarContainer = ({
 
       <div className="flex w-full flex-col gap-8">
         <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-        <CopyInput variant="snippet" />
+        <CopyInput variant="snippet" value="npx claudebin publish" />
 
         <Button variant="secondary">
           <SvgIconChat />
