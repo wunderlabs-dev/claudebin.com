@@ -12,8 +12,18 @@ const TextBlockSchema = z.object({ type: z.literal("text"), text: z.string() });
 const RawContentBlockSchema = z.union([
   TextBlockSchema,
   z.object({ type: z.literal("thinking"), thinking: z.string(), signature: z.string().optional() }),
-  z.object({ type: z.literal("tool_use"), id: z.string(), name: z.string(), input: z.record(z.string(), z.unknown()) }),
-  z.object({ type: z.literal("tool_result"), tool_use_id: z.string(), content: z.unknown(), is_error: z.boolean().optional() }),
+  z.object({
+    type: z.literal("tool_use"),
+    id: z.string(),
+    name: z.string(),
+    input: z.record(z.string(), z.unknown()),
+  }),
+  z.object({
+    type: z.literal("tool_result"),
+    tool_use_id: z.string(),
+    content: z.unknown(),
+    is_error: z.boolean().optional(),
+  }),
 ]);
 
 const RawJsonlMessageSchema = z.object({
@@ -85,15 +95,27 @@ const TASK_TOOLS: string[] = [ToolName.TASK_CREATE, ToolName.TASK_UPDATE];
 
 const ToolInputSchema = {
   AskUserQuestion: z.object({
-    questions: z.array(z.object({
-      question: z.string(),
-      header: z.string(),
-      options: z.array(z.object({ label: z.string(), description: z.string() })),
-      multiSelect: z.boolean(),
-    })).default([]),
+    questions: z
+      .array(
+        z.object({
+          question: z.string(),
+          header: z.string(),
+          options: z.array(z.object({ label: z.string(), description: z.string() })),
+          multiSelect: z.boolean(),
+        }),
+      )
+      .default([]),
   }),
-  Bash: z.object({ command: z.string(), description: z.string().optional(), timeout: z.number().optional() }),
-  Read: z.object({ file_path: z.string(), offset: z.number().optional(), limit: z.number().optional() }),
+  Bash: z.object({
+    command: z.string(),
+    description: z.string().optional(),
+    timeout: z.number().optional(),
+  }),
+  Read: z.object({
+    file_path: z.string(),
+    offset: z.number().optional(),
+    limit: z.number().optional(),
+  }),
   Write: z.object({ file_path: z.string(), content: z.string() }),
   Edit: z.object({ file_path: z.string(), old_string: z.string(), new_string: z.string() }),
   Glob: z.object({ pattern: z.string(), path: z.string().optional() }),
@@ -102,7 +124,10 @@ const ToolInputSchema = {
   WebFetch: z.object({ url: z.string(), prompt: z.string() }),
   WebSearch: z.object({ query: z.string() }),
   TaskCreate: z.object({ subject: z.string(), description: z.string().optional() }),
-  TaskUpdate: z.object({ taskId: z.string(), status: z.enum(["pending", "in_progress", "completed"]).optional() }),
+  TaskUpdate: z.object({
+    taskId: z.string(),
+    status: z.enum(["pending", "in_progress", "completed"]).optional(),
+  }),
 } as const;
 
 type TaskCreateInput = z.infer<typeof ToolInputSchema.TaskCreate>;
@@ -125,15 +150,16 @@ const isTaskToolBlock = (block: ContentBlock, taskToolIds: Set<string>): boolean
   return false;
 };
 
-const parseToolInput = <T>(
-  schema: z.ZodType<T>,
-  input: Record<string, unknown>,
-): T | null => {
+const parseToolInput = <T>(schema: z.ZodType<T>, input: Record<string, unknown>): T | null => {
   const result = schema.safeParse(input);
   return result.success ? result.data : null;
 };
 
-const transformToolUse = (id: string, name: string, input: Record<string, unknown>): ContentBlock => {
+const transformToolUse = (
+  id: string,
+  name: string,
+  input: Record<string, unknown>,
+): ContentBlock => {
   const fallback: ContentBlock = { type: BlockType.TOOL_USE, id, name, input };
 
   switch (name) {
@@ -196,7 +222,12 @@ const normalizeBlock = (block: RawContentBlock): ContentBlock => {
     case "tool_use":
       return transformToolUse(block.id, block.name, block.input);
     case "tool_result":
-      return { type: BlockType.TOOL_RESULT, tool_use_id: block.tool_use_id, content: extractText(block.content), is_error: block.is_error };
+      return {
+        type: BlockType.TOOL_RESULT,
+        tool_use_id: block.tool_use_id,
+        content: extractText(block.content),
+        is_error: block.is_error,
+      };
     case "thinking":
       return { type: BlockType.THINKING, thinking: block.thinking, signature: block.signature };
     default:
@@ -226,7 +257,8 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
     const content = normalizeContent(r.message.content);
 
     const isToolResult = content.length > 0 && content[0].type === BlockType.TOOL_RESULT;
-    const isSameAssistantMessage = r.type === MessageRole.ASSISTANT && msgId && msgId === currentMsgId;
+    const isSameAssistantMessage =
+      r.type === MessageRole.ASSISTANT && msgId && msgId === currentMsgId;
     const isToolResultAfterAssistant = isToolResult && currentIsAssistant;
     const shouldMerge = current && (isSameAssistantMessage || isToolResultAfterAssistant);
 
@@ -305,7 +337,9 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
     }
 
     const toolNames = finalContent
-      .map((block) => (block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_TOOL[block.type]))
+      .map((block) =>
+        block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_TOOL[block.type],
+      )
       .filter((name): name is string => Boolean(name));
 
     const textPreview = finalContent
