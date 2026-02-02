@@ -89,8 +89,6 @@ const ThreadPageConversationContainer = ({
 
   const [fallback] = [...author];
 
-  console.log(data);
-
   return (
     <Chat className="pr-14">
       {data?.messages?.map((message) => (
