@@ -1,22 +1,39 @@
-import type {
-  ContentBlock,
-  RawContentBlock,
-  RawJsonlMessage,
-  TaskItem,
-  TasksBlock,
-  ToolUseBlock,
-} from "@/supabase/types/message";
+import type { ContentBlock, TaskItem, TasksBlock, ToolUseBlock } from "@/supabase/types/message";
+
 import type { Json } from "@/supabase/types";
 
-import { BlockType, isSkippedMessageType } from "@/supabase/types/message";
+import { z } from "zod";
+
+import { BlockType, MessageRole, isSkippedMessageType } from "@/supabase/types/message";
 import { contentBlocksToJson, toJson } from "@/supabase/types/json-cast";
-import { logger } from "@/utils/logger";
 
-const TEXT_PREVIEW_LENGTH = 500;
+const TextBlockSchema = z.object({ type: z.literal("text"), text: z.string() });
 
-// =============================================================================
-// Types
-// =============================================================================
+const RawContentBlockSchema = z.union([
+  TextBlockSchema,
+  z.object({ type: z.literal("thinking"), thinking: z.string(), signature: z.string().optional() }),
+  z.object({ type: z.literal("tool_use"), id: z.string(), name: z.string(), input: z.record(z.string(), z.unknown()) }),
+  z.object({ type: z.literal("tool_result"), tool_use_id: z.string(), content: z.unknown(), is_error: z.boolean().optional() }),
+]);
+
+const RawJsonlMessageSchema = z.object({
+  type: z.enum(["user", "assistant", "file-history-snapshot", "tool_result"]),
+  uuid: z.string(),
+  timestamp: z.string(),
+  sessionId: z.string(),
+  parentUuid: z.string().nullable(),
+  isMeta: z.boolean().optional(),
+  isSidechain: z.boolean().optional(),
+  message: z.object({
+    id: z.string().optional(),
+    role: z.enum(["user", "assistant"]),
+    content: z.union([z.string(), z.array(RawContentBlockSchema)]),
+    model: z.string().optional(),
+  }),
+});
+
+type RawContentBlock = z.infer<typeof RawContentBlockSchema>;
+type RawJsonlMessage = z.infer<typeof RawJsonlMessageSchema>;
 
 export interface ParsedMessage {
   sessionId: string;
@@ -36,453 +53,299 @@ export interface ParsedMessage {
   rawMessage: Json;
 }
 
-interface QuestionInput {
-  question: string;
-  header: string;
-  options: Array<{ label: string; description: string }>;
-  multiSelect: boolean;
-}
-
-// =============================================================================
-// Tool Transformation
-// =============================================================================
+const ToolName = {
+  ASK_USER_QUESTION: "AskUserQuestion",
+  BASH: "Bash",
+  READ: "Read",
+  WRITE: "Write",
+  EDIT: "Edit",
+  GLOB: "Glob",
+  GREP: "Grep",
+  TASK: "Task",
+  WEB_FETCH: "WebFetch",
+  WEB_SEARCH: "WebSearch",
+  TASK_CREATE: "TaskCreate",
+  TASK_UPDATE: "TaskUpdate",
+} as const;
 
 const BLOCK_TYPE_TO_TOOL: Record<string, string> = {
-  [BlockType.QUESTION]: "AskUserQuestion",
-  [BlockType.BASH]: "Bash",
-  [BlockType.FILE_READ]: "Read",
-  [BlockType.FILE_WRITE]: "Write",
-  [BlockType.FILE_EDIT]: "Edit",
-  [BlockType.GLOB]: "Glob",
-  [BlockType.GREP]: "Grep",
-  [BlockType.TASK]: "Task",
-  [BlockType.WEB_FETCH]: "WebFetch",
-  [BlockType.WEB_SEARCH]: "WebSearch",
+  [BlockType.QUESTION]: ToolName.ASK_USER_QUESTION,
+  [BlockType.BASH]: ToolName.BASH,
+  [BlockType.FILE_READ]: ToolName.READ,
+  [BlockType.FILE_WRITE]: ToolName.WRITE,
+  [BlockType.FILE_EDIT]: ToolName.EDIT,
+  [BlockType.GLOB]: ToolName.GLOB,
+  [BlockType.GREP]: ToolName.GREP,
+  [BlockType.TASK]: ToolName.TASK,
+  [BlockType.WEB_FETCH]: ToolName.WEB_FETCH,
+  [BlockType.WEB_SEARCH]: ToolName.WEB_SEARCH,
 };
 
-const transformToolUse = (
-  id: string,
-  name: string,
-  input: Record<string, unknown>,
-): ContentBlock => {
-  switch (name) {
-    case "AskUserQuestion":
-      return {
-        type: BlockType.QUESTION,
-        id,
-        questions: (input.questions as QuestionInput[]) || [],
-      };
-    case "Bash":
-      return {
-        type: BlockType.BASH,
-        id,
-        command: (input.command as string) || "",
-        description: input.description as string | undefined,
-        timeout: input.timeout as number | undefined,
-      };
-    case "Read":
-      return {
-        type: BlockType.FILE_READ,
-        id,
-        file_path: (input.file_path as string) || "",
-        offset: input.offset as number | undefined,
-        limit: input.limit as number | undefined,
-      };
-    case "Write":
-      return {
-        type: BlockType.FILE_WRITE,
-        id,
-        file_path: (input.file_path as string) || "",
-        content: (input.content as string) || "",
-      };
-    case "Edit":
-      return {
-        type: BlockType.FILE_EDIT,
-        id,
-        file_path: (input.file_path as string) || "",
-        old_string: (input.old_string as string) || "",
-        new_string: (input.new_string as string) || "",
-      };
-    case "Glob":
-      return {
-        type: BlockType.GLOB,
-        id,
-        pattern: (input.pattern as string) || "",
-        path: input.path as string | undefined,
-      };
-    case "Grep":
-      return {
-        type: BlockType.GREP,
-        id,
-        pattern: (input.pattern as string) || "",
-        path: input.path as string | undefined,
-        glob: input.glob as string | undefined,
-      };
-    case "Task":
-      return {
-        type: BlockType.TASK,
-        id,
-        description: (input.description as string) || "",
-        prompt: (input.prompt as string) || "",
-        subagent_type: (input.subagent_type as string) || "",
-      };
-    case "WebFetch":
-      return {
-        type: BlockType.WEB_FETCH,
-        id,
-        url: (input.url as string) || "",
-        prompt: (input.prompt as string) || "",
-      };
-    case "WebSearch":
-      return {
-        type: BlockType.WEB_SEARCH,
-        id,
-        query: (input.query as string) || "",
-      };
-    default:
-      return { type: BlockType.TOOL_USE, id, name, input };
-  }
-};
+const TASK_TOOLS: string[] = [ToolName.TASK_CREATE, ToolName.TASK_UPDATE];
 
-// =============================================================================
-// Task Aggregation Helpers
-// =============================================================================
+const ToolInputSchema = {
+  AskUserQuestion: z.object({
+    questions: z.array(z.object({
+      question: z.string(),
+      header: z.string(),
+      options: z.array(z.object({ label: z.string(), description: z.string() })),
+      multiSelect: z.boolean(),
+    })).default([]),
+  }),
+  Bash: z.object({ command: z.string(), description: z.string().optional(), timeout: z.number().optional() }),
+  Read: z.object({ file_path: z.string(), offset: z.number().optional(), limit: z.number().optional() }),
+  Write: z.object({ file_path: z.string(), content: z.string() }),
+  Edit: z.object({ file_path: z.string(), old_string: z.string(), new_string: z.string() }),
+  Glob: z.object({ pattern: z.string(), path: z.string().optional() }),
+  Grep: z.object({ pattern: z.string(), path: z.string().optional(), glob: z.string().optional() }),
+  Task: z.object({ description: z.string(), prompt: z.string(), subagent_type: z.string() }),
+  WebFetch: z.object({ url: z.string(), prompt: z.string() }),
+  WebSearch: z.object({ query: z.string() }),
+  TaskCreate: z.object({ subject: z.string(), description: z.string().optional() }),
+  TaskUpdate: z.object({ taskId: z.string(), status: z.enum(["pending", "in_progress", "completed"]).optional() }),
+} as const;
+
+type TaskCreateInput = z.infer<typeof ToolInputSchema.TaskCreate>;
 
 const extractTaskId = (content: string): string | null => {
   const match = content.match(/(?:Task |task )#(\d+)/i);
   return match ? match[1] : null;
 };
 
-const isTaskTool = (name: string): boolean =>
-  ["TaskCreate", "TaskUpdate", "TaskGet", "TaskList"].includes(name);
+const createTaskFromToolUse = (taskId: string, input: TaskCreateInput): TaskItem => ({
+  id: taskId,
+  subject: input.subject,
+  description: input.description,
+  status: "pending",
+});
 
-// =============================================================================
-// Content Normalization
-// =============================================================================
+const isTaskToolBlock = (block: ContentBlock, taskToolIds: Set<string>): boolean => {
+  if (block.type === BlockType.TOOL_USE) return taskToolIds.has(block.id);
+  if (block.type === BlockType.TOOL_RESULT) return taskToolIds.has(block.tool_use_id);
+  return false;
+};
+
+const parseToolInput = <T>(
+  schema: z.ZodType<T>,
+  input: Record<string, unknown>,
+): T | null => {
+  const result = schema.safeParse(input);
+  return result.success ? result.data : null;
+};
+
+const transformToolUse = (id: string, name: string, input: Record<string, unknown>): ContentBlock => {
+  const fallback: ContentBlock = { type: BlockType.TOOL_USE, id, name, input };
+
+  switch (name) {
+    case ToolName.ASK_USER_QUESTION: {
+      const data = parseToolInput(ToolInputSchema.AskUserQuestion, input);
+      return { type: BlockType.QUESTION, id, questions: data?.questions ?? [] };
+    }
+    case ToolName.BASH: {
+      const data = parseToolInput(ToolInputSchema.Bash, input);
+      return data ? { type: BlockType.BASH, id, ...data } : fallback;
+    }
+    case ToolName.READ: {
+      const data = parseToolInput(ToolInputSchema.Read, input);
+      return data ? { type: BlockType.FILE_READ, id, ...data } : fallback;
+    }
+    case ToolName.WRITE: {
+      const data = parseToolInput(ToolInputSchema.Write, input);
+      return data ? { type: BlockType.FILE_WRITE, id, ...data } : fallback;
+    }
+    case ToolName.EDIT: {
+      const data = parseToolInput(ToolInputSchema.Edit, input);
+      return data ? { type: BlockType.FILE_EDIT, id, ...data } : fallback;
+    }
+    case ToolName.GLOB: {
+      const data = parseToolInput(ToolInputSchema.Glob, input);
+      return data ? { type: BlockType.GLOB, id, ...data } : fallback;
+    }
+    case ToolName.GREP: {
+      const data = parseToolInput(ToolInputSchema.Grep, input);
+      return data ? { type: BlockType.GREP, id, ...data } : fallback;
+    }
+    case ToolName.TASK: {
+      const data = parseToolInput(ToolInputSchema.Task, input);
+      return data ? { type: BlockType.TASK, id, ...data } : fallback;
+    }
+    case ToolName.WEB_FETCH: {
+      const data = parseToolInput(ToolInputSchema.WebFetch, input);
+      return data ? { type: BlockType.WEB_FETCH, id, ...data } : fallback;
+    }
+    case ToolName.WEB_SEARCH: {
+      const data = parseToolInput(ToolInputSchema.WebSearch, input);
+      return data ? { type: BlockType.WEB_SEARCH, id, ...data } : fallback;
+    }
+    default:
+      return fallback;
+  }
+};
+
+const extractText = (content: unknown): string => {
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) return content.map(extractText).join("\n");
+  const parsed = TextBlockSchema.safeParse(content);
+  return parsed.success ? parsed.data.text : JSON.stringify(content);
+};
+
+const normalizeBlock = (block: RawContentBlock): ContentBlock => {
+  switch (block.type) {
+    case "text":
+      return { type: BlockType.TEXT, text: block.text };
+    case "tool_use":
+      return transformToolUse(block.id, block.name, block.input);
+    case "tool_result":
+      return { type: BlockType.TOOL_RESULT, tool_use_id: block.tool_use_id, content: extractText(block.content), is_error: block.is_error };
+    case "thinking":
+      return { type: BlockType.THINKING, thinking: block.thinking, signature: block.signature };
+    default:
+      return { type: BlockType.TEXT, text: JSON.stringify(block) };
+  }
+};
 
 const normalizeContent = (content: string | RawContentBlock[] | undefined): ContentBlock[] => {
   if (!content) return [];
-
-  if (typeof content === "string") {
-    return [{ type: BlockType.TEXT, text: content }];
-  }
-
-  const normalized = content.map((block): ContentBlock => {
-    switch (block.type) {
-      case "text":
-        return { type: BlockType.TEXT, text: block.text };
-      case "tool_use":
-        return transformToolUse(block.id, block.name, block.input);
-      case "tool_result": {
-        // Content can be string, array of content blocks, or single content block
-        const extractText = (c: unknown): string => {
-          if (typeof c === "string") return c;
-          if (Array.isArray(c)) return c.map(extractText).join("\n");
-          if (c && typeof c === "object" && "type" in c) {
-            const contentBlock = c as { type: string; text?: string };
-            return contentBlock.type === "text" && contentBlock.text
-              ? contentBlock.text
-              : JSON.stringify(c);
-          }
-          return JSON.stringify(c);
-        };
-        return {
-          type: BlockType.TOOL_RESULT,
-          tool_use_id: block.tool_use_id,
-          content: extractText(block.content),
-          is_error: block.is_error,
-        };
-      }
-      case "thinking": {
-        const thinkingBlock = block as { type: "thinking"; thinking: string; signature?: string };
-        return {
-          type: BlockType.THINKING,
-          thinking: thinkingBlock.thinking,
-          signature: thinkingBlock.signature,
-        };
-      }
-      default:
-        return { type: BlockType.TEXT, text: JSON.stringify(block) };
-    }
-  });
-
-  return aggregateTaskBlocks(normalized);
+  if (typeof content === "string") return [{ type: BlockType.TEXT, text: content }];
+  return content.map(normalizeBlock);
 };
 
-// =============================================================================
-// Task Block Aggregation
-// =============================================================================
+type IntermediateMessage = { raw: RawJsonlMessage; content: ContentBlock[] };
 
-const aggregateTaskBlocks = (content: ContentBlock[]): ContentBlock[] => {
-  const result: ContentBlock[] = [];
-  const taskMap = new Map<string, TaskItem>();
-  const taskToolUseIds = new Set<string>();
-
-  // First pass: identify task tool_use blocks
-  for (const block of content) {
-    if (block.type === BlockType.TOOL_USE && isTaskTool(block.name)) {
-      taskToolUseIds.add(block.id);
-    }
-  }
-
-  // If no task tools, return content unchanged
-  if (taskToolUseIds.size === 0) return content;
-
-  // Second pass: match tool_results to tool_uses, build task state
-  for (const block of content) {
-    if (block.type === BlockType.TOOL_RESULT && taskToolUseIds.has(block.tool_use_id)) {
-      const taskId = extractTaskId(block.content);
-      if (!taskId) continue;
-
-      // Find corresponding tool_use
-      const toolUse = content.find(
-        (b): b is ToolUseBlock => b.type === BlockType.TOOL_USE && b.id === block.tool_use_id,
-      );
-
-      if (toolUse) {
-        if (toolUse.name === "TaskCreate") {
-          taskMap.set(taskId, {
-            id: taskId,
-            subject: (toolUse.input.subject as string) || "",
-            description: toolUse.input.description as string | undefined,
-            status: "pending",
-          });
-        } else if (toolUse.name === "TaskUpdate") {
-          const existing = taskMap.get(taskId);
-          if (existing && toolUse.input.status) {
-            taskMap.set(taskId, {
-              ...existing,
-              status: toolUse.input.status as TaskItem["status"],
-            });
-          }
-        }
-      }
-    }
-  }
-
-  // Third pass: build result, replacing task tools with TASKS block
-  let tasksBlockInserted = false;
-
-  for (const block of content) {
-    const isTaskToolUse = block.type === BlockType.TOOL_USE && taskToolUseIds.has(block.id);
-    const isTaskResult =
-      block.type === BlockType.TOOL_RESULT && taskToolUseIds.has(block.tool_use_id);
-
-    if (isTaskToolUse || isTaskResult) {
-      if (!tasksBlockInserted && taskMap.size > 0) {
-        result.push({
-          type: BlockType.TASKS,
-          tasks: Array.from(taskMap.values()),
-        } as TasksBlock);
-        tasksBlockInserted = true;
-      }
-      // Skip - aggregated into TASKS block
-    } else {
-      result.push(block);
-    }
-  }
-
-  return result;
-};
-
-// =============================================================================
-// Extraction Helpers
-// =============================================================================
-
-const extractTextPreview = (content: ContentBlock[]): string => {
-  const text = content
-    .filter((b): b is { type: "text"; text: string } => b.type === BlockType.TEXT)
-    .map((b) => b.text)
-    .join("\n");
-
-  return text.slice(0, TEXT_PREVIEW_LENGTH);
-};
-
-const extractToolNames = (content: ContentBlock[]): string[] => {
-  return content
-    .map((b) => {
-      if (b.type === BlockType.TOOL_USE) return b.name;
-      return BLOCK_TYPE_TO_TOOL[b.type];
-    })
-    .filter((name): name is string => !!name);
-};
-
-// =============================================================================
-// Message Normalization
-// =============================================================================
-
-const normalizeMessage = (
-  raw: RawJsonlMessage,
-  sessionId: string,
-  idx: number,
-): ParsedMessage | null => {
-  if (isSkippedMessageType(raw.type)) {
-    return null;
-  }
-
-  if (!raw.message) return null;
-
-  const content = normalizeContent(raw.message.content);
-  const toolNames = extractToolNames(content);
-
-  return {
-    sessionId,
-    idx,
-    uuid: raw.uuid,
-    parentUuid: raw.parentUuid,
-    type: raw.type,
-    role: raw.type === "user" ? "user" : "assistant",
-    model: raw.message.model || null,
-    timestamp: raw.timestamp,
-    isMeta: raw.isMeta || false,
-    isSidechain: raw.isSidechain || false,
-    content: contentBlocksToJson(content),
-    hasToolCalls: toolNames.length > 0,
-    toolNames,
-    textPreview: extractTextPreview(content),
-    rawMessage: toJson(raw),
-  };
-};
-
-// =============================================================================
-// Message Coalescing
-// =============================================================================
-
-const isToolResultContent = (content: string | RawContentBlock[] | undefined): boolean => {
-  if (!content || typeof content === "string") return false;
-  return content.length > 0 && content[0].type === "tool_result";
-};
-
-const mergeRawContent = (
-  base: string | RawContentBlock[] | undefined,
-  addition: string | RawContentBlock[] | undefined,
-): RawContentBlock[] => {
-  const toBlocks = (c: string | RawContentBlock[] | undefined): RawContentBlock[] => {
-    if (!c) return [];
-    if (typeof c === "string") return [{ type: "text", text: c }];
-    return c;
-  };
-  return [...toBlocks(base), ...toBlocks(addition)];
-};
-
-const coalesceMessages = (rawMessages: RawJsonlMessage[]): RawJsonlMessage[] => {
-  if (rawMessages.length === 0) return [];
-
-  const result: RawJsonlMessage[] = [];
-  let current: RawJsonlMessage | null = null;
+const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage[] => {
+  // Phase 1: Coalesce + normalize in single pass
+  const intermediate: IntermediateMessage[] = [];
+  let current: IntermediateMessage | null = null;
   let currentMsgId: string | null = null;
   let currentIsAssistant = false;
 
-  for (const raw of rawMessages) {
-    const rawMessage = raw.message;
-    const msgId = rawMessage.id ?? null;
-    const isToolResult = isToolResultContent(rawMessage.content);
+  for (const r of rawMessages) {
+    if (isSkippedMessageType(r.type)) continue;
 
-    // Merge conditions:
-    // 1. Same assistant message.id (streaming chunks)
-    // 2. Tool results following an assistant message (tool call + result = one turn)
-    const shouldMerge =
-      current !== null &&
-      ((raw.type === "assistant" && msgId && msgId === currentMsgId) ||
-        (isToolResult && currentIsAssistant));
+    const msgId = r.message.id ?? null;
+    const content = normalizeContent(r.message.content);
 
-    if (shouldMerge) {
-      const prev = current as RawJsonlMessage;
-      const mergedContent = mergeRawContent(prev.message.content, rawMessage.content);
-      current = {
-        ...prev,
-        message: {
-          ...prev.message,
-          content: mergedContent,
-        },
-      };
-      // Keep currentIsAssistant true so more tool_results can merge
+    const isToolResult = content.length > 0 && content[0].type === BlockType.TOOL_RESULT;
+    const isSameAssistantMessage = r.type === MessageRole.ASSISTANT && msgId && msgId === currentMsgId;
+    const isToolResultAfterAssistant = isToolResult && currentIsAssistant;
+    const shouldMerge = current && (isSameAssistantMessage || isToolResultAfterAssistant);
+
+    if (shouldMerge && current) {
+      current.content.push(...content);
     } else {
-      if (current !== null) result.push(current);
-      current = { ...raw, message: { ...rawMessage } };
+      if (current) intermediate.push(current);
+      current = { raw: r, content };
       currentMsgId = msgId;
-      currentIsAssistant = raw.type === "assistant";
+      currentIsAssistant = r.type === MessageRole.ASSISTANT;
     }
   }
+  if (current) intermediate.push(current);
 
-  if (current !== null) result.push(current);
-  return result;
-};
+  // Phase 2: Build task state
+  const tasks = new Map<string, TaskItem>();
+  const taskIds = new Map<number, Set<string>>();
 
-// =============================================================================
-// Public API
-// =============================================================================
+  for (const [idx, { content }] of intermediate.entries()) {
+    const ids = new Set<string>();
+    const toolUseById = new Map<string, ToolUseBlock>();
 
-export const parseJsonlMessages = (jsonlContent: string, sessionId: string): ParsedMessage[] => {
-  const lines = jsonlContent.split("\n").filter((line) => line.trim());
-  const rawMessages: RawJsonlMessage[] = [];
-
-  for (const line of lines) {
-    try {
-      const parsed = JSON.parse(line) as RawJsonlMessage;
-      if (!isSkippedMessageType(parsed.type) && parsed.message) {
-        rawMessages.push(parsed);
+    for (const block of content) {
+      if (block.type === BlockType.TOOL_USE && TASK_TOOLS.includes(block.name)) {
+        ids.add(block.id);
+        toolUseById.set(block.id, block);
       }
-    } catch (parseError) {
-      logger.parser.error("Parse error", parseError);
-    }
-  }
 
-  const coalesced = coalesceMessages(rawMessages);
+      if (block.type === BlockType.TOOL_RESULT && ids.has(block.tool_use_id)) {
+        const taskId = extractTaskId(block.content);
+        if (!taskId) continue;
 
-  return coalesced
-    .map((raw, idx) => normalizeMessage(raw, sessionId, idx))
-    .filter((msg): msg is ParsedMessage => msg !== null);
-};
+        const toolUse = toolUseById.get(block.tool_use_id);
+        if (!toolUse) continue;
 
-export async function* parseJsonlStream(
-  stream: ReadableStream<Uint8Array>,
-  sessionId: string,
-): AsyncGenerator<ParsedMessage> {
-  const reader = stream.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  const rawMessages: RawJsonlMessage[] = [];
-
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() || "";
-
-      for (const line of lines) {
-        if (!line.trim()) continue;
-        try {
-          const raw = JSON.parse(line) as RawJsonlMessage;
-          if (!isSkippedMessageType(raw.type) && raw.message) {
-            rawMessages.push(raw);
+        if (toolUse.name === ToolName.TASK_CREATE) {
+          const parsed = ToolInputSchema.TaskCreate.safeParse(toolUse.input);
+          if (parsed.success) {
+            tasks.set(taskId, createTaskFromToolUse(taskId, parsed.data));
           }
-        } catch (e) {
-          logger.parser.error("Line parse error", e);
+        }
+
+        if (toolUse.name === ToolName.TASK_UPDATE) {
+          const parsed = ToolInputSchema.TaskUpdate.safeParse(toolUse.input);
+          const existingTask = tasks.get(taskId);
+          if (parsed.success && existingTask && parsed.data.status) {
+            tasks.set(taskId, { ...existingTask, status: parsed.data.status });
+          }
         }
       }
     }
 
-    if (buffer.trim()) {
-      try {
-        const raw = JSON.parse(buffer) as RawJsonlMessage;
-        if (!isSkippedMessageType(raw.type) && raw.message) {
-          rawMessages.push(raw);
-        }
-      } catch (e) {
-        logger.parser.error("Final line parse error", e);
-      }
-    }
-
-    const coalesced = coalesceMessages(rawMessages);
-    for (let idx = 0; idx < coalesced.length; idx++) {
-      const normalized = normalizeMessage(coalesced[idx], sessionId, idx);
-      if (normalized) yield normalized;
-    }
-  } finally {
-    reader.releaseLock();
+    if (ids.size > 0) taskIds.set(idx, ids);
   }
-}
+
+  // Phase 3: Build final messages
+  return intermediate.map(({ raw, content }, idx) => {
+    let finalContent = content;
+
+    const taskToolIds = taskIds.get(idx);
+    if (taskToolIds && tasks.size > 0) {
+      const tasksSummary: TasksBlock = { type: BlockType.TASKS, tasks: Array.from(tasks.values()) };
+      let summaryInserted = false;
+
+      finalContent = content.reduce<ContentBlock[]>((acc, block) => {
+        if (isTaskToolBlock(block, taskToolIds)) {
+          if (!summaryInserted) {
+            acc.push(tasksSummary);
+            summaryInserted = true;
+          }
+        } else {
+          acc.push(block);
+        }
+        return acc;
+      }, []);
+    }
+
+    const toolNames = finalContent
+      .map((block) => (block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_TOOL[block.type]))
+      .filter((name): name is string => Boolean(name));
+
+    const textPreview = finalContent
+      .filter((b): b is { type: "text"; text: string } => b.type === BlockType.TEXT)
+      .map((b) => b.text)
+      .join("\n")
+      .slice(0, 500);
+
+    return {
+      sessionId,
+      idx,
+      uuid: raw.uuid,
+      parentUuid: raw.parentUuid,
+      type: raw.type,
+      role: raw.type === MessageRole.USER ? MessageRole.USER : MessageRole.ASSISTANT,
+      model: raw.message.model ?? null,
+      timestamp: raw.timestamp,
+      isMeta: raw.isMeta ?? false,
+      isSidechain: raw.isSidechain ?? false,
+      content: contentBlocksToJson(finalContent),
+      hasToolCalls: toolNames.length > 0,
+      toolNames,
+      textPreview,
+      rawMessage: toJson(raw),
+    };
+  });
+};
+
+export const parseJsonl = (jsonl: string, sessionId: string): ParsedMessage[] => {
+  const raw: RawJsonlMessage[] = [];
+  for (const line of jsonl.split("\n")) {
+    if (!line.trim()) continue;
+    try {
+      const result = RawJsonlMessageSchema.safeParse(JSON.parse(line));
+      if (result.success && !isSkippedMessageType(result.data.type)) {
+        raw.push(result.data);
+      }
+    } catch {
+      // Skip malformed JSON lines
+    }
+  }
+  return parse(raw, sessionId);
+};

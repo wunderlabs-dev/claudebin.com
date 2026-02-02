@@ -199,19 +199,6 @@ const downloadJsonl = async (
   return data.text();
 };
 
-const downloadJsonlStream = async (
-  supabase: SupabaseClient<Database>,
-  storagePath: string,
-): Promise<ReadableStream<Uint8Array>> => {
-  const { data, error } = await supabase.storage.from("sessions").download(storagePath);
-
-  if (error || !data) {
-    throw new Error(`Download failed: ${error?.message}`);
-  }
-
-  return data.stream();
-};
-
 const deleteFile = async (
   supabase: SupabaseClient<Database>,
   storagePath: string,
@@ -246,7 +233,6 @@ export const sessions = {
   update,
   uploadJsonl,
   downloadJsonl,
-  downloadJsonlStream,
   deleteFile,
   incrementViewCount,
 };

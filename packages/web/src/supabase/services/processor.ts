@@ -7,7 +7,7 @@ import type { Json } from "@/supabase/types";
 import type { ParsedMessage } from "@/supabase/services/parser";
 
 import { messages } from "@/supabase/repos/messages";
-import { parseJsonlStream } from "@/supabase/services/parser";
+import { parseJsonl } from "@/supabase/services/parser";
 import { sessions } from "@/supabase/repos/sessions";
 import { SessionStatus } from "@/trpc/routers/sessions";
 import { BlockType } from "@/supabase/types/message";
@@ -151,23 +151,16 @@ export const processSession = async (
   if (!session) return;
 
   try {
-    const stream = await sessions.downloadJsonlStream(supabase, session.storagePath);
+    const jsonl = await sessions.downloadJsonl(supabase, session.storagePath);
+    const allMessages = parseJsonl(jsonl, sessionId);
     const accumulator = createAccumulator(session.title);
 
-    let batch: ParsedMessage[] = [];
-
-    for await (const message of parseJsonlStream(stream, sessionId)) {
+    for (const message of allMessages) {
       accumulator.process(message);
-      batch.push(message);
-
-      if (batch.length >= batchSize) {
-        await messages.insertBatch(supabase, batch);
-        batch = [];
-      }
     }
 
-    if (batch.length > 0) {
-      await messages.insertBatch(supabase, batch);
+    for (let i = 0; i < allMessages.length; i += batchSize) {
+      await messages.insertBatch(supabase, allMessages.slice(i, i + batchSize));
     }
 
     const metadata = await accumulator.getResult();
