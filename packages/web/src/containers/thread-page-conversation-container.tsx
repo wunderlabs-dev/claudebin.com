@@ -20,12 +20,13 @@ import { ChatPageChatContentFileEdit } from "@/components/chat-page-chat-content
 import { ChatPageChatContentGlob } from "@/components/chat-page-chat-content-glob";
 import { ChatPageChatContentGrep } from "@/components/chat-page-chat-content-grep";
 import { ChatPageChatContentTask } from "@/components/chat-page-chat-content-task";
+import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-tasks";
 import { ChatPageChatContentQuestion } from "@/components/chat-page-chat-content-question";
-import { ChatPageChatContentTodo } from "@/components/chat-page-chat-content-todo";
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
 import { ChatPageChatContentToolResult } from "@/components/chat-page-chat-content-tool-result";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
+import { ChatPageChatContentThinking } from "@/components/chat-page-chat-content-thinking";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -52,10 +53,10 @@ const renderers = {
         return <ChatPageChatContentGrep key={index} block={block} />;
       case BlockType.TASK:
         return <ChatPageChatContentTask key={index} block={block} />;
+      case BlockType.TASKS:
+        return <ChatPageChatContentTasks key={index} block={block} />;
       case BlockType.QUESTION:
         return <ChatPageChatContentQuestion key={index} block={block} />;
-      case BlockType.TODO:
-        return <ChatPageChatContentTodo key={index} block={block} />;
       case BlockType.WEB_FETCH:
         return <ChatPageChatContentWebFetch key={index} block={block} />;
       case BlockType.WEB_SEARCH:
@@ -64,6 +65,8 @@ const renderers = {
         return <ChatPageChatContentToolResult key={index} block={block} />;
       case BlockType.TOOL_USE:
         return <ChatPageChatContentToolUse key={index} block={block} />;
+      case BlockType.THINKING:
+        return <ChatPageChatContentThinking key={index} block={block} />;
       default: {
         return null;
       }

@@ -1,4 +1,11 @@
-import type { ContentBlock, RawContentBlock, RawJsonlMessage } from "@/supabase/types/message";
+import type {
+  ContentBlock,
+  RawContentBlock,
+  RawJsonlMessage,
+  TaskItem,
+  TasksBlock,
+  ToolUseBlock,
+} from "@/supabase/types/message";
 import type { Json } from "@/supabase/types";
 
 import { BlockType, isSkippedMessageType } from "@/supabase/types/message";
@@ -36,19 +43,12 @@ interface QuestionInput {
   multiSelect: boolean;
 }
 
-interface TodoInput {
-  content: string;
-  status: "pending" | "in_progress" | "completed";
-  activeForm: string;
-}
-
 // =============================================================================
 // Tool Transformation
 // =============================================================================
 
 const BLOCK_TYPE_TO_TOOL: Record<string, string> = {
   [BlockType.QUESTION]: "AskUserQuestion",
-  [BlockType.TODO]: "TodoWrite",
   [BlockType.BASH]: "Bash",
   [BlockType.FILE_READ]: "Read",
   [BlockType.FILE_WRITE]: "Write",
@@ -71,12 +71,6 @@ const transformToolUse = (
         type: BlockType.QUESTION,
         id,
         questions: (input.questions as QuestionInput[]) || [],
-      };
-    case "TodoWrite":
-      return {
-        type: BlockType.TODO,
-        id,
-        todos: (input.todos as TodoInput[]) || [],
       };
     case "Bash":
       return {
@@ -151,6 +145,18 @@ const transformToolUse = (
 };
 
 // =============================================================================
+// Task Aggregation Helpers
+// =============================================================================
+
+const extractTaskId = (content: string): string | null => {
+  const match = content.match(/(?:Task |task )#(\d+)/i);
+  return match ? match[1] : null;
+};
+
+const isTaskTool = (name: string): boolean =>
+  ["TaskCreate", "TaskUpdate", "TaskGet", "TaskList"].includes(name);
+
+// =============================================================================
 // Content Normalization
 // =============================================================================
 
@@ -161,7 +167,7 @@ const normalizeContent = (content: string | RawContentBlock[] | undefined): Cont
     return [{ type: BlockType.TEXT, text: content }];
   }
 
-  return content.map((block): ContentBlock => {
+  const normalized = content.map((block): ContentBlock => {
     switch (block.type) {
       case "text":
         return { type: BlockType.TEXT, text: block.text };
@@ -173,8 +179,10 @@ const normalizeContent = (content: string | RawContentBlock[] | undefined): Cont
           if (typeof c === "string") return c;
           if (Array.isArray(c)) return c.map(extractText).join("\n");
           if (c && typeof c === "object" && "type" in c) {
-            const block = c as { type: string; text?: string };
-            return block.type === "text" && block.text ? block.text : JSON.stringify(c);
+            const contentBlock = c as { type: string; text?: string };
+            return contentBlock.type === "text" && contentBlock.text
+              ? contentBlock.text
+              : JSON.stringify(c);
           }
           return JSON.stringify(c);
         };
@@ -185,10 +193,96 @@ const normalizeContent = (content: string | RawContentBlock[] | undefined): Cont
           is_error: block.is_error,
         };
       }
+      case "thinking": {
+        const thinkingBlock = block as { type: "thinking"; thinking: string; signature?: string };
+        return {
+          type: BlockType.THINKING,
+          thinking: thinkingBlock.thinking,
+          signature: thinkingBlock.signature,
+        };
+      }
       default:
         return { type: BlockType.TEXT, text: JSON.stringify(block) };
     }
   });
+
+  return aggregateTaskBlocks(normalized);
+};
+
+// =============================================================================
+// Task Block Aggregation
+// =============================================================================
+
+const aggregateTaskBlocks = (content: ContentBlock[]): ContentBlock[] => {
+  const result: ContentBlock[] = [];
+  const taskMap = new Map<string, TaskItem>();
+  const taskToolUseIds = new Set<string>();
+
+  // First pass: identify task tool_use blocks
+  for (const block of content) {
+    if (block.type === BlockType.TOOL_USE && isTaskTool(block.name)) {
+      taskToolUseIds.add(block.id);
+    }
+  }
+
+  // If no task tools, return content unchanged
+  if (taskToolUseIds.size === 0) return content;
+
+  // Second pass: match tool_results to tool_uses, build task state
+  for (const block of content) {
+    if (block.type === BlockType.TOOL_RESULT && taskToolUseIds.has(block.tool_use_id)) {
+      const taskId = extractTaskId(block.content);
+      if (!taskId) continue;
+
+      // Find corresponding tool_use
+      const toolUse = content.find(
+        (b): b is ToolUseBlock => b.type === BlockType.TOOL_USE && b.id === block.tool_use_id,
+      );
+
+      if (toolUse) {
+        if (toolUse.name === "TaskCreate") {
+          taskMap.set(taskId, {
+            id: taskId,
+            subject: (toolUse.input.subject as string) || "",
+            description: toolUse.input.description as string | undefined,
+            status: "pending",
+          });
+        } else if (toolUse.name === "TaskUpdate") {
+          const existing = taskMap.get(taskId);
+          if (existing && toolUse.input.status) {
+            taskMap.set(taskId, {
+              ...existing,
+              status: toolUse.input.status as TaskItem["status"],
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Third pass: build result, replacing task tools with TASKS block
+  let tasksBlockInserted = false;
+
+  for (const block of content) {
+    const isTaskToolUse = block.type === BlockType.TOOL_USE && taskToolUseIds.has(block.id);
+    const isTaskResult =
+      block.type === BlockType.TOOL_RESULT && taskToolUseIds.has(block.tool_use_id);
+
+    if (isTaskToolUse || isTaskResult) {
+      if (!tasksBlockInserted && taskMap.size > 0) {
+        result.push({
+          type: BlockType.TASKS,
+          tasks: Array.from(taskMap.values()),
+        } as TasksBlock);
+        tasksBlockInserted = true;
+      }
+      // Skip - aggregated into TASKS block
+    } else {
+      result.push(block);
+    }
+  }
+
+  return result;
 };
 
 // =============================================================================
@@ -251,27 +345,94 @@ const normalizeMessage = (
 };
 
 // =============================================================================
+// Message Coalescing
+// =============================================================================
+
+const isToolResultContent = (content: string | RawContentBlock[] | undefined): boolean => {
+  if (!content || typeof content === "string") return false;
+  return content.length > 0 && content[0].type === "tool_result";
+};
+
+const mergeRawContent = (
+  base: string | RawContentBlock[] | undefined,
+  addition: string | RawContentBlock[] | undefined,
+): RawContentBlock[] => {
+  const toBlocks = (c: string | RawContentBlock[] | undefined): RawContentBlock[] => {
+    if (!c) return [];
+    if (typeof c === "string") return [{ type: "text", text: c }];
+    return c;
+  };
+  return [...toBlocks(base), ...toBlocks(addition)];
+};
+
+const coalesceMessages = (rawMessages: RawJsonlMessage[]): RawJsonlMessage[] => {
+  if (rawMessages.length === 0) return [];
+
+  const result: RawJsonlMessage[] = [];
+  let current: RawJsonlMessage | null = null;
+  let currentMsgId: string | null = null;
+  let currentIsAssistant = false;
+
+  for (const raw of rawMessages) {
+    const rawMessage = raw.message;
+    const msgId = rawMessage.id ?? null;
+    const isToolResult = isToolResultContent(rawMessage.content);
+
+    // Merge conditions:
+    // 1. Same assistant message.id (streaming chunks)
+    // 2. Tool results following an assistant message (tool call + result = one turn)
+    const shouldMerge =
+      current !== null &&
+      ((raw.type === "assistant" && msgId && msgId === currentMsgId) ||
+        (isToolResult && currentIsAssistant));
+
+    if (shouldMerge) {
+      const prev = current as RawJsonlMessage;
+      const mergedContent = mergeRawContent(prev.message.content, rawMessage.content);
+      current = {
+        ...prev,
+        message: {
+          ...prev.message,
+          content: mergedContent,
+        },
+      };
+      // Keep currentIsAssistant true so more tool_results can merge
+    } else {
+      if (current !== null) result.push(current);
+      current = { ...raw, message: { ...rawMessage } };
+      currentMsgId = msgId;
+      currentIsAssistant = raw.type === "assistant";
+    }
+  }
+
+  if (current !== null) result.push(current);
+  return result;
+};
+
+// =============================================================================
 // Public API
 // =============================================================================
 
 export const parseJsonlMessages = (jsonlContent: string, sessionId: string): ParsedMessage[] => {
   const lines = jsonlContent.split("\n").filter((line) => line.trim());
-  const messages: ParsedMessage[] = [];
+  const rawMessages: RawJsonlMessage[] = [];
 
-  for (let idx = 0; idx < lines.length; idx++) {
-    const line = lines[idx];
+  for (const line of lines) {
     try {
       const parsed = JSON.parse(line) as RawJsonlMessage;
-      const normalized = normalizeMessage(parsed, sessionId, idx);
-      if (normalized) {
-        messages.push(normalized);
+      if (!isSkippedMessageType(parsed.type) && parsed.message) {
+        rawMessages.push(parsed);
       }
     } catch (parseError) {
-      logger.parser.error(`Line ${idx} parse error`, parseError);
+      logger.parser.error("Parse error", parseError);
     }
   }
 
-  return messages;
+  const coalesced = coalesceMessages(rawMessages);
+
+  return coalesced
+    .map((raw, idx) => normalizeMessage(raw, sessionId, idx))
+    .filter((msg): msg is ParsedMessage => msg !== null);
 };
 
 export async function* parseJsonlStream(
@@ -281,7 +442,7 @@ export async function* parseJsonlStream(
   const reader = stream.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
-  let idx = 0;
+  const rawMessages: RawJsonlMessage[] = [];
 
   try {
     while (true) {
@@ -296,10 +457,11 @@ export async function* parseJsonlStream(
         if (!line.trim()) continue;
         try {
           const raw = JSON.parse(line) as RawJsonlMessage;
-          const normalized = normalizeMessage(raw, sessionId, idx++);
-          if (normalized) yield normalized;
+          if (!isSkippedMessageType(raw.type) && raw.message) {
+            rawMessages.push(raw);
+          }
         } catch (e) {
-          logger.parser.error(`Line ${idx} parse error`, e);
+          logger.parser.error("Line parse error", e);
         }
       }
     }
@@ -307,11 +469,18 @@ export async function* parseJsonlStream(
     if (buffer.trim()) {
       try {
         const raw = JSON.parse(buffer) as RawJsonlMessage;
-        const normalized = normalizeMessage(raw, sessionId, idx);
-        if (normalized) yield normalized;
+        if (!isSkippedMessageType(raw.type) && raw.message) {
+          rawMessages.push(raw);
+        }
       } catch (e) {
         logger.parser.error("Final line parse error", e);
       }
+    }
+
+    const coalesced = coalesceMessages(rawMessages);
+    for (let idx = 0; idx < coalesced.length; idx++) {
+      const normalized = normalizeMessage(coalesced[idx], sessionId, idx);
+      if (normalized) yield normalized;
     }
   } finally {
     reader.releaseLock();

@@ -28,12 +28,12 @@ export interface Message {
 export const BlockType = {
   // Core types
   TEXT: "text",
+  THINKING: "thinking",
   TOOL_RESULT: "tool_result",
   TOOL_USE: "tool_use", // Fallback for unknown/MCP tools
 
   // Specific tool types
   QUESTION: "question",
-  TODO: "todo",
   BASH: "bash",
   FILE_READ: "file_read",
   FILE_WRITE: "file_write",
@@ -43,14 +43,15 @@ export const BlockType = {
   TASK: "task",
   WEB_FETCH: "web_fetch",
   WEB_SEARCH: "web_search",
+  TASKS: "tasks",
 } as const;
 
 export type ContentBlock =
   | TextBlock
+  | ThinkingBlock
   | ToolResultBlock
   | ToolUseBlock // Fallback for unknown/MCP tools
   | QuestionBlock
-  | TodoBlock
   | BashBlock
   | FileReadBlock
   | FileWriteBlock
@@ -59,11 +60,18 @@ export type ContentBlock =
   | GrepBlock
   | TaskBlock
   | WebFetchBlock
-  | WebSearchBlock;
+  | WebSearchBlock
+  | TasksBlock;
 
 export interface TextBlock {
   type: typeof BlockType.TEXT;
   text: string;
+}
+
+export interface ThinkingBlock {
+  type: typeof BlockType.THINKING;
+  thinking: string;
+  signature?: string;
 }
 
 export interface ToolResultBlock {
@@ -97,16 +105,6 @@ export interface QuestionBlock {
       description: string;
     }>;
     multiSelect: boolean;
-  }>;
-}
-
-export interface TodoBlock {
-  type: typeof BlockType.TODO;
-  id: string;
-  todos: Array<{
-    content: string;
-    status: "pending" | "in_progress" | "completed";
-    activeForm: string;
   }>;
 }
 
@@ -177,13 +175,24 @@ export interface WebSearchBlock {
   query: string;
 }
 
+export interface TaskItem {
+  id: string;
+  subject: string;
+  description?: string;
+  status: "pending" | "in_progress" | "completed";
+}
+
+export interface TasksBlock {
+  type: typeof BlockType.TASKS;
+  tasks: TaskItem[];
+}
+
 // =============================================================================
 // Tool Name Mapping (raw name → block type)
 // =============================================================================
 
 export const TOOL_TO_BLOCK_TYPE: Record<string, string> = {
   AskUserQuestion: BlockType.QUESTION,
-  TodoWrite: BlockType.TODO,
   Bash: BlockType.BASH,
   Read: BlockType.FILE_READ,
   Write: BlockType.FILE_WRITE,
@@ -210,6 +219,7 @@ export interface RawJsonlMessage {
   isMeta?: boolean;
   isSidechain?: boolean;
   message: {
+    id?: string;
     role: Role;
     content: string | RawContentBlock[];
     model?: string;
@@ -227,6 +237,12 @@ export interface RawTextBlock {
   text: string;
 }
 
+export interface RawThinkingBlock {
+  type: "thinking";
+  thinking: string;
+  signature?: string;
+}
+
 export interface RawToolUseBlock {
   type: "tool_use";
   id: string;
@@ -241,7 +257,11 @@ export interface RawToolResultBlock {
   is_error?: boolean;
 }
 
-export type RawContentBlock = RawTextBlock | RawToolUseBlock | RawToolResultBlock;
+export type RawContentBlock =
+  | RawTextBlock
+  | RawThinkingBlock
+  | RawToolUseBlock
+  | RawToolResultBlock;
 
 // =============================================================================
 // Display Helpers
@@ -257,8 +277,6 @@ export const TOOL_ICONS: Record<string, string> = {
   Grep: "search",
   LS: "folder",
   Task: "cpu",
-  TodoRead: "check-square",
-  TodoWrite: "check-square",
   WebFetch: "globe",
   WebSearch: "search",
   NotebookEdit: "book-open",
@@ -278,8 +296,6 @@ export const TOOL_COLORS: Record<string, string> = {
   Grep: "cyan",
   LS: "blue",
   Task: "purple",
-  TodoRead: "green",
-  TodoWrite: "green",
   WebFetch: "indigo",
   WebSearch: "indigo",
   NotebookEdit: "orange",
@@ -294,6 +310,9 @@ export const TOOL_COLORS: Record<string, string> = {
 export const isTextBlock = (block: ContentBlock): block is TextBlock =>
   block.type === BlockType.TEXT;
 
+export const isThinkingBlock = (block: ContentBlock): block is ThinkingBlock =>
+  block.type === BlockType.THINKING;
+
 export const isToolResultBlock = (block: ContentBlock): block is ToolResultBlock =>
   block.type === BlockType.TOOL_RESULT;
 
@@ -302,9 +321,6 @@ export const isToolUseBlock = (block: ContentBlock): block is ToolUseBlock =>
 
 export const isQuestionBlock = (block: ContentBlock): block is QuestionBlock =>
   block.type === BlockType.QUESTION;
-
-export const isTodoBlock = (block: ContentBlock): block is TodoBlock =>
-  block.type === BlockType.TODO;
 
 export const isBashBlock = (block: ContentBlock): block is BashBlock =>
   block.type === BlockType.BASH;
@@ -317,5 +333,8 @@ export const isFileWriteBlock = (block: ContentBlock): block is FileWriteBlock =
 
 export const isFileEditBlock = (block: ContentBlock): block is FileEditBlock =>
   block.type === BlockType.FILE_EDIT;
+
+export const isTasksBlock = (block: ContentBlock): block is TasksBlock =>
+  block.type === BlockType.TASKS;
 
 export const isSkippedMessageType = (type: string): boolean => type === "file-history-snapshot";
