@@ -30,7 +30,8 @@ export const BlockType = {
   TEXT: "text",
   THINKING: "thinking",
   TOOL_RESULT: "tool_result",
-  TOOL_USE: "tool_use", // Fallback for unknown/MCP tools
+  TOOL_USE: "tool_use", // Fallback for unknown tools
+  MCP: "mcp", // MCP server tools
 
   // Specific tool types
   QUESTION: "question",
@@ -50,7 +51,8 @@ export type ContentBlock =
   | TextBlock
   | ThinkingBlock
   | ToolResultBlock
-  | ToolUseBlock // Fallback for unknown/MCP tools
+  | ToolUseBlock // Fallback for unknown tools
+  | McpBlock // MCP server tools
   | QuestionBlock
   | BashBlock
   | FileReadBlock
@@ -82,11 +84,20 @@ export interface ToolResultBlock {
   is_error?: boolean;
 }
 
-// Fallback for unknown tools (MCP, etc.)
+// Fallback for unknown tools
 export interface ToolUseBlock {
   type: typeof BlockType.TOOL_USE;
   id: string;
   name: string;
+  input: Record<string, unknown>;
+}
+
+// MCP server tools (mcp__server__tool pattern)
+export interface McpBlock {
+  type: typeof BlockType.MCP;
+  id: string;
+  server: string;
+  tool: string;
   input: Record<string, unknown>;
 }
 
@@ -318,6 +329,8 @@ export const isToolResultBlock = (block: ContentBlock): block is ToolResultBlock
 
 export const isToolUseBlock = (block: ContentBlock): block is ToolUseBlock =>
   block.type === BlockType.TOOL_USE;
+
+export const isMcpBlock = (block: ContentBlock): block is McpBlock => block.type === BlockType.MCP;
 
 export const isQuestionBlock = (block: ContentBlock): block is QuestionBlock =>
   block.type === BlockType.QUESTION;

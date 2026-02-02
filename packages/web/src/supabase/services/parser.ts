@@ -272,6 +272,17 @@ const parseToolInput = <T>(schema: z.ZodType<T>, input: Record<string, unknown>)
   return result.success ? result.data : null;
 };
 
+type McpToolInfo = { server: string; tool: string };
+
+const parseMcpToolName = (name: string): McpToolInfo | null => {
+  const match = name.match(/^mcp__(.+)__(\w+)$/);
+  if (!match) return null;
+  return {
+    server: match[1].replace(/_/g, " "),
+    tool: match[2].replace(/_/g, " "),
+  };
+};
+
 const transformToolUse = (
   id: string,
   name: string,
@@ -320,8 +331,13 @@ const transformToolUse = (
       const data = parseToolInput(ToolInputSchema.WebSearch, input);
       return data ? { type: BlockType.WEB_SEARCH, id, ...data } : fallback;
     }
-    default:
+    default: {
+      const mcpInfo = parseMcpToolName(name);
+      if (mcpInfo) {
+        return { type: BlockType.MCP, id, ...mcpInfo, input };
+      }
       return fallback;
+    }
   }
 };
 

@@ -26,6 +26,7 @@ import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
 import { ChatPageChatContentToolResult } from "@/components/chat-page-chat-content-tool-result";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
+import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
 import { ChatPageChatContentThinking } from "@/components/chat-page-chat-content-thinking";
 
 type ThreadPageConversationContainerProps = {
@@ -65,6 +66,8 @@ const renderers = {
         return <ChatPageChatContentToolResult key={index} block={block} />;
       case BlockType.TOOL_USE:
         return <ChatPageChatContentToolUse key={index} block={block} />;
+      case BlockType.MCP:
+        return <ChatPageChatContentMcp key={index} block={block} />;
       case BlockType.THINKING:
         return <ChatPageChatContentThinking key={index} block={block} />;
       default: {
