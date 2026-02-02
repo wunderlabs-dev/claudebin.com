@@ -1,19 +1,31 @@
 import type { TasksBlock, TaskItem } from "@/supabase/types/message";
 
-import { cn } from "@/utils/helpers";
+import { SvgIconCircle, SvgIconCircleLine, SvgIconCheck } from "@/components/icon";
+import { Todo, TodoItem, TodoItemIcon, TodoItemLabel } from "@/components/ui/todo";
 
 type ChatPageChatContentTasksProps = {
   block: TasksBlock;
 };
 
-const TaskStatusIcon = ({ status }: { status: TaskItem["status"] }) => {
+const statusToVariant = (status: TaskItem["status"]) => {
   switch (status) {
     case "completed":
-      return <span className="text-green-600">✓</span>;
+      return "completed";
     case "in_progress":
-      return <span className="text-blue-500">●</span>;
+      return "progress";
     default:
-      return <span className="text-gray-400">◻</span>;
+      return "pending";
+  }
+};
+
+const TaskIcon = ({ status }: { status: TaskItem["status"] }) => {
+  switch (status) {
+    case "completed":
+      return <SvgIconCheck size="sm" />;
+    case "in_progress":
+      return <SvgIconCircleLine size="sm" />;
+    default:
+      return <SvgIconCircle size="sm" />;
   }
 };
 
@@ -26,21 +38,20 @@ const ChatPageChatContentTasks = ({ block }: ChatPageChatContentTasksProps) => {
       <div className="mb-2 font-medium text-gray-600 text-sm">
         Tasks ({completed}/{total} done)
       </div>
-      <ul className="space-y-1">
-        {block.tasks.map((task) => (
-          <li
-            key={task.id}
-            className={cn(
-              "flex items-center gap-2 text-sm",
-              task.status === "completed" && "text-gray-400 line-through",
-            )}
-          >
-            <TaskStatusIcon status={task.status} />
-            <span className="text-gray-500">#{task.id}</span>
-            <span>{task.subject}</span>
-          </li>
-        ))}
-      </ul>
+      <Todo>
+        {block.tasks.map((task) => {
+          const variant = statusToVariant(task.status);
+          return (
+            <TodoItem key={task.id} variant={variant}>
+              <TodoItemIcon variant={variant}>
+                <TaskIcon status={task.status} />
+              </TodoItemIcon>
+              <span className="text-gray-400 text-xs">#{task.id}</span>
+              <TodoItemLabel>{task.subject}</TodoItemLabel>
+            </TodoItem>
+          );
+        })}
+      </Todo>
     </div>
   );
 };
