@@ -1,4 +1,4 @@
-import type { ContentBlock, TaskItem, TasksBlock, ToolUseBlock } from "@/supabase/types/message";
+import type { ContentBlock, TaskItem, ToolUseBlock } from "@/supabase/types/message";
 
 import type { Json } from "@/supabase/types";
 
@@ -150,6 +150,105 @@ const isTaskToolBlock = (block: ContentBlock, taskToolIds: Set<string>): boolean
   return false;
 };
 
+const findToolUse = (content: ContentBlock[], toolUseId: string): ToolUseBlock | undefined =>
+  content.find((b): b is ToolUseBlock => b.type === BlockType.TOOL_USE && b.id === toolUseId);
+
+type TaskState = {
+  tasks: Map<string, TaskItem>;
+  taskToolIdsByMessage: Map<number, Set<string>>;
+};
+
+const buildTaskState = (intermediate: IntermediateMessage[]): TaskState => {
+  const tasks = new Map<string, TaskItem>();
+  const taskToolIdsByMessage = new Map<number, Set<string>>();
+
+  for (const [idx, { content }] of intermediate.entries()) {
+    const taskToolIds = new Set<string>();
+
+    for (const block of content) {
+      if (block.type === BlockType.TOOL_USE && TASK_TOOLS.includes(block.name)) {
+        taskToolIds.add(block.id);
+      }
+
+      if (block.type === BlockType.TOOL_RESULT && taskToolIds.has(block.tool_use_id)) {
+        const taskId = extractTaskId(block.content);
+        if (!taskId) continue;
+
+        const toolUse = findToolUse(content, block.tool_use_id);
+        if (!toolUse) continue;
+
+        if (toolUse.name === ToolName.TASK_CREATE) {
+          const parsed = ToolInputSchema.TaskCreate.safeParse(toolUse.input);
+          if (parsed.success) {
+            tasks.set(taskId, createTaskFromToolUse(taskId, parsed.data));
+          }
+        }
+
+        if (toolUse.name === ToolName.TASK_UPDATE) {
+          const parsed = ToolInputSchema.TaskUpdate.safeParse(toolUse.input);
+          const existingTask = tasks.get(taskId);
+          if (parsed.success && existingTask && parsed.data.status) {
+            tasks.set(taskId, { ...existingTask, status: parsed.data.status });
+          }
+        }
+      }
+    }
+
+    if (taskToolIds.size > 0) {
+      taskToolIdsByMessage.set(idx, taskToolIds);
+    }
+  }
+
+  return { tasks, taskToolIdsByMessage };
+};
+
+const replaceTaskBlocksWithSummary = (
+  content: ContentBlock[],
+  taskToolIds: Set<string>,
+  tasks: TaskItem[],
+): ContentBlock[] => {
+  const result: ContentBlock[] = [];
+  let summaryInserted = false;
+
+  for (const block of content) {
+    if (isTaskToolBlock(block, taskToolIds)) {
+      if (!summaryInserted) {
+        result.push({ type: BlockType.TASKS, tasks });
+        summaryInserted = true;
+      }
+    } else {
+      result.push(block);
+    }
+  }
+
+  return result;
+};
+
+type ContentSummary = {
+  toolNames: string[];
+  textPreview: string;
+};
+
+const summarizeContent = (content: ContentBlock[]): ContentSummary => {
+  const toolNames: string[] = [];
+  const textParts: string[] = [];
+
+  for (const block of content) {
+    const toolName =
+      block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_TOOL[block.type];
+    if (toolName) toolNames.push(toolName);
+
+    if (block.type === BlockType.TEXT) {
+      textParts.push(block.text);
+    }
+  }
+
+  return {
+    toolNames,
+    textPreview: textParts.join("\n").slice(0, 500),
+  };
+};
+
 const parseToolInput = <T>(schema: z.ZodType<T>, input: Record<string, unknown>): T | null => {
   const result = schema.safeParse(input);
   return result.success ? result.data : null;
@@ -274,79 +373,17 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   if (current) intermediate.push(current);
 
   // Phase 2: Build task state
-  const tasks = new Map<string, TaskItem>();
-  const taskIds = new Map<number, Set<string>>();
-
-  for (const [idx, { content }] of intermediate.entries()) {
-    const ids = new Set<string>();
-    const toolUseById = new Map<string, ToolUseBlock>();
-
-    for (const block of content) {
-      if (block.type === BlockType.TOOL_USE && TASK_TOOLS.includes(block.name)) {
-        ids.add(block.id);
-        toolUseById.set(block.id, block);
-      }
-
-      if (block.type === BlockType.TOOL_RESULT && ids.has(block.tool_use_id)) {
-        const taskId = extractTaskId(block.content);
-        if (!taskId) continue;
-
-        const toolUse = toolUseById.get(block.tool_use_id);
-        if (!toolUse) continue;
-
-        if (toolUse.name === ToolName.TASK_CREATE) {
-          const parsed = ToolInputSchema.TaskCreate.safeParse(toolUse.input);
-          if (parsed.success) {
-            tasks.set(taskId, createTaskFromToolUse(taskId, parsed.data));
-          }
-        }
-
-        if (toolUse.name === ToolName.TASK_UPDATE) {
-          const parsed = ToolInputSchema.TaskUpdate.safeParse(toolUse.input);
-          const existingTask = tasks.get(taskId);
-          if (parsed.success && existingTask && parsed.data.status) {
-            tasks.set(taskId, { ...existingTask, status: parsed.data.status });
-          }
-        }
-      }
-    }
-
-    if (ids.size > 0) taskIds.set(idx, ids);
-  }
+  const { tasks, taskToolIdsByMessage } = buildTaskState(intermediate);
 
   // Phase 3: Build final messages
   return intermediate.map(({ raw, content }, idx) => {
-    let finalContent = content;
+    const taskToolIds = taskToolIdsByMessage.get(idx);
+    const finalContent =
+      taskToolIds && tasks.size > 0
+        ? replaceTaskBlocksWithSummary(content, taskToolIds, Array.from(tasks.values()))
+        : content;
 
-    const taskToolIds = taskIds.get(idx);
-    if (taskToolIds && tasks.size > 0) {
-      const tasksSummary: TasksBlock = { type: BlockType.TASKS, tasks: Array.from(tasks.values()) };
-      let summaryInserted = false;
-
-      finalContent = content.reduce<ContentBlock[]>((acc, block) => {
-        if (isTaskToolBlock(block, taskToolIds)) {
-          if (!summaryInserted) {
-            acc.push(tasksSummary);
-            summaryInserted = true;
-          }
-        } else {
-          acc.push(block);
-        }
-        return acc;
-      }, []);
-    }
-
-    const toolNames = finalContent
-      .map((block) =>
-        block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_TOOL[block.type],
-      )
-      .filter((name): name is string => Boolean(name));
-
-    const textPreview = finalContent
-      .filter((b): b is { type: "text"; text: string } => b.type === BlockType.TEXT)
-      .map((b) => b.text)
-      .join("\n")
-      .slice(0, 500);
+    const { toolNames, textPreview } = summarizeContent(finalContent);
 
     return {
       sessionId,
