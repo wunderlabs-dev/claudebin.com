@@ -37,8 +37,6 @@ const components = {
   strong: ({ children }: { children?: ReactNode }) => (
     <strong className="font-semibold">{children}</strong>
   ),
-  em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
-  pre: ({ children }: { children?: ReactNode }) => <pre>{children}</pre>,
   code: ({ children }: { children?: ReactNode }) => (
     <code className="font-mono text-base">{children}</code>
   ),
@@ -51,6 +49,8 @@ const components = {
   ol: ({ children }: { children?: ReactNode }) => <Steps variant="ordered">{children}</Steps>,
   ul: ({ children }: { children?: ReactNode }) => <Steps variant="unordered">{children}</Steps>,
   li: ({ children }: { children?: ReactNode }) => <StepsItem>{children}</StepsItem>,
+  em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
+  pre: ({ children }: { children?: ReactNode }) => <pre>{children}</pre>,
   hr: () => <Divider />,
 };
 
