@@ -12,6 +12,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Chip } from "@/components/ui/chip";
+import { Code } from "@/components/ui/code";
 
 type ChatPageChatContentFileReadProps = {
   block: FileReadBlock;
@@ -28,7 +29,7 @@ const ChatPageChatContentFileRead = ({ block }: ChatPageChatContentFileReadProps
           {t("chat.read")}
           <Chip icon={<SvgIconFile size="xs" />} label={block.file_path} />
         </AccordionTrigger>
-        <AccordionContent />
+        <AccordionContent>{block.result && <Code code={block.result} />}</AccordionContent>
       </AccordionItem>
     </Accordion>
   );

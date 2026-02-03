@@ -201,10 +201,6 @@ const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
   switch (block.type) {
     case "text":
       return { type: BlockType.TEXT, text: block.text };
-    case "tool_use":
-      return transformToolUse(block.id, block.name, block.input);
-    case "tool_result":
-      return null;
     case "thinking":
       return { type: BlockType.THINKING, thinking: block.thinking, signature: block.signature };
     default:
@@ -217,14 +213,16 @@ const isFilteredBlock = (block: ContentBlock): boolean => {
   return block.type === BlockType.THINKING;
 };
 
-type TrackedToolBlock = {
+type TrackedTaskTool = {
   id: string;
   name: string;
   input: Record<string, unknown>;
-  group?: string;
+  group: string;
   result?: string;
   is_error?: boolean;
 };
+
+type ToolBlockWithId = ContentBlock & { id: string; result?: string; is_error?: boolean };
 
 type TasksAnchor = { type: typeof BlockType.TASKS; tasks: TaskItem[] };
 
@@ -244,7 +242,8 @@ const createPipeline = () => {
   let toolNames: string[] = [];
   let textParts: string[] = [];
   let hasToolResult = false;
-  const toolUseMap = new Map<string, TrackedToolBlock>();
+  const toolBlockMap = new Map<string, ToolBlockWithId>();
+  const taskToolMap = new Map<string, TrackedTaskTool>();
   const groups = new Map<string, TasksAnchor>();
 
   const messages: IntermediateMessage[] = [];
@@ -260,15 +259,15 @@ const createPipeline = () => {
     if (block.type === BlockType.TEXT) textParts.push(block.text);
   };
 
-  const updateTaskAnchor = (toolUse: TrackedToolBlock): void => {
+  const updateTaskAnchor = (taskTool: TrackedTaskTool): void => {
     const anchor = groups.get(Group.TASKS);
-    if (!anchor || !toolUse.result) return;
+    if (!anchor || !taskTool.result) return;
 
-    const taskId = extractTaskId(toolUse.result);
+    const taskId = extractTaskId(taskTool.result);
     if (!taskId) return;
 
-    if (toolUse.name === RawTool.TASK_CREATE) {
-      const parsed = ToolInputSchema.TaskCreate.safeParse(toolUse.input);
+    if (taskTool.name === RawTool.TASK_CREATE) {
+      const parsed = ToolInputSchema.TaskCreate.safeParse(taskTool.input);
       if (parsed.success) {
         anchor.tasks.push({
           id: taskId,
@@ -279,8 +278,8 @@ const createPipeline = () => {
       }
     }
 
-    if (toolUse.name === RawTool.TASK_UPDATE) {
-      const parsed = ToolInputSchema.TaskUpdate.safeParse(toolUse.input);
+    if (taskTool.name === RawTool.TASK_UPDATE) {
+      const parsed = ToolInputSchema.TaskUpdate.safeParse(taskTool.input);
       const task = anchor.tasks.find((t) => t.id === taskId);
       if (parsed.success && task && parsed.data.status) {
         task.status = parsed.data.status;
@@ -290,15 +289,27 @@ const createPipeline = () => {
 
   const ingestToolResult = (raw: Extract<RawContentBlock, { type: "tool_result" }>): void => {
     hasToolResult = true;
-    const toolUse = toolUseMap.get(raw.tool_use_id);
-    if (!toolUse) return;
-    toolUse.result = extractText(raw.content);
-    toolUse.is_error = raw.is_error;
-    if (toolUse.group === Group.TASKS) updateTaskAnchor(toolUse);
+    const resultText = extractText(raw.content);
+
+    // Attach result to task tool if applicable
+    const taskTool = taskToolMap.get(raw.tool_use_id);
+    if (taskTool) {
+      taskTool.result = resultText;
+      taskTool.is_error = raw.is_error;
+      updateTaskAnchor(taskTool);
+      return;
+    }
+
+    // Attach result to regular tool block
+    const toolBlock = toolBlockMap.get(raw.tool_use_id);
+    if (toolBlock) {
+      toolBlock.result = resultText;
+      toolBlock.is_error = raw.is_error;
+    }
   };
 
   const ingestTaskTool = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
-    toolUseMap.set(raw.id, {
+    taskToolMap.set(raw.id, {
       id: raw.id,
       name: raw.name,
       input: raw.input,
@@ -310,19 +321,15 @@ const createPipeline = () => {
     emit(anchor);
   };
 
-  const ingestToolUse = (block: ContentBlock): void => {
-    if (block.type !== BlockType.TOOL_USE) return;
-    toolUseMap.set(block.id, block as TrackedToolBlock);
+  const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
+    const block = transformToolUse(raw.id, raw.name, raw.input) as ToolBlockWithId;
+    toolBlockMap.set(raw.id, block);
     emit(block);
   };
 
   const ingestDefault = (raw: RawContentBlock): void => {
     const block = normalizeBlock(raw);
     if (!block || isFilteredBlock(block)) return;
-    if (block.type === BlockType.TOOL_USE) {
-      ingestToolUse(block);
-      return;
-    }
     emit(block);
   };
 
@@ -333,6 +340,10 @@ const createPipeline = () => {
     }
     if (raw.type === "tool_use" && isTaskTool(raw.name)) {
       ingestTaskTool(raw);
+      return;
+    }
+    if (raw.type === "tool_use") {
+      ingestToolUse(raw);
       return;
     }
     ingestDefault(raw);

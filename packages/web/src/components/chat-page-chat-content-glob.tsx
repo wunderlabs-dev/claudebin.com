@@ -27,9 +27,7 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.glob")}
         </AccordionTrigger>
-        <AccordionContent>
-          <Code code={block.pattern} lang="bash" />
-        </AccordionContent>
+        <AccordionContent>{block.result && <Code code={block.result} />}</AccordionContent>
       </AccordionItem>
     </Accordion>
   );
