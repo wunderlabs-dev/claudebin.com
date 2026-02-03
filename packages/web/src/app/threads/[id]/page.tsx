@@ -48,18 +48,18 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           </NavLink>
 
           <ThreadPageAuthorMeta
-            title={thread.title ?? t("common.untitled")}
-            author={thread.profiles?.username ?? t("common.deactivated")}
             avatarUrl={thread.profiles?.avatarUrl}
             username={thread.profiles?.username}
             createdAt={thread.createdAt}
+            title={thread.title ?? t("common.untitled")}
+            author={thread.profiles?.username ?? t("common.deactivated")}
           />
         </div>
 
         <ThreadPageConversationContainer
           id={thread.id}
-          author={thread.profiles?.username ?? t("common.deactivated")}
           avatarUrl={thread.profiles?.avatarUrl}
+          author={thread.profiles?.username ?? t("common.deactivated")}
         />
       </div>
 

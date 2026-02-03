@@ -20,9 +20,7 @@ const ChatPageChatContentTasks = ({ block }: ChatPageChatContentTasksProps) => {
     <Todo>
       {block.tasks.map((task) => (
         <TodoItem key={task.id} variant={task.status}>
-          <TodoItemIcon variant={task.status}>
-            {icons[task.status]}
-          </TodoItemIcon>
+          <TodoItemIcon variant={task.status}>{icons[task.status]}</TodoItemIcon>
           <span className="text-gray-400 text-xs">#{task.id}</span>
           <TodoItemLabel>{task.subject}</TodoItemLabel>
         </TodoItem>
