@@ -30,9 +30,6 @@ const fetchSessionPollData = async (
   return json.result?.data ?? null;
 };
 
-/**
- * Poll for session processing completion. Returns URL or throws.
- */
 const pollForProcessing = async (
   sessionId: string,
   apiUrl: string,
@@ -72,7 +69,6 @@ export const registerShare = (server: McpServer): void => {
         const token = await auth.getToken();
         const content = await session.extract(project_path);
 
-        // Check size
         const sizeBytes = new TextEncoder().encode(content).length;
         if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
           throw new Error(
@@ -80,7 +76,6 @@ export const registerShare = (server: McpServer): void => {
           );
         }
 
-        // Publish
         const api = createApiClient();
         const apiUrl = getApiBaseUrl();
 

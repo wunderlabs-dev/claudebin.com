@@ -70,7 +70,6 @@ export interface ParsedMessage {
   rawMessage: Json;
 }
 
-// Derived: internal block type → raw tool name (inverse of RAW_TOOL_TO_BLOCK_TYPE)
 const BLOCK_TYPE_TO_RAW_TOOL: Record<string, string> = Object.fromEntries(
   Object.entries(RAW_TOOL_TO_BLOCK_TYPE).map(([raw, internal]) => [internal, raw]),
 );
@@ -358,7 +357,6 @@ const normalizeContent = (content: string | RawContentBlock[] | undefined): Cont
 type IntermediateMessage = { raw: RawJsonlMessage; content: ContentBlock[] };
 
 const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage[] => {
-  // Phase 1: Coalesce + normalize in single pass
   const intermediate: IntermediateMessage[] = [];
   let current: IntermediateMessage | null = null;
   let currentMsgId: string | null = null;
@@ -387,13 +385,8 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   }
   if (current) intermediate.push(current);
 
-  // Phase 2: Build task state
   const { tasks, taskToolIdsByMessage } = buildTaskState(intermediate);
-
-  // Find the last message with task tools (to show final state there)
   const lastTaskMessageIdx = Math.max(...Array.from(taskToolIdsByMessage.keys()), -1);
-
-  // Phase 3: Build final messages
   const tasksList = Array.from(tasks.values());
 
   return intermediate.flatMap(({ raw, content }, idx) => {
@@ -434,9 +427,7 @@ export const parseJsonl = (jsonl: string, sessionId: string): ParsedMessage[] =>
       if (result.success && !isSkippedMessageType(result.data.type)) {
         raw.push(result.data);
       }
-    } catch {
-      // Skip malformed JSON lines
-    }
+    } catch {}
   }
   return parse(raw, sessionId);
 };

@@ -89,8 +89,6 @@ const getByUserId = async (
   return data ?? [];
 };
 
-// No ownership check - session ID is treated as capability token.
-// For owner-only operations, use getByIdForUser instead.
 const getById = async (supabase: SupabaseClient<Database>, id: string): Promise<Session | null> => {
   const { data, error } = await supabase.from("sessions").select("*").eq("id", id).maybeSingle();
 

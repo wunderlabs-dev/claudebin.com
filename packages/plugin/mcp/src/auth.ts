@@ -25,9 +25,6 @@ const fetchAuthPollData = async (code: string, apiUrl: string): Promise<AuthPoll
   return json.result?.data ?? null;
 };
 
-/**
- * Poll for auth completion. Returns auth data or throws.
- */
 const pollForAuthCompletion = async (
   code: string,
   apiUrl: string,
@@ -56,9 +53,6 @@ const pollForAuthCompletion = async (
   return { token, refresh_token, user };
 };
 
-/**
- * Start the auth flow by creating a session. Returns code and URL or throws.
- */
 const start = async (): Promise<{ code: string; url: string }> => {
   const api = createApiClient();
 
@@ -72,10 +66,6 @@ const start = async (): Promise<{ code: string; url: string }> => {
   }
 };
 
-/**
- * Run the full authentication flow: start -> open browser -> poll -> save config.
- * Returns the token or throws.
- */
 const run = async (): Promise<string> => {
   const apiUrl = getApiBaseUrl();
 
@@ -97,9 +87,6 @@ const run = async (): Promise<string> => {
   return token;
 };
 
-/**
- * Refresh the auth token. Returns true on success, false on failure.
- */
 const refresh = async (): Promise<boolean> => {
   const config = await readConfig();
 
@@ -133,10 +120,6 @@ const refresh = async (): Promise<boolean> => {
   }
 };
 
-/**
- * Get a locally valid token (checking expiration, refreshing if needed).
- * Returns token or null if not available.
- */
 const getLocalToken = async (): Promise<string | null> => {
   const config = await readConfig();
 
@@ -156,9 +139,6 @@ const getLocalToken = async (): Promise<string | null> => {
   return config.auth.token;
 };
 
-/**
- * Validate token with the server. Returns true if valid.
- */
 const validate = async (token: string): Promise<boolean> => {
   const api = createApiClient();
 
@@ -170,11 +150,7 @@ const validate = async (token: string): Promise<boolean> => {
   }
 };
 
-/**
- * Get a validated token, running auth flow if needed. Throws on failure.
- */
 const getToken = async (): Promise<string> => {
-  // Try existing token first
   const localToken = await getLocalToken();
 
   if (localToken) {
@@ -184,7 +160,6 @@ const getToken = async (): Promise<string> => {
     }
   }
 
-  // No valid token, run auth flow
   return run();
 };
 

@@ -10,7 +10,6 @@ import { jsonToContentBlocks } from "@/supabase/types/json-cast";
 type MessagesRow = Database["public"]["Tables"]["messages"]["Row"];
 type MessagesInsert = Database["public"]["Tables"]["messages"]["Insert"];
 
-// Message with typed content for UI consumption
 export type Message = Omit<MessagesRow, "content" | "rawMessage" | "role"> & {
   role: Role;
   content: ContentBlock[];

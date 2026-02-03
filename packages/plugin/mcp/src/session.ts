@@ -35,10 +35,6 @@ const findMostRecentSession = (files: FileWithStats[]): string | null => {
   return sessions.length > 0 ? sessions[0].file : null;
 };
 
-/**
- * Extract the most recent Claude session content for a project.
- * Throws if no session is found.
- */
 const extract = async (projectPath: string): Promise<string> => {
   const normalizedPath = normalizeProjectPath(projectPath);
   const claudeProjectPath = getClaudeProjectPath(normalizedPath);

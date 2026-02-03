@@ -1,7 +1,3 @@
-// Minimal type declaration for web's AppRouter
-// Declares only the procedures used by the plugin to avoid
-// type-checking the entire web package
-
 interface AuthStartResponse {
   code: string;
   url: string;
