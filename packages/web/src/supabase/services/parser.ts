@@ -386,10 +386,16 @@ const createPipeline = () => {
   };
 };
 
-const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage[] => {
+export const parseJsonl = (jsonl: string, sessionId: string): ParsedMessage[] => {
   const pipeline = createPipeline();
 
-  for (const r of rawMessages) pipeline.ingest(r);
+  for (const line of jsonl.split("\n")) {
+    if (!line.trim()) continue;
+    try {
+      const result = RawJsonlMessageSchema.safeParse(JSON.parse(line));
+      if (result.success) pipeline.ingest(result.data);
+    } catch {}
+  }
   pipeline.flush();
 
   return pipeline.getMessages().flatMap(({ raw, content, toolNames, textParts }, idx) => {
@@ -413,18 +419,4 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
       rawMessage: toJson(raw),
     };
   });
-};
-
-export const parseJsonl = (jsonl: string, sessionId: string): ParsedMessage[] => {
-  const raw: RawJsonlMessage[] = [];
-  for (const line of jsonl.split("\n")) {
-    if (!line.trim()) continue;
-    try {
-      const result = RawJsonlMessageSchema.safeParse(JSON.parse(line));
-      if (result.success && !isSkippedMessageType(result.data.type)) {
-        raw.push(result.data);
-      }
-    } catch {}
-  }
-  return parse(raw, sessionId);
 };
