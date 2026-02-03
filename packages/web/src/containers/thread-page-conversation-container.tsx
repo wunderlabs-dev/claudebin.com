@@ -28,7 +28,6 @@ import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-conten
 import { ChatPageChatContentToolResult } from "@/components/chat-page-chat-content-tool-result";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
-import { ChatPageChatContentThinking } from "@/components/chat-page-chat-content-thinking";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -69,8 +68,6 @@ const renderers = {
         return <ChatPageChatContentToolUse key={index} block={block} />;
       case BlockType.MCP:
         return <ChatPageChatContentMcp key={index} block={block} />;
-      case BlockType.THINKING:
-        return <ChatPageChatContentThinking key={index} block={block} />;
       default: {
         return null;
       }

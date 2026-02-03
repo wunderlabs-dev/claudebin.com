@@ -49,7 +49,6 @@ import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-conten
 import { ChatPageChatContentToolResult } from "@/components/chat-page-chat-content-tool-result";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
-import { ChatPageChatContentThinking } from "@/components/chat-page-chat-content-thinking";
 import { Steps, StepsItem } from "@/components/ui/steps";
 import {
   Table,
@@ -323,13 +322,6 @@ const UiPage = () => {
           </ChatItem>
           <ChatItem variant="assistant">
             <ChatContent>
-              <ChatPageChatContentThinking
-                block={{
-                  type: "thinking",
-                  thinking:
-                    "The user wants me to add a publishSession function. I need to read the existing CLI code first to understand the structure, then create the new function.",
-                }}
-              />
               <ChatPageChatContentText
                 block={{
                   type: "text",
