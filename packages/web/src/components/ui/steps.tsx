@@ -26,9 +26,7 @@ type StepsVariant = (typeof StepsVariants)[number];
 
 const StepsContext = createContext<StepsVariant>("outlined");
 
-type StepsProps = {
-  variant?: StepsVariant;
-} & HTMLAttributes<HTMLOListElement>;
+type StepsProps = VariantProps<typeof stepsVariants> & HTMLAttributes<HTMLOListElement>;
 
 type StepsItemProps = {
   children: ReactNode;
@@ -36,7 +34,7 @@ type StepsItemProps = {
 
 const Steps = ({ variant = "outlined", className, children, ...props }: StepsProps) => {
   return (
-    <StepsContext.Provider value={variant}>
+    <StepsContext.Provider value={variant ?? "outlined"}>
       <ol className={cn(stepsVariants({ variant, className }))} {...props}>
         {children}
       </ol>
