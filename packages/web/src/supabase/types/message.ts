@@ -60,14 +60,19 @@ export interface ToolResultBlock {
   is_error?: boolean;
 }
 
-export interface ToolUseBlock {
+export interface ToolResult {
+  result?: string;
+  is_error?: boolean;
+}
+
+export interface ToolUseBlock extends ToolResult {
   type: typeof BlockType.TOOL_USE;
   id: string;
   name: string;
   input: Record<string, unknown>;
 }
 
-export interface McpBlock {
+export interface McpBlock extends ToolResult {
   type: typeof BlockType.MCP;
   id: string;
   server: string;
@@ -75,7 +80,7 @@ export interface McpBlock {
   input: Record<string, unknown>;
 }
 
-export interface QuestionBlock {
+export interface QuestionBlock extends ToolResult {
   type: typeof BlockType.QUESTION;
   id: string;
   questions: Array<{
@@ -89,7 +94,7 @@ export interface QuestionBlock {
   }>;
 }
 
-export interface BashBlock {
+export interface BashBlock extends ToolResult {
   type: typeof BlockType.BASH;
   id: string;
   command: string;
@@ -97,7 +102,7 @@ export interface BashBlock {
   timeout?: number;
 }
 
-export interface FileReadBlock {
+export interface FileReadBlock extends ToolResult {
   type: typeof BlockType.FILE_READ;
   id: string;
   file_path: string;
@@ -105,14 +110,14 @@ export interface FileReadBlock {
   limit?: number;
 }
 
-export interface FileWriteBlock {
+export interface FileWriteBlock extends ToolResult {
   type: typeof BlockType.FILE_WRITE;
   id: string;
   file_path: string;
   content: string;
 }
 
-export interface FileEditBlock {
+export interface FileEditBlock extends ToolResult {
   type: typeof BlockType.FILE_EDIT;
   id: string;
   file_path: string;
@@ -120,14 +125,14 @@ export interface FileEditBlock {
   new_string: string;
 }
 
-export interface GlobBlock {
+export interface GlobBlock extends ToolResult {
   type: typeof BlockType.GLOB;
   id: string;
   pattern: string;
   path?: string;
 }
 
-export interface GrepBlock {
+export interface GrepBlock extends ToolResult {
   type: typeof BlockType.GREP;
   id: string;
   pattern: string;
@@ -135,7 +140,7 @@ export interface GrepBlock {
   glob?: string;
 }
 
-export interface TaskBlock {
+export interface TaskBlock extends ToolResult {
   type: typeof BlockType.TASK;
   id: string;
   description: string;
@@ -143,14 +148,14 @@ export interface TaskBlock {
   subagent_type: string;
 }
 
-export interface WebFetchBlock {
+export interface WebFetchBlock extends ToolResult {
   type: typeof BlockType.WEB_FETCH;
   id: string;
   url: string;
   prompt: string;
 }
 
-export interface WebSearchBlock {
+export interface WebSearchBlock extends ToolResult {
   type: typeof BlockType.WEB_SEARCH;
   id: string;
   query: string;

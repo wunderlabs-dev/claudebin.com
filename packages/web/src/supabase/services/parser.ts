@@ -216,6 +216,35 @@ const processTaskBlocks = (
   return content.filter((block) => !isTaskToolBlock(block, taskToolIds));
 };
 
+type ToolResultData = { content: string; is_error?: boolean };
+
+const hasId = (block: ContentBlock): block is ContentBlock & { id: string } =>
+  "id" in block && typeof block.id === "string";
+
+const mergeToolResults = (blocks: ContentBlock[]): ContentBlock[] => {
+  const resultMap = new Map<string, ToolResultData>();
+
+  for (const block of blocks) {
+    if (block.type === BlockType.TOOL_RESULT) {
+      resultMap.set(block.tool_use_id, {
+        content: block.content,
+        is_error: block.is_error,
+      });
+    }
+  }
+
+  return blocks
+    .map((block) => {
+      if (!hasId(block)) return block;
+      const resultData = resultMap.get(block.id);
+      if (resultData) {
+        return { ...block, result: resultData.content, is_error: resultData.is_error };
+      }
+      return block;
+    })
+    .filter((block) => block.type !== BlockType.TOOL_RESULT);
+};
+
 type ContentSummary = {
   toolNames: string[];
   textPreview: string;
@@ -392,7 +421,8 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   return intermediate.flatMap(({ raw, content }, idx) => {
     const taskToolIds = taskToolIdsByMessage.get(idx);
     const isLastTaskMessage = idx === lastTaskMessageIdx && tasks.size > 0;
-    const finalContent = processTaskBlocks(content, taskToolIds, isLastTaskMessage, tasksList);
+    const taskProcessedContent = processTaskBlocks(content, taskToolIds, isLastTaskMessage, tasksList);
+    const finalContent = mergeToolResults(taskProcessedContent);
 
     if (finalContent.length === 0) return [];
 
