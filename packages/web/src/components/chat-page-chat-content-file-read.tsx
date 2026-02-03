@@ -27,7 +27,6 @@ const ChatPageChatContentFileRead = ({
   lineCount,
 }: ChatPageChatContentFileReadProps) => {
   const t = useTranslations();
-  const filename = block.file_path.split("/").pop() ?? block.file_path;
 
   return (
     <Accordion type="single" collapsible>
@@ -35,7 +34,7 @@ const ChatPageChatContentFileRead = ({
         <AccordionTrigger>
           <SvgIconEye size="sm" color="primary" />
           {t("chat.read")}
-          <Chip icon={<SvgIconFile size="xs" />} label={filename} />
+          <Chip icon={<SvgIconFile size="xs" />} label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           {lineCount ? (

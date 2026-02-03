@@ -20,7 +20,6 @@ type ChatPageChatContentFileWriteProps = {
 
 const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWriteProps) => {
   const t = useTranslations();
-  const filename = block.file_path.split("/").pop() ?? block.file_path;
 
   return (
     <Accordion type="single" collapsible>
@@ -28,7 +27,7 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
         <AccordionTrigger>
           <SvgIconPen size="sm" color="primary" />
           {t("chat.write")}
-          <Chip icon={<SvgIconFile size="xs" />} label={filename} />
+          <Chip icon={<SvgIconFile size="xs" />} label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent>
           <Code code={block.content} />
