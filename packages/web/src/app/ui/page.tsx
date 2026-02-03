@@ -334,8 +334,6 @@ const UiPage = () => {
                   id: "read-1",
                   file_path: "src/lib/session.ts",
                 }}
-                lineCount={253}
-                content={`import { readFileSync } from "fs";\nimport { join } from "path";\n\nimport type { Session } from "./types";\n\nconst SESSION_DIR = join(process.env.HOME!, ".claude", "projects");\n\nexport const discoverSessions = (projectPath: string): Session[] => {\n  const normalized = projectPath.replace(/\\//g, "-");\n  const dir = join(SESSION_DIR, normalized);\n  return readFileSync(dir, "utf-8").split("\\n");\n};`}
               />
               <ChatPageChatContentFileRead
                 block={{
@@ -343,8 +341,6 @@ const UiPage = () => {
                   id: "read-2",
                   file_path: "src/lib/api.ts",
                 }}
-                lineCount={84}
-                content={`import { createClient } from "@supabase/supabase-js";\nimport type { Session } from "./session";\n\nconst supabase = createClient(\n  process.env.SUPABASE_URL!,\n  process.env.SUPABASE_KEY!\n);`}
               />
               <ChatPageChatContentGlob
                 block={{

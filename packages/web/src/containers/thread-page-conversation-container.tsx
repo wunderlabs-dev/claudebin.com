@@ -162,8 +162,6 @@ const ThreadPageConversationContainer = ({
               id: "read-1",
               file_path: "src/formatters/html.py",
             }}
-            lineCount={253}
-            content={`import { readFileSync } from "fs";\nimport { join } from "path";\n\nimport type { Session } from "./types";\n\nconst SESSION_DIR = join(process.env.HOME!, ".claude", "projects");\n\nexport const discoverSessions = (projectPath: string): Session[] => {\n  const normalized = projectPath.replace(/\\//g, "-");\n  const dir = join(SESSION_DIR, normalized);\n  return readFileSync(dir, "utf-8").split("\\n");\n};`}
           />
 
           <ChatPageChatContentFileWrite
@@ -172,6 +170,124 @@ const ThreadPageConversationContainer = ({
               id: "write-1",
               file_path: "src/lib/publish.ts",
               content: `import { createClient } from "@supabase/supabase-js";\n\nexport const publishSession = async (session: Session): Promise<string> => {\n  const { data, error } = await supabase\n    .from("sessions")\n    .insert({ content: session })\n    .select("id")\n    .single();\n\n  if (error) throw new Error(error.message);\n  return data.id;\n};`,
+            }}
+          />
+
+          <ChatPageChatContentFileEdit
+            block={{
+              type: "file_edit",
+              id: "edit-1",
+              file_path: "src/commands/publish.ts",
+              old_string: `  const result = await uploadSession(id);\n  console.log("Uploaded:", result);\n  return result;`,
+              new_string: `  const result = await publishSession(id);\n  const url = \`https://claudebin.com/threads/\${result.id}\`;\n  await clipboard.copy(url);\n  console.log("Published:", url);\n  return url;`,
+            }}
+          />
+
+          <ChatPageChatContentGlob
+            block={{
+              type: "glob",
+              id: "glob-1",
+              pattern: "src/commands/**/*.ts",
+            }}
+          />
+
+          <ChatPageChatContentGrep
+            block={{
+              type: "grep",
+              id: "grep-1",
+              pattern: "export const publish",
+              path: "src/commands",
+            }}
+          />
+
+          <ChatPageChatContentBash
+            block={{
+              type: "bash",
+              id: "bash-1",
+              command: "bun test src/lib/publish.test.ts",
+              description: "Run publish tests",
+            }}
+          />
+
+          <ChatPageChatContentToolResult
+            block={{
+              type: "tool_result",
+              tool_use_id: "bash-1",
+              content: "✓ 3 tests passed (12ms)",
+            }}
+          />
+
+          <ChatPageChatContentToolResult
+            block={{
+              type: "tool_result",
+              tool_use_id: "bash-2",
+              content: "Error: Connection refused at localhost:3000",
+              is_error: true,
+            }}
+          />
+
+          <ChatPageChatContentWebSearch
+            block={{
+              type: "web_search",
+              id: "search-1",
+              query: "supabase storage upload file typescript",
+            }}
+          />
+
+          <ChatPageChatContentWebFetch
+            block={{
+              type: "web_fetch",
+              id: "fetch-1",
+              url: "https://supabase.com/docs/reference/javascript/storage-from-upload",
+              prompt: "How to upload a file to Supabase Storage",
+            }}
+          />
+
+          <ChatPageChatContentTask
+            block={{
+              type: "task",
+              id: "task-1",
+              description: "Explore upload patterns",
+              prompt: "Find how files are uploaded in the codebase",
+              subagent_type: "Explore",
+            }}
+          />
+
+          <ChatPageChatContentQuestion
+            block={{
+              type: "question",
+              id: "question-1",
+              questions: [
+                {
+                  question: "Should the session be public by default?",
+                  header: "Visibility",
+                  options: [
+                    { label: "Public", description: "Anyone with the link can view" },
+                    { label: "Private", description: "Only you can view" },
+                    { label: "Unlisted", description: "Not indexed, but accessible via link" },
+                  ],
+                  multiSelect: false,
+                },
+              ],
+            }}
+          />
+
+          <ChatPageChatContentToolUse
+            block={{
+              type: "tool_use",
+              id: "tool-1",
+              name: "NotebookEdit",
+              input: { notebook_path: "/docs/api.ipynb", cell_number: 3 },
+            }}
+          />
+
+          <ChatPageChatContentMcp
+            block={{
+              type: "mcp",
+              id: "mcp-1",
+              server: "claudebin",
+              tool: "share",
+              input: { project_path: "/Users/dev/project", is_public: true },
             }}
           />
         </ChatContent>
