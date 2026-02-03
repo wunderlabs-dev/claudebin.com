@@ -14,7 +14,7 @@ const todoItemVariants = cva(["flex items-center gap-2"], {
   variants: {
     variant: {
       pending: "text-gray-600",
-      progress: "text-gray-600",
+      in_progress: "text-gray-600",
       completed: "text-gray-400 line-through",
     },
   },
@@ -40,7 +40,7 @@ const todoItemIconVariants = cva(["flex-shrink-0"], {
   variants: {
     variant: {
       pending: "text-gray-400",
-      progress: "text-blue-500",
+      in_progress: "text-blue-500",
       completed: "text-green-600",
     },
   },
