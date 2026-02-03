@@ -421,7 +421,12 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
   return intermediate.flatMap(({ raw, content }, idx) => {
     const taskToolIds = taskToolIdsByMessage.get(idx);
     const isLastTaskMessage = idx === lastTaskMessageIdx && tasks.size > 0;
-    const taskProcessedContent = processTaskBlocks(content, taskToolIds, isLastTaskMessage, tasksList);
+    const taskProcessedContent = processTaskBlocks(
+      content,
+      taskToolIds,
+      isLastTaskMessage,
+      tasksList,
+    );
     const finalContent = mergeToolResults(taskProcessedContent);
 
     if (finalContent.length === 0) return [];
