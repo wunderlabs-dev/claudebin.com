@@ -7,7 +7,7 @@ type ChatPageChatContentToolResultProps = {
 const ChatPageChatContentToolResult = ({ block }: ChatPageChatContentToolResultProps) => {
   return (
     <pre
-      className={`overflow-x-auto rounded-md p-2 text-xs ${block.is_error ? "bg-red-50 text-red-700" : "bg-gray-100 text-gray-700"}`}
+      className={`overflow-x-auto p-2 ${block.is_error ? "bg-red-50" : "bg-gray-100"} rounded-md text-xs ${block.is_error ? "text-red-700" : "text-gray-700"}`}
     >
       <code>{block.content}</code>
     </pre>
