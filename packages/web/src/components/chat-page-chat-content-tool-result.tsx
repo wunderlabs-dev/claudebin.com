@@ -10,7 +10,7 @@ const ChatPageChatContentToolResult = ({ block }: ChatPageChatContentToolResultP
   return (
     <pre
       className={cn(
-        "overflow-x-auto p-2 rounded-md text-xs",
+        "overflow-x-auto rounded-md p-2 text-xs",
         block.is_error ? "bg-red-50 text-red-700" : "bg-gray-100 text-gray-700",
       )}
     >
