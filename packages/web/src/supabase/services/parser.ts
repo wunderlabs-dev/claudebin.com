@@ -4,7 +4,14 @@ import type { Json } from "@/supabase/types";
 
 import { z } from "zod";
 
-import { BlockType, MessageRole, isSkippedMessageType } from "@/supabase/types/message";
+import {
+  BlockType,
+  MessageRole,
+  RAW_TASK_TOOLS,
+  RAW_TOOL_TO_BLOCK_TYPE,
+  RawTool,
+  isSkippedMessageType,
+} from "@/supabase/types/message";
 import { contentBlocksToJson, toJson } from "@/supabase/types/json-cast";
 
 const TextBlockSchema = z.object({ type: z.literal("text"), text: z.string() });
@@ -63,42 +70,10 @@ export interface ParsedMessage {
   rawMessage: Json;
 }
 
-const ToolName = {
-  ASK_USER_QUESTION: "AskUserQuestion",
-  BASH: "Bash",
-  READ: "Read",
-  WRITE: "Write",
-  EDIT: "Edit",
-  GLOB: "Glob",
-  GREP: "Grep",
-  TASK: "Task",
-  WEB_FETCH: "WebFetch",
-  WEB_SEARCH: "WebSearch",
-  TASK_CREATE: "TaskCreate",
-  TASK_UPDATE: "TaskUpdate",
-  TASK_GET: "TaskGet",
-  TASK_LIST: "TaskList",
-} as const;
-
-const BLOCK_TYPE_TO_TOOL: Record<string, string> = {
-  [BlockType.QUESTION]: ToolName.ASK_USER_QUESTION,
-  [BlockType.BASH]: ToolName.BASH,
-  [BlockType.FILE_READ]: ToolName.READ,
-  [BlockType.FILE_WRITE]: ToolName.WRITE,
-  [BlockType.FILE_EDIT]: ToolName.EDIT,
-  [BlockType.GLOB]: ToolName.GLOB,
-  [BlockType.GREP]: ToolName.GREP,
-  [BlockType.TASK]: ToolName.TASK,
-  [BlockType.WEB_FETCH]: ToolName.WEB_FETCH,
-  [BlockType.WEB_SEARCH]: ToolName.WEB_SEARCH,
-};
-
-const TASK_TOOLS: string[] = [
-  ToolName.TASK_CREATE,
-  ToolName.TASK_UPDATE,
-  ToolName.TASK_GET,
-  ToolName.TASK_LIST,
-];
+// Derived: internal block type → raw tool name (inverse of RAW_TOOL_TO_BLOCK_TYPE)
+const BLOCK_TYPE_TO_RAW_TOOL: Record<string, string> = Object.fromEntries(
+  Object.entries(RAW_TOOL_TO_BLOCK_TYPE).map(([raw, internal]) => [internal, raw]),
+);
 
 const ToolInputSchema = {
   AskUserQuestion: z.object({
@@ -173,7 +148,7 @@ const buildTaskState = (intermediate: IntermediateMessage[]): TaskState => {
     const taskToolIds = new Set<string>();
 
     for (const block of content) {
-      if (block.type === BlockType.TOOL_USE && TASK_TOOLS.includes(block.name)) {
+      if (block.type === BlockType.TOOL_USE && RAW_TASK_TOOLS.includes(block.name)) {
         taskToolIds.add(block.id);
       }
 
@@ -184,14 +159,14 @@ const buildTaskState = (intermediate: IntermediateMessage[]): TaskState => {
         const toolUse = findToolUse(content, block.tool_use_id);
         if (!toolUse) continue;
 
-        if (toolUse.name === ToolName.TASK_CREATE) {
+        if (toolUse.name === RawTool.TASK_CREATE) {
           const parsed = ToolInputSchema.TaskCreate.safeParse(toolUse.input);
           if (parsed.success) {
             tasks.set(taskId, createTaskFromToolUse(taskId, parsed.data));
           }
         }
 
-        if (toolUse.name === ToolName.TASK_UPDATE) {
+        if (toolUse.name === RawTool.TASK_UPDATE) {
           const parsed = ToolInputSchema.TaskUpdate.safeParse(toolUse.input);
           const existingTask = tasks.get(taskId);
           if (parsed.success && existingTask && parsed.data.status) {
@@ -253,7 +228,7 @@ const summarizeContent = (content: ContentBlock[]): ContentSummary => {
 
   for (const block of content) {
     const toolName =
-      block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_TOOL[block.type];
+      block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_RAW_TOOL[block.type];
     if (toolName) toolNames.push(toolName);
 
     if (block.type === BlockType.TEXT) {
@@ -291,43 +266,43 @@ const transformToolUse = (
   const fallback: ContentBlock = { type: BlockType.TOOL_USE, id, name, input };
 
   switch (name) {
-    case ToolName.ASK_USER_QUESTION: {
+    case RawTool.ASK_USER_QUESTION: {
       const data = parseToolInput(ToolInputSchema.AskUserQuestion, input);
       return { type: BlockType.QUESTION, id, questions: data?.questions ?? [] };
     }
-    case ToolName.BASH: {
+    case RawTool.BASH: {
       const data = parseToolInput(ToolInputSchema.Bash, input);
       return data ? { type: BlockType.BASH, id, ...data } : fallback;
     }
-    case ToolName.READ: {
+    case RawTool.READ: {
       const data = parseToolInput(ToolInputSchema.Read, input);
       return data ? { type: BlockType.FILE_READ, id, ...data } : fallback;
     }
-    case ToolName.WRITE: {
+    case RawTool.WRITE: {
       const data = parseToolInput(ToolInputSchema.Write, input);
       return data ? { type: BlockType.FILE_WRITE, id, ...data } : fallback;
     }
-    case ToolName.EDIT: {
+    case RawTool.EDIT: {
       const data = parseToolInput(ToolInputSchema.Edit, input);
       return data ? { type: BlockType.FILE_EDIT, id, ...data } : fallback;
     }
-    case ToolName.GLOB: {
+    case RawTool.GLOB: {
       const data = parseToolInput(ToolInputSchema.Glob, input);
       return data ? { type: BlockType.GLOB, id, ...data } : fallback;
     }
-    case ToolName.GREP: {
+    case RawTool.GREP: {
       const data = parseToolInput(ToolInputSchema.Grep, input);
       return data ? { type: BlockType.GREP, id, ...data } : fallback;
     }
-    case ToolName.TASK: {
+    case RawTool.TASK: {
       const data = parseToolInput(ToolInputSchema.Task, input);
       return data ? { type: BlockType.TASK, id, ...data } : fallback;
     }
-    case ToolName.WEB_FETCH: {
+    case RawTool.WEB_FETCH: {
       const data = parseToolInput(ToolInputSchema.WebFetch, input);
       return data ? { type: BlockType.WEB_FETCH, id, ...data } : fallback;
     }
-    case ToolName.WEB_SEARCH: {
+    case RawTool.WEB_SEARCH: {
       const data = parseToolInput(ToolInputSchema.WebSearch, input);
       return data ? { type: BlockType.WEB_SEARCH, id, ...data } : fallback;
     }

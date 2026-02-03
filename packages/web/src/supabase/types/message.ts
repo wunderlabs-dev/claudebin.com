@@ -199,21 +199,51 @@ export interface TasksBlock {
 }
 
 // =============================================================================
-// Tool Name Mapping (raw name → block type)
+// Raw Tool Names (what Claude API sends)
 // =============================================================================
 
-export const TOOL_TO_BLOCK_TYPE: Record<string, string> = {
-  AskUserQuestion: BlockType.QUESTION,
-  Bash: BlockType.BASH,
-  Read: BlockType.FILE_READ,
-  Write: BlockType.FILE_WRITE,
-  Edit: BlockType.FILE_EDIT,
-  Glob: BlockType.GLOB,
-  Grep: BlockType.GREP,
-  Task: BlockType.TASK,
-  WebFetch: BlockType.WEB_FETCH,
-  WebSearch: BlockType.WEB_SEARCH,
+export enum RawTool {
+  ASK_USER_QUESTION = "AskUserQuestion",
+  BASH = "Bash",
+  READ = "Read",
+  WRITE = "Write",
+  EDIT = "Edit",
+  GLOB = "Glob",
+  GREP = "Grep",
+  TASK = "Task",
+  WEB_FETCH = "WebFetch",
+  WEB_SEARCH = "WebSearch",
+  // Task management tools (aggregated into TASKS block)
+  TASK_CREATE = "TaskCreate",
+  TASK_UPDATE = "TaskUpdate",
+  TASK_GET = "TaskGet",
+  TASK_LIST = "TaskList",
+}
+
+// =============================================================================
+// Tool Name Mapping (raw API name → internal block type)
+// =============================================================================
+
+export const RAW_TOOL_TO_BLOCK_TYPE: Record<string, string> = {
+  [RawTool.ASK_USER_QUESTION]: BlockType.QUESTION,
+  [RawTool.BASH]: BlockType.BASH,
+  [RawTool.READ]: BlockType.FILE_READ,
+  [RawTool.WRITE]: BlockType.FILE_WRITE,
+  [RawTool.EDIT]: BlockType.FILE_EDIT,
+  [RawTool.GLOB]: BlockType.GLOB,
+  [RawTool.GREP]: BlockType.GREP,
+  [RawTool.TASK]: BlockType.TASK,
+  [RawTool.WEB_FETCH]: BlockType.WEB_FETCH,
+  [RawTool.WEB_SEARCH]: BlockType.WEB_SEARCH,
 };
+
+// Task tools get aggregated into a single TASKS block (no individual rendering)
+export const RAW_TASK_TOOLS: readonly string[] = [
+  RawTool.TASK_CREATE,
+  RawTool.TASK_UPDATE,
+  RawTool.TASK_GET,
+  RawTool.TASK_LIST,
+];
 
 // =============================================================================
 // Raw JSONL Types (what we receive from Claude Code)
@@ -273,46 +303,6 @@ export type RawContentBlock =
   | RawThinkingBlock
   | RawToolUseBlock
   | RawToolResultBlock;
-
-// =============================================================================
-// Display Helpers
-// =============================================================================
-
-export const TOOL_ICONS: Record<string, string> = {
-  Bash: "terminal",
-  Read: "file-text",
-  Write: "file-plus",
-  Edit: "edit",
-  MultiEdit: "edit-3",
-  Glob: "search",
-  Grep: "search",
-  LS: "folder",
-  Task: "cpu",
-  WebFetch: "globe",
-  WebSearch: "search",
-  NotebookEdit: "book-open",
-  AskUserQuestion: "help-circle",
-  Skill: "zap",
-  KillShell: "x-circle",
-  TaskOutput: "terminal",
-};
-
-export const TOOL_COLORS: Record<string, string> = {
-  Bash: "red",
-  Read: "green",
-  Write: "blue",
-  Edit: "yellow",
-  MultiEdit: "yellow",
-  Glob: "cyan",
-  Grep: "cyan",
-  LS: "blue",
-  Task: "purple",
-  WebFetch: "indigo",
-  WebSearch: "indigo",
-  NotebookEdit: "orange",
-  AskUserQuestion: "pink",
-  Skill: "amber",
-};
 
 // =============================================================================
 // Type Guards
