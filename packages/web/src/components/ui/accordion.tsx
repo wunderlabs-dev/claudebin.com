@@ -69,7 +69,7 @@ const AccordionContent = ({ className, children, ...props }: AccordionContentPro
       className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
       {...props}
     >
-      <div className={cn("pb-4 text-gray-400", className)}>{children}</div>
+      <div className={cn("flex flex-col gap-2 pb-4 text-gray-400", className)}>{children}</div>
     </AccordionPrimitive.Content>
   );
 };

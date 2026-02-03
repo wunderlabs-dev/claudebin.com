@@ -45,7 +45,7 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
           {t("chat.edit")}
           <Chip icon={<SvgIconFile size="xs" />} label={filename} />
         </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-2">
+        <AccordionContent>
           <Typography variant="small" color="muted">
             {t("chat.lines", { count: lineCount })}
           </Typography>

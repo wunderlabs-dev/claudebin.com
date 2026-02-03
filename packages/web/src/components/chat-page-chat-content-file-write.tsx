@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
+import { Typography } from "@/components/ui/typography";
 
 type ChatPageChatContentFileWriteProps = {
   block: FileWriteBlock;
@@ -20,6 +21,7 @@ type ChatPageChatContentFileWriteProps = {
 
 const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWriteProps) => {
   const t = useTranslations();
+  const lineCount = block.content.split("\n").length;
 
   return (
     <Accordion type="single" collapsible>
@@ -30,6 +32,9 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
           <Chip icon={<SvgIconFile size="xs" />} label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent>
+          <Typography variant="small" color="muted">
+            {t("chat.lines", { count: lineCount })}
+          </Typography>
           <Code code={block.content} />
         </AccordionContent>
       </AccordionItem>

@@ -1,15 +1,37 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { GlobBlock } from "@/supabase/types/message";
+
+import { SvgIconMagnifier } from "@/components/icon";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { Code } from "@/components/ui/code";
 
 type ChatPageChatContentGlobProps = {
   block: GlobBlock;
 };
 
 const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
+  const t = useTranslations();
+
   return (
-    <div className="flex items-center gap-2 text-gray-600 text-xs">
-      <span className="font-medium">Glob</span>
-      <code className="rounded bg-gray-100 px-1.5 py-0.5">{block.pattern}</code>
-    </div>
+    <Accordion type="single" collapsible>
+      <AccordionItem value="glob">
+        <AccordionTrigger>
+          <SvgIconMagnifier size="sm" color="primary" />
+          {t("chat.glob")}
+        </AccordionTrigger>
+        <AccordionContent>
+          <Code code={block.pattern} lang="bash" />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 

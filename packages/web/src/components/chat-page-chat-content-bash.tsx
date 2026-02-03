@@ -1,4 +1,15 @@
+"use client";
+
 import type { BashBlock } from "@/supabase/types/message";
+
+import { SvgIconBash } from "@/components/icon";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { Code } from "@/components/ui/code";
 
 type ChatPageChatContentBashProps = {
   block: BashBlock;
@@ -6,14 +17,17 @@ type ChatPageChatContentBashProps = {
 
 const ChatPageChatContentBash = ({ block }: ChatPageChatContentBashProps) => {
   return (
-    <div className="flex flex-col gap-1">
-      {block.description ? (
-        <span className="text-gray-500 text-xs">{block.description}</span>
-      ) : null}
-      <pre className="overflow-x-auto rounded-md bg-gray-100 p-2 text-xs">
-        <code>{block.command}</code>
-      </pre>
-    </div>
+    <Accordion type="single" collapsible>
+      <AccordionItem value="bash">
+        <AccordionTrigger>
+          <SvgIconBash size="sm" color="primary" />
+          {block.description ?? block.command}
+        </AccordionTrigger>
+        <AccordionContent>
+          <Code code={block.command} lang="bash" />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 

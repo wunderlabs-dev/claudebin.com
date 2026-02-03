@@ -117,6 +117,8 @@
     "read": "Read",
     "write": "Write",
     "edit": "Edit",
+    "glob": "Glob",
+    "grep": "Grep",
     "lines": "{count} lines"
   },
   "footer": {

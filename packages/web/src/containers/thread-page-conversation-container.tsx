@@ -217,6 +217,27 @@ const ThreadPageConversationContainer = ({
             }}
           />
 
+          <ChatPageChatContentQuestion
+            block={{
+              type: "question",
+              id: "question-1",
+              questions: [
+                {
+                  question: "Should the session be public by default?",
+                  header: "Visibility",
+                  options: [
+                    { label: "Public", description: "Anyone with the link can view" },
+                    { label: "Private", description: "Only you can view" },
+                    { label: "Unlisted", description: "Not indexed, but accessible via link" },
+                  ],
+                  multiSelect: false,
+                },
+              ],
+            }}
+          />
+
+
+
           <ChatPageChatContentToolResult
             block={{
               type: "tool_result",
@@ -250,25 +271,6 @@ const ThreadPageConversationContainer = ({
               description: "Explore upload patterns",
               prompt: "Find how files are uploaded in the codebase",
               subagent_type: "Explore",
-            }}
-          />
-
-          <ChatPageChatContentQuestion
-            block={{
-              type: "question",
-              id: "question-1",
-              questions: [
-                {
-                  question: "Should the session be public by default?",
-                  header: "Visibility",
-                  options: [
-                    { label: "Public", description: "Anyone with the link can view" },
-                    { label: "Private", description: "Only you can view" },
-                    { label: "Unlisted", description: "Not indexed, but accessible via link" },
-                  ],
-                  multiSelect: false,
-                },
-              ],
             }}
           />
 
