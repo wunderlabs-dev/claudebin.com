@@ -197,6 +197,31 @@ const extractText = (content: unknown): string => {
   return parsed.success ? parsed.data.text : JSON.stringify(content);
 };
 
+const stripSystemReminders = (text: string): string =>
+  text.replace(/<system-reminder>[\s\S]*?<\/system-reminder>/g, "").trim();
+
+const stripLineNumbers = (text: string): string => text.replace(/^ *\d+→/gm, "");
+
+// biome-ignore lint/suspicious/noControlCharactersInRegex: ANSI escape codes use control characters
+const stripAnsiCodes = (text: string): string => text.replace(/\x1b\[[0-9;]*m/g, "");
+
+const sanitizers: Partial<Record<string, (result: string) => string>> = {
+  [RawTool.READ]: (result) => stripSystemReminders(stripLineNumbers(result)),
+  [RawTool.BASH]: (result) => stripSystemReminders(stripAnsiCodes(result)),
+  [RawTool.GLOB]: stripSystemReminders,
+  [RawTool.GREP]: stripSystemReminders,
+  [RawTool.WRITE]: stripSystemReminders,
+  [RawTool.EDIT]: stripSystemReminders,
+  [RawTool.TASK]: stripSystemReminders,
+  [RawTool.WEB_FETCH]: stripSystemReminders,
+  [RawTool.WEB_SEARCH]: stripSystemReminders,
+};
+
+const sanitizeResult = (toolName: string, result: string): string => {
+  const sanitizer = sanitizers[toolName];
+  return sanitizer ? sanitizer(result) : stripSystemReminders(result);
+};
+
 const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
   switch (block.type) {
     case "text":
@@ -243,6 +268,7 @@ const createPipeline = () => {
   let textParts: string[] = [];
   let hasToolResult = false;
   const toolBlockMap = new Map<string, ToolBlockWithId>();
+  const toolNameMap = new Map<string, string>();
   const taskToolMap = new Map<string, TrackedTaskTool>();
   const groups = new Map<string, TasksAnchor>();
 
@@ -289,12 +315,12 @@ const createPipeline = () => {
 
   const ingestToolResult = (raw: Extract<RawContentBlock, { type: "tool_result" }>): void => {
     hasToolResult = true;
-    const resultText = extractText(raw.content);
+    const rawText = extractText(raw.content);
 
     // Attach result to task tool if applicable
     const taskTool = taskToolMap.get(raw.tool_use_id);
     if (taskTool) {
-      taskTool.result = resultText;
+      taskTool.result = sanitizeResult(taskTool.name, rawText);
       taskTool.is_error = raw.is_error;
       updateTaskAnchor(taskTool);
       return;
@@ -303,7 +329,8 @@ const createPipeline = () => {
     // Attach result to regular tool block
     const toolBlock = toolBlockMap.get(raw.tool_use_id);
     if (toolBlock) {
-      toolBlock.result = resultText;
+      const toolName = toolNameMap.get(raw.tool_use_id) ?? "";
+      toolBlock.result = sanitizeResult(toolName, rawText);
       toolBlock.is_error = raw.is_error;
     }
   };
@@ -324,6 +351,7 @@ const createPipeline = () => {
   const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
     const block = transformToolUse(raw.id, raw.name, raw.input) as ToolBlockWithId;
     toolBlockMap.set(raw.id, block);
+    toolNameMap.set(raw.id, raw.name);
     emit(block);
   };
 
