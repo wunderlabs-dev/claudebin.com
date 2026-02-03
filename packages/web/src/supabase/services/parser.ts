@@ -132,9 +132,7 @@ const parseMcpToolName = (name: string): McpToolInfo | null => {
   };
 };
 
-// ABOUTME: Convert absolute paths to relative by finding project root markers
 const toRelativePath = (absolutePath: string): string => {
-  // Look for common project root patterns and make relative from there
   const patterns = [
     /.*\/(packages\/.*)/,
     /.*\/(src\/.*)/,
@@ -146,9 +144,11 @@ const toRelativePath = (absolutePath: string): string => {
     if (match) return match[1];
   }
 
-  // Fallback: strip home directory pattern
   return absolutePath.replace(/^\/Users\/[^/]+\/[^/]+\/[^/]+\//, "");
 };
+
+const stripAbsolutePaths = (text: string): string =>
+  text.replace(/\/Users\/[^\s:]+/g, (match) => toRelativePath(match));
 
 const transformToolUse = (
   id: string,
@@ -226,24 +226,26 @@ const stripSystemReminders = (text: string): string =>
 
 const stripLineNumbers = (text: string): string => text.replace(/^ *\d+→/gm, "");
 
-// biome-ignore lint/suspicious/noControlCharactersInRegex: ANSI escape codes use control characters
+// biome-ignore lint/suspicious/noControlCharactersInRegex: ANSI escape codes require control characters
 const stripAnsiCodes = (text: string): string => text.replace(/\x1b\[[0-9;]*m/g, "");
 
+const sanitize = (text: string): string => stripAbsolutePaths(stripSystemReminders(text));
+
 const sanitizers: Partial<Record<string, (result: string) => string>> = {
-  [RawTool.READ]: (result) => stripSystemReminders(stripLineNumbers(result)),
-  [RawTool.BASH]: (result) => stripSystemReminders(stripAnsiCodes(result)),
-  [RawTool.GLOB]: stripSystemReminders,
-  [RawTool.GREP]: stripSystemReminders,
-  [RawTool.WRITE]: stripSystemReminders,
-  [RawTool.EDIT]: stripSystemReminders,
-  [RawTool.TASK]: stripSystemReminders,
-  [RawTool.WEB_FETCH]: stripSystemReminders,
-  [RawTool.WEB_SEARCH]: stripSystemReminders,
+  [RawTool.READ]: (result) => sanitize(stripLineNumbers(result)),
+  [RawTool.BASH]: (result) => sanitize(stripAnsiCodes(result)),
+  [RawTool.GLOB]: sanitize,
+  [RawTool.GREP]: sanitize,
+  [RawTool.WRITE]: sanitize,
+  [RawTool.EDIT]: sanitize,
+  [RawTool.TASK]: sanitize,
+  [RawTool.WEB_FETCH]: sanitize,
+  [RawTool.WEB_SEARCH]: sanitize,
 };
 
 const sanitizeResult = (toolName: string, result: string): string => {
   const sanitizer = sanitizers[toolName];
-  return sanitizer ? sanitizer(result) : stripSystemReminders(result);
+  return sanitizer ? sanitizer(result) : sanitize(result);
 };
 
 const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
@@ -341,7 +343,6 @@ const createPipeline = () => {
     hasToolResult = true;
     const rawText = extractText(raw.content);
 
-    // Attach result to task tool if applicable
     const taskTool = taskToolMap.get(raw.tool_use_id);
     if (taskTool) {
       taskTool.result = sanitizeResult(taskTool.name, rawText);
@@ -350,7 +351,6 @@ const createPipeline = () => {
       return;
     }
 
-    // Attach result to regular tool block
     const toolBlock = toolBlockMap.get(raw.tool_use_id);
     if (toolBlock) {
       const toolName = toolNameMap.get(raw.tool_use_id) ?? "";
