@@ -24,7 +24,7 @@ const stepsVariants = cva("flex w-full flex-col items-start [counter-reset:step]
 const StepsVariants = ["ordered", "outlined", "unordered"] as const;
 type StepsVariant = (typeof StepsVariants)[number];
 
-const StepsContext = createContext<StepsVariant>("ordered");
+const StepsContext = createContext<StepsVariant | undefined | null>(undefined);
 
 type StepsProps = VariantProps<typeof stepsVariants> & HTMLAttributes<HTMLOListElement>;
 
@@ -34,7 +34,7 @@ type StepsItemProps = {
 
 const Steps = ({ variant, className, children, ...props }: StepsProps) => {
   return (
-    <StepsContext.Provider value={variant ?? "ordered"}>
+    <StepsContext.Provider value={variant}>
       <ol className={cn(stepsVariants({ variant, className }))} {...props}>
         {children}
       </ol>
@@ -59,7 +59,7 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
       <span
         className={cn(
           "flex shrink-0 items-center justify-center",
-          stepsItemIconClassNames[variant],
+          stepsItemIconClassNames?.[variant],
         )}
       >
         {variant === "unordered" ? <SvgIconDot color="accent" /> : null}
