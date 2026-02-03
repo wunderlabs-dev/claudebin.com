@@ -11,7 +11,6 @@ import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
-import { Typography } from "@/components/ui/typography";
 
 import { ChatPageChatContentText } from "@/components/chat-page-chat-content-text";
 import { ChatPageChatContentBash } from "@/components/chat-page-chat-content-bash";
@@ -76,10 +75,11 @@ const renderers = {
 };
 
 const mockupMarkdown = `
+# Hello, how can I help you today?
 ## Hello, how can I help you today?
 I'll deeply analyze the repository structure for you, Vlad. Let me use an exploration agent to thoroughly examine the codebase.
 
-## Repository Structure
+### Repository Structure
 
 | Component | Purpose |
 |----------|---------|
@@ -235,8 +235,6 @@ const ThreadPageConversationContainer = ({
               ],
             }}
           />
-
-
 
           <ChatPageChatContentToolResult
             block={{

@@ -24,13 +24,18 @@ const components = {
   p: ({ children }: { children?: ReactNode }) => (
     <Typography variant="small">{children}</Typography>
   ),
+  h1: ({ children }: { children?: ReactNode }) => (
+    <Typography className="pt-8" variant="h2">
+      {children}
+    </Typography>
+  ),
   h2: ({ children }: { children?: ReactNode }) => (
-    <Typography variant="h3" as="h2">
+    <Typography className="pt-8" variant="h3">
       {children}
     </Typography>
   ),
   h3: ({ children }: { children?: ReactNode }) => (
-    <Typography variant="h4" as="h3">
+    <Typography className="pt-8" variant="h4">
       {children}
     </Typography>
   ),
@@ -56,7 +61,7 @@ const components = {
 
 const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 [&>*:first-child]:pt-0">
       <Markdown remarkPlugins={[remarkGfm]} components={components}>
         {block.text}
       </Markdown>
