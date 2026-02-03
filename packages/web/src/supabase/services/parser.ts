@@ -132,6 +132,24 @@ const parseMcpToolName = (name: string): McpToolInfo | null => {
   };
 };
 
+// ABOUTME: Convert absolute paths to relative by finding project root markers
+const toRelativePath = (absolutePath: string): string => {
+  // Look for common project root patterns and make relative from there
+  const patterns = [
+    /.*\/(packages\/.*)/,
+    /.*\/(src\/.*)/,
+    /.*\/([^/]+\.(ts|tsx|js|jsx|json|md|css|html))$/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = absolutePath.match(pattern);
+    if (match) return match[1];
+  }
+
+  // Fallback: strip home directory pattern
+  return absolutePath.replace(/^\/Users\/[^/]+\/[^/]+\/[^/]+\//, "");
+};
+
 const transformToolUse = (
   id: string,
   name: string,
@@ -150,15 +168,21 @@ const transformToolUse = (
     }
     case RawTool.READ: {
       const data = parseToolInput(ToolInputSchema.Read, input);
-      return data ? { type: BlockType.FILE_READ, id, ...data } : fallback;
+      return data
+        ? { type: BlockType.FILE_READ, id, ...data, file_path: toRelativePath(data.file_path) }
+        : fallback;
     }
     case RawTool.WRITE: {
       const data = parseToolInput(ToolInputSchema.Write, input);
-      return data ? { type: BlockType.FILE_WRITE, id, ...data } : fallback;
+      return data
+        ? { type: BlockType.FILE_WRITE, id, ...data, file_path: toRelativePath(data.file_path) }
+        : fallback;
     }
     case RawTool.EDIT: {
       const data = parseToolInput(ToolInputSchema.Edit, input);
-      return data ? { type: BlockType.FILE_EDIT, id, ...data } : fallback;
+      return data
+        ? { type: BlockType.FILE_EDIT, id, ...data, file_path: toRelativePath(data.file_path) }
+        : fallback;
     }
     case RawTool.GLOB: {
       const data = parseToolInput(ToolInputSchema.Glob, input);
