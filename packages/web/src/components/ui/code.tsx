@@ -17,6 +17,9 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
   const html = highlighter.codeToHtml(code, {
     lang,
     theme: "plastic",
+    colorReplacements: {
+      "#21252b": "#303030",
+    },
   });
 
   return (

@@ -32,9 +32,9 @@ type StepsItemProps = {
   children: ReactNode;
 } & HTMLAttributes<HTMLLIElement>;
 
-const Steps = ({ variant = "ordered", className, children, ...props }: StepsProps) => {
+const Steps = ({ variant, className, children, ...props }: StepsProps) => {
   return (
-    <StepsContext.Provider value={variant!}>
+    <StepsContext.Provider value={variant ?? "ordered"}>
       <ol className={cn(stepsVariants({ variant, className }))} {...props}>
         {children}
       </ol>
