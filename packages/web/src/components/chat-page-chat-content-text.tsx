@@ -21,9 +21,6 @@ type ChatPageChatContentTextProps = {
 };
 
 const components = {
-  p: ({ children }: { children?: ReactNode }) => (
-    <Typography variant="small">{children}</Typography>
-  ),
   h1: ({ children }: { children?: ReactNode }) => (
     <Typography className="mt-8" variant="h2">
       {children}
@@ -38,6 +35,9 @@ const components = {
     <Typography className="mt-8" variant="h4">
       {children}
     </Typography>
+  ),
+  p: ({ children }: { children?: ReactNode }) => (
+    <Typography variant="small">{children}</Typography>
   ),
   strong: ({ children }: { children?: ReactNode }) => (
     <strong className="font-semibold">{children}</strong>
@@ -56,7 +56,7 @@ const components = {
   li: ({ children }: { children?: ReactNode }) => <StepsItem>{children}</StepsItem>,
   em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
   pre: ({ children }: { children?: ReactNode }) => <pre>{children}</pre>,
-  hr: () => <Divider className="mt-8" />,
+  hr: () => <Divider className="my-8" />,
 };
 
 const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
