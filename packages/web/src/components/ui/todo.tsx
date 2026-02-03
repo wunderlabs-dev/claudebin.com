@@ -15,7 +15,7 @@ const todoItemVariants = cva(["flex items-center gap-2"], {
     variant: {
       pending: "text-gray-600",
       in_progress: "text-gray-600",
-      completed: "text-gray-400 line-through",
+      completed: "text-gray-400",
     },
   },
   defaultVariants: {
@@ -40,8 +40,8 @@ const todoItemIconVariants = cva(["flex-shrink-0"], {
   variants: {
     variant: {
       pending: "text-gray-400",
-      in_progress: "text-blue-500",
-      completed: "text-green-600",
+      in_progress: "text-orange-50",
+      completed: "text-green-50",
     },
   },
   defaultVariants: {
@@ -68,7 +68,7 @@ type TodoItemLabelProps = {
 
 const TodoItemLabel = ({ className, children }: TodoItemLabelProps) => {
   return (
-    <Typography data-slot="todo-item-label" variant="small" className={className}>
+    <Typography data-slot="todo-item-label" variant="small" color="inherit" className={className}>
       {children}
     </Typography>
   );

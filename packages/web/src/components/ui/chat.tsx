@@ -1,7 +1,14 @@
+"use client";
+
 import type * as React from "react";
+import { createContext, useContext } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/utils/helpers";
+
+type ChatItemVariant = "user" | "assistant";
+
+const ChatItemContext = createContext<ChatItemVariant>("assistant");
 
 type ChatProps = React.ComponentProps<"div">;
 
@@ -25,29 +32,36 @@ type ChatItemProps = React.ComponentProps<"div"> & VariantProps<typeof chatItemV
 
 const ChatItem = ({ className, variant = "assistant", ...props }: ChatItemProps) => {
   return (
-    <div
-      data-slot="chat-item"
-      className={cn(chatItemVariants({ variant, className }))}
-      {...props}
-    />
+    <ChatItemContext.Provider value={variant || "assistant"}>
+      <div
+        data-slot="chat-item"
+        className={cn(chatItemVariants({ variant, className }))}
+        {...props}
+      />
+    </ChatItemContext.Provider>
   );
 };
 
-const chatContentVariants = cva(["max-w-3/4 rounded-xl border border-gray-250 px-4 py-3"], {
-  variants: {
-    variant: {
-      user: "rounded-tr-none bg-gray-200",
-      assistant: "rounded-tl-none",
+const chatContentVariants = cva(
+  ["flex max-w-3/4 flex-col gap-4 rounded-xl border border-gray-250 px-4 py-3"],
+  {
+    variants: {
+      variant: {
+        user: "rounded-tr-none bg-gray-200",
+        assistant: "rounded-tl-none",
+      },
+    },
+    defaultVariants: {
+      variant: "user",
     },
   },
-  defaultVariants: {
-    variant: "user",
-  },
-});
+);
 
-type ChatContentProps = React.ComponentProps<"article"> & VariantProps<typeof chatContentVariants>;
+type ChatContentProps = React.ComponentProps<"article">;
 
-const ChatContent = ({ className, variant = "user", ...props }: ChatContentProps) => {
+const ChatContent = ({ className, ...props }: ChatContentProps) => {
+  const variant = useContext(ChatItemContext);
+
   return (
     <article
       data-slot="chat-content"

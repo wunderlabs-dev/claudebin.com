@@ -8,27 +8,21 @@ type CodeProps = {
   className?: string;
 };
 
-const THEME = "plastic";
-
 const highlighter = await createHighlighter({
-  themes: [THEME],
-  langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html"],
+  themes: ["plastic"],
+  langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html", "diff"],
 });
 
 const Code = ({ code, lang = "typescript", className }: CodeProps) => {
   const html = highlighter.codeToHtml(code, {
     lang,
-    theme: THEME,
+    theme: "plastic",
   });
 
   return (
     <div
       data-slot="code"
-      className={cn(
-        "overflow-x-auto rounded-lg",
-        "[&_pre]:bg-gray-200 [&_pre]:px-4 [&_pre]:py-3",
-        className,
-      )}
+      className={cn("overflow-x-auto rounded-lg", "[&_pre]:px-4 [&_pre]:py-3", className)}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML
       dangerouslySetInnerHTML={{ __html: html }}
     />

@@ -112,6 +112,13 @@
     "failedTitle": "Authentication failed",
     "failedDescription": "Something went wrong while connecting your terminal. Please try again."
   },
+  "chat": {
+    "todos": "Todos",
+    "read": "Read",
+    "write": "Write",
+    "edit": "Edit",
+    "lines": "{count} lines"
+  },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
     "disclaimer": "Independent project, not affiliated with Anthropic.",

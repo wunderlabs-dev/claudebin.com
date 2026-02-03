@@ -1,17 +1,26 @@
 import type { ReactNode } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import type { TextBlock } from "@/supabase/types/message";
 
 import { Divider } from "@/components/ui/divider";
+import { Steps, StepsItem } from "@/components/ui/steps";
 import { Typography } from "@/components/ui/typography";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
 type ChatPageChatContentTextProps = {
   block: TextBlock;
 };
 
 const components = {
-  hr: () => <Divider />,
   p: ({ children }: { children?: ReactNode }) => (
     <Typography variant="small">{children}</Typography>
   ),
@@ -25,21 +34,32 @@ const components = {
       {children}
     </Typography>
   ),
-  em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
   strong: ({ children }: { children?: ReactNode }) => (
     <strong className="font-semibold">{children}</strong>
   ),
+  em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
   pre: ({ children }: { children?: ReactNode }) => <pre>{children}</pre>,
-  code: ({ children }: { children?: ReactNode }) => <code>{children}</code>,
-  ul: ({ children }: { children?: ReactNode }) => <ul>{children}</ul>,
-  ol: ({ children }: { children?: ReactNode }) => <ol>{children}</ol>,
-  li: ({ children }: { children?: ReactNode }) => <li>{children}</li>,
+  code: ({ children }: { children?: ReactNode }) => (
+    <code className="font-mono text-base">{children}</code>
+  ),
+  table: ({ children }: { children?: ReactNode }) => <Table>{children}</Table>,
+  thead: ({ children }: { children?: ReactNode }) => <TableHeader>{children}</TableHeader>,
+  tbody: ({ children }: { children?: ReactNode }) => <TableBody>{children}</TableBody>,
+  tr: ({ children }: { children?: ReactNode }) => <TableRow>{children}</TableRow>,
+  th: ({ children }: { children?: ReactNode }) => <TableHead>{children}</TableHead>,
+  td: ({ children }: { children?: ReactNode }) => <TableCell>{children}</TableCell>,
+  ol: ({ children }: { children?: ReactNode }) => <Steps variant="ordered">{children}</Steps>,
+  ul: ({ children }: { children?: ReactNode }) => <Steps variant="unordered">{children}</Steps>,
+  li: ({ children }: { children?: ReactNode }) => <StepsItem>{children}</StepsItem>,
+  hr: () => <Divider />,
 };
 
 const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
   return (
-    <div className="flex flex-col gap-2">
-      <Markdown components={components}>{block.text}</Markdown>
+    <div className="flex flex-col gap-4">
+      <Markdown remarkPlugins={[remarkGfm]} components={components}>
+        {block.text}
+      </Markdown>
     </div>
   );
 };

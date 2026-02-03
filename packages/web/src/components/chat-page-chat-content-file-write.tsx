@@ -1,15 +1,40 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { FileWriteBlock } from "@/supabase/types/message";
+
+import { SvgIconFile, SvgIconPen } from "@/components/icon";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { Chip } from "@/components/ui/chip";
+import { Code } from "@/components/ui/code";
 
 type ChatPageChatContentFileWriteProps = {
   block: FileWriteBlock;
 };
 
 const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWriteProps) => {
+  const t = useTranslations();
+  const filename = block.file_path.split("/").pop() ?? block.file_path;
+
   return (
-    <div className="flex items-center gap-2 text-gray-600 text-xs">
-      <span className="font-medium">Write</span>
-      <code className="rounded bg-gray-100 px-1.5 py-0.5">{block.file_path}</code>
-    </div>
+    <Accordion type="single" collapsible>
+      <AccordionItem value="file-write">
+        <AccordionTrigger>
+          <SvgIconPen size="sm" color="primary" />
+          {t("chat.write")}
+          <Chip icon={<SvgIconFile size="xs" />} label={filename} />
+        </AccordionTrigger>
+        <AccordionContent>
+          <Code code={block.content} />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 

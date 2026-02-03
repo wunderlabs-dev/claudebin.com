@@ -41,7 +41,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-12">
       <div className="col-span-9 flex flex-col gap-18 pt-9">
-        <div className="flex flex-col gap-9">
+        <div className="flex flex-col items-start gap-9">
           <NavLink href="/threads">
             <SvgIconArrowLeft size="sm" />
             <NavLabel>{t("thread.backToThreads")}</NavLabel>
