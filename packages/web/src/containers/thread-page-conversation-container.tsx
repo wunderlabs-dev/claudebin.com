@@ -24,7 +24,6 @@ import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-ta
 import { ChatPageChatContentQuestion } from "@/components/chat-page-chat-content-question";
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
-import { ChatPageChatContentToolResult } from "@/components/chat-page-chat-content-tool-result";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
 
@@ -61,8 +60,6 @@ const renderers = {
         return <ChatPageChatContentWebFetch key={index} block={block} />;
       case BlockType.WEB_SEARCH:
         return <ChatPageChatContentWebSearch key={index} block={block} />;
-      case BlockType.TOOL_RESULT:
-        return <ChatPageChatContentToolResult key={index} block={block} />;
       case BlockType.TOOL_USE:
         return <ChatPageChatContentToolUse key={index} block={block} />;
       case BlockType.MCP:
@@ -209,14 +206,6 @@ const ThreadPageConversationContainer = ({
             }}
           />
 
-          <ChatPageChatContentToolResult
-            block={{
-              type: "tool_result",
-              tool_use_id: "bash-1",
-              content: "✓ 3 tests passed (12ms)",
-            }}
-          />
-
           <ChatPageChatContentQuestion
             block={{
               type: "question",
@@ -233,15 +222,6 @@ const ThreadPageConversationContainer = ({
                   multiSelect: false,
                 },
               ],
-            }}
-          />
-
-          <ChatPageChatContentToolResult
-            block={{
-              type: "tool_result",
-              tool_use_id: "bash-2",
-              content: "Error: Connection refused at localhost:3000",
-              is_error: true,
             }}
           />
 

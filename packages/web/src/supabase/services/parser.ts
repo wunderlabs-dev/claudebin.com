@@ -111,154 +111,9 @@ const ToolInputSchema = {
   }),
 } as const;
 
-type TaskCreateInput = z.infer<typeof ToolInputSchema.TaskCreate>;
-
 const extractTaskId = (content: string): string | null => {
   const match = content.match(/(?:Task |task )#(\d+)/i);
   return match ? match[1] : null;
-};
-
-const createTaskFromToolUse = (taskId: string, input: TaskCreateInput): TaskItem => ({
-  id: taskId,
-  subject: input.subject,
-  description: input.description,
-  status: "pending",
-});
-
-const isTaskToolBlock = (block: ContentBlock, taskToolIds: Set<string>): boolean =>
-  block.type === BlockType.TOOL_USE && taskToolIds.has(block.id);
-
-type TaskState = {
-  tasks: Map<string, TaskItem>;
-  taskToolIdsByMessage: Map<number, Set<string>>;
-};
-
-const buildTaskState = (intermediate: IntermediateMessage[]): TaskState => {
-  const tasks = new Map<string, TaskItem>();
-  const taskToolIdsByMessage = new Map<number, Set<string>>();
-
-  for (const [idx, { content }] of intermediate.entries()) {
-    const taskToolIds = new Set<string>();
-
-    for (const block of content) {
-      if (block.type !== BlockType.TOOL_USE) continue;
-      if (!RAW_TASK_TOOLS.includes(block.name)) continue;
-
-      taskToolIds.add(block.id);
-
-      if (!block.result) continue;
-      const taskId = extractTaskId(block.result);
-      if (!taskId) continue;
-
-      if (block.name === RawTool.TASK_CREATE) {
-        const parsed = ToolInputSchema.TaskCreate.safeParse(block.input);
-        if (parsed.success) {
-          tasks.set(taskId, createTaskFromToolUse(taskId, parsed.data));
-        }
-      }
-
-      if (block.name === RawTool.TASK_UPDATE) {
-        const parsed = ToolInputSchema.TaskUpdate.safeParse(block.input);
-        const existingTask = tasks.get(taskId);
-        if (parsed.success && existingTask && parsed.data.status) {
-          tasks.set(taskId, { ...existingTask, status: parsed.data.status });
-        }
-      }
-    }
-
-    if (taskToolIds.size > 0) {
-      taskToolIdsByMessage.set(idx, taskToolIds);
-    }
-  }
-
-  return { tasks, taskToolIdsByMessage };
-};
-
-const replaceTaskBlocksWithSummary = (
-  content: ContentBlock[],
-  taskToolIds: Set<string>,
-  tasks: TaskItem[],
-): ContentBlock[] => {
-  const result: ContentBlock[] = [];
-  let summaryInserted = false;
-
-  for (const block of content) {
-    if (isTaskToolBlock(block, taskToolIds)) {
-      if (!summaryInserted) {
-        result.push({ type: BlockType.TASKS, tasks });
-        summaryInserted = true;
-      }
-    } else {
-      result.push(block);
-    }
-  }
-
-  return result;
-};
-
-const processTaskBlocks = (
-  content: ContentBlock[],
-  taskToolIds: Set<string> | undefined,
-  isLastTaskMessage: boolean,
-  tasksList: TaskItem[],
-): ContentBlock[] => {
-  if (!taskToolIds) return content;
-  if (isLastTaskMessage) return replaceTaskBlocksWithSummary(content, taskToolIds, tasksList);
-  return content.filter((block) => !isTaskToolBlock(block, taskToolIds));
-};
-
-const mergeToolResults = (blocks: ContentBlock[]): ContentBlock[] => {
-  const resultMap = new Map<string, { content: string; is_error?: boolean }>();
-
-  for (const block of blocks) {
-    if (block.type === BlockType.TOOL_RESULT) {
-      resultMap.set(block.tool_use_id, {
-        content: block.content,
-        is_error: block.is_error,
-      });
-    }
-  }
-
-  return blocks.flatMap((block) => {
-    if (block.type === BlockType.TOOL_RESULT) return [];
-    if (
-      block.type === BlockType.TEXT ||
-      block.type === BlockType.THINKING ||
-      block.type === BlockType.TASKS
-    ) {
-      return block;
-    }
-    const resultData = resultMap.get(block.id);
-    if (resultData) {
-      return { ...block, result: resultData.content, is_error: resultData.is_error };
-    }
-    return block;
-  });
-};
-
-type ContentSummary = {
-  toolNames: string[];
-  textPreview: string;
-};
-
-const summarizeContent = (content: ContentBlock[]): ContentSummary => {
-  const toolNames: string[] = [];
-  const textParts: string[] = [];
-
-  for (const block of content) {
-    const toolName =
-      block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_RAW_TOOL[block.type];
-    if (toolName) toolNames.push(toolName);
-
-    if (block.type === BlockType.TEXT) {
-      textParts.push(block.text);
-    }
-  }
-
-  return {
-    toolNames,
-    textPreview: textParts.join("\n").slice(0, 500),
-  };
 };
 
 const parseToolInput = <T>(schema: z.ZodType<T>, input: Record<string, unknown>): T | null => {
@@ -342,19 +197,14 @@ const extractText = (content: unknown): string => {
   return parsed.success ? parsed.data.text : JSON.stringify(content);
 };
 
-const normalizeBlock = (block: RawContentBlock): ContentBlock => {
+const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
   switch (block.type) {
     case "text":
       return { type: BlockType.TEXT, text: block.text };
     case "tool_use":
       return transformToolUse(block.id, block.name, block.input);
     case "tool_result":
-      return {
-        type: BlockType.TOOL_RESULT,
-        tool_use_id: block.tool_use_id,
-        content: extractText(block.content),
-        is_error: block.is_error,
-      };
+      return null;
     case "thinking":
       return { type: BlockType.THINKING, thinking: block.thinking, signature: block.signature };
     default:
@@ -364,63 +214,186 @@ const normalizeBlock = (block: RawContentBlock): ContentBlock => {
 
 const isFilteredBlock = (block: ContentBlock): boolean => {
   if (block.type === BlockType.TEXT) return !block.text.trim();
-  if (block.type === BlockType.THINKING) return true;
-  return false;
+  return block.type === BlockType.THINKING;
 };
 
-const normalizeContent = (content: string | RawContentBlock[] | undefined): ContentBlock[] => {
-  if (!content) return [];
-  if (typeof content === "string") return [{ type: BlockType.TEXT, text: content }];
-  return content.map(normalizeBlock).filter((block) => !isFilteredBlock(block));
+type TrackedToolBlock = {
+  id: string;
+  name: string;
+  input: Record<string, unknown>;
+  group?: string;
+  result?: string;
+  is_error?: boolean;
 };
 
-type IntermediateMessage = { raw: RawJsonlMessage; content: ContentBlock[] };
+type TasksAnchor = { type: typeof BlockType.TASKS; tasks: TaskItem[] };
 
-const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage[] => {
-  const intermediate: IntermediateMessage[] = [];
+const Group = { TASKS: "tasks" } as const;
+
+const isTaskTool = (name: string): boolean => RAW_TASK_TOOLS.includes(name);
+
+type IntermediateMessage = {
+  raw: RawJsonlMessage;
+  content: ContentBlock[];
+  toolNames: string[];
+  textParts: string[];
+};
+
+const createPipeline = () => {
+  let blocks: ContentBlock[] = [];
+  let toolNames: string[] = [];
+  let textParts: string[] = [];
+  let hasToolResult = false;
+  const toolUseMap = new Map<string, TrackedToolBlock>();
+  const groups = new Map<string, TasksAnchor>();
+
+  const messages: IntermediateMessage[] = [];
   let current: IntermediateMessage | null = null;
   let currentMsgId: string | null = null;
   let currentIsAssistant = false;
 
-  for (const r of rawMessages) {
-    if (isSkippedMessageType(r.type)) continue;
+  const emit = (block: ContentBlock): void => {
+    blocks.push(block);
+    const toolName =
+      block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_RAW_TOOL[block.type];
+    if (toolName) toolNames.push(toolName);
+    if (block.type === BlockType.TEXT) textParts.push(block.text);
+  };
 
+  const updateTaskAnchor = (toolUse: TrackedToolBlock): void => {
+    const anchor = groups.get(Group.TASKS);
+    if (!anchor || !toolUse.result) return;
+
+    const taskId = extractTaskId(toolUse.result);
+    if (!taskId) return;
+
+    if (toolUse.name === RawTool.TASK_CREATE) {
+      const parsed = ToolInputSchema.TaskCreate.safeParse(toolUse.input);
+      if (parsed.success) {
+        anchor.tasks.push({
+          id: taskId,
+          subject: parsed.data.subject,
+          description: parsed.data.description,
+          status: "pending",
+        });
+      }
+    }
+
+    if (toolUse.name === RawTool.TASK_UPDATE) {
+      const parsed = ToolInputSchema.TaskUpdate.safeParse(toolUse.input);
+      const task = anchor.tasks.find((t) => t.id === taskId);
+      if (parsed.success && task && parsed.data.status) {
+        task.status = parsed.data.status;
+      }
+    }
+  };
+
+  const ingestToolResult = (raw: Extract<RawContentBlock, { type: "tool_result" }>): void => {
+    hasToolResult = true;
+    const toolUse = toolUseMap.get(raw.tool_use_id);
+    if (!toolUse) return;
+    toolUse.result = extractText(raw.content);
+    toolUse.is_error = raw.is_error;
+    if (toolUse.group === Group.TASKS) updateTaskAnchor(toolUse);
+  };
+
+  const ingestTaskTool = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
+    toolUseMap.set(raw.id, {
+      id: raw.id,
+      name: raw.name,
+      input: raw.input,
+      group: Group.TASKS,
+    });
+    if (groups.has(Group.TASKS)) return;
+    const anchor: TasksAnchor = { type: BlockType.TASKS, tasks: [] };
+    groups.set(Group.TASKS, anchor);
+    emit(anchor);
+  };
+
+  const ingestToolUse = (block: ContentBlock): void => {
+    if (block.type !== BlockType.TOOL_USE) return;
+    toolUseMap.set(block.id, block as TrackedToolBlock);
+    emit(block);
+  };
+
+  const ingestDefault = (raw: RawContentBlock): void => {
+    const block = normalizeBlock(raw);
+    if (!block || isFilteredBlock(block)) return;
+    if (block.type === BlockType.TOOL_USE) {
+      ingestToolUse(block);
+      return;
+    }
+    emit(block);
+  };
+
+  const ingestBlock = (raw: RawContentBlock): void => {
+    if (raw.type === "tool_result") {
+      ingestToolResult(raw);
+      return;
+    }
+    if (raw.type === "tool_use" && isTaskTool(raw.name)) {
+      ingestTaskTool(raw);
+      return;
+    }
+    ingestDefault(raw);
+  };
+
+  const ingestContent = (content: string | RawContentBlock[] | undefined): void => {
+    blocks = [];
+    toolNames = [];
+    textParts = [];
+    hasToolResult = false;
+    if (!content) return;
+    if (typeof content === "string") {
+      emit({ type: BlockType.TEXT, text: content });
+      return;
+    }
+    for (const raw of content) ingestBlock(raw);
+  };
+
+  const ingest = (r: RawJsonlMessage): void => {
+    if (isSkippedMessageType(r.type)) return;
+
+    ingestContent(r.message.content);
     const msgId = r.message.id ?? null;
-    const content = normalizeContent(r.message.content);
 
-    const isToolResult = content.length > 0 && content[0].type === BlockType.TOOL_RESULT;
     const isSameAssistantMessage =
       r.type === MessageRole.ASSISTANT && msgId && msgId === currentMsgId;
-    const isToolResultAfterAssistant = isToolResult && currentIsAssistant;
+    const isToolResultAfterAssistant = hasToolResult && currentIsAssistant;
     const shouldMerge = current && (isSameAssistantMessage || isToolResultAfterAssistant);
 
     if (shouldMerge && current) {
-      current.content.push(...content);
+      current.content.push(...blocks);
+      current.toolNames.push(...toolNames);
+      current.textParts.push(...textParts);
     } else {
-      if (current) intermediate.push(current);
-      current = { raw: r, content };
+      if (current) messages.push(current);
+      current = { raw: r, content: blocks, toolNames, textParts };
       currentMsgId = msgId;
       currentIsAssistant = r.type === MessageRole.ASSISTANT;
     }
-  }
-  if (current) intermediate.push(current);
+  };
 
-  for (const msg of intermediate) {
-    msg.content = mergeToolResults(msg.content);
-  }
+  const flush = (): void => {
+    if (current) messages.push(current);
+    current = null;
+  };
 
-  const { tasks, taskToolIdsByMessage } = buildTaskState(intermediate);
-  const lastTaskMessageIdx = Math.max(...Array.from(taskToolIdsByMessage.keys()), -1);
-  const tasksList = Array.from(tasks.values());
+  return {
+    ingest,
+    flush,
+    getMessages: () => messages,
+  };
+};
 
-  return intermediate.flatMap(({ raw, content }, idx) => {
-    const taskToolIds = taskToolIdsByMessage.get(idx);
-    const isLastTaskMessage = idx === lastTaskMessageIdx && tasks.size > 0;
-    const finalContent = processTaskBlocks(content, taskToolIds, isLastTaskMessage, tasksList);
+const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage[] => {
+  const pipeline = createPipeline();
 
-    if (finalContent.length === 0) return [];
+  for (const r of rawMessages) pipeline.ingest(r);
+  pipeline.flush();
 
-    const { toolNames, textPreview } = summarizeContent(finalContent);
+  return pipeline.getMessages().flatMap(({ raw, content, toolNames, textParts }, idx) => {
+    if (content.length === 0) return [];
 
     return {
       sessionId,
@@ -433,10 +406,10 @@ const parse = (rawMessages: RawJsonlMessage[], sessionId: string): ParsedMessage
       timestamp: raw.timestamp,
       isMeta: raw.isMeta ?? false,
       isSidechain: raw.isSidechain ?? false,
-      content: contentBlocksToJson(finalContent),
+      content: contentBlocksToJson(content),
       hasToolCalls: toolNames.length > 0,
       toolNames,
-      textPreview,
+      textPreview: textParts.join("\n").slice(0, 500),
       rawMessage: toJson(raw),
     };
   });

@@ -46,7 +46,6 @@ import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-ta
 import { ChatPageChatContentQuestion } from "@/components/chat-page-chat-content-question";
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
-import { ChatPageChatContentToolResult } from "@/components/chat-page-chat-content-tool-result";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
 import { Steps, StepsItem } from "@/components/ui/steps";
@@ -380,21 +379,6 @@ const UiPage = () => {
                   id: "bash-1",
                   command: "bun test src/lib/publish.test.ts",
                   description: "Run publish tests",
-                }}
-              />
-              <ChatPageChatContentToolResult
-                block={{
-                  type: "tool_result",
-                  tool_use_id: "bash-1",
-                  content: "✓ 3 tests passed (12ms)",
-                }}
-              />
-              <ChatPageChatContentToolResult
-                block={{
-                  type: "tool_result",
-                  tool_use_id: "bash-2",
-                  content: "Error: Connection refused at localhost:3000",
-                  is_error: true,
                 }}
               />
               <ChatPageChatContentWebSearch

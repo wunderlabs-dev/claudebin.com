@@ -8,7 +8,6 @@ export type Role = (typeof MessageRole)[keyof typeof MessageRole];
 export const BlockType = {
   TEXT: "text",
   THINKING: "thinking",
-  TOOL_RESULT: "tool_result",
   TOOL_USE: "tool_use",
   MCP: "mcp",
   QUESTION: "question",
@@ -27,7 +26,6 @@ export const BlockType = {
 export type ContentBlock =
   | TextBlock
   | ThinkingBlock
-  | ToolResultBlock
   | ToolUseBlock
   | McpBlock
   | QuestionBlock
@@ -51,13 +49,6 @@ export interface ThinkingBlock {
   type: typeof BlockType.THINKING;
   thinking: string;
   signature?: string;
-}
-
-export interface ToolResultBlock {
-  type: typeof BlockType.TOOL_RESULT;
-  tool_use_id: string;
-  content: string;
-  is_error?: boolean;
 }
 
 export interface ToolResult {
