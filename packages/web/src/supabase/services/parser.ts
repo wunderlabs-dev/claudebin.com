@@ -219,22 +219,21 @@ const mergeToolResults = (blocks: ContentBlock[]): ContentBlock[] => {
     }
   }
 
-  return blocks
-    .flatMap((block) => {
-      if (block.type === BlockType.TOOL_RESULT) return [];
-      if (
-        block.type === BlockType.TEXT ||
-        block.type === BlockType.THINKING ||
-        block.type === BlockType.TASKS
-      ) {
-        return block;
-      }
-      const resultData = resultMap.get(block.id);
-      if (resultData) {
-        return { ...block, result: resultData.content, is_error: resultData.is_error };
-      }
+  return blocks.flatMap((block) => {
+    if (block.type === BlockType.TOOL_RESULT) return [];
+    if (
+      block.type === BlockType.TEXT ||
+      block.type === BlockType.THINKING ||
+      block.type === BlockType.TASKS
+    ) {
       return block;
-    });
+    }
+    const resultData = resultMap.get(block.id);
+    if (resultData) {
+      return { ...block, result: resultData.content, is_error: resultData.is_error };
+    }
+    return block;
+  });
 };
 
 type ContentSummary = {
