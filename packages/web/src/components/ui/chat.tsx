@@ -48,7 +48,7 @@ const chatContentVariants = cva(
     variants: {
       variant: {
         user: "rounded-tr-none bg-gray-200",
-        assistant: "rounded-tl-none",
+        assistant: "w-3/4 rounded-tl-none",
       },
     },
     defaultVariants: {

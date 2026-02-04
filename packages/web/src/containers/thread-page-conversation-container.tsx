@@ -91,7 +91,7 @@ const ThreadPageConversationContainer = ({
   const [fallback] = [...author];
 
   return (
-    <Chat className="pr-12">
+    <Chat className="min-h-screen pr-12">
       {data?.messages.map((message) => (
         <ChatItem key={message.uuid} variant={message.role}>
           {message.role === "assistant" ? (

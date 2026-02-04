@@ -23,9 +23,13 @@ type ChatPageChatContentTextProps = {
 };
 
 const components = {
-  h1: ({ children }: { children?: ReactNode }) => <Typography variant="h2">{children}</Typography>,
-  h2: ({ children }: { children?: ReactNode }) => <Typography variant="h3">{children}</Typography>,
-  h3: ({ children }: { children?: ReactNode }) => <Typography variant="h4">{children}</Typography>,
+  h1: ({ children }: { children?: ReactNode }) => <Typography variant="h3">{children}</Typography>,
+  h2: ({ children }: { children?: ReactNode }) => <Typography variant="h4">{children}</Typography>,
+  h3: ({ children }: { children?: ReactNode }) => (
+    <Typography variant="body" fontWeight="bold">
+      {children}
+    </Typography>
+  ),
   p: ({ children }: { children?: ReactNode }) => (
     <Typography variant="small">{children}</Typography>
   ),

@@ -106,7 +106,7 @@ const ThreadsPageThreadsContainer = ({
             </Button>
           </FormControl>
         </DividerGridCell>
-        <DividerGridCell className="col-span-3 flex items-center justify-end border-t border-r border-b px-3 lg:border-t-0">
+        <DividerGridCell className="col-span-3 flex items-center justify-end border-t border-r border-b px-3 lg:col-span-4 lg:border-t-0">
           {hasSearchQuery ? (
             <Typography variant="small" color="muted">
               {t("threads.threadCount", { count: threads.length })}
@@ -119,7 +119,7 @@ const ThreadsPageThreadsContainer = ({
       <DividerGridRow>
         {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
         <DividerGridCell className="col-span-9 border-r border-b border-l py-6 lg:col-span-6" />
-        <DividerGridCell className="col-span-3 flex items-center justify-end border-r border-b py-6" />
+        <DividerGridCell className="col-span-3 flex items-center justify-end border-r border-b py-6 lg:col-span-4" />
         {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
       </DividerGridRow>
 
