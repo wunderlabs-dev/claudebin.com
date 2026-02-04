@@ -30,7 +30,9 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
           {t("chat.glob")}
           <ChatPageChatContentChip label={block.pattern} />
         </AccordionTrigger>
-        <AccordionContent>{block.result ? <Code code={block.result} /> : null}</AccordionContent>
+        <AccordionContent>
+          {block.filenames ? <Code code={block.filenames.join("\n")} /> : null}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );

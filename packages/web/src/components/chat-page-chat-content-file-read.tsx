@@ -30,7 +30,7 @@ const ChatPageChatContentFileRead = ({ block }: ChatPageChatContentFileReadProps
           {t("chat.read")}
           <ChatPageChatContentChip label={block.file_path} />
         </AccordionTrigger>
-        <AccordionContent>{block.result ? <Code code={block.result} /> : null}</AccordionContent>
+        <AccordionContent>{block.content ? <Code code={block.content} /> : null}</AccordionContent>
       </AccordionItem>
     </Accordion>
   );

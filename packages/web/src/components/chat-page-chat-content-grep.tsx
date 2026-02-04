@@ -30,7 +30,9 @@ const ChatPageChatContentGrep = ({ block }: ChatPageChatContentGrepProps) => {
           {t("chat.grep")}
           <ChatPageChatContentChip label={block.pattern} />
         </AccordionTrigger>
-        <AccordionContent>{block.result ? <Code code={block.result} /> : null}</AccordionContent>
+        <AccordionContent>
+          {block.filenames ? <Code code={block.filenames.join("\n")} /> : null}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );

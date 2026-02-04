@@ -25,7 +25,8 @@ const ChatPageChatContentBash = ({ block }: ChatPageChatContentBashProps) => {
         </AccordionTrigger>
         <AccordionContent>
           <Code code={block.command} lang="bash" />
-          {block.result ? <Code code={block.result} /> : null}
+          {block.stdout ? <Code code={block.stdout} /> : null}
+          {block.stderr ? <Code code={block.stderr} /> : null}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

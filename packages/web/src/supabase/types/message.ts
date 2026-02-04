@@ -51,29 +51,32 @@ export interface ThinkingBlock {
   signature?: string;
 }
 
-export interface ToolResult {
-  result?: string;
+// Base fields shared by all tool blocks
+export interface ToolBase {
+  id: string;
   is_error?: boolean;
+  error?: string;
 }
 
-export interface GenericBlock extends ToolResult {
+export interface GenericBlock extends ToolBase {
   type: typeof BlockType.GENERIC;
-  id: string;
   name: string;
   input: Record<string, unknown>;
+  // Output - generic fallback
+  output?: unknown;
 }
 
-export interface McpBlock extends ToolResult {
+export interface McpBlock extends ToolBase {
   type: typeof BlockType.MCP;
-  id: string;
   server: string;
   tool: string;
   input: Record<string, unknown>;
+  // Output - generic since MCP tools vary
+  output?: unknown;
 }
 
-export interface QuestionBlock extends ToolResult {
+export interface QuestionBlock extends ToolBase {
   type: typeof BlockType.QUESTION;
-  id: string;
   questions: Array<{
     question: string;
     header: string;
@@ -83,73 +86,99 @@ export interface QuestionBlock extends ToolResult {
     }>;
     multiSelect: boolean;
   }>;
+  // Output
+  answers?: Record<string, string>;
 }
 
-export interface BashBlock extends ToolResult {
+export interface BashBlock extends ToolBase {
   type: typeof BlockType.BASH;
-  id: string;
   command: string;
   description?: string;
   timeout?: number;
+  // Output
+  stdout?: string;
+  stderr?: string;
+  exitCode?: number;
+  interrupted?: boolean;
 }
 
-export interface FileReadBlock extends ToolResult {
+export interface FileReadBlock extends ToolBase {
   type: typeof BlockType.FILE_READ;
-  id: string;
   file_path: string;
   offset?: number;
   limit?: number;
+  // Output
+  content?: string;
+  numLines?: number;
+  totalLines?: number;
 }
 
-export interface FileWriteBlock extends ToolResult {
+export interface FileWriteBlock extends ToolBase {
   type: typeof BlockType.FILE_WRITE;
-  id: string;
   file_path: string;
   content: string;
+  // Output
+  success?: boolean;
 }
 
-export interface FileEditBlock extends ToolResult {
+export interface FileEditBlock extends ToolBase {
   type: typeof BlockType.FILE_EDIT;
-  id: string;
   file_path: string;
   old_string: string;
   new_string: string;
+  // Output
+  success?: boolean;
 }
 
-export interface GlobBlock extends ToolResult {
+export interface GlobBlock extends ToolBase {
   type: typeof BlockType.GLOB;
-  id: string;
   pattern: string;
   path?: string;
+  // Output
+  filenames?: string[];
+  numFiles?: number;
+  truncated?: boolean;
+  durationMs?: number;
 }
 
-export interface GrepBlock extends ToolResult {
+export interface GrepBlock extends ToolBase {
   type: typeof BlockType.GREP;
-  id: string;
   pattern: string;
   path?: string;
   glob?: string;
+  // Output
+  filenames?: string[];
+  numFiles?: number;
+  truncated?: boolean;
+  durationMs?: number;
 }
 
-export interface TaskBlock extends ToolResult {
+export interface TaskBlock extends ToolBase {
   type: typeof BlockType.TASK;
-  id: string;
   description: string;
   prompt: string;
   subagent_type: string;
+  // Output
+  output?: string;
 }
 
-export interface WebFetchBlock extends ToolResult {
+export interface WebFetchBlock extends ToolBase {
   type: typeof BlockType.WEB_FETCH;
-  id: string;
   url: string;
   prompt: string;
+  // Output
+  content?: string;
+  statusCode?: number;
+  statusText?: string;
+  bytes?: number;
+  durationMs?: number;
 }
 
-export interface WebSearchBlock extends ToolResult {
+export interface WebSearchBlock extends ToolBase {
   type: typeof BlockType.WEB_SEARCH;
-  id: string;
   query: string;
+  // Output
+  content?: string;
 }
 
 export interface TaskItem {

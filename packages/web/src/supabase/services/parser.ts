@@ -1,4 +1,17 @@
-import type { ContentBlock, TaskItem } from "@/supabase/types/message";
+import type {
+  BashBlock,
+  ContentBlock,
+  FileEditBlock,
+  FileReadBlock,
+  FileWriteBlock,
+  GenericBlock,
+  GlobBlock,
+  GrepBlock,
+  McpBlock,
+  QuestionBlock,
+  TaskItem,
+  WebFetchBlock,
+} from "@/supabase/types/message";
 
 import type { Json } from "@/supabase/types";
 
@@ -33,6 +46,78 @@ const RawContentBlockSchema = z.union([
   }),
 ]);
 
+// Zod schemas for toolUseResult shapes per tool
+const ToolUseResultSchema = {
+  Read: z.object({
+    type: z.literal("text"),
+    file: z.object({
+      filePath: z.string(),
+      content: z.string(),
+      numLines: z.number().optional(),
+      startLine: z.number().optional(),
+      totalLines: z.number().optional(),
+    }),
+  }),
+  Glob: z.object({
+    filenames: z.array(z.string()),
+    durationMs: z.number().optional(),
+    numFiles: z.number(),
+    truncated: z.boolean(),
+  }),
+  Grep: z.object({
+    filenames: z.array(z.string()),
+    durationMs: z.number().optional(),
+    numFiles: z.number(),
+    truncated: z.boolean(),
+  }),
+  Bash: z.object({
+    stdout: z.string(),
+    stderr: z.string(),
+    interrupted: z.boolean(),
+    isImage: z.boolean().optional(),
+  }),
+  Write: z.object({
+    type: z.enum(["create", "update"]),
+    filePath: z.string(),
+    content: z.string().optional(),
+  }),
+  Edit: z.object({
+    type: z.enum(["create", "update"]),
+    filePath: z.string(),
+    content: z.string().optional(),
+    structuredPatch: z
+      .array(
+        z.object({
+          oldStart: z.number(),
+          oldLines: z.number(),
+          newStart: z.number(),
+          newLines: z.number(),
+          lines: z.array(z.string()),
+        }),
+      )
+      .optional(),
+  }),
+  WebFetch: z.object({
+    bytes: z.number().optional(),
+    code: z.number(),
+    codeText: z.string(),
+    result: z.string(),
+    durationMs: z.number(),
+    url: z.string(),
+  }),
+  AskUserQuestion: z.object({
+    questions: z.array(
+      z.object({
+        question: z.string(),
+        header: z.string(),
+        options: z.array(z.object({ label: z.string(), description: z.string() })),
+        multiSelect: z.boolean(),
+      }),
+    ),
+    answers: z.record(z.string(), z.string()),
+  }),
+} as const;
+
 const RawJsonlMessageSchema = z.object({
   type: z.enum(["user", "assistant", "file-history-snapshot", "tool_result"]),
   uuid: z.string(),
@@ -41,6 +126,7 @@ const RawJsonlMessageSchema = z.object({
   parentUuid: z.string().nullable(),
   isMeta: z.boolean().optional(),
   isSidechain: z.boolean().optional(),
+  toolUseResult: z.unknown().optional(),
   message: z.object({
     id: z.string().optional(),
     role: z.enum(["user", "assistant"]),
@@ -60,7 +146,8 @@ type TrackedTaskTool = {
   input: Record<string, unknown>;
 };
 
-type TrackedToolBlock = ContentBlock & { id: string; result?: string; is_error?: boolean };
+// TrackedToolBlock can have any output fields from the block types
+type TrackedToolBlock = ContentBlock & { id: string; is_error?: boolean; error?: string };
 
 type IntermediateMessage = {
   raw: RawJsonlMessage;
@@ -263,6 +350,104 @@ const sanitizeResult = (toolName: string, result: string): string => {
   return sanitizer ? sanitizer(result) : sanitize(result);
 };
 
+// Attach typed output from toolUseResult to the block
+const attachToolOutput = (
+  block: TrackedToolBlock,
+  toolName: string,
+  toolUseResult: unknown,
+): void => {
+  switch (toolName) {
+    case RawTool.READ: {
+      const parsed = ToolUseResultSchema.Read.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.FILE_READ) {
+        const b = block as FileReadBlock;
+        b.content = sanitize(stripLineNumbers(parsed.data.file.content));
+        b.numLines = parsed.data.file.numLines;
+        b.totalLines = parsed.data.file.totalLines;
+      }
+      break;
+    }
+    case RawTool.GLOB: {
+      const parsed = ToolUseResultSchema.Glob.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.GLOB) {
+        const b = block as GlobBlock;
+        b.filenames = parsed.data.filenames.map(toRelativePath);
+        b.numFiles = parsed.data.numFiles;
+        b.truncated = parsed.data.truncated;
+        b.durationMs = parsed.data.durationMs;
+      }
+      break;
+    }
+    case RawTool.GREP: {
+      const parsed = ToolUseResultSchema.Grep.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.GREP) {
+        const b = block as GrepBlock;
+        b.filenames = parsed.data.filenames.map(toRelativePath);
+        b.numFiles = parsed.data.numFiles;
+        b.truncated = parsed.data.truncated;
+        b.durationMs = parsed.data.durationMs;
+      }
+      break;
+    }
+    case RawTool.BASH: {
+      const parsed = ToolUseResultSchema.Bash.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.BASH) {
+        const b = block as BashBlock;
+        b.stdout = sanitize(stripAnsiCodes(parsed.data.stdout));
+        b.stderr = sanitize(stripAnsiCodes(parsed.data.stderr));
+        b.interrupted = parsed.data.interrupted;
+      }
+      break;
+    }
+    case RawTool.WRITE: {
+      const parsed = ToolUseResultSchema.Write.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.FILE_WRITE) {
+        const b = block as FileWriteBlock;
+        b.success = true;
+      }
+      break;
+    }
+    case RawTool.EDIT: {
+      const parsed = ToolUseResultSchema.Edit.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.FILE_EDIT) {
+        const b = block as FileEditBlock;
+        b.success = true;
+      }
+      break;
+    }
+    case RawTool.WEB_FETCH: {
+      const parsed = ToolUseResultSchema.WebFetch.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.WEB_FETCH) {
+        const b = block as WebFetchBlock;
+        b.content = sanitize(parsed.data.result);
+        b.statusCode = parsed.data.code;
+        b.statusText = parsed.data.codeText;
+        b.bytes = parsed.data.bytes;
+        b.durationMs = parsed.data.durationMs;
+      }
+      break;
+    }
+    case RawTool.ASK_USER_QUESTION: {
+      const parsed = ToolUseResultSchema.AskUserQuestion.safeParse(toolUseResult);
+      if (parsed.success && block.type === BlockType.QUESTION) {
+        const b = block as QuestionBlock;
+        b.answers = parsed.data.answers;
+      }
+      break;
+    }
+    default: {
+      // MCP and Generic blocks - store raw output
+      if (block.type === BlockType.MCP) {
+        (block as McpBlock).output = toolUseResult;
+      }
+      if (block.type === BlockType.GENERIC) {
+        (block as GenericBlock).output = toolUseResult;
+      }
+      break;
+    }
+  }
+};
+
 const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
   switch (block.type) {
     case "text":
@@ -286,6 +471,7 @@ const createPipeline = () => {
   let toolNames: string[] = [];
   let textParts: string[] = [];
   let hasToolResult = false;
+  let currentToolUseResult: unknown = undefined;
   const toolBlockMap = new Map<string, TrackedToolBlock>();
   const toolNameMap = new Map<string, string>();
   const taskToolMap = new Map<string, TrackedTaskTool>();
@@ -344,8 +530,15 @@ const createPipeline = () => {
     const toolBlock = toolBlockMap.get(raw.tool_use_id);
     if (toolBlock) {
       const toolName = toolNameMap.get(raw.tool_use_id) ?? "";
-      toolBlock.result = sanitizeResult(toolName, rawText);
       toolBlock.is_error = raw.is_error;
+
+      // Prefer rich toolUseResult over raw string content
+      if (currentToolUseResult !== undefined) {
+        attachToolOutput(toolBlock, toolName, currentToolUseResult);
+      } else if (raw.is_error) {
+        // For errors, store the error message
+        toolBlock.error = sanitizeResult(toolName, rawText);
+      }
     }
   };
 
@@ -397,6 +590,9 @@ const createPipeline = () => {
 
   const ingest = (r: RawJsonlMessage): void => {
     if (isSkippedMessageType(r.type)) return;
+
+    // Store toolUseResult for use when processing tool_result blocks
+    currentToolUseResult = r.toolUseResult;
 
     ingestContent(r.message.content);
     const msgId = r.message.id ?? null;

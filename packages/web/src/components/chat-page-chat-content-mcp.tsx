@@ -42,7 +42,15 @@ const ChatPageChatContentMcp = ({ block }: ChatPageChatContentMcpProps) => {
         </AccordionTrigger>
         <AccordionContent>
           {input ? <Code code={input} /> : null}
-          {block.result ? <Code code={block.result} /> : null}
+          {block.output ? (
+            <Code
+              code={
+                typeof block.output === "string"
+                  ? block.output
+                  : JSON.stringify(block.output, null, 2)
+              }
+            />
+          ) : null}
         </AccordionContent>
       </AccordionItem>
     </Accordion>
