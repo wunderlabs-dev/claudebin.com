@@ -11,9 +11,10 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
+
+import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
 
 type ChatPageChatContentFileEditProps = {
   block: FileEditBlock;
@@ -43,7 +44,7 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
         <AccordionTrigger>
           <SvgIconFile size="sm" color="primary" />
           {t("chat.edit")}
-          <Chip icon={<SvgIconFile size="xs" />} label={filename} />
+          <ChatPageChatContentChip label={filename} />
         </AccordionTrigger>
         <AccordionContent>
           <Typography variant="small" color="muted">

@@ -4,16 +4,17 @@ import { useTranslations } from "next-intl";
 
 import type { FileWriteBlock } from "@/supabase/types/message";
 
-import { SvgIconFile, SvgIconPen } from "@/components/icon";
+import { SvgIconPen } from "@/components/icon";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
+
+import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
 
 type ChatPageChatContentFileWriteProps = {
   block: FileWriteBlock;
@@ -29,7 +30,7 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
         <AccordionTrigger>
           <SvgIconPen size="sm" color="primary" />
           {t("chat.write")}
-          <Chip icon={<SvgIconFile size="xs" />} label={block.file_path} />
+          <ChatPageChatContentChip label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent>
           <Typography variant="small" color="muted">

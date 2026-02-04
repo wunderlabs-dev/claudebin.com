@@ -4,15 +4,16 @@ import { useTranslations } from "next-intl";
 
 import type { FileReadBlock } from "@/supabase/types/message";
 
-import { SvgIconEye, SvgIconFile } from "@/components/icon";
+import { SvgIconEye } from "@/components/icon";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
+
+import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
 
 type ChatPageChatContentFileReadProps = {
   block: FileReadBlock;
@@ -27,9 +28,9 @@ const ChatPageChatContentFileRead = ({ block }: ChatPageChatContentFileReadProps
         <AccordionTrigger>
           <SvgIconEye size="sm" color="primary" />
           {t("chat.read")}
-          <Chip icon={<SvgIconFile size="xs" />} label={block.file_path} />
+          <ChatPageChatContentChip label={block.file_path} />
         </AccordionTrigger>
-        <AccordionContent>{block.result && <Code code={block.result} />}</AccordionContent>
+        <AccordionContent>{block.result ? <Code code={block.result} /> : null}</AccordionContent>
       </AccordionItem>
     </Accordion>
   );

@@ -12,7 +12,7 @@ const Chip = ({ icon, label, className, ...props }: ChipProps) => {
     <span
       data-slot="chip"
       className={cn(
-        "inline-flex items-center gap-2",
+        "inline-flex max-w-xs items-center gap-2",
         "px-2 py-1",
         "rounded-full",
         "border border-gray-250 bg-gray-100",
@@ -21,8 +21,8 @@ const Chip = ({ icon, label, className, ...props }: ChipProps) => {
       )}
       {...props}
     >
-      {icon}
-      {label}
+      {icon ? <span className="shrink-0">{icon}</span> : null}
+      <span className="truncate">{label}</span>
     </span>
   );
 };

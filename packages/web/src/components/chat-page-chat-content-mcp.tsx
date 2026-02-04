@@ -11,8 +11,9 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
+
+import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
 
 type ChatPageChatContentMcpProps = {
   block: McpBlock;
@@ -37,7 +38,7 @@ const ChatPageChatContentMcp = ({ block }: ChatPageChatContentMcpProps) => {
         <AccordionTrigger>
           <SvgIconMcp size="sm" color="primary" />
           {t("chat.mcp")}
-          <Chip label={`${block.server} → ${block.tool}`} />
+          <ChatPageChatContentChip label={`${block.server} → ${block.tool}`} />
         </AccordionTrigger>
         <AccordionContent>
           {input ? <Code code={input} /> : null}
