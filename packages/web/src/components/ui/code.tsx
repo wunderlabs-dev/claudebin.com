@@ -18,7 +18,7 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
     lang,
     theme: "plastic",
     colorReplacements: {
-      "#21252b": "#303030",
+      "#21252b": "transparent",
     },
   });
 
@@ -26,7 +26,7 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
     <div
       data-slot="code"
       className={cn(
-        "overflow-x-auto rounded-lg",
+        "bg-gray-200 min-w-0 overflow-x-auto rounded-lg",
         "[&+pre]:font-mono [&_pre]:px-4 [&_pre]:py-3",
         className,
       )}
