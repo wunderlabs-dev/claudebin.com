@@ -53,7 +53,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           <NextIntlClientProvider messages={messages}>
             <AuthProvider initialUser={user}>
               <AppBar />
-              <main className="overflow-hidden">{children}</main>
+              <main>{children}</main>
               <Footer />
               <Toaster />
             </AuthProvider>
