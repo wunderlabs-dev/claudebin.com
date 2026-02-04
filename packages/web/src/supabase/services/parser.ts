@@ -270,7 +270,7 @@ type TrackedTaskTool = {
   input: Record<string, unknown>;
 };
 
-type ToolBlockWithId = ContentBlock & { id: string; result?: string; is_error?: boolean };
+type TrackedToolBlock = ContentBlock & { id: string; result?: string; is_error?: boolean };
 
 const isTaskTool = (name: string): boolean => RAW_TASK_TOOLS.includes(name);
 
@@ -286,7 +286,7 @@ const createPipeline = () => {
   let toolNames: string[] = [];
   let textParts: string[] = [];
   let hasToolResult = false;
-  const toolBlockMap = new Map<string, ToolBlockWithId>();
+  const toolBlockMap = new Map<string, TrackedToolBlock>();
   const toolNameMap = new Map<string, string>();
   const taskToolMap = new Map<string, TrackedTaskTool>();
   const currentTasks: TaskItem[] = [];
@@ -354,7 +354,7 @@ const createPipeline = () => {
   };
 
   const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
-    const block = transformToolUse(raw.id, raw.name, raw.input) as ToolBlockWithId;
+    const block = transformToolUse(raw.id, raw.name, raw.input) as TrackedToolBlock;
     toolBlockMap.set(raw.id, block);
     toolNameMap.set(raw.id, raw.name);
     emit(block);
