@@ -111,6 +111,7 @@ const RawJsonlMessageSchema = z.object({
   timestamp: z.string(),
   sessionId: z.string(),
   parentUuid: z.string().nullable(),
+  cwd: z.string().optional(),
   isMeta: z.boolean().optional(),
   isSidechain: z.boolean().optional(),
   toolUseResult: z.unknown().optional(),
