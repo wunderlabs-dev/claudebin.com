@@ -28,6 +28,7 @@ import { ChatPageChatContentQuestions } from "@/components/chat-page-chat-conten
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
+import { ChatPageChatContentGeneric } from "@/components/chat-page-chat-content-generic";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -64,6 +65,8 @@ const renderer = {
         return <ChatPageChatContentWebSearch key={index} block={block} />;
       case BlockType.MCP:
         return <ChatPageChatContentMcp key={index} block={block} />;
+      case BlockType.GENERIC:
+        return <ChatPageChatContentGeneric key={index} block={block} />;
       default:
         return null;
     }

@@ -155,7 +155,7 @@ const transformToolUse = (
   name: string,
   input: Record<string, unknown>,
 ): ContentBlock => {
-  const fallback: ContentBlock = { type: BlockType.TOOL_USE, id, name, input };
+  const fallback: ContentBlock = { type: BlockType.GENERIC, id, name, input };
 
   switch (name) {
     case RawTool.ASK_USER_QUESTION: {
@@ -306,7 +306,7 @@ const createPipeline = () => {
   const emit = (block: ContentBlock): void => {
     blocks.push(block);
     const toolName =
-      block.type === BlockType.TOOL_USE ? block.name : BLOCK_TYPE_TO_RAW_TOOL[block.type];
+      block.type === BlockType.GENERIC ? block.name : BLOCK_TYPE_TO_RAW_TOOL[block.type];
     if (toolName) toolNames.push(toolName);
     if (block.type === BlockType.TEXT) textParts.push(block.text);
   };

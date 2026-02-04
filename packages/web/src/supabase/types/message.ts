@@ -8,7 +8,7 @@ export type Role = (typeof MessageRole)[keyof typeof MessageRole];
 export const BlockType = {
   TEXT: "text",
   THINKING: "thinking",
-  TOOL_USE: "tool_use",
+  GENERIC: "generic",
   MCP: "mcp",
   QUESTION: "question",
   BASH: "bash",
@@ -26,7 +26,7 @@ export const BlockType = {
 export type ContentBlock =
   | TextBlock
   | ThinkingBlock
-  | ToolUseBlock
+  | GenericBlock
   | McpBlock
   | QuestionBlock
   | BashBlock
@@ -56,8 +56,8 @@ export interface ToolResult {
   is_error?: boolean;
 }
 
-export interface ToolUseBlock extends ToolResult {
-  type: typeof BlockType.TOOL_USE;
+export interface GenericBlock extends ToolResult {
+  type: typeof BlockType.GENERIC;
   id: string;
   name: string;
   input: Record<string, unknown>;
