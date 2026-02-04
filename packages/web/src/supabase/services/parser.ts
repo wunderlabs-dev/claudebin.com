@@ -11,6 +11,9 @@ import {
   RAW_TOOL_TO_BLOCK_TYPE,
   RawTool,
   isSkippedMessageType,
+  parseSkillCommand,
+  parseSkillMeta,
+  type SkillCommandData,
 } from "@/supabase/types/message";
 import { contentBlocksToJson, toJson } from "@/supabase/types/json-cast";
 
@@ -444,6 +447,7 @@ const createPipeline = () => {
   const pendingTools = new Map<string, PendingTool>();
   const taskToolMap = new Map<string, TrackedTaskTool>();
   const currentTasks: TaskItem[] = [];
+  let pendingSkillCommand: SkillCommandData | null = null;
 
   const messages: IntermediateMessage[] = [];
   let current: IntermediateMessage | null = null;
@@ -563,17 +567,44 @@ const createPipeline = () => {
     ingestDefault(raw);
   };
 
-  const ingestContent = (content: string | RawContentBlock[] | undefined): void => {
+  const ingestContent = (
+    content: string | RawContentBlock[] | undefined,
+    isMeta?: boolean,
+  ): boolean => {
     blocks = [];
     toolNames = [];
     textParts = [];
     hasToolResult = false;
-    if (!content) return;
+    if (!content) return false;
+
+    // Handle skill meta message - completes a pending skill command
+    // Returns true to signal caller to merge with previous message
+    if (isMeta && pendingSkillCommand) {
+      const textContent = typeof content === "string" ? content : extractText(content);
+      const skillMeta = parseSkillMeta(textContent);
+      emit({
+        type: BlockType.SKILL,
+        ...pendingSkillCommand,
+        instructions: skillMeta.instructions,
+        output: skillMeta.output,
+      });
+      pendingSkillCommand = null;
+      return true; // Signal to merge with previous
+    }
+
     if (typeof content === "string") {
+      // Check for skill command pattern
+      const skillCommand = parseSkillCommand(content);
+      if (skillCommand) {
+        pendingSkillCommand = skillCommand;
+        // Don't emit - wait for meta message
+        return false;
+      }
       emit({ type: BlockType.TEXT, text: content });
-      return;
+      return false;
     }
     for (const raw of content) ingestBlock(raw);
+    return false;
   };
 
   const ingest = (r: RawJsonlMessage): void => {
@@ -582,8 +613,16 @@ const createPipeline = () => {
     // Store toolUseResult for use when processing tool_result blocks
     currentToolUseResult = r.toolUseResult;
 
-    ingestContent(r.message.content);
+    const mergeWithPrevious = ingestContent(r.message.content, r.isMeta);
     const msgId = r.message.id ?? null;
+
+    // Skill meta messages merge their content with the previous (command) message
+    if (mergeWithPrevious && current) {
+      current.content.push(...blocks);
+      current.toolNames.push(...toolNames);
+      current.textParts.push(...textParts);
+      return;
+    }
 
     const isSameAssistantMessage =
       r.type === MessageRole.ASSISTANT && msgId && msgId === currentMsgId;

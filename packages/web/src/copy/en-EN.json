@@ -123,7 +123,8 @@
     "search": "Search",
     "fetch": "Fetch",
     "task": "Task",
-    "mcp": "MCP"
+    "mcp": "MCP",
+    "skill": "Skill"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

@@ -21,6 +21,7 @@ export const BlockType = {
   WEB_FETCH: "web_fetch",
   WEB_SEARCH: "web_search",
   TASKS: "tasks",
+  SKILL: "skill",
 } as const;
 
 export type ContentBlock =
@@ -38,7 +39,8 @@ export type ContentBlock =
   | TaskBlock
   | WebFetchBlock
   | WebSearchBlock
-  | TasksBlock;
+  | TasksBlock
+  | SkillBlock;
 
 export interface TextBlock {
   type: typeof BlockType.TEXT;
@@ -193,6 +195,14 @@ export interface TasksBlock {
   tasks: TaskItem[];
 }
 
+export interface SkillBlock {
+  type: typeof BlockType.SKILL;
+  name: string;
+  commandName: string;
+  instructions?: string;
+  output?: string;
+}
+
 export enum RawTool {
   ASK_USER_QUESTION = "AskUserQuestion",
   BASH = "Bash",
@@ -231,3 +241,37 @@ export const RAW_TASK_TOOLS: readonly string[] = [
 ];
 
 export const isSkippedMessageType = (type: string): boolean => type === "file-history-snapshot";
+
+// Skill command patterns
+const SKILL_COMMAND_REGEX =
+  /<command-message>([^<]+)<\/command-message>\s*\n<command-name>\/([^<]+)<\/command-name>/;
+const SKILL_INSTRUCTIONS_REGEX = /<instructions>([\s\S]*?)<\/instructions>/;
+const SKILL_OUTPUT_REGEX = /<output>([\s\S]*?)<\/output>/;
+
+export type SkillCommandData = {
+  name: string;
+  commandName: string;
+};
+
+export type SkillMetaData = {
+  instructions?: string;
+  output?: string;
+};
+
+export const parseSkillCommand = (content: string): SkillCommandData | null => {
+  const match = content.match(SKILL_COMMAND_REGEX);
+  if (!match) return null;
+  return {
+    name: match[1].trim(),
+    commandName: `/${match[2].trim()}`,
+  };
+};
+
+export const parseSkillMeta = (content: string): SkillMetaData => {
+  const instructionsMatch = content.match(SKILL_INSTRUCTIONS_REGEX);
+  const outputMatch = content.match(SKILL_OUTPUT_REGEX);
+  return {
+    instructions: instructionsMatch?.[1]?.trim(),
+    output: outputMatch?.[1]?.trim(),
+  };
+};
