@@ -18,7 +18,8 @@
     "views": "{count} views",
     "likes": "{count} likes",
     "forks": "{count} forks",
-    "deactivated": "Deactivated"
+    "deactivated": "Deactivated",
+    "noResultsFound": "No results found"
   },
   "appBar": {
     "claudebin": "Claudebin",

@@ -29,7 +29,7 @@ const Code = ({ code, lang = "typescript", variant = "assistant", className }: C
     <div
       data-slot="code"
       className={cn(
-        "overflow-x-auto min-w-0 rounded-lg",
+        "overflow-x-auto scrollbar-hidden min-w-0 rounded-lg",
         variant === "assistant" ? "bg-gray-200" : "bg-gray-100",
         "[&_pre]:font-mono [&_pre]:text-sm [&_pre]:px-4 [&_pre]:py-3",
         className,

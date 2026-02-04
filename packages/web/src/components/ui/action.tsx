@@ -24,7 +24,7 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
       <Typography variant="small" className="font-mono">
         {title}
       </Typography>
-      <code className="max-w-full overflow-x-scroll whitespace-nowrap rounded-sm bg-gray-200 px-2 py-0.5 text-gray-600">
+      <code className="max-w-full overflow-x-scroll scrollbar-hidden whitespace-nowrap rounded-sm bg-gray-200 px-2 py-0.5 text-gray-600">
         {children}
       </code>
     </div>

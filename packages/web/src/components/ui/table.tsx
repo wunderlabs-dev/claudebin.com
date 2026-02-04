@@ -20,7 +20,7 @@ const Table = ({ variant = "assistant", className, ...props }: TableProps) => {
       <div
         data-slot="table-container"
         className={cn(
-          "relative overflow-x-auto w-full rounded-lg border border-gray-200",
+          "relative overflow-x-auto scrollbar-hidden w-full rounded-lg border border-gray-200",
           variant === "user" ? "bg-gray-100" : undefined,
         )}
       >

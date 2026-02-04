@@ -12,6 +12,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
+import { Typography } from "@/components/ui/typography";
 
 import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
 
@@ -28,6 +29,11 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.glob")}
+          {block.numFiles ? (
+            <Typography variant="caption" color="muted">
+              {t("common.files", { count: block.numFiles })}
+            </Typography>
+          ) : null}
           <ChatPageChatContentChip label={block.pattern} />
         </AccordionTrigger>
         <AccordionContent>
