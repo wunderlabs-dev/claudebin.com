@@ -16,6 +16,7 @@ import { Typography } from "@/components/ui/typography";
 
 import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
 
+
 type ChatPageChatContentGlobProps = {
   block: GlobBlock;
 };
@@ -29,15 +30,13 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.glob")}
-          {block.numFiles ? (
-            <Typography variant="caption" color="muted">
-              {t("common.files", { count: block.numFiles })}
-            </Typography>
-          ) : null}
+          {block.numFiles ? <Typography variant="caption" color="muted">
+            {t("common.files", { count: block.numFiles })}
+          </Typography> : null}
           <ChatPageChatContentChip label={block.pattern} />
         </AccordionTrigger>
         <AccordionContent>
-          {block.filenames ? <Code code={block.filenames.join("\n")} /> : null}
+          {block.filenames ? <Code code={block.filenames.join("\n")} /> : <Code code={t("common.noResultsFound")} />}
         </AccordionContent>
       </AccordionItem>
     </Accordion>
