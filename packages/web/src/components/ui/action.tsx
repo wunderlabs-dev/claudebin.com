@@ -20,9 +20,7 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
       )}
       {...props}
     >
-      <div className="shrink-0">
-        {icon}
-      </div>
+      <div className="shrink-0">{icon}</div>
       <Typography variant="small" className="font-mono">
         {title}
       </Typography>

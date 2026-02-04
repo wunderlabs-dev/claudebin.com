@@ -97,6 +97,9 @@
 /* ----------------------------------------
  * Custom Utilities
  * ---------------------------------------- */
+@utility scrollbar-hidden {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
 
 @utility ridge-t {
   box-shadow: inset var(--util-ridge-size) var(--util-ridge-color);
