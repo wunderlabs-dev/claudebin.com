@@ -23,7 +23,10 @@ const StepsContext = createContext<StepsVariant>("outlined");
 const Steps = ({ variant = "outlined", className, children, ...props }: StepsProps) => {
   return (
     <StepsContext.Provider value={variant}>
-      <ol className={cn("flex w-full flex-col items-start gap-4 [counter-reset:step]", className)} {...props}>
+      <ol
+        className={cn("flex w-full flex-col items-start gap-4 [counter-reset:step]", className)}
+        {...props}
+      >
         {children}
       </ol>
     </StepsContext.Provider>
