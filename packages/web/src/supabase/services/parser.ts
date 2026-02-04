@@ -52,6 +52,23 @@ const RawJsonlMessageSchema = z.object({
 type RawContentBlock = z.infer<typeof RawContentBlockSchema>;
 type RawJsonlMessage = z.infer<typeof RawJsonlMessageSchema>;
 
+type McpToolInfo = { server: string; tool: string };
+
+type TrackedTaskTool = {
+  id: string;
+  name: string;
+  input: Record<string, unknown>;
+};
+
+type TrackedToolBlock = ContentBlock & { id: string; result?: string; is_error?: boolean };
+
+type IntermediateMessage = {
+  raw: RawJsonlMessage;
+  content: ContentBlock[];
+  toolNames: string[];
+  textParts: string[];
+};
+
 export interface ParsedMessage {
   sessionId: string;
   idx: number;
@@ -120,8 +137,6 @@ const parseToolInput = <T>(schema: z.ZodType<T>, input: Record<string, unknown>)
   const result = schema.safeParse(input);
   return result.success ? result.data : null;
 };
-
-type McpToolInfo = { server: string; tool: string };
 
 const parseMcpToolName = (name: string): McpToolInfo | null => {
   const match = name.match(/^mcp__(.+)__(\w+)$/);
@@ -264,22 +279,7 @@ const isFilteredBlock = (block: ContentBlock): boolean => {
   return block.type === BlockType.THINKING;
 };
 
-type TrackedTaskTool = {
-  id: string;
-  name: string;
-  input: Record<string, unknown>;
-};
-
-type TrackedToolBlock = ContentBlock & { id: string; result?: string; is_error?: boolean };
-
 const isTaskTool = (name: string): boolean => RAW_TASK_TOOLS.includes(name);
-
-type IntermediateMessage = {
-  raw: RawJsonlMessage;
-  content: ContentBlock[];
-  toolNames: string[];
-  textParts: string[];
-};
 
 const createPipeline = () => {
   let blocks: ContentBlock[] = [];
