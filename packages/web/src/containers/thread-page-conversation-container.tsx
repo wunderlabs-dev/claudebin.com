@@ -48,7 +48,9 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
         previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
 
       return assistant
-        ? concat(init(accumulator), [{ ...previous, content: concat(previous.content, message.content) }])
+        ? concat(init(accumulator), [
+            { ...previous, content: concat(previous.content, message.content) },
+          ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
