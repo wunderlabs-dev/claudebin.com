@@ -47,9 +47,7 @@ const createComponents = (role: Role) => ({
     <strong className="font-semibold">{children}</strong>
   ),
   code: ({ children }: { children?: ReactNode }) => (
-    <code className="font-mono text-base">
-      {children}
-    </code>
+    <code className="font-mono text-base">{children}</code>
   ),
   table: ({ children }: { children?: ReactNode }) => <Table variant={role}>{children}</Table>,
   thead: ({ children }: { children?: ReactNode }) => <TableHeader>{children}</TableHeader>,
