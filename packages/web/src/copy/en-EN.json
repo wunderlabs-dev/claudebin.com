@@ -121,7 +121,9 @@
     "grep": "Grep",
     "lines": "{count} lines",
     "search": "Search",
-    "fetch": "Fetch"
+    "fetch": "Fetch",
+    "task": "Task",
+    "mcp": "MCP"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

@@ -30,7 +30,7 @@ const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
 };
 
 const tabsListVariantClassNames: Record<TabsVariant, string> = {
-  default: "p-1 rounded-full bg-gray-200 border border-gray-50",
+  default: "p-1 bg-gray-200 border border-gray-50 rounded-full",
   transparent: "p-1 border border-transparent",
 } as const;
 
