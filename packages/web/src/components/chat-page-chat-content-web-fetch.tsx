@@ -2,7 +2,7 @@
 
 import prettyMs from "pretty-ms";
 import prettyBytes from "pretty-bytes";
-import { head, isNil } from "ramda";
+import { head } from "ramda";
 import { useTranslations } from "next-intl";
 
 import type { WebFetchBlock } from "@/supabase/types/message";
@@ -57,9 +57,11 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
                 {t("chat.bytes")}: {prettyBytes(block.bytes)}
               </Typography>
             ) : null}
-            {block.statusCode ? <Typography variant="small" className={getStatusColor(block.statusCode)}>
-              {block.statusCode} {block.statusText}
-            </Typography> : null}
+            {block.statusCode ? (
+              <Typography variant="small" className={getStatusColor(block.statusCode)}>
+                {block.statusCode} {block.statusText}
+              </Typography>
+            ) : null}
           </div>
           {block.content ? <Code code={block.content} /> : null}
         </AccordionContent>

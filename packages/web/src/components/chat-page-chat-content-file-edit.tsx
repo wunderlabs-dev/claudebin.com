@@ -56,7 +56,7 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
               {t("chat.lines", { count: lineCount })}
             </Typography>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex items-center justify-end gap-3">
               <Typography variant="small" className="text-green-50">
                 +{linesAdded}
               </Typography>
