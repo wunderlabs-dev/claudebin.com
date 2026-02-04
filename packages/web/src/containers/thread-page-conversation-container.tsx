@@ -4,8 +4,11 @@ import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { BlockType } from "@/supabase/types/message";
+import { last, concat, init, reduce } from "ramda";
+
+import { BlockType, MessageRole } from "@/supabase/types/message";
 import type { ContentBlock } from "@/supabase/types/message";
+import type { Message } from "@/supabase/repos/messages";
 import { getMessagesBySessionId } from "@/actions/messages";
 
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
@@ -36,6 +39,21 @@ type ThreadPageConversationContainerProps = {
   author: string;
   avatarUrl?: string | null;
 };
+
+const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
+  reduce<Message, Message[]>(
+    (accumulator, message) => {
+      const previous = last(accumulator);
+      const assistant =
+        previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
+
+      return assistant
+        ? concat(init(accumulator), [{ ...previous, content: concat(previous.content, message.content) }])
+        : concat(accumulator, [{ ...message }]);
+    },
+    [],
+    [...messages],
+  );
 
 const renderer = {
   message: (block: ContentBlock, index: number): ReactNode => {
@@ -92,10 +110,11 @@ const ThreadPageConversationContainer = ({
   }
 
   const [fallback] = [...author];
+  const messages = compact(data?.messages);
 
   return (
     <Chat className="min-h-screen pr-12">
-      {data?.messages.map((message) => (
+      {messages.map((message) => (
         <ChatItem key={message.uuid} variant={message.role}>
           {message.role === "assistant" ? (
             <Avatar size="sm">
