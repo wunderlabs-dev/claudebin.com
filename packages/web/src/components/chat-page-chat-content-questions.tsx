@@ -20,14 +20,12 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
       {block.questions.map((question) => {
         const answer = block.answers?.[question.question];
 
-        const isAnswer = answer && question.options.some((option) => option.label === answer);
-        const isCustomAnswer = answer && not(isAnswer);
+        const isPredefinedAnswer = answer && question.options.some((option) => option.label === answer);
+        const isUserAnswer = answer && not(isPredefinedAnswer);
 
         return (
           <div key={question.header} className="flex flex-col gap-4">
-            <Typography variant="h4">
-              {question.question}
-            </Typography>
+            <Typography variant="h4">{question.question}</Typography>
 
             <Tabs value={answer}>
               <TabsList>
@@ -43,7 +41,7 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
               </TabsList>
             </Tabs>
 
-            {isCustomAnswer ? (
+            {isUserAnswer ? (
               <Typography variant="small">
                 {t.rich("chat.customAnswer", {
                   answer,
