@@ -58,7 +58,11 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
       >
         {variant === "unordered" ? <SvgIconDot color="accent" /> : null}
       </span>
-      <Typography as="div" variant="small" className="min-w-0 space-y-4">
+      <Typography
+        as="div"
+        variant="small"
+        className="min-w-0 space-y-2 *:data-[slot='code']:mt-2 [&>ol]:mt-2 [&>ul]:mt-2"
+      >
         {children}
       </Typography>
     </li>
