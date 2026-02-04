@@ -33,9 +33,11 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
           <ChatPageChatContentChip label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent>
-          <Typography variant="small" color="muted">
-            {t("chat.lines", { count: lineCount })}
-          </Typography>
+          <div className="flex justify-end">
+            <Typography variant="small" className="text-green-50">
+              +{t('chat.lines', { count: lineCount })}
+            </Typography>
+          </div>
           <Code code={block.content} />
         </AccordionContent>
       </AccordionItem>
