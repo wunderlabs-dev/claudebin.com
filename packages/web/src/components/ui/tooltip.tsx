@@ -35,11 +35,11 @@ const TooltipContent = ({ className, sideOffset = 6, ...props }: TooltipContentP
           "z-50 max-w-sm",
           "px-3 py-1.5",
           "rounded-lg border border-gray-250 bg-gray-100",
-          "text-white text-xs break-all",
+          "break-all text-white text-xs",
           "fade-in-0 zoom-in-95 animate-in",
           className,
         )}
-        onClick={event => event.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
         {...props}
       />
     </TooltipPrimitive.Portal>
