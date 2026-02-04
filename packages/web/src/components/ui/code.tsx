@@ -27,7 +27,7 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
       data-slot="code"
       className={cn(
         "min-w-0 overflow-x-auto rounded-lg bg-gray-200",
-        "[&+pre]:font-mono [&_pre]:px-4 [&_pre]:py-3",
+        "[&_pre]:font-mono [&_pre]:px-4 [&_pre]:py-3",
         className,
       )}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML
