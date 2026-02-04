@@ -25,7 +25,9 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
 
         return (
           <div key={question.header} className="flex flex-col gap-4">
-            <Typography variant="small">{question.question}</Typography>
+            <Typography variant="h4">
+              {question.question}
+            </Typography>
 
             <Tabs value={answer}>
               <TabsList>
