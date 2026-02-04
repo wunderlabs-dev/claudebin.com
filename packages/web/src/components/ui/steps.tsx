@@ -24,7 +24,11 @@ const Steps = ({ variant = "outlined", className, children, ...props }: StepsPro
   return (
     <StepsContext.Provider value={variant}>
       <ol
-        className={cn("flex w-full flex-col items-start gap-4 [counter-reset:step]", className)}
+        className={cn(
+          "flex w-full flex-col items-start gap-4 [counter-reset:step]",
+          variant === "outlined" ? "gap-4" : "gap-2",
+          className,
+        )}
         {...props}
       >
         {children}
@@ -59,8 +63,8 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
         {variant === "unordered" ? <SvgIconDot color="accent" /> : null}
       </span>
       <Typography
-        as="div"
         variant="small"
+        as="div"
         className="min-w-0 space-y-2 *:data-[slot='code']:mt-2 [&>ol]:mt-2 [&>ul]:mt-2"
       >
         {children}
