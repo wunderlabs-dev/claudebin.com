@@ -119,7 +119,9 @@
     "edit": "Edit",
     "glob": "Glob",
     "grep": "Grep",
-    "lines": "{count} lines"
+    "lines": "{count} lines",
+    "search": "Search",
+    "fetch": "Fetch"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
