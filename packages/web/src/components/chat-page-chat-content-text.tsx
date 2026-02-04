@@ -83,9 +83,9 @@ const createComponents = (role: Role) => ({
     const parsed = parseCodeBlock(children);
 
     if (parsed) {
-      return <Code {...parsed} variant={role} />
+      return <Code {...parsed} variant={role} />;
     }
-    return <pre>{children}</pre>
+    return <pre>{children}</pre>;
   },
 });
 
