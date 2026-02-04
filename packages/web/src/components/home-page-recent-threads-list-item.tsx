@@ -51,7 +51,7 @@ const HomePageRecentThreadsListItem = ({
         <List direction="column">
           {thread.messageCount ? (
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-              {t("common.prompts", { count: thread.messageCount })}
+              {t("common.messages", { count: thread.messageCount })}
             </ListItem>
           ) : null}
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>

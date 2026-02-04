@@ -57,7 +57,7 @@ const ThreadPageSidebarContainer = ({
         <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
         {messageCount ? (
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("common.prompts", { count: messageCount })}
+            {t("common.messages", { count: messageCount })}
           </ListItem>
         ) : null}
         <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>

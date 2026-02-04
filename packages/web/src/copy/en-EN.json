@@ -12,7 +12,6 @@
     "private": "Private",
     "untitled": "Untitled",
     "ago": "{date} ago",
-    "prompts": "{count} prompts",
     "messages": "{count} messages",
     "files": "{count} files",
     "views": "{count} views",
