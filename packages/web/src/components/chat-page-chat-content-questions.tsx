@@ -19,8 +19,8 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
     <Fragment>
       {block.questions.map((question) => {
         const answer = block.answers?.[question.question];
-
-        const isPredefinedAnswer = answer && question.options.some((option) => option.label === answer);
+        const isPredefinedAnswer =
+          answer && question.options.some((option) => option.label === answer);
         const isUserAnswer = answer && not(isPredefinedAnswer);
 
         return (

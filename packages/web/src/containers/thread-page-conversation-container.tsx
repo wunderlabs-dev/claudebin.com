@@ -102,6 +102,7 @@ const ThreadPageConversationContainer = ({
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
   const t = useTranslations();
+
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
