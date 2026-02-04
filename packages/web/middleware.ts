@@ -6,6 +6,7 @@ const PUBLIC_ROUTES = ["/", "/auth/login", "/auth/callback"];
 const isPublicRoute = (pathname: string): boolean => {
   if (PUBLIC_ROUTES.includes(pathname)) return true;
   if (pathname.startsWith("/api/")) return true;
+  if (pathname.startsWith("/monitoring")) return true; // Sentry tunnel
   return false;
 };
 
