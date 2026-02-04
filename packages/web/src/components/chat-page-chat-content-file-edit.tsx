@@ -53,7 +53,7 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
         <AccordionContent>
           <div className="flex items-center justify-between">
             <Typography variant="small" color="neutral">
-              {t('chat.lines', { count: lineCount })}
+              {t("chat.lines", { count: lineCount })}
             </Typography>
 
             <div className="flex justify-end gap-3">

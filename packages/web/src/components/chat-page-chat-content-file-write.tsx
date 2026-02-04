@@ -35,7 +35,7 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
         <AccordionContent>
           <div className="flex justify-end">
             <Typography variant="small" className="text-green-50">
-              +{t('chat.lines', { count: lineCount })}
+              +{t("chat.lines", { count: lineCount })}
             </Typography>
           </div>
           <Code code={block.content} />
