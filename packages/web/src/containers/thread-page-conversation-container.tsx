@@ -10,10 +10,10 @@ import { getMessagesBySessionId } from "@/actions/messages";
 
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { ChatPageChatContentText } from "@/components/chat-page-chat-content-text";
 import { ChatPageChatContentBash } from "@/components/chat-page-chat-content-bash";
@@ -116,7 +116,7 @@ const ThreadPageConversationContainer = ({
           <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
         </Avatar>
 
-        <ChatContent>
+        <ChatContent data-continue-conversation>
           <div className="flex flex-col gap-2">
             <Typography variant="h4">{t("thread.continueTitle")}</Typography>
             <Typography variant="small" color="muted">

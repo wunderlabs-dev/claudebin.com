@@ -12,10 +12,11 @@ import {
 import { APP_THREADS_URL } from "@/utils/constants";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
-import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
 import { List, ListItem } from "@/components/ui/list";
+
+import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
+import { ThreadPageSidebarContinueConversation } from "@/components/thread-page-sidebar-continue-conversation";
 
 type ThreadPageSidebarContainerProps = {
   id: string;
@@ -71,11 +72,7 @@ const ThreadPageSidebarContainer = ({
       <div className="flex w-full flex-col gap-8">
         <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
         <CopyInput variant="snippet" value="npx claudebin publish" />
-
-        <Button variant="secondary">
-          <SvgIconChat />
-          {t("thread.continueConversation")}
-        </Button>
+        <ThreadPageSidebarContinueConversation />
       </div>
     </div>
   );
