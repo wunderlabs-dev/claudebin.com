@@ -1,41 +1,29 @@
 "use client";
 
 import { createContext, useContext, type HTMLAttributes, type ReactNode } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/utils/helpers";
 
 import { SvgIconDot } from "@/components/icon";
 import { Typography } from "@/components/ui/typography";
 
-const stepsVariants = cva("flex w-full flex-col items-start [counter-reset:step]", {
-  variants: {
-    variant: {
-      ordered: "gap-2",
-      outlined: "gap-4",
-      unordered: "gap-2",
-    },
-  },
-  defaultVariants: {
-    variant: "outlined",
-  },
-});
-
 const StepsVariants = ["ordered", "outlined", "unordered"] as const;
 type StepsVariant = (typeof StepsVariants)[number];
 
-const StepsContext = createContext<StepsVariant>("outlined");
-
-type StepsProps = VariantProps<typeof stepsVariants> & HTMLAttributes<HTMLOListElement>;
+type StepsProps = {
+  variant?: StepsVariant;
+} & HTMLAttributes<HTMLOListElement>;
 
 type StepsItemProps = {
   children: ReactNode;
 } & HTMLAttributes<HTMLLIElement>;
 
+const StepsContext = createContext<StepsVariant>("outlined");
+
 const Steps = ({ variant = "outlined", className, children, ...props }: StepsProps) => {
   return (
-    <StepsContext.Provider value={variant ?? "outlined"}>
-      <ol className={cn(stepsVariants({ variant, className }))} {...props}>
+    <StepsContext.Provider value={variant}>
+      <ol className={cn("flex w-full flex-col items-start gap-4 [counter-reset:step]", className)} {...props}>
         {children}
       </ol>
     </StepsContext.Provider>
@@ -67,7 +55,7 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
       >
         {variant === "unordered" ? <SvgIconDot color="accent" /> : null}
       </span>
-      <Typography as="div" variant="small" className="min-w-0 space-y-2">
+      <Typography as="div" variant="small" className="min-w-0 space-y-4">
         {children}
       </Typography>
     </li>
