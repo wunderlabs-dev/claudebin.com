@@ -1,21 +1,36 @@
-import type * as React from "react";
+"use client";
+
+import { createContext, useContext, type ComponentProps } from "react";
+
+import type { Role } from "@/supabase/types/message";
 
 import { cn } from "@/utils/helpers";
 
-type TableProps = React.ComponentProps<"table">;
+const TableContext = createContext<Role>("assistant");
 
-const Table = ({ className, ...props }: TableProps) => {
+const useTableVariant = () => useContext(TableContext);
+
+type TableProps = {
+  variant?: Role;
+} & ComponentProps<"table">;
+
+const Table = ({ variant = "assistant", className, ...props }: TableProps) => {
   return (
-    <div
-      data-slot="table-container"
-      className="relative w-full overflow-x-auto rounded-lg border border-gray-200"
-    >
-      <table data-slot="table" className={cn("w-full caption-bottom", className)} {...props} />
-    </div>
+    <TableContext.Provider value={variant}>
+      <div
+        data-slot="table-container"
+        className={cn(
+          "relative w-full overflow-x-auto rounded-lg border border-gray-200",
+          variant === "user" && "bg-gray-100",
+        )}
+      >
+        <table data-slot="table" className={cn("w-full caption-bottom", className)} {...props} />
+      </div>
+    </TableContext.Provider>
   );
 };
 
-type TableHeaderProps = React.ComponentProps<"thead">;
+type TableHeaderProps = ComponentProps<"thead">;
 
 const TableHeader = ({ className, ...props }: TableHeaderProps) => {
   return (
@@ -27,7 +42,7 @@ const TableHeader = ({ className, ...props }: TableHeaderProps) => {
   );
 };
 
-type TableBodyProps = React.ComponentProps<"tbody">;
+type TableBodyProps = ComponentProps<"tbody">;
 
 const TableBody = ({ className, ...props }: TableBodyProps) => {
   return (
@@ -39,7 +54,7 @@ const TableBody = ({ className, ...props }: TableBodyProps) => {
   );
 };
 
-type TableFooterProps = React.ComponentProps<"tfoot">;
+type TableFooterProps = ComponentProps<"tfoot">;
 
 const TableFooter = ({ className, ...props }: TableFooterProps) => {
   return (
@@ -54,14 +69,17 @@ const TableFooter = ({ className, ...props }: TableFooterProps) => {
   );
 };
 
-type TableRowProps = React.ComponentProps<"tr">;
+type TableRowProps = ComponentProps<"tr">;
 
 const TableRow = ({ className, ...props }: TableRowProps) => {
+  const variant = useTableVariant();
+
   return (
     <tr
       data-slot="table-row"
       className={cn(
-        "group border-gray-200 border-b transition-colors hover:border-gray-100 hover:bg-gray-500/10 data-[state=selected]:bg-gray-100",
+        "group border-gray-200 border-b transition-colors data-[state=selected]:bg-gray-100",
+        variant === "user" ? "hover:bg-gray-500/5" : "hover:border-gray-100 hover:bg-gray-500/10",
         className,
       )}
       {...props}
@@ -69,7 +87,7 @@ const TableRow = ({ className, ...props }: TableRowProps) => {
   );
 };
 
-type TableHeadProps = React.ComponentProps<"th">;
+type TableHeadProps = ComponentProps<"th">;
 
 const TableHead = ({ className, ...props }: TableHeadProps) => {
   return (
@@ -85,7 +103,7 @@ const TableHead = ({ className, ...props }: TableHeadProps) => {
   );
 };
 
-type TableCellProps = React.ComponentProps<"td">;
+type TableCellProps = ComponentProps<"td">;
 
 const TableCell = ({ className, ...props }: TableCellProps) => {
   return (
@@ -101,7 +119,7 @@ const TableCell = ({ className, ...props }: TableCellProps) => {
   );
 };
 
-type TableCaptionProps = React.ComponentProps<"caption">;
+type TableCaptionProps = ComponentProps<"caption">;
 
 const TableCaption = ({ className, ...props }: TableCaptionProps) => {
   return (

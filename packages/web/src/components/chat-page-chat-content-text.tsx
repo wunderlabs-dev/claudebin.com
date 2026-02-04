@@ -1,9 +1,12 @@
-import { Children, isValidElement, type ReactNode } from "react";
+"use client";
+
+import { Children, isValidElement, useMemo, type ReactNode } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import type { TextBlock } from "@/supabase/types/message";
+import type { Role, TextBlock } from "@/supabase/types/message";
 
+import { useChatItemRole } from "@/components/ui/chat";
 import { Code } from "@/components/ui/code";
 import { Divider } from "@/components/ui/divider";
 import { Steps, StepsItem } from "@/components/ui/steps";
@@ -22,7 +25,7 @@ type ChatPageChatContentTextProps = {
   block: TextBlock;
 };
 
-const components = {
+const createComponents = (role: Role) => ({
   h1: ({ children }: { children?: ReactNode }) => <Typography variant="h3">{children}</Typography>,
   h2: ({ children }: { children?: ReactNode }) => <Typography variant="h4">{children}</Typography>,
   h3: ({ children }: { children?: ReactNode }) => (
@@ -46,7 +49,7 @@ const components = {
   code: ({ children }: { children?: ReactNode }) => (
     <code className="font-mono text-base">{children}</code>
   ),
-  table: ({ children }: { children?: ReactNode }) => <Table>{children}</Table>,
+  table: ({ children }: { children?: ReactNode }) => <Table variant={role}>{children}</Table>,
   thead: ({ children }: { children?: ReactNode }) => <TableHeader>{children}</TableHeader>,
   tbody: ({ children }: { children?: ReactNode }) => <TableBody>{children}</TableBody>,
   tr: ({ children }: { children?: ReactNode }) => <TableRow>{children}</TableRow>,
@@ -63,15 +66,18 @@ const components = {
       const code = String(codeElement.props.children).trimEnd();
       const lang = codeElement.props.className?.replace("language-", "") || "typescript";
 
-      return <Code code={code} lang={lang} />;
+      return <Code code={code} lang={lang} variant={role} />;
     }
 
     return <pre>{children}</pre>;
   },
   hr: () => <Divider className="my-8" />,
-};
+});
 
 const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
+  const role = useChatItemRole();
+  const components = useMemo(() => createComponents(role), [role]);
+
   return (
     <div className="flex max-w-full flex-col gap-4 [&>*:first-child]:mt-0">
       <Markdown remarkPlugins={[remarkGfm]} components={components}>

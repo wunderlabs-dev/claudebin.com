@@ -1,10 +1,13 @@
 import { createHighlighter } from "shiki";
 
+import type { Role } from "@/supabase/types/message";
+
 import { cn } from "@/utils/helpers";
 
 type CodeProps = {
   code: string;
   lang?: string;
+  variant?: Role;
   className?: string;
 };
 
@@ -13,7 +16,7 @@ const highlighter = await createHighlighter({
   langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html", "diff"],
 });
 
-const Code = ({ code, lang = "typescript", className }: CodeProps) => {
+const Code = ({ code, lang = "typescript", variant = "assistant", className }: CodeProps) => {
   const html = highlighter.codeToHtml(code, {
     lang,
     theme: "plastic",
@@ -26,7 +29,8 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
     <div
       data-slot="code"
       className={cn(
-        "min-w-0 overflow-x-auto rounded-lg bg-gray-200",
+        "min-w-0 overflow-x-auto rounded-lg",
+        variant === "assistant" ? "bg-gray-200" : "bg-gray-100",
         "[&_pre]:px-4 [&_pre]:py-3 [&_pre]:font-mono",
         className,
       )}

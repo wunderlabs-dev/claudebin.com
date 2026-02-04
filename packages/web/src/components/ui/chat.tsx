@@ -72,4 +72,6 @@ const ChatContent = ({ className, ...props }: ChatContentProps) => {
   );
 };
 
-export { Chat, ChatItem, ChatContent };
+const useChatItemRole = () => useContext(ChatItemContext);
+
+export { Chat, ChatItem, ChatContent, useChatItemRole };
