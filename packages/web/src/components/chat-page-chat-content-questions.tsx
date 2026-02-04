@@ -1,15 +1,18 @@
 import type { QuestionBlock } from "@/supabase/types/message";
 
-type ChatPageChatContentQuestionProps = {
+import { Typography } from "@/components/ui/typography";
+
+
+type ChatPageChatContentQuestionsProps = {
   block: QuestionBlock;
 };
 
-const ChatPageChatContentQuestion = ({ block }: ChatPageChatContentQuestionProps) => {
+const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsProps) => {
   return (
     <div className="flex flex-col gap-2">
       {block.questions.map((question) => (
         <div key={question.header} className="flex flex-col gap-1 text-xs">
-          <span className="font-medium">{question.question}</span>
+          <Typography variant="small">{question.question}</Typography>
           <div className="flex flex-wrap gap-1">
             {question.options.map((option) => (
               <span
@@ -26,4 +29,4 @@ const ChatPageChatContentQuestion = ({ block }: ChatPageChatContentQuestionProps
   );
 };
 
-export { ChatPageChatContentQuestion };
+export { ChatPageChatContentQuestions };

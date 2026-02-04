@@ -15,7 +15,7 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
     <div
       data-slot="action"
       className={cn(
-        "flex items-center gap-4 px-4 py-3 border border-gray-200 rounded-xl font-mono text-base",
+        "flex items-center gap-4 rounded-xl border border-gray-200 px-4 py-3 font-mono text-base",
         className,
       )}
       {...props}
@@ -24,7 +24,9 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
       <Typography variant="small" className="font-mono">
         {title}
       </Typography>
-      <code className="overflow-x-scroll max-w-full px-2 py-0.5 bg-gray-200 rounded-sm text-gray-600 whitespace-nowrap">{children}</code>
+      <code className="max-w-full overflow-x-scroll whitespace-nowrap rounded-sm bg-gray-200 px-2 py-0.5 text-gray-600">
+        {children}
+      </code>
     </div>
   );
 };

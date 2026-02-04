@@ -21,7 +21,7 @@ import { ChatPageChatContentGlob } from "@/components/chat-page-chat-content-glo
 import { ChatPageChatContentGrep } from "@/components/chat-page-chat-content-grep";
 import { ChatPageChatContentTask } from "@/components/chat-page-chat-content-task";
 import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-tasks";
-import { ChatPageChatContentQuestion } from "@/components/chat-page-chat-content-question";
+import { ChatPageChatContentQuestions } from "@/components/chat-page-chat-content-questions";
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
 import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
@@ -55,7 +55,7 @@ const renderers = {
       case BlockType.TASKS:
         return <ChatPageChatContentTasks key={index} block={block} />;
       case BlockType.QUESTION:
-        return <ChatPageChatContentQuestion key={index} block={block} />;
+        return <ChatPageChatContentQuestions key={index} block={block} />;
       case BlockType.WEB_FETCH:
         return <ChatPageChatContentWebFetch key={index} block={block} />;
       case BlockType.WEB_SEARCH:
@@ -206,7 +206,7 @@ const ThreadPageConversationContainer = ({
             }}
           />
 
-          <ChatPageChatContentQuestion
+          <ChatPageChatContentQuestions
             block={{
               type: "question",
               id: "question-1",
