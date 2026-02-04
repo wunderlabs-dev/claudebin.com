@@ -56,7 +56,7 @@ const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode =
           onClick={handleCopy}
         >
           {copiedText === value ? <SvgIconCheck /> : <SvgIconCopy />}
-          {copiedText === value ? t("common.linkCopied") : t("common.copyLink")}
+          {copiedText === value ? t("common.copied") : t("common.copy")}
         </Button>
       </div>
     );
