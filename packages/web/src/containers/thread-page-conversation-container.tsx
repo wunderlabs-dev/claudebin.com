@@ -67,8 +67,8 @@ const renderer = {
       default:
         return null;
     }
-  }
-}
+  },
+};
 
 const ThreadPageConversationContainer = ({
   id,
