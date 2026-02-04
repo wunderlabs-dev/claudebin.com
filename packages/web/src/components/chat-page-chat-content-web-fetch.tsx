@@ -44,14 +44,15 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
           <SvgIconDownload size="sm" color="primary" />
           {t("chat.fetch")}
 
-          {block.durationMs ? (
-            <Typography variant="small" className="shrink-0 text-gray-400">
-              {prettyMs(block.durationMs)}
-            </Typography>
-          ) : null}
           {block.is_error ? (
             <Typography variant="small" className="shrink-0 text-red-50">
               {t("chat.error")}
+            </Typography>
+          ) : null}
+
+          {block.durationMs ? (
+            <Typography variant="small" className="shrink-0" color="neutral">
+              {prettyMs(block.durationMs)}
             </Typography>
           ) : null}
 
@@ -59,24 +60,23 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
         </AccordionTrigger>
 
         <AccordionContent>
-          <div className="flex justify-between items-center gap-3">
-            {block.bytes ? (
-              <Typography variant="small" color="neutral">
-                {t("chat.bytes")}: {prettyBytes(block.bytes)}
-              </Typography>
-            ) : null}
-            {block.statusCode ? (
-              <Typography variant="small" className={getStatusColor(block.statusCode)}>
-                {block.statusCode} {block.statusText}
-              </Typography>
-            ) : null}
-          </div>
-
-          {block.is_error && block.error ? (
-            <Code code={block.error} />
+          {block.bytes || block.statusCode ? (
+            <div className="flex justify-between items-center gap-3">
+              {block.bytes ? (
+                <Typography variant="small" color="neutral">
+                  {t("chat.bytes")}: {prettyBytes(block.bytes)}
+                </Typography>
+              ) : null}
+              {block.statusCode ? (
+                <Typography variant="small" className={getStatusColor(block.statusCode)}>
+                  {block.statusCode} {block.statusText}
+                </Typography>
+              ) : null}
+            </div>
           ) : null}
 
           {block.content ? <Code code={block.content} /> : null}
+          {block.is_error && block.error ? <Code code={block.error} /> : null}
         </AccordionContent>
       </AccordionItem>
     </Accordion>
