@@ -47,7 +47,7 @@ const createComponents = (role: Role) => ({
     <strong className="font-semibold">{children}</strong>
   ),
   code: ({ children }: { children?: ReactNode }) => (
-    <code className="max-w-full overflow-x-auto scrollbar-hidden whitespace-nowrap rounded-sm bg-gray-200 px-2 py-0.5 font-mono text-base text-gray-600">
+    <code className="font-mono text-base">
       {children}
     </code>
   ),
