@@ -2,9 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
-import { SvgIconChat } from "@/components/icon";
-
 import { Button } from "@/components/ui/button";
+import { SvgIconChat } from "@/components/icon";
 
 const ThreadPageSidebarContinueConversation = () => {
   const t = useTranslations();
