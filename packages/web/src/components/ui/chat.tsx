@@ -16,7 +16,7 @@ const Chat = ({ className, ...props }: ChatProps) => {
   return <div data-slot="chat" className={cn("flex flex-col gap-8", className)} {...props} />;
 };
 
-const chatItemVariants = cva(["flex items-start gap-3"], {
+const chatItemVariants = cva(["flex items-start gap-4"], {
   variants: {
     variant: {
       user: "justify-end",

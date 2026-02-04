@@ -54,7 +54,7 @@ const components = {
     const codeElement = Children.toArray(children)[0];
 
     if (isValidElement<{ children?: string; className?: string }>(codeElement)) {
-      const code = String(codeElement.props.children ?? "").trimEnd();
+      const code = String(codeElement.props.children).trimEnd();
       const lang = codeElement.props.className?.replace("language-", "") || "typescript";
 
       return <Code code={code} lang={lang} />;

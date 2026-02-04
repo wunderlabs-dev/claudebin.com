@@ -85,6 +85,8 @@
     "openSharing": "Open sharing",
     "fork": "Fork",
     "continueConversation": "Continue conversation",
+    "continueTitle": "Continue this conversation?",
+    "continueDescription": "Paste the following prompt in Claude Code to pick up where this left off",
     "notFoundTitle": "Thread <gradient>not found</gradient>",
     "notFoundDescription": "The thread you're looking for doesn't exist or has been removed.",
     "browseThreads": "Browse threads"
