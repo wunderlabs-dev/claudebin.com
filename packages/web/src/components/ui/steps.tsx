@@ -55,7 +55,10 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
   const variant = useContext(StepsContext);
 
   return (
-    <li className={cn("flex w-full items-start gap-4 [counter-increment:step]", className)} {...props}>
+    <li
+      className={cn("flex w-full items-start gap-4 [counter-increment:step]", className)}
+      {...props}
+    >
       <span
         className={cn(
           "flex shrink-0 items-center justify-center",
