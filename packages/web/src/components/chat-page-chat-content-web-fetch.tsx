@@ -43,13 +43,21 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
         <AccordionTrigger>
           <SvgIconDownload size="sm" color="primary" />
           {t("chat.fetch")}
+
           {block.durationMs ? (
             <Typography variant="small" className="shrink-0 text-gray-400">
               {prettyMs(block.durationMs)}
             </Typography>
           ) : null}
+          {block.is_error ? (
+            <Typography variant="small" className="shrink-0 text-red-50">
+              {t("chat.error")}
+            </Typography>
+          ) : null}
+
           <ChatPageChatContentChip label={block.url} />
         </AccordionTrigger>
+
         <AccordionContent>
           <div className="flex justify-between items-center gap-3">
             {block.bytes ? (
@@ -63,6 +71,11 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
               </Typography>
             ) : null}
           </div>
+
+          {block.is_error && block.error ? (
+            <Code code={block.error} />
+          ) : null}
+
           {block.content ? <Code code={block.content} /> : null}
         </AccordionContent>
       </AccordionItem>
