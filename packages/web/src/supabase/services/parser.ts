@@ -367,11 +367,11 @@ const enhanceBash = (data: z.infer<typeof ToolUseResultSchema.Bash>) => ({
 });
 
 const enhanceWrite = (_data: z.infer<typeof ToolUseResultSchema.Write>) => ({
-  success: true as const,
+  success: true,
 });
 
 const enhanceEdit = (_data: z.infer<typeof ToolUseResultSchema.Edit>) => ({
-  success: true as const,
+  success: true,
 });
 
 const enhanceWebFetch = (data: z.infer<typeof ToolUseResultSchema.WebFetch>) => ({
@@ -532,7 +532,6 @@ const createPipeline = () => {
     const block = transformToolUse(raw.id, raw.name, raw.input);
     pendingTools.set(raw.id, { name: raw.name, block });
     toolNames.push(raw.name);
-    // Don't emit - wait for tool_result
   };
 
   const ingestDefault = (raw: RawContentBlock): void => {
