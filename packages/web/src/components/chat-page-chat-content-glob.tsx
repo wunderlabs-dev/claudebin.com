@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
 
 type ChatPageChatContentGlobProps = {
@@ -26,8 +27,9 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.glob")}
+          <Chip label={block.pattern} />
         </AccordionTrigger>
-        <AccordionContent>{block.result && <Code code={block.result} />}</AccordionContent>
+        <AccordionContent>{block.result ? <Code code={block.result} /> : null}</AccordionContent>
       </AccordionItem>
     </Accordion>
   );

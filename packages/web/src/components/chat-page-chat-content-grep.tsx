@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { Chip } from "@/components/ui/chip";
 import { Code } from "@/components/ui/code";
 
 type ChatPageChatContentGrepProps = {
@@ -26,6 +27,7 @@ const ChatPageChatContentGrep = ({ block }: ChatPageChatContentGrepProps) => {
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.grep")}
+          <Chip label={block.pattern} />
         </AccordionTrigger>
         <AccordionContent>{block.result && <Code code={block.result} />}</AccordionContent>
       </AccordionItem>

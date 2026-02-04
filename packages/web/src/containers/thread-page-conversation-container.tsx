@@ -24,7 +24,6 @@ import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-ta
 import { ChatPageChatContentQuestions } from "@/components/chat-page-chat-content-questions";
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
-import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
 
 type ThreadPageConversationContainerProps = {
@@ -60,8 +59,6 @@ const renderers = {
         return <ChatPageChatContentWebFetch key={index} block={block} />;
       case BlockType.WEB_SEARCH:
         return <ChatPageChatContentWebSearch key={index} block={block} />;
-      case BlockType.TOOL_USE:
-        return <ChatPageChatContentToolUse key={index} block={block} />;
       case BlockType.MCP:
         return <ChatPageChatContentMcp key={index} block={block} />;
       default: {
@@ -249,15 +246,6 @@ const ThreadPageConversationContainer = ({
               description: "Explore upload patterns",
               prompt: "Find how files are uploaded in the codebase",
               subagent_type: "Explore",
-            }}
-          />
-
-          <ChatPageChatContentToolUse
-            block={{
-              type: "tool_use",
-              id: "tool-1",
-              name: "NotebookEdit",
-              input: { notebook_path: "/docs/api.ipynb", cell_number: 3 },
             }}
           />
 

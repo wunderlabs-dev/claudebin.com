@@ -25,7 +25,6 @@ import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-ta
 import { ChatPageChatContentQuestions } from "@/components/chat-page-chat-content-questions";
 import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
 import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
-import { ChatPageChatContentToolUse } from "@/components/chat-page-chat-content-tool-use";
 import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
 
 type ThreadConversationContainerProps = {
@@ -60,8 +59,6 @@ const renderBlock = (block: ContentBlock, index: number): ReactNode => {
       return <ChatPageChatContentWebFetch key={index} block={block} />;
     case BlockType.WEB_SEARCH:
       return <ChatPageChatContentWebSearch key={index} block={block} />;
-    case BlockType.TOOL_USE:
-      return <ChatPageChatContentToolUse key={index} block={block} />;
     case BlockType.MCP:
       return <ChatPageChatContentMcp key={index} block={block} />;
     default:

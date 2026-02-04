@@ -16,10 +16,14 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
       {block.questions.map((question) => (
         <div key={question.header} className="flex flex-col gap-4">
           <Typography variant="small">{question.question}</Typography>
-          <Tabs value={question.options[0]?.label}>
+          <Tabs value={question.options[2]?.label}>
             <TabsList>
               {question.options.map((option) => (
-                <TabsTrigger key={option.label} value={option.label}>
+                <TabsTrigger
+                  key={option.label}
+                  value={option.label}
+                  className="data-[state=inactive]:line-through"
+                >
                   {option.label}
                 </TabsTrigger>
               ))}
