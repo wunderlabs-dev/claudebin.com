@@ -461,6 +461,8 @@ const createPipeline = () => {
     const taskId = extractTaskId(result);
     if (!taskId) return;
 
+    let changed = false;
+
     if (taskTool.name === RawTool.TASK_CREATE) {
       const parsed = ToolInputSchema.TaskCreate.safeParse(taskTool.input);
       if (parsed.success) {
@@ -470,18 +472,22 @@ const createPipeline = () => {
           description: parsed.data.description,
           status: "pending",
         });
+        changed = true;
       }
     }
 
     if (taskTool.name === RawTool.TASK_UPDATE) {
       const parsed = ToolInputSchema.TaskUpdate.safeParse(taskTool.input);
       const task = currentTasks.find((t) => t.id === parsed.data?.taskId);
-      if (parsed.success && task && parsed.data.status) {
+      if (parsed.success && task && parsed.data.status && task.status !== parsed.data.status) {
         task.status = parsed.data.status;
+        changed = true;
       }
     }
 
-    emit({ type: BlockType.TASKS, tasks: [...currentTasks] });
+    if (changed) {
+      emit({ type: BlockType.TASKS, tasks: [...currentTasks] });
+    }
   };
 
   const ingestToolResult = (raw: Extract<RawContentBlock, { type: "tool_result" }>): void => {
