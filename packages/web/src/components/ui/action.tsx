@@ -20,11 +20,13 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
       )}
       {...props}
     >
-      {icon}
+      <div className="shrink-0">
+        {icon}
+      </div>
       <Typography variant="small" className="font-mono">
         {title}
       </Typography>
-      <code className="max-w-full overflow-x-scroll scrollbar-hidden whitespace-nowrap rounded-sm bg-gray-200 px-2 py-0.5 text-gray-600">
+      <code className="max-w-full overflow-x-auto scrollbar-hidden whitespace-nowrap rounded-sm bg-gray-200 px-2 py-0.5 text-gray-600">
         {children}
       </code>
     </div>
