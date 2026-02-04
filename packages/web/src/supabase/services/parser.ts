@@ -1,17 +1,4 @@
-import type {
-  BashBlock,
-  ContentBlock,
-  FileEditBlock,
-  FileReadBlock,
-  FileWriteBlock,
-  GenericBlock,
-  GlobBlock,
-  GrepBlock,
-  McpBlock,
-  QuestionBlock,
-  TaskItem,
-  WebFetchBlock,
-} from "@/supabase/types/message";
+import type { ContentBlock, TaskItem } from "@/supabase/types/message";
 
 import type { Json } from "@/supabase/types";
 
@@ -146,8 +133,10 @@ type TrackedTaskTool = {
   input: Record<string, unknown>;
 };
 
-// TrackedToolBlock can have any output fields from the block types
-type TrackedToolBlock = ContentBlock & { id: string; is_error?: boolean; error?: string };
+type PendingTool = {
+  name: string;
+  block: ContentBlock;
+};
 
 type IntermediateMessage = {
   raw: RawJsonlMessage;
@@ -350,102 +339,81 @@ const sanitizeResult = (toolName: string, result: string): string => {
   return sanitizer ? sanitizer(result) : sanitize(result);
 };
 
-// Attach typed output from toolUseResult to the block
-const attachToolOutput = (
-  block: TrackedToolBlock,
+// Output enhancers - pure functions that return output fields
+const enhanceRead = (data: z.infer<typeof ToolUseResultSchema.Read>) => ({
+  content: sanitize(stripLineNumbers(data.file.content)),
+  numLines: data.file.numLines,
+  totalLines: data.file.totalLines,
+});
+
+const enhanceGlob = (data: z.infer<typeof ToolUseResultSchema.Glob>) => ({
+  filenames: data.filenames.map(toRelativePath),
+  numFiles: data.numFiles,
+  truncated: data.truncated,
+  durationMs: data.durationMs,
+});
+
+const enhanceGrep = (data: z.infer<typeof ToolUseResultSchema.Grep>) => ({
+  filenames: data.filenames.map(toRelativePath),
+  numFiles: data.numFiles,
+  truncated: data.truncated,
+  durationMs: data.durationMs,
+});
+
+const enhanceBash = (data: z.infer<typeof ToolUseResultSchema.Bash>) => ({
+  stdout: sanitize(stripAnsiCodes(data.stdout)),
+  stderr: sanitize(stripAnsiCodes(data.stderr)),
+  interrupted: data.interrupted,
+});
+
+const enhanceWrite = (_data: z.infer<typeof ToolUseResultSchema.Write>) => ({
+  success: true as const,
+});
+
+const enhanceEdit = (_data: z.infer<typeof ToolUseResultSchema.Edit>) => ({
+  success: true as const,
+});
+
+const enhanceWebFetch = (data: z.infer<typeof ToolUseResultSchema.WebFetch>) => ({
+  content: sanitize(data.result),
+  statusCode: data.code,
+  statusText: data.codeText,
+  bytes: data.bytes,
+  durationMs: data.durationMs,
+});
+
+const enhanceQuestion = (data: z.infer<typeof ToolUseResultSchema.AskUserQuestion>) => ({
+  answers: data.answers,
+});
+
+// Registry mapping tool name -> schema + enhancer
+const outputEnhancers = {
+  [RawTool.READ]: { schema: ToolUseResultSchema.Read, enhance: enhanceRead },
+  [RawTool.GLOB]: { schema: ToolUseResultSchema.Glob, enhance: enhanceGlob },
+  [RawTool.GREP]: { schema: ToolUseResultSchema.Grep, enhance: enhanceGrep },
+  [RawTool.BASH]: { schema: ToolUseResultSchema.Bash, enhance: enhanceBash },
+  [RawTool.WRITE]: { schema: ToolUseResultSchema.Write, enhance: enhanceWrite },
+  [RawTool.EDIT]: { schema: ToolUseResultSchema.Edit, enhance: enhanceEdit },
+  [RawTool.WEB_FETCH]: { schema: ToolUseResultSchema.WebFetch, enhance: enhanceWebFetch },
+  [RawTool.ASK_USER_QUESTION]: {
+    schema: ToolUseResultSchema.AskUserQuestion,
+    enhance: enhanceQuestion,
+  },
+} as const;
+
+// Returns enhanced output fields or null if parsing fails
+const enhanceToolOutput = (
   toolName: string,
   toolUseResult: unknown,
-): void => {
-  switch (toolName) {
-    case RawTool.READ: {
-      const parsed = ToolUseResultSchema.Read.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.FILE_READ) {
-        const b = block as FileReadBlock;
-        b.content = sanitize(stripLineNumbers(parsed.data.file.content));
-        b.numLines = parsed.data.file.numLines;
-        b.totalLines = parsed.data.file.totalLines;
-      }
-      break;
-    }
-    case RawTool.GLOB: {
-      const parsed = ToolUseResultSchema.Glob.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.GLOB) {
-        const b = block as GlobBlock;
-        b.filenames = parsed.data.filenames.map(toRelativePath);
-        b.numFiles = parsed.data.numFiles;
-        b.truncated = parsed.data.truncated;
-        b.durationMs = parsed.data.durationMs;
-      }
-      break;
-    }
-    case RawTool.GREP: {
-      const parsed = ToolUseResultSchema.Grep.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.GREP) {
-        const b = block as GrepBlock;
-        b.filenames = parsed.data.filenames.map(toRelativePath);
-        b.numFiles = parsed.data.numFiles;
-        b.truncated = parsed.data.truncated;
-        b.durationMs = parsed.data.durationMs;
-      }
-      break;
-    }
-    case RawTool.BASH: {
-      const parsed = ToolUseResultSchema.Bash.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.BASH) {
-        const b = block as BashBlock;
-        b.stdout = sanitize(stripAnsiCodes(parsed.data.stdout));
-        b.stderr = sanitize(stripAnsiCodes(parsed.data.stderr));
-        b.interrupted = parsed.data.interrupted;
-      }
-      break;
-    }
-    case RawTool.WRITE: {
-      const parsed = ToolUseResultSchema.Write.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.FILE_WRITE) {
-        const b = block as FileWriteBlock;
-        b.success = true;
-      }
-      break;
-    }
-    case RawTool.EDIT: {
-      const parsed = ToolUseResultSchema.Edit.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.FILE_EDIT) {
-        const b = block as FileEditBlock;
-        b.success = true;
-      }
-      break;
-    }
-    case RawTool.WEB_FETCH: {
-      const parsed = ToolUseResultSchema.WebFetch.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.WEB_FETCH) {
-        const b = block as WebFetchBlock;
-        b.content = sanitize(parsed.data.result);
-        b.statusCode = parsed.data.code;
-        b.statusText = parsed.data.codeText;
-        b.bytes = parsed.data.bytes;
-        b.durationMs = parsed.data.durationMs;
-      }
-      break;
-    }
-    case RawTool.ASK_USER_QUESTION: {
-      const parsed = ToolUseResultSchema.AskUserQuestion.safeParse(toolUseResult);
-      if (parsed.success && block.type === BlockType.QUESTION) {
-        const b = block as QuestionBlock;
-        b.answers = parsed.data.answers;
-      }
-      break;
-    }
-    default: {
-      // MCP and Generic blocks - store raw output
-      if (block.type === BlockType.MCP) {
-        (block as McpBlock).output = toolUseResult;
-      }
-      if (block.type === BlockType.GENERIC) {
-        (block as GenericBlock).output = toolUseResult;
-      }
-      break;
-    }
-  }
+): Record<string, unknown> | null => {
+  const enhancer = outputEnhancers[toolName as keyof typeof outputEnhancers];
+  if (!enhancer) return null;
+
+  const parsed = enhancer.schema.safeParse(toolUseResult);
+  if (!parsed.success) return null;
+
+  // biome-ignore lint/suspicious/noExplicitAny: enhancer types are matched by registry key
+  return (enhancer.enhance as (data: any) => Record<string, unknown>)(parsed.data);
 };
 
 const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
@@ -471,9 +439,8 @@ const createPipeline = () => {
   let toolNames: string[] = [];
   let textParts: string[] = [];
   let hasToolResult = false;
-  let currentToolUseResult: unknown = undefined;
-  const toolBlockMap = new Map<string, TrackedToolBlock>();
-  const toolNameMap = new Map<string, string>();
+  let currentToolUseResult: unknown;
+  const pendingTools = new Map<string, PendingTool>();
   const taskToolMap = new Map<string, TrackedTaskTool>();
   const currentTasks: TaskItem[] = [];
 
@@ -521,24 +488,39 @@ const createPipeline = () => {
     hasToolResult = true;
     const rawText = extractText(raw.content);
 
+    // Handle task tools separately
     const taskTool = taskToolMap.get(raw.tool_use_id);
     if (taskTool) {
       emitTasksSnapshot(taskTool, sanitizeResult(taskTool.name, rawText));
       return;
     }
 
-    const toolBlock = toolBlockMap.get(raw.tool_use_id);
-    if (toolBlock) {
-      const toolName = toolNameMap.get(raw.tool_use_id) ?? "";
-      toolBlock.is_error = raw.is_error;
+    // Get pending tool and remove from map
+    const pending = pendingTools.get(raw.tool_use_id);
+    if (!pending) return;
+    pendingTools.delete(raw.tool_use_id);
 
-      // Prefer rich toolUseResult over raw string content
-      if (currentToolUseResult !== undefined) {
-        attachToolOutput(toolBlock, toolName, currentToolUseResult);
-      } else if (raw.is_error) {
-        // For errors, store the error message
-        toolBlock.error = sanitizeResult(toolName, rawText);
-      }
+    // Build complete block with output
+    const buildBlock = (extraFields: Record<string, unknown>): ContentBlock =>
+      ({ ...pending.block, ...extraFields, is_error: raw.is_error }) as ContentBlock;
+
+    // Handle MCP/Generic - store raw output
+    if (pending.block.type === BlockType.MCP || pending.block.type === BlockType.GENERIC) {
+      emit(buildBlock({ output: currentToolUseResult }));
+      return;
+    }
+
+    // Try to enhance with rich output
+    const outputFields = currentToolUseResult
+      ? enhanceToolOutput(pending.name, currentToolUseResult)
+      : null;
+
+    if (outputFields) {
+      emit(buildBlock(outputFields));
+    } else {
+      // No rich output - emit with error if present
+      const errorFields = raw.is_error ? { error: sanitizeResult(pending.name, rawText) } : {};
+      emit(buildBlock(errorFields));
     }
   };
 
@@ -547,10 +529,10 @@ const createPipeline = () => {
   };
 
   const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
-    const block = transformToolUse(raw.id, raw.name, raw.input) as TrackedToolBlock;
-    toolBlockMap.set(raw.id, block);
-    toolNameMap.set(raw.id, raw.name);
-    emit(block);
+    const block = transformToolUse(raw.id, raw.name, raw.input);
+    pendingTools.set(raw.id, { name: raw.name, block });
+    toolNames.push(raw.name);
+    // Don't emit - wait for tool_result
   };
 
   const ingestDefault = (raw: RawContentBlock): void => {
@@ -615,6 +597,12 @@ const createPipeline = () => {
   };
 
   const flush = (): void => {
+    // Emit any pending tools that never got results
+    for (const { block } of pendingTools.values()) {
+      emit(block);
+    }
+    pendingTools.clear();
+
     if (current) messages.push(current);
     current = null;
   };
