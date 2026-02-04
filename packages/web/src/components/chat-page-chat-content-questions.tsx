@@ -1,6 +1,8 @@
 "use client";
 
-import { Fragment } from "react";
+import { type ReactNode, Fragment } from "react";
+import { useTranslations } from "next-intl";
+import { not } from "ramda";
 import type { QuestionBlock } from "@/supabase/types/message";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,15 +13,20 @@ type ChatPageChatContentQuestionsProps = {
 };
 
 const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsProps) => {
+  const t = useTranslations();
+
   return (
     <Fragment>
       {block.questions.map((question) => {
         const answer = block.answers?.[question.question];
-        const isCustomAnswer = answer && !question.options.some((o) => o.label === answer);
+
+        const isAnswer = answer && question.options.some((option) => option.label === answer);
+        const isCustomAnswer = answer && not(isAnswer);
 
         return (
           <div key={question.header} className="flex flex-col gap-4">
             <Typography variant="small">{question.question}</Typography>
+
             <Tabs value={answer}>
               <TabsList>
                 {question.options.map((option) => (
@@ -33,11 +40,15 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
                 ))}
               </TabsList>
             </Tabs>
-            {isCustomAnswer && (
-              <Typography variant="small" className="text-gray-600">
-                Answer: {answer}
+
+            {isCustomAnswer ? (
+              <Typography variant="small">
+                {t.rich("chat.customAnswer", {
+                  answer,
+                  underline: (chunks: ReactNode) => <span className="border-b">{chunks}</span>,
+                })}
               </Typography>
-            )}
+            ) : null}
           </div>
         );
       })}

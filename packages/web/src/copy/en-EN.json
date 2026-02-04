@@ -124,7 +124,8 @@
     "fetch": "Fetch",
     "task": "Task",
     "mcp": "MCP",
-    "skill": "Skill"
+    "skill": "Skill",
+    "customAnswer": "Custom answer: <underline>{answer}</underline>"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
