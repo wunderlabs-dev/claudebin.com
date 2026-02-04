@@ -1,9 +1,10 @@
-import type { ReactNode } from "react";
+import { Children, isValidElement, type ReactNode } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import type { TextBlock } from "@/supabase/types/message";
 
+import { Code } from "@/components/ui/code";
 import { Divider } from "@/components/ui/divider";
 import { Steps, StepsItem } from "@/components/ui/steps";
 import { Typography } from "@/components/ui/typography";
@@ -22,21 +23,9 @@ type ChatPageChatContentTextProps = {
 };
 
 const components = {
-  h1: ({ children }: { children?: ReactNode }) => (
-    <Typography className="mt-8" variant="h2">
-      {children}
-    </Typography>
-  ),
-  h2: ({ children }: { children?: ReactNode }) => (
-    <Typography className="mt-8" variant="h3">
-      {children}
-    </Typography>
-  ),
-  h3: ({ children }: { children?: ReactNode }) => (
-    <Typography className="mt-8" variant="h4">
-      {children}
-    </Typography>
-  ),
+  h1: ({ children }: { children?: ReactNode }) => <Typography variant="h2">{children}</Typography>,
+  h2: ({ children }: { children?: ReactNode }) => <Typography variant="h3">{children}</Typography>,
+  h3: ({ children }: { children?: ReactNode }) => <Typography variant="h4">{children}</Typography>,
   p: ({ children }: { children?: ReactNode }) => (
     <Typography variant="small">{children}</Typography>
   ),
@@ -61,7 +50,18 @@ const components = {
   ul: ({ children }: { children?: ReactNode }) => <Steps variant="unordered">{children}</Steps>,
   li: ({ children }: { children?: ReactNode }) => <StepsItem>{children}</StepsItem>,
   em: ({ children }: { children?: ReactNode }) => <em className="italic">{children}</em>,
-  pre: ({ children }: { children?: ReactNode }) => <pre>{children}</pre>,
+  pre: ({ children }: { children?: ReactNode }) => {
+    const codeElement = Children.toArray(children)[0];
+
+    if (isValidElement<{ children?: string; className?: string }>(codeElement)) {
+      const code = String(codeElement.props.children ?? "").trimEnd();
+      const lang = codeElement.props.className?.replace("language-", "") || "typescript";
+
+      return <Code code={code} lang={lang} />;
+    }
+
+    return <pre>{children}</pre>;
+  },
   hr: () => <Divider className="my-8" />,
 };
 

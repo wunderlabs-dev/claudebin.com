@@ -63,7 +63,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         />
       </div>
 
-      <div className="col-span-3 flex flex-col justify-between border-gray-250 border-l px-6 pt-24 pb-12">
+      <div className="col-span-3 flex flex-col justify-between overflow-y-auto border-gray-250 border-l px-6 pt-24 pb-12">
         <ThreadPageSidebarContainer
           id={thread.id}
           isPublic={thread.isPublic}
