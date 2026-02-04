@@ -45,7 +45,7 @@ const Steps = ({ variant = "outlined", className, children, ...props }: StepsPro
 type StepsItemIconVariantMapping = Record<StepsVariant, string>;
 
 const stepsItemIconClassNames: StepsItemIconVariantMapping = {
-  ordered: "w-4 text-base text-orange-50 leading-6 before:content-[counter(step)]",
+  ordered: "w-4 text-base text-orange-50 text-left leading-6 before:content-[counter(step)]",
   outlined:
     "w-8 h-8 bg-orange-50/10 border border-orange-50 rounded-full text-base text-orange-50 before:content-[counter(step)]",
   unordered: "w-4 leading-6",
@@ -67,7 +67,7 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
       >
         {variant === "unordered" ? <SvgIconDot color="accent" /> : null}
       </span>
-      <Typography as="span" variant="small" className="min-w-0">
+      <Typography as="div" variant="small" className="min-w-0 space-y-2">
         {children}
       </Typography>
     </li>

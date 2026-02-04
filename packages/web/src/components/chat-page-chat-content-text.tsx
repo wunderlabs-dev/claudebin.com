@@ -79,7 +79,7 @@ const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
   const components = useMemo(() => createComponents(role), [role]);
 
   return (
-    <div className="flex max-w-full flex-col gap-4 [&>*:first-child]:mt-0">
+    <div className="flex flex-col max-w-full gap-4 [&>*:first-child]:mt-0">
       <Markdown remarkPlugins={[remarkGfm]} components={components}>
         {block.text}
       </Markdown>

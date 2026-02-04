@@ -13,7 +13,7 @@ type CodeProps = {
 
 const highlighter = await createHighlighter({
   themes: ["plastic"],
-  langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html", "diff"],
+  langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html", "sql", "diff"],
 });
 
 const Code = ({ code, lang = "typescript", variant = "assistant", className }: CodeProps) => {
@@ -29,9 +29,9 @@ const Code = ({ code, lang = "typescript", variant = "assistant", className }: C
     <div
       data-slot="code"
       className={cn(
-        "min-w-0 overflow-x-auto rounded-lg",
+        "overflow-x-auto min-w-0 rounded-lg",
         variant === "assistant" ? "bg-gray-200" : "bg-gray-100",
-        "[&_pre]:px-4 [&_pre]:py-3 [&_pre]:font-mono",
+        "[&_pre]:font-mono [&_pre]:text-sm [&_pre]:px-4 [&_pre]:py-3",
         className,
       )}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML

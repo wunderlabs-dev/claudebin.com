@@ -20,8 +20,8 @@ const Table = ({ variant = "assistant", className, ...props }: TableProps) => {
       <div
         data-slot="table-container"
         className={cn(
-          "relative w-full overflow-x-auto rounded-lg border border-gray-200",
-          variant === "user" && "bg-gray-100",
+          "relative overflow-x-auto w-full rounded-lg border border-gray-200",
+          variant === "user" ? "bg-gray-100" : undefined,
         )}
       >
         <table data-slot="table" className={cn("w-full caption-bottom", className)} {...props} />
@@ -36,7 +36,7 @@ const TableHeader = ({ className, ...props }: TableHeaderProps) => {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-gray-200 [&_tr]:border-b", className)}
+      className={cn("[&_tr]:border-b [&_tr]:border-gray-200", className)}
       {...props}
     />
   );
@@ -61,7 +61,7 @@ const TableFooter = ({ className, ...props }: TableFooterProps) => {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-gray-200 border-t bg-gray-100 font-medium [&>tr]:last:border-b-0",
+        "bg-gray-100 border-t border-gray-200 font-medium [&>tr]:last:border-b-0",
         className,
       )}
       {...props}
@@ -78,8 +78,8 @@ const TableRow = ({ className, ...props }: TableRowProps) => {
     <tr
       data-slot="table-row"
       className={cn(
-        "group border-gray-200 border-b transition-colors data-[state=selected]:bg-gray-100",
-        variant === "user" ? "hover:bg-gray-500/5" : "hover:border-gray-100 hover:bg-gray-500/10",
+        "group border-b border-gray-200 transition-colors data-[state=selected]:bg-gray-100",
+        variant === "user" ? "hover:bg-gray-500/5" : "hover:bg-gray-500/10 hover:border-gray-100",
         className,
       )}
       {...props}
@@ -94,8 +94,7 @@ const TableHead = ({ className, ...props }: TableHeadProps) => {
     <th
       data-slot="table-head"
       className={cn(
-        "whitespace-nowrap px-4 py-3 text-left align-middle font-medium text-white text-xl",
-        "border-gray-200 border-r transition-colors last:border-r-0 group-hover:border-gray-100",
+        "align-middle px-4 py-3 border-r border-gray-200 font-medium text-left text-lg text-white whitespace-nowrap transition-colors last:border-r-0 group-hover:border-gray-100",
         className,
       )}
       {...props}
@@ -110,8 +109,7 @@ const TableCell = ({ className, ...props }: TableCellProps) => {
     <td
       data-slot="table-cell"
       className={cn(
-        "whitespace-nowrap px-4 py-3 align-middle text-base text-white",
-        "border-gray-200 border-r transition-colors last:border-r-0 group-hover:border-gray-100",
+        "align-middle px-4 py-3 border-r border-gray-200 text-base text-white whitespace-nowrap transition-colors last:border-r-0 group-hover:border-gray-100",
         className,
       )}
       {...props}
@@ -125,7 +123,7 @@ const TableCaption = ({ className, ...props }: TableCaptionProps) => {
   return (
     <caption
       data-slot="table-caption"
-      className={cn("mt-4 text-gray-400 text-sm", className)}
+      className={cn("mt-4 text-sm text-gray-400", className)}
       {...props}
     />
   );
