@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["NEXT_PUBLIC_SENTRY_DSN", "SENTRY_AUTH_TOKEN"],
+  "globalEnv": ["NEXT_PUBLIC_SENTRY_DSN", "NEXT_PUBLIC_SENTRY_ENV", "SENTRY_AUTH_TOKEN"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

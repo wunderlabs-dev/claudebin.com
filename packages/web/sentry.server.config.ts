@@ -6,11 +6,11 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
-  // Environment: production, preview, or development
-  environment: process.env.VERCEL_ENV || process.env.NODE_ENV,
+  // Environment: production, staging, or development
+  environment: process.env.NEXT_PUBLIC_SENTRY_ENV || process.env.NODE_ENV,
 
-  // Sample 10% of transactions in production, 100% in preview
-  tracesSampleRate: process.env.VERCEL_ENV === "production" ? 0.1 : 1.0,
+  // Sample 10% of transactions in production, 100% in staging
+  tracesSampleRate: process.env.NEXT_PUBLIC_SENTRY_ENV === "production" ? 0.1 : 1.0,
 
   // Enable logs to be sent to Sentry
   enableLogs: true,
