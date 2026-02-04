@@ -7,6 +7,7 @@ import type { TextBlock } from "@/supabase/types/message";
 import { Divider } from "@/components/ui/divider";
 import { Steps, StepsItem } from "@/components/ui/steps";
 import { Typography } from "@/components/ui/typography";
+
 import {
   Table,
   TableHeader,
@@ -38,6 +39,11 @@ const components = {
   ),
   p: ({ children }: { children?: ReactNode }) => (
     <Typography variant="small">{children}</Typography>
+  ),
+  a: ({ href, children }: { href?: string; children?: ReactNode }) => (
+    <a href={href} className="text-orange-50 hover:underline">
+      {children}
+    </a>
   ),
   strong: ({ children }: { children?: ReactNode }) => (
     <strong className="font-semibold">{children}</strong>

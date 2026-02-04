@@ -4,11 +4,11 @@ import type * as React from "react";
 import { createContext, useContext } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import type { Role } from "@/supabase/types/message";
+
 import { cn } from "@/utils/helpers";
 
-type ChatItemVariant = "user" | "assistant";
-
-const ChatItemContext = createContext<ChatItemVariant>("assistant");
+const ChatItemContext = createContext<Role>("assistant");
 
 type ChatProps = React.ComponentProps<"div">;
 
