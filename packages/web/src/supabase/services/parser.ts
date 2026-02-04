@@ -268,16 +268,9 @@ type TrackedTaskTool = {
   id: string;
   name: string;
   input: Record<string, unknown>;
-  group: string;
-  result?: string;
-  is_error?: boolean;
 };
 
 type ToolBlockWithId = ContentBlock & { id: string; result?: string; is_error?: boolean };
-
-type TasksAnchor = { type: typeof BlockType.TASKS; tasks: TaskItem[] };
-
-const Group = { TASKS: "tasks" } as const;
 
 const isTaskTool = (name: string): boolean => RAW_TASK_TOOLS.includes(name);
 
@@ -296,7 +289,7 @@ const createPipeline = () => {
   const toolBlockMap = new Map<string, ToolBlockWithId>();
   const toolNameMap = new Map<string, string>();
   const taskToolMap = new Map<string, TrackedTaskTool>();
-  const groups = new Map<string, TasksAnchor>();
+  const currentTasks: TaskItem[] = [];
 
   const messages: IntermediateMessage[] = [];
   let current: IntermediateMessage | null = null;
@@ -311,17 +304,14 @@ const createPipeline = () => {
     if (block.type === BlockType.TEXT) textParts.push(block.text);
   };
 
-  const updateTaskAnchor = (taskTool: TrackedTaskTool): void => {
-    const anchor = groups.get(Group.TASKS);
-    if (!anchor || !taskTool.result) return;
-
-    const taskId = extractTaskId(taskTool.result);
+  const emitTasksSnapshot = (taskTool: TrackedTaskTool, result: string): void => {
+    const taskId = extractTaskId(result);
     if (!taskId) return;
 
     if (taskTool.name === RawTool.TASK_CREATE) {
       const parsed = ToolInputSchema.TaskCreate.safeParse(taskTool.input);
       if (parsed.success) {
-        anchor.tasks.push({
+        currentTasks.push({
           id: taskId,
           subject: parsed.data.subject,
           description: parsed.data.description,
@@ -332,11 +322,13 @@ const createPipeline = () => {
 
     if (taskTool.name === RawTool.TASK_UPDATE) {
       const parsed = ToolInputSchema.TaskUpdate.safeParse(taskTool.input);
-      const task = anchor.tasks.find((t) => t.id === taskId);
+      const task = currentTasks.find((t) => t.id === parsed.data?.taskId);
       if (parsed.success && task && parsed.data.status) {
         task.status = parsed.data.status;
       }
     }
+
+    emit({ type: BlockType.TASKS, tasks: [...currentTasks] });
   };
 
   const ingestToolResult = (raw: Extract<RawContentBlock, { type: "tool_result" }>): void => {
@@ -345,9 +337,7 @@ const createPipeline = () => {
 
     const taskTool = taskToolMap.get(raw.tool_use_id);
     if (taskTool) {
-      taskTool.result = sanitizeResult(taskTool.name, rawText);
-      taskTool.is_error = raw.is_error;
-      updateTaskAnchor(taskTool);
+      emitTasksSnapshot(taskTool, sanitizeResult(taskTool.name, rawText));
       return;
     }
 
@@ -360,16 +350,7 @@ const createPipeline = () => {
   };
 
   const ingestTaskTool = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
-    taskToolMap.set(raw.id, {
-      id: raw.id,
-      name: raw.name,
-      input: raw.input,
-      group: Group.TASKS,
-    });
-    if (groups.has(Group.TASKS)) return;
-    const anchor: TasksAnchor = { type: BlockType.TASKS, tasks: [] };
-    groups.set(Group.TASKS, anchor);
-    emit(anchor);
+    taskToolMap.set(raw.id, { id: raw.id, name: raw.name, input: raw.input });
   };
 
   const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
