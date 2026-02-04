@@ -1,7 +1,10 @@
+"use client";
+
+import { Fragment } from "react";
 import type { QuestionBlock } from "@/supabase/types/message";
 
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Typography } from "@/components/ui/typography";
-
 
 type ChatPageChatContentQuestionsProps = {
   block: QuestionBlock;
@@ -9,23 +12,22 @@ type ChatPageChatContentQuestionsProps = {
 
 const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsProps) => {
   return (
-    <div className="flex flex-col gap-2">
+    <Fragment>
       {block.questions.map((question) => (
-        <div key={question.header} className="flex flex-col gap-1 text-xs">
+        <div key={question.header} className="flex flex-col gap-4">
           <Typography variant="small">{question.question}</Typography>
-          <div className="flex flex-wrap gap-1">
-            {question.options.map((option) => (
-              <span
-                key={option.label}
-                className="rounded-full bg-gray-100 px-2 py-0.5 text-gray-600"
-              >
-                {option.label}
-              </span>
-            ))}
-          </div>
+          <Tabs value={question.options[0]?.label}>
+            <TabsList>
+              {question.options.map((option) => (
+                <TabsTrigger key={option.label} value={option.label}>
+                  {option.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
       ))}
-    </div>
+    </Fragment>
   );
 };
 
