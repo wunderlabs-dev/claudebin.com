@@ -1,7 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
-import type * as React from "react";
+import { createContext, useContext, type ComponentProps } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/utils/helpers";
@@ -12,7 +11,7 @@ type TabsVariant = (typeof TabsVariants)[number];
 
 const TabsContext = createContext<TabsVariant>("default");
 
-type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root> & {
+type TabsProps = ComponentProps<typeof TabsPrimitive.Root> & {
   variant?: TabsVariant;
 };
 
@@ -35,7 +34,7 @@ const tabsListVariantClassNames: Record<TabsVariant, string> = {
   list: "flex-col items-start h-auto p-1 bg-gray-200 border border-gray-50 rounded-xl",
 } as const;
 
-const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) => {
+const TabsList = ({ className, ...props }: ComponentProps<typeof TabsPrimitive.List>) => {
   const variant = useContext(TabsContext);
 
   return (
@@ -64,7 +63,7 @@ const tabsTriggerVariantClassNames: Record<TabsVariant, string> = {
 const TabsTrigger = ({
   className,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
+}: ComponentProps<typeof TabsPrimitive.Trigger>) => {
   const variant = useContext(TabsContext);
 
   return (
@@ -89,7 +88,7 @@ const TabsTrigger = ({
 const TabsContent = ({
   className,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) => {
+}: ComponentProps<typeof TabsPrimitive.Content>) => {
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
