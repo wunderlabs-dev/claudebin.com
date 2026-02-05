@@ -6,15 +6,19 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { cn } from "@/utils/helpers";
 
 import { SvgIconArrowBottom } from "@/components/icon";
+import { useChatItemRole } from "@/components/ui/chat";
 
 type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;
 
 const Accordion = ({ className, ...props }: AccordionProps) => {
+  const variant = useChatItemRole();
+
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
       className={cn(
-        "min-w-full lg:min-w-md xl:min-w-xl rounded-xl border border-gray-200 px-4",
+        "min-w-full lg:min-w-md xl:min-w-xl rounded-xl border px-4",
+        variant === "user" ? "border-gray-250" : "border-gray-200",
         className,
       )}
       {...props}

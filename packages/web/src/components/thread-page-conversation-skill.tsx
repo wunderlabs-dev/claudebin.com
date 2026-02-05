@@ -21,22 +21,20 @@ type ThreadPageConversationSkillProps = {
 
 const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps) => {
   const t = useTranslations();
-  const hasContent = block.instructions || block.output;
 
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="skill">
-        <AccordionTrigger disabled={!hasContent}>
+        <AccordionTrigger>
           <SvgIconGlitters size="sm" color="primary" />
           {t("chat.skill")}
           <ThreadPageConversationChip label={block.commandName} />
         </AccordionTrigger>
-        {hasContent ? (
-          <AccordionContent>
-            {block.instructions ? <Code code={block.instructions} /> : null}
-            {block.output ? <Code code={block.output} /> : null}
-          </AccordionContent>
-        ) : null}
+
+        <AccordionContent>
+          {block.instructions ? <Code code={block.instructions} /> : null}
+          {block.output ? <Code code={block.output} /> : null}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );

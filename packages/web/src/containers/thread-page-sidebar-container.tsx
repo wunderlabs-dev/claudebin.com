@@ -54,10 +54,10 @@ const ThreadPageSidebarContainer = ({
       </Badge>
 
       <List className="w-full gap-3">
+        <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
         <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
           {t("thread.created", { date: createdAt })}
         </ListItem>
-        <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
         <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
         {messageCount ? (
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>

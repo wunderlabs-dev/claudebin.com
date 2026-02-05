@@ -1,13 +1,13 @@
+"use client";
+
 import { createHighlighter } from "shiki";
 
-import type { Role } from "@/supabase/types/message";
-
 import { cn } from "@/utils/helpers";
+import { useChatItemRole } from "@/components/ui/chat";
 
 type CodeProps = {
   code: string;
   lang?: string;
-  variant?: Role;
   className?: string;
 };
 
@@ -16,7 +16,9 @@ const highlighter = await createHighlighter({
   langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html", "sql", "diff"],
 });
 
-const Code = ({ code, lang = "typescript", variant = "assistant", className }: CodeProps) => {
+const Code = ({ code, lang = "typescript", className }: CodeProps) => {
+  const role = useChatItemRole();
+
   const html = highlighter.codeToHtml(code, {
     lang,
     theme: "plastic",
@@ -30,7 +32,7 @@ const Code = ({ code, lang = "typescript", variant = "assistant", className }: C
       data-slot="code"
       className={cn(
         "overflow-x-auto scrollbar-hidden min-w-0 rounded-lg",
-        variant === "assistant" ? "bg-gray-200" : "bg-gray-100",
+        role === "assistant" ? "bg-gray-200" : "bg-gray-100",
         "[&_pre]:font-mono [&_pre]:text-sm [&_pre]:px-4 [&_pre]:py-3",
         className,
       )}
