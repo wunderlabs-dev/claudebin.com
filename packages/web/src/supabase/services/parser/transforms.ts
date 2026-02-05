@@ -172,6 +172,7 @@ export const transformToolUse = (
       if (mcpInfo) {
         return { type: BlockType.MCP, id, ...mcpInfo, input };
       }
+      console.error("[parser] Unknown tool falling back to generic", { name, inputKeys: Object.keys(input) });
       return fallback;
     }
   }
