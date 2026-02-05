@@ -15,7 +15,7 @@ const ThreadPageConversationChip = ({ icon, label }: ThreadPageConversationChipP
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Chip icon={icon} label={label} />
+          <Chip icon={icon} label={label} className="truncate max-w-2xs" />
         </TooltipTrigger>
         <TooltipContent>{label}</TooltipContent>
       </Tooltip>

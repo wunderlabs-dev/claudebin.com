@@ -12,8 +12,8 @@ import { useChatItemRole } from "@/components/ui/chat";
 
 import { Code } from "@/components/ui/code";
 import { Divider } from "@/components/ui/divider";
-import { Steps, StepsItem } from "@/components/ui/steps";
 import { Typography } from "@/components/ui/typography";
+import { Steps, StepsItem } from "@/components/ui/steps";
 
 import {
   Table,
@@ -102,7 +102,7 @@ const parseCodeBlock = (children: ReactNode) => {
 };
 
 const createComponents = (role: Role) => ({
-  hr: () => <Divider className="my-8" />,
+  hr: () => <Divider />,
   table: ({ children }: { children?: ReactNode }) => <Table variant={role}>{children}</Table>,
   thead: ({ children }: { children?: ReactNode }) => <TableHeader>{children}</TableHeader>,
   tbody: ({ children }: { children?: ReactNode }) => <TableBody>{children}</TableBody>,

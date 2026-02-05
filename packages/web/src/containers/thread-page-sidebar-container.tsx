@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 
-import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";
 
 import { SvgIconGlobe } from "@/components/icon";
@@ -38,7 +37,6 @@ const ThreadPageSidebarContainer = ({
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
-  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   return (
     <div className="flex flex-col items-start gap-6">

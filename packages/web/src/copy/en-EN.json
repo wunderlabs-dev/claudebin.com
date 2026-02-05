@@ -82,6 +82,7 @@
     "linesWritten": "{count} lines written",
     "openSharing": "Open sharing",
     "fork": "Fork",
+    "continue": "Continue",
     "continueConversation": "Continue conversation",
     "continueTitle": "Continue this conversation?",
     "continueDescription": "Paste the following prompt in Claude Code to pick up where this left off",

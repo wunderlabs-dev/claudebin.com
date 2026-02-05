@@ -113,6 +113,7 @@ const ButtonText = ({ className, ...props }: ButtonTextProps) => {
         "after:origin-left after:scale-x-0",
         "after:transition-transform after:ease-in-out",
         "group-hover:after:scale-x-100 group-active:text-orange-50",
+        "[&_svg]:shrink-0",
         className,
       )}
       {...props}
