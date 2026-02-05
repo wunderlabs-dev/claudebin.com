@@ -42,9 +42,19 @@ export type ContentBlock =
   | TasksBlock
   | SkillBlock;
 
+export type ImageAttachment = {
+  type: "image";
+  sourceType: "base64" | "url";
+  mediaType?: string; // "image/png", "image/jpeg", etc.
+  data: string; // base64 data or URL
+};
+
+export type Attachment = ImageAttachment;
+
 export interface TextBlock {
   type: typeof BlockType.TEXT;
   text: string;
+  attachments?: Attachment[];
 }
 
 export interface ThinkingBlock {
