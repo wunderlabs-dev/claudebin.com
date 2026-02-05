@@ -30,7 +30,9 @@ const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileRea
           {t("chat.read")}
           <ThreadPageConversationChip label={block.file_path} />
         </AccordionTrigger>
-        <AccordionContent>{block.content ? <Code code={block.content} /> : null}</AccordionContent>
+        <AccordionContent>
+          <Code code={block.content ?? t("common.noResultsFound")} />
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );
