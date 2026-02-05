@@ -46,7 +46,6 @@ const ThreadPageSidebarContainer = ({
 }: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
 
-
   return (
     <div className="flex flex-col items-start gap-6">
       <Badge variant="neutral">
