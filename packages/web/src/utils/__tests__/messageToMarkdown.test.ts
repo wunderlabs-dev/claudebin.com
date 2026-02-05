@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test";
 
 import { messagesToMarkdown } from "../messageToMarkdown";
-import { BlockType, MessageRole } from "@/supabase/types/message";
+import { BlockType } from "@/supabase/types/message";
 import type { Message } from "@/supabase/repos/messages";
 
 const createMessage = (role: "user" | "assistant", content: Message["content"]): Message => ({
@@ -14,8 +14,12 @@ const createMessage = (role: "user" | "assistant", content: Message["content"]):
   isMeta: false,
   isSidechain: false,
   hasToolCalls: false,
-  toolNames: null,
-  textPreview: null,
+  toolNames: [],
+  textPreview: "",
+  model: null,
+  parentUuid: null,
+  timestamp: new Date().toISOString(),
+  type: "message",
   createdAt: new Date().toISOString(),
 });
 
