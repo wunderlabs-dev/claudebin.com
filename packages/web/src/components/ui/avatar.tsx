@@ -30,7 +30,7 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
         data-slot="avatar"
         className={cn(
           "relative flex shrink-0 overflow-hidden",
-          "bg-orange-50/10 rounded-full outline outline-orange-150",
+          "rounded-full bg-orange-50/10 outline outline-orange-150",
           "select-none",
           avatarSizeClassNames[size],
           className,

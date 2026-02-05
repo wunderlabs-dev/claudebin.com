@@ -48,7 +48,7 @@ const buttonVariants = cva(
           "active:bg-red-50/60",
           "disabled:border-transparent disabled:bg-red-50/10 disabled:text-gray-450",
         ],
-        link: ["group", "h-auto rounded-none px-0 py-0", "disabled:text-gray-250"],
+        link: ["group", "h-auto px-0 py-0 rounded-none", "disabled:text-gray-250"],
       },
       color: {
         default: [],

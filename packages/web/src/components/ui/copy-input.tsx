@@ -28,7 +28,7 @@ const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode =
 
   if (variant === "terminal") {
     return (
-      <div className="flex items-center justify-between gap-5 rounded-full border border-gray-50 bg-gray-200 p-1 transition ease-in-out hover:border-orange-50/60 active:border-orange-50">
+      <div className="flex items-center justify-between gap-5 p-1 bg-gray-200 rounded-full border border-gray-50 transition ease-in-out hover:border-orange-50/60 active:border-orange-50">
         <div className="flex items-center gap-5 pl-6">
           <SvgIconBash className="shrink-0 text-orange-300" />
           <span className="flex-1 whitespace-nowrap font-mono text-base text-orange-50">

@@ -33,7 +33,7 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
       className={cn(
         "overflow-x-auto scrollbar-hidden min-w-0 w-full rounded-lg",
         role === "assistant" ? "bg-gray-200" : "bg-gray-100",
-        "[&_pre]:font-mono [&_pre]:text-sm [&_pre]:px-4 [&_pre]:py-3",
+        "[&_pre]:px-4 [&_pre]:py-3 [&_pre]:font-mono [&_pre]:text-sm",
         className,
       )}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML

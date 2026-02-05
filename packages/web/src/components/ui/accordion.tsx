@@ -48,7 +48,7 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
         data-slot="accordion-trigger"
         className={cn(
           "group",
-          "flex flex-1 items-center justify-between gap-3 w-full",
+          "flex flex-1 items-center justify-between w-full gap-3",
           "py-3",
           "text-left font-medium font-mono text-base",
           "transition ease-in-out",

@@ -15,10 +15,10 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "border border-orange-50/50 bg-orange-50/10 text-orange-50",
-        success: "border border-green-50/50 bg-green-50/10 text-green-50",
-        error: "border border-red-50/50 bg-red-50/10 text-red-50",
-        neutral: "border border-gray-500/50 bg-gray-500/10 text-gray-500",
+        default: "bg-orange-50/10 border border-orange-50/50 text-orange-50",
+        success: "bg-green-50/10 border border-green-50/50 text-green-50",
+        error: "bg-red-50/10 border border-red-50/50 text-red-50",
+        neutral: "bg-gray-500/10 border border-gray-500/50 text-gray-500",
       },
     },
     defaultVariants: {
