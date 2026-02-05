@@ -5,7 +5,7 @@ import { SkeletonAvatar, SkeletonBar } from "@/components/ui/skeleton";
 
 const ThreadPageConversationSkeleton = () => {
   return (
-    <Chat className="min-h-screen lg:pr-12">
+    <Chat className="lg:min-h-screen lg:pr-12">
       <ChatItem variant="user">
         <ChatContent className="w-1/4">
           <SkeletonBar className="w-full" />
@@ -24,7 +24,6 @@ const ThreadPageConversationSkeleton = () => {
 
       <ChatItem variant="user">
         <ChatContent className="w-1/3">
-          <SkeletonBar className="w-1/3" />
           <SkeletonBar className="w-full" />
         </ChatContent>
         <SkeletonAvatar />

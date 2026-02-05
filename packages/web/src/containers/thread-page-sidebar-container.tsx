@@ -1,12 +1,12 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { APP_THREADS_URL } from "@/utils/constants";
 
-import { SvgIconGlobe } from "@/components/icon";
 import { CopyInput } from "@/components/ui/copy-input";
-import { Badge } from "@/components/ui/badge";
 
 import { ThreadPageThreadMeta } from "@/components/thread-page-thread-meta";
 import { ThreadPageSidebarContinueConversation } from "@/components/thread-page-sidebar-continue-conversation";
@@ -36,26 +36,24 @@ const ThreadPageSidebarContainer = ({
   likeCount,
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
-  const t = useTranslations();
+  const lg = useMediaQuery(breakpoints.lg);
 
   return (
     <div className="flex flex-col items-start gap-6">
-      <Badge variant="neutral">
-        <SvgIconGlobe size="sm" />
-        {isPublic ? t("common.public") : t("common.private")}
-      </Badge>
-
-      <ThreadPageThreadMeta
-        id={id}
-        createdAt={createdAt}
-        fileCount={fileCount}
-        viewCount={viewCount}
-        likeCount={likeCount}
-        workingDir={workingDir}
-        modelName={modelName}
-        messageCount={messageCount}
-        initialLiked={initialLiked}
-      />
+      {lg ? (
+        <ThreadPageThreadMeta
+          id={id}
+          isPublic={isPublic}
+          createdAt={createdAt}
+          fileCount={fileCount}
+          viewCount={viewCount}
+          likeCount={likeCount}
+          workingDir={workingDir}
+          modelName={modelName}
+          messageCount={messageCount}
+          initialLiked={initialLiked}
+        />
+      ) : null}
 
       <div className="flex flex-col w-full gap-8">
         <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />

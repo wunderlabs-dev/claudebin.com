@@ -9,8 +9,10 @@ import {
   SvgIconEye,
   SvgIconFile,
   SvgIconFolder,
+  SvgIconGlobe,
 } from "@/components/icon";
 
+import { Badge } from "@/components/ui/badge";
 import { List, ListItem } from "@/components/ui/list";
 
 import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
@@ -25,6 +27,7 @@ type ThreadPageThreadMetaProps = {
   modelName?: string | null;
   messageCount?: number | null;
   initialLiked?: boolean;
+  isPublic?: boolean;
 };
 
 const ThreadPageThreadMeta = ({
@@ -37,29 +40,37 @@ const ThreadPageThreadMeta = ({
   modelName,
   messageCount,
   initialLiked,
+  isPublic,
 }: ThreadPageThreadMetaProps) => {
   const t = useTranslations();
 
   return (
-    <List className="w-full gap-3 pb-9 lg:pb-0 border-b lg:border-b-0 border-gray-250">
-      <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
-      <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
-        {t("thread.created", { date: createdAt })}
-      </ListItem>
-      <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
-      {messageCount ? (
-        <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-          {t("common.messages", { count: messageCount })}
+    <div className="flex flex-col gap-6">
+      <Badge variant="neutral">
+        <SvgIconGlobe size="sm" />
+        {isPublic ? t("common.public") : t("common.private")}
+      </Badge>
+
+      <List className="w-full gap-3 pb-9 lg:pb-0 border-b lg:border-b-0 border-gray-250">
+        <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
+        <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
+          {t("thread.created", { date: createdAt })}
         </ListItem>
-      ) : null}
-      <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-        {t("common.files", { count: fileCount })}
-      </ListItem>
-      <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
-        {t("common.views", { count: viewCount })}
-      </ListItem>
-      <ThreadPageSidebarLikeContainer id={id} initialLiked={initialLiked} likeCount={likeCount} />
-    </List>
+        <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
+        {messageCount ? (
+          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
+            {t("common.messages", { count: messageCount })}
+          </ListItem>
+        ) : null}
+        <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
+          {t("common.files", { count: fileCount })}
+        </ListItem>
+        <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
+          {t("common.views", { count: viewCount })}
+        </ListItem>
+        <ThreadPageSidebarLikeContainer id={id} initialLiked={initialLiked} likeCount={likeCount} />
+      </List>
+    </div>
   );
 };
 
