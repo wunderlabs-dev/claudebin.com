@@ -10,7 +10,7 @@ const HomePage = async () => {
   const { threads } = await sessions.getPublicThreads(supabase);
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden [--util-grid-columns:10] md:[--util-grid-columns:20] lg:[--util-grid-columns:30]">
       <HomePageHeroIntroduction />
       <HomePageTutorialsList />
       <HomePageRecentThreadsCarousel threads={threads} />
