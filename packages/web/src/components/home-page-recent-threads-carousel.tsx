@@ -38,7 +38,11 @@ const HomePageRecentThreadsCarousel = ({
         <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
 
         <div className="flex flex-col md:flex-row gap-2 md:gap-0 items-start md:items-center justify-between">
-          <Typography variant="body" color="neutral" className="md:whitespace-break-spaces leading-8">
+          <Typography
+            variant="body"
+            color="neutral"
+            className="md:whitespace-break-spaces leading-8"
+          >
             {t("home.recentThreadsDescription")}
           </Typography>
 
