@@ -68,9 +68,7 @@ const createComponents = (role: Role) => ({
     </Typography>
   ),
   p: ({ children }: { children?: ReactNode }) => (
-    <Typography variant="small" className="break-all">
-      {children}
-    </Typography>
+    <Typography variant="small">{children}</Typography>
   ),
   a: ({ href, children }: { href?: string; children?: ReactNode }) => (
     <a href={href} className="text-orange-50 hover:underline">
@@ -98,7 +96,7 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
   const components = useMemo(() => createComponents(role), [role]);
 
   return (
-    <div className="flex flex-col max-w-full gap-4 [&>*:first-child]:mt-0">
+    <div className="flex flex-col max-w-full gap-4 [&>*:first-child]:mt-0 break-all">
       {block.text.trim().length ? (
         <Markdown remarkPlugins={REMARK_PLUGINS} components={components}>
           {block.text}
