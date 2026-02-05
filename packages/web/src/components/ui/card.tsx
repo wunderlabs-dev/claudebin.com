@@ -23,8 +23,8 @@ type CardProps = {
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex shrink-0 flex-col justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
-  list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 hover:z-10 lg:divide-y-0 lg:divide-x",
-  grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 hover:z-10 lg:grid-cols-3 lg:divide-y-0 lg:divide-x",
+  list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 lg:divide-y-0 lg:divide-x hover:z-10",
+  grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 lg:grid-cols-3 lg:divide-y-0 lg:divide-x hover:z-10",
 } as const;
 
 const Card = ({ variant = "card", href, className, children, ...props }: CardProps) => {

@@ -20,9 +20,9 @@ type DividerGridEdgeProps = {
 };
 
 const edgeVariantClassNames = {
-  left: "w-16 h-px bg-gradient-to-l from-gray-250 to-transparent",
-  right: "w-16 h-px bg-gradient-to-r from-gray-250 to-transparent",
-};
+  left: "h-px w-16 bg-gradient-to-l from-gray-250 to-transparent",
+  right: "h-px w-16 bg-gradient-to-r from-gray-250 to-transparent",
+} as const;
 
 const DividerGridEdge = ({ position, className }: DividerGridEdgeProps) => (
   <div
@@ -50,7 +50,7 @@ type DividerGridDividerProps = {
 const dividerVariantClassNames = {
   top: "h-16 w-px bg-gradient-to-t from-gray-250 to-transparent",
   bottom: "h-16 w-px bg-gradient-to-b from-gray-250 to-transparent",
-};
+} as const;
 
 const DividerGridDivider = ({ variant, className }: DividerGridDividerProps) => (
   <div className={cn(dividerVariantClassNames[variant], className)} />

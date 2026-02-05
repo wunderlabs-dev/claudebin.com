@@ -13,7 +13,7 @@ type ListAlign = (typeof ListAligns)[number];
 const listDirectionClassNames: Record<ListDirection, string> = {
   row: "flex flex-row items-center gap-3",
   column: "flex flex-col gap-1",
-};
+} as const;
 
 const listAlignClassNames: Record<ListAlign, string | string[]> = {
   start: [],
