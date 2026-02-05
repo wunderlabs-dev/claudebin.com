@@ -12,7 +12,7 @@ const ChatItemContext = createContext<Role>("assistant");
 type ChatProps = ComponentProps<"div">;
 
 const Chat = ({ className, ...props }: ChatProps) => {
-  return <div data-slot="chat" className={cn("flex flex-col gap-8", className)} {...props} />;
+  return <div data-slot="chat" className={cn("flex flex-col", className)} {...props} />;
 };
 
 const chatItemVariants = cva(["flex items-start gap-4 pb-8"], {
