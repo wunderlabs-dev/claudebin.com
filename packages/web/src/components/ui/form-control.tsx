@@ -51,7 +51,7 @@ const inputVariants = cva(
         default: "rounded-full border border-gray-50 focus:border-orange-50",
         error:
           "rounded-full border border-red-50 text-red-50 placeholder:text-red-50 focus:border-red-50",
-        filled: "rounded-lg border-none px-4",
+        filled: "px-4 rounded-lg border-none",
       },
     },
     defaultVariants: {
@@ -108,7 +108,7 @@ const textareaVariants = cva(
   [
     "w-full",
     "px-4 py-3",
-    "rounded-lg bg-gray-200",
+    "bg-gray-200 rounded-lg",
     "font-mono font-normal text-base leading-6",
     "resize-none outline-none",
     "transition ease-in-out",

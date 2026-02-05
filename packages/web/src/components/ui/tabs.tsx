@@ -6,7 +6,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/utils/helpers";
 
-const TabsVariants = ["default", "transparent"] as const;
+const TabsVariants = ["default", "transparent", "list"] as const;
 
 type TabsVariant = (typeof TabsVariants)[number];
 
@@ -32,6 +32,7 @@ const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
 const tabsListVariantClassNames: Record<TabsVariant, string> = {
   default: "p-1 bg-gray-200 border border-gray-50 rounded-full",
   transparent: "p-1 border border-transparent rounded-full",
+  list: "flex-col items-start w-full h-auto p-1 bg-gray-200 border border-gray-50 rounded-xl",
 } as const;
 
 const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) => {
@@ -53,9 +54,11 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
 };
 
 const tabsTriggerVariantClassNames: Record<TabsVariant, string> = {
-  default: "data-[state=active]:bg-gray-100 data-[state=active]:text-white",
+  default:
+    "cursor-pointer hover:text-white data-[state=active]:bg-gray-100 data-[state=active]:text-white",
   transparent:
-    "border border-transparent data-[state=active]:border-gray-50 data-[state=active]:text-white",
+    "border border-transparent cursor-pointer hover:text-white data-[state=active]:border-gray-50 data-[state=active]:text-white",
+  list: "justify-start w-full rounded-lg text-left data-[state=active]:bg-gray-100 data-[state=active]:text-white data-[state=inactive]:line-through",
 } as const;
 
 const TabsTrigger = ({
@@ -73,9 +76,7 @@ const TabsTrigger = ({
         "px-6 py-2",
         "rounded-full",
         "font-normal text-base text-gray-450",
-        "cursor-pointer select-none",
         "transition ease-in-out",
-        "hover:text-white",
         "disabled:pointer-events-none disabled:opacity-50",
         tabsTriggerVariantClassNames[variant],
         className,

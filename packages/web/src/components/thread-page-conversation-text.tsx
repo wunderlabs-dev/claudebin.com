@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { Children, isValidElement, useMemo, useState, type ReactNode } from "react";
+import { Children, isValidElement, useMemo, type ReactNode } from "react";
 import { head, last, split } from "ramda";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import type { Attachment, Role, TextBlock } from "@/supabase/types/message";
+import type { Role, TextBlock } from "@/supabase/types/message";
 
 import { useChatItemRole } from "@/components/ui/chat";
 
@@ -24,6 +23,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
+import { ThreadPageConversationAttachmentChip } from "@/components/thread-page-conversation-attachment-chip";
+
 type CodeElementProps = {
   children?: string;
   className?: string;
@@ -31,62 +32,6 @@ type CodeElementProps = {
 
 type ThreadPageConversationTextProps = {
   block: TextBlock;
-};
-
-type ImageAttachmentProps = {
-  attachment: Attachment;
-};
-
-const ImageAttachmentComponent = ({ attachment }: ImageAttachmentProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-
-  const src =
-    attachment.sourceType === "base64"
-      ? `data:${attachment.mediaType ?? "image/png"};base64,${attachment.data}`
-      : attachment.data;
-
-  const handleLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
-
-  if (hasError) {
-    return (
-      <div className="flex items-center justify-center w-full max-w-md h-32 bg-gray-100 rounded-lg border border-gray-200">
-        <Typography variant="small" className="text-gray-500">
-          Failed to load image
-        </Typography>
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative max-w-full">
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
-          <Typography variant="small" className="text-gray-500">
-            Loading...
-          </Typography>
-        </div>
-      )}
-      <Image
-        src={src}
-        alt="User attached screenshot"
-        className="max-w-full h-auto rounded-lg border border-gray-200"
-        width={800}
-        height={600}
-        unoptimized
-        onLoad={handleLoad}
-        onError={handleError}
-        style={{ display: isLoading ? "none" : "block", width: "auto", height: "auto" }}
-      />
-    </div>
-  );
 };
 
 const parseCodeBlock = (children: ReactNode) => {
@@ -149,23 +94,18 @@ const createComponents = (role: Role) => ({
 const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) => {
   const role = useChatItemRole();
   const components = useMemo(() => createComponents(role), [role]);
-  const hasText = block.text.trim().length > 0;
-  const hasAttachments = block.attachments && block.attachments.length > 0;
 
   return (
     <div className="flex flex-col max-w-full gap-4 [&>*:first-child]:mt-0">
-      {hasText && (
+      {block.text.trim().length ? (
         <Markdown remarkPlugins={[remarkGfm]} components={components}>
           {block.text}
         </Markdown>
-      )}
-      {hasAttachments &&
-        block.attachments?.map((attachment) => (
-          <ImageAttachmentComponent
-            key={`${attachment.sourceType}-${attachment.data.slice(0, 50)}`}
-            attachment={attachment}
-          />
-        ))}
+      ) : null}
+
+      {block.attachments?.map((attachment) => (
+        <ThreadPageConversationAttachmentChip key={attachment.data} attachment={attachment} />
+      ))}
     </div>
   );
 };

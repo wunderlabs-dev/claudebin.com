@@ -27,14 +27,10 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
           <div key={question.header} className="flex flex-col gap-4">
             <Typography variant="h4">{question.question}</Typography>
 
-            <Tabs value={answer}>
-              <TabsList className="flex-col items-start rounded-xl w-full h-auto">
+            <Tabs variant="list" value={answer}>
+              <TabsList>
                 {question.options.map((option) => (
-                  <TabsTrigger
-                    key={option.label}
-                    value={option.label}
-                    className="data-[state=inactive]:line-through w-full rounded-lg justify-start"
-                  >
+                  <TabsTrigger key={option.label} value={option.label}>
                     {option.label}
                   </TabsTrigger>
                 ))}
