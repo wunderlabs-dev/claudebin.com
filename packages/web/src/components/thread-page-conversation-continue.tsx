@@ -17,7 +17,7 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
   const t = useTranslations();
 
   return (
-    <ChatItem variant="assistant">
+    <ChatItem variant="assistant" className="pb-0">
       <Avatar size="sm">
         <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
       </Avatar>
