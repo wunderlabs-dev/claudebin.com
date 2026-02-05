@@ -4,16 +4,18 @@ import Link from "next/link";
 import { useState, type ComponentProps } from "react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
+import { useEventListener, useIsomorphicLayoutEffect, useMediaQuery } from "usehooks-ts";
 
 import { cn } from "@/utils/helpers";
+import { breakpoints } from "@/utils/breakpoints";
+
 import { useAuth } from "@/context/auth";
 
-import { SvgIconClaudebinXs, SvgIconHome, SvgIconUser } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
+import { SvgIconClaudebinXs, SvgIconHome, SvgIconUser } from "@/components/icon";
 
 type AppBarProps = ComponentProps<"header">;
 
@@ -25,6 +27,7 @@ const links = [
 const AppBar = ({ className, ...props }: AppBarProps) => {
   const t = useTranslations();
   const pathname = usePathname();
+  const md = useMediaQuery(breakpoints.md);
 
   const { user, signOut } = useAuth();
   const [isSticky, setIsSticky] = useState<number>();
@@ -52,18 +55,21 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
             <Link href="/" className="transition-colors ease-in-out hover:text-orange-50">
               <SvgIconClaudebinXs size="auto" className="w-14" />
             </Link>
-            <Nav>
-              {links.map((link) => (
-                <NavLink
-                  key={link.href}
-                  href={link.href}
-                  variant={pathname === link.href ? "active" : "default"}
-                >
-                  {link.icon}
-                  <NavLabel>{t(link.label)}</NavLabel>
-                </NavLink>
-              ))}
-            </Nav>
+
+            {md ? (
+              <Nav>
+                {links.map((link) => (
+                  <NavLink
+                    key={link.href}
+                    href={link.href}
+                    variant={pathname === link.href ? "active" : "default"}
+                  >
+                    {link.icon}
+                    <NavLabel>{t(link.label)}</NavLabel>
+                  </NavLink>
+                ))}
+              </Nav>
+            ) : null}
           </div>
 
           {user ? (

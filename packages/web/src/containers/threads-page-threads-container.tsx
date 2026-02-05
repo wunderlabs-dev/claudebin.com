@@ -4,21 +4,22 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useDebounceValue } from "usehooks-ts";
+import { useDebounceValue, useMediaQuery } from "usehooks-ts";
 import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
+import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
 import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 
 import { renderers } from "@/utils/renderers";
-import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
+import { breakpoints } from "@/utils/breakpoints";
 
+import { SvgIconMagnifier } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
 import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
-import { SvgIconMagnifier } from "@/components/icon";
 
 import {
   DividerGrid,
@@ -45,6 +46,7 @@ const ThreadsPageThreadsContainer = ({
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
+  const lg = useMediaQuery(breakpoints.lg);
 
   const [query, setQuery] = useState(initialQuery);
   const [queryDebounced] = useDebounceValue(query, SEARCH_DEBOUNCE_MS);
@@ -76,17 +78,19 @@ const ThreadsPageThreadsContainer = ({
 
   return (
     <DividerGrid>
-      <DividerGridRow>
-        <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-6 border-b">
-          <DividerGridDivider variant="top" />
-        </DividerGridCell>
-        <DividerGridCell className="col-span-4 flex justify-between border-b">
-          <DividerGridDivider variant="top" />
-          <DividerGridDivider variant="top" />
-        </DividerGridCell>
-        <DividerGridEdge position="right" className="col-span-1" />
-      </DividerGridRow>
+      {lg ? (
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-6 border-b">
+            <DividerGridDivider variant="top" />
+          </DividerGridCell>
+          <DividerGridCell className="col-span-4 flex justify-between border-b">
+            <DividerGridDivider variant="top" />
+            <DividerGridDivider variant="top" />
+          </DividerGridCell>
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
+      ) : null}
 
       <DividerGridRow>
         <DividerGridEdge position="left" className="col-span-1" />
@@ -113,12 +117,14 @@ const ThreadsPageThreadsContainer = ({
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
-      <DividerGridRow>
-        <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-9 border-r border-b border-l py-6 lg:col-span-6" />
-        <DividerGridCell className="col-span-3 flex items-center justify-end border-r border-b py-6 lg:col-span-4" />
-        <DividerGridEdge position="right" className="col-span-1" />
-      </DividerGridRow>
+      {lg ? (
+        <DividerGridRow>
+          <DividerGridEdge position="left" className="col-span-1" />
+          <DividerGridCell className="col-span-9 border-r border-b border-l py-6 lg:col-span-6" />
+          <DividerGridCell className="col-span-3 flex items-center justify-end border-r border-b py-6 lg:col-span-4" />
+          <DividerGridEdge position="right" className="col-span-1" />
+        </DividerGridRow>
+      ) : null}
 
       {hasNoResult ? (
         <DividerGridRow>
@@ -151,10 +157,10 @@ const ThreadsPageThreadsContainer = ({
 
           {hasNextPage ? (
             <DividerGridRow>
-              <DividerGridEdge position="left" className="col-span-1" />
+              {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
               <DividerGridCell className="col-span-12 lg:col-span-10">
                 <Card variant="grid">
-                  <CardBody />
+                  {lg ? <CardBody /> : null}
                   <CardBody className="items-center justify-center p-0">
                     <Button
                       variant="secondary"
@@ -164,33 +170,35 @@ const ThreadsPageThreadsContainer = ({
                       {isFetchingNextPage ? t("threads.loadingMore") : t("threads.loadMore")}
                     </Button>
                   </CardBody>
-                  <CardBody />
+                  {lg ? <CardBody /> : null}
                 </Card>
               </DividerGridCell>
-              <DividerGridEdge position="right" className="col-span-1" />
+              {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
             </DividerGridRow>
           ) : null}
         </>
       ) : null}
 
-      <DividerGridRow>
-        <DividerGridCell className="col-span-1" />
-        <DividerGridCell className="col-span-10">
-          <DividerGridRow>
-            <DividerGridCell className="col-span-4 flex justify-between">
-              <DividerGridDivider variant="bottom" />
-              <DividerGridDivider variant="bottom" />
-            </DividerGridCell>
-            <DividerGridCell className="col-span-4 flex justify-end">
-              <DividerGridDivider variant="bottom" />
-            </DividerGridCell>
-            <DividerGridCell className="col-span-4 flex justify-end">
-              <DividerGridDivider variant="bottom" />
-            </DividerGridCell>
-          </DividerGridRow>
-        </DividerGridCell>
-        <DividerGridCell className="col-span-1" />
-      </DividerGridRow>
+      {lg ? (
+        <DividerGridRow>
+          <DividerGridCell className="col-span-1" />
+          <DividerGridCell className="col-span-10">
+            <DividerGridRow>
+              <DividerGridCell className="col-span-4 flex justify-between">
+                <DividerGridDivider variant="bottom" />
+                <DividerGridDivider variant="bottom" />
+              </DividerGridCell>
+              <DividerGridCell className="col-span-4 flex justify-end">
+                <DividerGridDivider variant="bottom" />
+              </DividerGridCell>
+              <DividerGridCell className="col-span-4 flex justify-end">
+                <DividerGridDivider variant="bottom" />
+              </DividerGridCell>
+            </DividerGridRow>
+          </DividerGridCell>
+          <DividerGridCell className="col-span-1" />
+        </DividerGridRow>
+      ) : null}
     </DividerGrid>
   );
 };

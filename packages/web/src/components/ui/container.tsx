@@ -1,7 +1,7 @@
 import type * as React from "react";
 
 import { cn } from "@/utils/helpers";
-import { spacingClassNames, type Spacing } from "@/utils/constants";
+import { spacingClassNames, type Spacing } from "@/utils/spacing";
 
 type ContainerSize = "sm" | "md" | "lg";
 
