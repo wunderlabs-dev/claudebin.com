@@ -18,6 +18,7 @@ type ThreadPageSidebarContainerProps = {
   messageCount?: number | null;
   isPublic: boolean;
   initialLiked?: boolean;
+  isAuthor: boolean;
 };
 
 const ThreadPageSidebarContainer = ({
@@ -31,6 +32,7 @@ const ThreadPageSidebarContainer = ({
   fileCount,
   likeCount,
   messageCount,
+  isAuthor,
 }: ThreadPageSidebarContainerProps) => {
   return (
     <div className="flex flex-col items-start gap-6">

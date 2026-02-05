@@ -39,6 +39,7 @@ type ThreadPageConversationContainerProps = {
   id: string;
   author: string;
   avatarUrl?: string | null;
+  isAuthor: boolean;
 };
 
 const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
@@ -105,6 +106,7 @@ const ThreadPageConversationContainer = ({
   id,
   author,
   avatarUrl,
+  isAuthor,
 }: ThreadPageConversationContainerProps): ReactNode => {
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
@@ -140,7 +142,7 @@ const ThreadPageConversationContainer = ({
           </ChatItem>
         )}
         components={{
-          Footer: () => <ThreadPageConversationContinue id={id} />,
+          Footer: () => <ThreadPageConversationContinue id={id} isAuthor={isAuthor} />,
         }}
       />
     </div>
