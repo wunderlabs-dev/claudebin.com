@@ -39,8 +39,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   sessions.incrementViewCount(supabase, id);
 
   return (
-    <Container size="lg" spacing="none" className="grid grid-cols-12">
-      <div className="col-span-9 flex flex-col gap-18 pt-9">
+    <Container size="lg" spacing="none" className="grid grid-cols-1 md:grid-cols-12">
+      <div className="col-span-1 md:col-span-9 flex flex-col gap-18 pt-9 pb-12 md:pb-0">
         <div className="flex flex-col items-start gap-9">
           <NavLink href="/threads">
             <SvgIconArrowLeft size="sm" />
@@ -63,7 +63,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         />
       </div>
 
-      <div className="sticky top-0 col-span-3 flex h-screen flex-col justify-between self-start overflow-y-auto border-gray-250 border-l px-6 pt-24 pb-12">
+      <div className="sticky top-0 col-span-1 md:col-span-3 flex md:h-screen flex-col justify-between self-start overflow-y-auto border-gray-250 border-t md:border-l px-0 md:px-6 pt-12 md:pt-24 md:pb-12">
         <ThreadPageSidebarContainer
           id={thread.id}
           isPublic={thread.isPublic}

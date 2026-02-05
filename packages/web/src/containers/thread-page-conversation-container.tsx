@@ -50,8 +50,8 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
 
       return assistant
         ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
+          { ...previous, content: concat(previous.content, message.content) },
+        ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
@@ -117,7 +117,7 @@ const ThreadPageConversationContainer = ({
   const messages = compact(data?.messages);
 
   return (
-    <Chat className="min-h-screen pr-12">
+    <Chat className="min-h-screen md:pr-12">
       {messages.map((message) => (
         <ChatItem key={message.uuid} variant={message.role}>
           {message.role === "assistant" ? (
