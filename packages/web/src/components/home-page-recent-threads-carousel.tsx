@@ -34,11 +34,11 @@ const HomePageRecentThreadsCarousel = ({
 
   return (
     <section className={cn("flex flex-col gap-8 md:gap-12", className)} {...props}>
-      <Container size="lg" spacing="lg" className="flex flex-col gap-2 md:gap-0">
+      <Container size="lg" spacing="lg" className="flex flex-col">
         <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
 
         <div className="flex flex-col md:flex-row gap-2 md:gap-0 items-start md:items-center justify-between">
-          <Typography variant="body" color="neutral" className="whitespace-break-spaces leading-8">
+          <Typography variant="body" color="neutral" className="md:whitespace-break-spaces leading-8">
             {t("home.recentThreadsDescription")}
           </Typography>
 
