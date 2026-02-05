@@ -70,6 +70,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           initialLiked={thread.hasLiked}
           createdAt={format(thread.createdAt, "MM/dd/yyyy")}
           workingDir={getProjectName(thread.workingDir)}
+          modelName={thread.modelName}
           fileCount={thread.fileCount}
           viewCount={thread.viewCount}
           likeCount={thread.likeCount}
