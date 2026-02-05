@@ -21,5 +21,4 @@ export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 
 export const SEARCH_DEBOUNCE_MS = 300;
 
-
 export const APP_THREADS_URL = "https://claudebin.com/threads";

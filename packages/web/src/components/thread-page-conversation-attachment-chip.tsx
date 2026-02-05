@@ -15,7 +15,7 @@ type ThreadPageConversationAttachmentChipProps = {
   attachment: Attachment;
 };
 
-const srcFromDataUrl = (attachment: Attachment) => {
+const resolveDataUrlSrc = (attachment: Attachment) => {
   if (attachment.sourceType === "url") {
     return attachment.data;
   }
@@ -39,11 +39,12 @@ const ThreadPageConversationAttachmentChip = ({
         </TooltipTrigger>
         <TooltipContent>
           <Image
-            src={srcFromDataUrl(attachment)}
+            src={resolveDataUrlSrc(attachment)}
             className="rounded"
             width={THREAD_ATTACHMENT_SIZE}
             height={THREAD_ATTACHMENT_SIZE}
             alt={t("common.image")}
+            loading="lazy"
           />
         </TooltipContent>
       </Tooltip>
