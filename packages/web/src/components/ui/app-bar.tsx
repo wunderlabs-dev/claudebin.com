@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { isServer } from "@tanstack/react-query";
 import { useState, type ComponentProps } from "react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -27,7 +28,7 @@ const links = [
 const AppBar = ({ className, ...props }: AppBarProps) => {
   const t = useTranslations();
   const pathname = usePathname();
-  const md = useMediaQuery(breakpoints.md);
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   const { user, signOut } = useAuth();
   const [isSticky, setIsSticky] = useState<number>();

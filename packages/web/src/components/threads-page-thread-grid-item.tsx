@@ -3,6 +3,7 @@ import truncate from "lodash.truncate";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 import { formatDistanceToNow } from "date-fns";
+import { isServer } from "@tanstack/react-query";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
@@ -39,7 +40,7 @@ type ThreadsPageThreadGridItemProps = {
 const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridItemProps) => {
   const t = useTranslations();
   const hash = hashString(thread.id);
-  const lg = useMediaQuery(breakpoints.lg);
+  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
   const positions = THREAD_CARD_LAYOUTS[hash % THREAD_CARD_LAYOUTS.length];
 
   const columns: ReactNode[] = [

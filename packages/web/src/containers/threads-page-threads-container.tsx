@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue, useMediaQuery } from "usehooks-ts";
+import { isServer } from "@tanstack/react-query";
 import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
@@ -46,7 +47,7 @@ const ThreadsPageThreadsContainer = ({
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
-  const lg = useMediaQuery(breakpoints.lg);
+  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   const [query, setQuery] = useState(initialQuery);
   const [queryDebounced] = useDebounceValue(query, SEARCH_DEBOUNCE_MS);
