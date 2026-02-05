@@ -9,13 +9,13 @@ type HomePageTutorialsListProps = ComponentProps<"section">;
 
 const tutorials = [
   {
-    id: "terminal",
-    title: "home.viewDemoTerminal",
+    id: "installation",
+    title: "home.installation",
     src: "https://samplelib.com/lib/preview/webm/sample-30s.webm",
   },
   {
-    id: "editor",
-    title: "home.viewDemoEditor",
+    id: "howToUse",
+    title: "home.howToUse",
     src: "https://samplelib.com/lib/preview/webm/sample-30s.webm",
   },
 ] as const;
@@ -25,7 +25,7 @@ const HomePageTutorialsList = ({ ...props }: HomePageTutorialsListProps) => {
 
   return (
     <Container as="section" size="lg" {...props}>
-      <Tabs defaultValue="terminal" className="flex flex-col items-center gap-8">
+      <Tabs defaultValue="installation" className="flex flex-col items-center gap-8">
         <Backdrop size="half" spacing="lg" className="sm:px-4 lg:px-12">
           <div className="mx-auto w-full max-w-6xl rounded-3xl border border-gray-500/20 bg-gray-200/50 p-2">
             {tutorials.map((tutorial) => (

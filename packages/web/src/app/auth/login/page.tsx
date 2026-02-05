@@ -7,7 +7,7 @@ import { createClient } from "@/supabase/server";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
-import { AuthLoginPageForm } from "@/components/auth-login-page-form";
+import { CliAuthLoginPageForm } from "@/components/cli-auth-login-page-form";
 
 const AuthLoginPage = async () => {
   const t = await getTranslations();
@@ -30,7 +30,7 @@ const AuthLoginPage = async () => {
           </Typography>
         }
       >
-        <AuthLoginPageForm />
+        <CliAuthLoginPageForm />
       </Suspense>
     </Container>
   );

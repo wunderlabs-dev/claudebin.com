@@ -12,7 +12,7 @@ import { Typography } from "@/components/ui/typography";
 
 import { LoginPageHeader } from "@/components/login-page-header";
 
-const AuthLoginPageForm = () => {
+const CliAuthLoginPageForm = () => {
   const t = useTranslations();
   const searchParams = useSearchParams();
 
@@ -41,9 +41,10 @@ const AuthLoginPageForm = () => {
   };
 
   return (
-    <div className="flex flex-col gap-18">
+    <div className="flex flex-col gap-12 md:gap-18">
       <LoginPageHeader />
-      <div className="flex flex-col gap-5">
+
+      <div className="flex flex-col items-start gap-5">
         {authError ? (
           <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
@@ -55,6 +56,7 @@ const AuthLoginPageForm = () => {
             </Typography>
           </div>
         ) : null}
+
         <Button variant="secondary" onClick={handleSignIn} disabled={value}>
           <SvgIconGithub />
           {value ? t("common.loading") : t("login.continueWithGithub")}
@@ -64,4 +66,4 @@ const AuthLoginPageForm = () => {
   );
 };
 
-export { AuthLoginPageForm };
+export { CliAuthLoginPageForm };

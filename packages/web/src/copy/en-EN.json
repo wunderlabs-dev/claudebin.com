@@ -36,8 +36,8 @@
     "cliInstall": "CLI Install",
     "editorInstall": "Editor Install",
     "viewDemo": "View Demo",
-    "viewDemoTerminal": "View Demo Terminal",
-    "viewDemoEditor": "View Demo Editor",
+    "installation": "Installation",
+    "howToUse": "How to Use",
     "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
     "recentThreadsDescription": "See what the community is building\nwith Claude."
   },
