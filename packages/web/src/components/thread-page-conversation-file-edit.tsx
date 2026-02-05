@@ -42,6 +42,7 @@ const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEdi
   const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   const filename = block.file_path.split("/").pop() ?? block.file_path;
+
   const diff = useMemo(
     () => toDiff(block.old_string, block.new_string),
     [block.old_string, block.new_string],
@@ -59,6 +60,7 @@ const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEdi
           {t("chat.edit")}
           {md ? <ThreadPageConversationChip label={filename} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={filename} />}
           <div className="flex items-center justify-between">
