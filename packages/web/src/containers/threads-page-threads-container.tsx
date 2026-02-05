@@ -29,9 +29,7 @@ import {
 } from "@/components/ui/divider-grid";
 
 import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid-item";
-import { ThreadsPageThreadsAdornmentStart } from "@/components/threads-page-threads-adornment-start";
-import { ThreadsPageThreadsAdornmentSpacer } from "@/components/threads-page-threads-adornment-spacer";
-import { ThreadsPageThreadsAdornmentEnd } from "@/components/threads-page-threads-adornment-end";
+import { ThreadsPageThreadsAdornment } from "@/components/threads-page-threads-adornment";
 
 type ThreadsPageThreadsContainerProps = {
   initialThreads: ThreadWithAuthor[];
@@ -80,7 +78,7 @@ const ThreadsPageThreadsContainer = ({
 
   return (
     <DividerGrid>
-      <ThreadsPageThreadsAdornmentStart />
+      <ThreadsPageThreadsAdornment variant="start" />
 
       <DividerGridRow>
         {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
@@ -111,13 +109,13 @@ const ThreadsPageThreadsContainer = ({
         {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
       </DividerGridRow>
 
-      <ThreadsPageThreadsAdornmentSpacer />
+      <ThreadsPageThreadsAdornment variant="spacer" />
 
       {hasNoResult ? (
         <DividerGridRow>
           {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
           <DividerGridCell className="col-span-12 px-8 py-24 lg:px-12 border-l border-r border-t border-b">
-            <div className="flex flex-col mx-auto max-w-lg gap-6">
+            <div className="flex flex-col max-w-lg mx-auto gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { ...renderers, query: queryDebounced })}
               </Typography>
@@ -148,7 +146,7 @@ const ThreadsPageThreadsContainer = ({
               <DividerGridCell className="col-span-12 lg:col-span-10">
                 <Card variant="grid">
                   {lg ? <CardBody /> : null}
-                  <CardBody className="items-center justify-center p-0">
+                  <CardBody className="items-center justify-center md:p-0">
                     <Button
                       variant="secondary"
                       onClick={() => fetchNextPage()}
@@ -166,7 +164,7 @@ const ThreadsPageThreadsContainer = ({
         </Fragment>
       ) : null}
 
-      <ThreadsPageThreadsAdornmentEnd />
+      <ThreadsPageThreadsAdornment variant="end" />
     </DividerGrid>
   );
 };
