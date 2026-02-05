@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { FileWriteBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconPen } from "@/components/icon";
 import {
@@ -22,6 +26,7 @@ type ThreadPageConversationFileWriteProps = {
 
 const ThreadPageConversationFileWrite = ({ block }: ThreadPageConversationFileWriteProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
   const lineCount = block.content.split("\n").length;
 
   return (
@@ -30,9 +35,10 @@ const ThreadPageConversationFileWrite = ({ block }: ThreadPageConversationFileWr
         <AccordionTrigger>
           <SvgIconPen size="sm" color="primary" />
           {t("chat.write")}
-          <ThreadPageConversationChip label={block.file_path} />
+          {md ? <ThreadPageConversationChip label={block.file_path} /> : null}
         </AccordionTrigger>
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={block.file_path} />}
           <div className="flex justify-end">
             <Typography variant="small" className="text-green-50">
               +{t("chat.lines", { count: lineCount })}

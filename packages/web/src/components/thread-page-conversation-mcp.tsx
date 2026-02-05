@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { McpBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconMcp } from "@/components/icon";
 import {
@@ -30,6 +34,7 @@ const formatInput = (input: Record<string, unknown>): string => {
 
 const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
   const input = formatInput(block.input);
 
   return (
@@ -38,9 +43,10 @@ const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) =>
         <AccordionTrigger>
           <SvgIconMcp size="sm" color="primary" />
           {t("chat.mcp")}
-          <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} />
+          {md ? <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} /> : null}
         </AccordionTrigger>
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} />}
           {input ? <Code code={input} /> : null}
           {block.output ? (
             <Code

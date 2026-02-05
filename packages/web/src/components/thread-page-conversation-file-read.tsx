@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { FileReadBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconEye } from "@/components/icon";
 import {
@@ -21,6 +25,7 @@ type ThreadPageConversationFileReadProps = {
 
 const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileReadProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>
@@ -28,9 +33,10 @@ const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileRea
         <AccordionTrigger>
           <SvgIconEye size="sm" color="primary" />
           {t("chat.read")}
-          <ThreadPageConversationChip label={block.file_path} />
+          {md ? <ThreadPageConversationChip label={block.file_path} /> : null}
         </AccordionTrigger>
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={block.file_path} />}
           <Code code={block.content ?? t("common.noResultsFound")} />
         </AccordionContent>
       </AccordionItem>

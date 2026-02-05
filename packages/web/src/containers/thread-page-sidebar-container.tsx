@@ -1,22 +1,15 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 
-import {
-  SvgIconBrain,
-  SvgIconChat,
-  SvgIconEye,
-  SvgIconFile,
-  SvgIconFolder,
-  SvgIconGlobe,
-  SvgIconCalendar,
-} from "@/components/icon";
-
+import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";
 
-import { Badge } from "@/components/ui/badge";
+import { SvgIconGlobe } from "@/components/icon";
 import { CopyInput } from "@/components/ui/copy-input";
-import { List, ListItem } from "@/components/ui/list";
+import { Badge } from "@/components/ui/badge";
 
-import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
+import { ThreadPageThreadMeta } from "@/components/thread-page-thread-meta";
 import { ThreadPageSidebarContinueConversation } from "@/components/thread-page-sidebar-continue-conversation";
 
 type ThreadPageSidebarContainerProps = {
@@ -45,6 +38,7 @@ const ThreadPageSidebarContainer = ({
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
+  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   return (
     <div className="flex flex-col items-start gap-6">
@@ -53,27 +47,19 @@ const ThreadPageSidebarContainer = ({
         {isPublic ? t("common.public") : t("common.private")}
       </Badge>
 
-      <List className="w-full gap-3">
-        <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
-        <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
-          {t("thread.created", { date: createdAt })}
-        </ListItem>
-        <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
-        {messageCount ? (
-          <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
-            {t("common.messages", { count: messageCount })}
-          </ListItem>
-        ) : null}
-        <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
-          {t("common.files", { count: fileCount })}
-        </ListItem>
-        <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
-          {t("common.views", { count: viewCount })}
-        </ListItem>
-        <ThreadPageSidebarLikeContainer id={id} initialLiked={initialLiked} likeCount={likeCount} />
-      </List>
+      <ThreadPageThreadMeta
+        id={id}
+        createdAt={createdAt}
+        fileCount={fileCount}
+        viewCount={viewCount}
+        likeCount={likeCount}
+        workingDir={workingDir}
+        modelName={modelName}
+        messageCount={messageCount}
+        initialLiked={initialLiked}
+      />
 
-      <div className="flex w-full flex-col gap-8">
+      <div className="flex flex-col w-full gap-8">
         <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
         <CopyInput variant="snippet" value="npx claudebin publish" />
         <ThreadPageSidebarContinueConversation />

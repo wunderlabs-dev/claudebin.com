@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { SkillBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconGlitters } from "@/components/icon";
 import {
@@ -21,6 +25,7 @@ type ThreadPageConversationSkillProps = {
 
 const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>
@@ -28,10 +33,10 @@ const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps
         <AccordionTrigger>
           <SvgIconGlitters size="sm" color="primary" />
           {t("chat.skill")}
-          <ThreadPageConversationChip label={block.commandName} />
+          {md ? <ThreadPageConversationChip label={block.commandName} /> : null}
         </AccordionTrigger>
-
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={block.commandName} />}
           {block.instructions ? <Code code={block.instructions} /> : null}
           {block.output ? <Code code={block.output} /> : null}
         </AccordionContent>

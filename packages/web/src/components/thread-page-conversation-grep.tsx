@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { GrepBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconMagnifier } from "@/components/icon";
 import {
@@ -21,6 +25,7 @@ type ThreadPageConversationGrepProps = {
 
 const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>
@@ -28,10 +33,10 @@ const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) 
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.grep")}
-          <ThreadPageConversationChip label={block.pattern} />
+          {md ? <ThreadPageConversationChip label={block.pattern} /> : null}
         </AccordionTrigger>
-
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={block.pattern} />}
           <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />
         </AccordionContent>
       </AccordionItem>

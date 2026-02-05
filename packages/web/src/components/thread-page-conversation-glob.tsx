@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { GlobBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconMagnifier } from "@/components/icon";
 import {
@@ -22,6 +26,7 @@ type ThreadPageConversationGlobProps = {
 
 const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>
@@ -34,9 +39,10 @@ const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) 
               {t("common.files", { count: block.numFiles })}
             </Typography>
           ) : null}
-          <ThreadPageConversationChip label={block.pattern} />
+          {md ? <ThreadPageConversationChip label={block.pattern} /> : null}
         </AccordionTrigger>
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={block.pattern} />}
           <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />
         </AccordionContent>
       </AccordionItem>

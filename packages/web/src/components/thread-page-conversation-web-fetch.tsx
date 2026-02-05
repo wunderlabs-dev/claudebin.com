@@ -1,11 +1,15 @@
 "use client";
 
-import prettyMs from "pretty-ms";
-import prettyBytes from "pretty-bytes";
-import { head } from "ramda";
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import prettyBytes from "pretty-bytes";
+import prettyMs from "pretty-ms";
+import { head } from "ramda";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { WebFetchBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconDownload } from "@/components/icon";
 import {
@@ -36,6 +40,7 @@ const getStatusColor = (statusCode: number) => {
 
 const ThreadPageConversationWebFetch = ({ block }: ThreadPageConversationWebFetchProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>
@@ -56,12 +61,13 @@ const ThreadPageConversationWebFetch = ({ block }: ThreadPageConversationWebFetc
             </Typography>
           ) : null}
 
-          <ThreadPageConversationChip label={block.url} />
+          {md ? <ThreadPageConversationChip label={block.url} /> : null}
         </AccordionTrigger>
-
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={block.url} />}
+
           {block.bytes || block.statusCode ? (
-            <div className="flex justify-between items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
               {block.bytes ? (
                 <Typography variant="small" color="neutral">
                   {t("chat.bytes")}: {prettyBytes(block.bytes)}

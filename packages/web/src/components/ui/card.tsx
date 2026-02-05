@@ -60,7 +60,7 @@ const Card = ({ variant = "card", href, className, children, ...props }: CardPro
 
 const cardBodyVariantClassNames: CardVariantMapping = {
   card: "flex flex-col self-start max-w-3xs gap-3 p-4 bg-gray-100",
-  list: "flex flex-col col-span-12 gap-3 py-3 lg:col-span-5",
+  list: "flex flex-col col-span-12 lg:col-span-5 gap-3 py-3",
   grid: "relative flex flex-col justify-end col-span-1 gap-3 py-6",
 } as const;
 
@@ -140,7 +140,7 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
 
 const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
-  list: "flex flex-col gap-3 pl-4 pr-4 md:gap-1 md:pr-3 md:pl-8",
+  list: "flex flex-col gap-3 md:gap-1 pl-4 pr-4 md:pl-8 md:pr-3",
   grid: "flex flex-col gap-3 px-3",
 } as const;
 
@@ -162,14 +162,14 @@ type CardDividerProps = React.ComponentProps<"div">;
 
 const CardDivider = ({ className, ...props }: CardDividerProps) => {
   return (
-    <div data-slot="card-divider" className={cn("h-px w-full bg-gray-200", className)} {...props} />
+    <div data-slot="card-divider" className={cn("w-full h-px bg-gray-200", className)} {...props} />
   );
 };
 
 const cardActionsVariantClassNames: CardVariantMapping = {
   card: "ml-auto",
   list: "ml-auto",
-  grid: "absolute right-3 top-3",
+  grid: "absolute top-3 right-3",
 } as const;
 
 type CardActionsProps = Omit<React.ComponentProps<"button">, "children">;

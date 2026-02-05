@@ -1,8 +1,12 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { FileEditBlock } from "@/supabase/types/message";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconFile } from "@/components/icon";
 import {
@@ -34,6 +38,7 @@ const toDiff = (oldString: string, newString: string): string => {
 
 const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEditProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   const diff = toDiff(block.old_string, block.new_string);
   const filename = block.file_path.split("/").pop() ?? block.file_path;
@@ -48,9 +53,10 @@ const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEdi
         <AccordionTrigger>
           <SvgIconFile size="sm" color="primary" />
           {t("chat.edit")}
-          <ThreadPageConversationChip label={filename} />
+          {md ? <ThreadPageConversationChip label={filename} /> : null}
         </AccordionTrigger>
         <AccordionContent>
+          {md ? null : <ThreadPageConversationChip label={filename} />}
           <div className="flex items-center justify-between">
             <Typography variant="small" color="neutral">
               {t("chat.lines", { count: lineCount })}
