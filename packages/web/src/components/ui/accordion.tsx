@@ -17,7 +17,7 @@ const Accordion = ({ className, ...props }: AccordionProps) => {
     <AccordionPrimitive.Root
       data-slot="accordion"
       className={cn(
-        "min-w-full lg:min-w-md xl:min-w-xl",
+        "min-w-full md:min-w-sm lg:min-w-md xl:min-w-xl",
         "rounded-xl border px-4",
         "[&_svg]:shrink-0",
         variant === "user" ? "border-gray-250" : "border-gray-200",
