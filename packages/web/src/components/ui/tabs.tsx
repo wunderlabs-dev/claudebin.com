@@ -32,7 +32,7 @@ const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
 const tabsListVariantClassNames: Record<TabsVariant, string> = {
   default: "p-1 bg-gray-200 border border-gray-50 rounded-full",
   transparent: "p-1 border border-transparent rounded-full",
-  list: "flex-col items-start w-full h-auto p-1 bg-gray-200 border border-gray-50 rounded-xl",
+  list: "flex-col items-start h-auto p-1 bg-gray-200 border border-gray-50 rounded-xl",
 } as const;
 
 const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) => {
