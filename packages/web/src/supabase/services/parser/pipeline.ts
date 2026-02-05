@@ -185,6 +185,26 @@ export const createPipeline = () => {
     ingestDefault(raw);
   };
 
+  const isContentArray = (
+    content: string | RawContentBlock[] | undefined
+  ): content is RawContentBlock[] => Array.isArray(content);
+
+  const hasToolResultContent = (content: string | RawContentBlock[] | undefined): boolean =>
+    isContentArray(content) && content.some((b) => b.type === "tool_result");
+
+  const ingestSkillMeta = (content: string | RawContentBlock[] | undefined): void => {
+    const text = typeof content === "string" ? content : extractText(content);
+    const skillMeta = parseSkillMeta(text);
+    resetMessageState();
+    emit({
+      type: BlockType.SKILL,
+      ...pipeline.pendingSkillCommand!,
+      instructions: skillMeta.instructions,
+      output: skillMeta.output,
+    });
+    pipeline.pendingSkillCommand = null;
+  };
+
   const ingestUserMessage = (content: string | RawContentBlock[] | undefined): void => {
     resetMessageState();
     if (!content) return;
@@ -258,14 +278,37 @@ export const createPipeline = () => {
       return;
     }
 
+    pipeline.toolUseResult = r.toolUseResult;
+
     if (r.type === MessageRole.USER) {
-      pipeline.toolUseResult = r.toolUseResult;
-      ingestUserMessage(r.message.content);
+      const content = r.message.content;
+
+      // 1. Skill meta in USER message
+      if (r.isMeta && pipeline.pendingSkillCommand) {
+        ingestSkillMeta(content);
+        mergeIntoCurrent();
+        return;
+      }
+
+      // 2. Tool result in USER message - route through ingestContent
+      if (hasToolResultContent(content)) {
+        ingestContent(content as RawContentBlock[], r.isMeta);
+
+        if (msg.hasToolResult && acc.currentIsAssistant) {
+          mergeIntoCurrent();
+        } else {
+          startNewMessage(r);
+        }
+        return;
+      }
+
+      // 3. Regular user message (text/image/skill command)
+      ingestUserMessage(content);
       startNewMessage(r);
       return;
     }
 
-    pipeline.toolUseResult = r.toolUseResult;
+    // Assistant message handling
     const mergeWithPrevious = ingestContent(r.message.content, r.isMeta);
     const msgId = r.message.id ?? null;
 

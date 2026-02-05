@@ -22,6 +22,7 @@ type SessionMetadata = {
   fileCount: number;
   messageCount: number;
   title: string | null;
+  modelName: string | null;
 };
 
 type ContentBlockJson = {
@@ -67,6 +68,7 @@ const fallbackTitle = (text: string): string | null => {
 
 const createAccumulator = (existingTitle: string | null) => {
   let workingDir: string | null = null;
+  let modelName: string | null = null;
   let firstMessageText: string | null = null;
   let messageCount = 0;
   const filePaths = new Set<string>();
@@ -89,6 +91,10 @@ const createAccumulator = (existingTitle: string | null) => {
         workingDir = getWorkingDir(message.rawMessage);
       }
 
+      if (modelName === null && message.model) {
+        modelName = message.model;
+      }
+
       for (const path of getFilePaths(message.content)) {
         filePaths.add(path);
       }
@@ -107,6 +113,7 @@ const createAccumulator = (existingTitle: string | null) => {
       fileCount: filePaths.size,
       messageCount,
       title: await resolveTitle(),
+      modelName,
     }),
   };
 };
@@ -171,6 +178,7 @@ export const processSession = async (
       workingDir: metadata.workingDir,
       fileCount: metadata.fileCount,
       title: metadata.title,
+      modelName: metadata.modelName,
     });
   } catch (error) {
     await sessions.update(supabase, sessionId, {

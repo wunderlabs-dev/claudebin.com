@@ -196,6 +196,7 @@ export type Database = {
           isPublic: boolean;
           likeCount: number;
           messageCount: number | null;
+          modelName: string | null;
           status: string;
           storagePath: string | null;
           title: string | null;
@@ -212,6 +213,7 @@ export type Database = {
           isPublic?: boolean;
           likeCount?: number;
           messageCount?: number | null;
+          modelName?: string | null;
           status?: string;
           storagePath?: string | null;
           title?: string | null;
@@ -228,6 +230,7 @@ export type Database = {
           isPublic?: boolean;
           likeCount?: number;
           messageCount?: number | null;
+          modelName?: string | null;
           status?: string;
           storagePath?: string | null;
           title?: string | null;
