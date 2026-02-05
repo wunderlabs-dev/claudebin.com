@@ -51,7 +51,7 @@ const CliAuthLoginPageForm = () => {
               <SvgIconSkull />
               {t("login.errorTitle")}
             </Typography>
-            <Typography color="neutral">
+            <Typography variant="body" color="neutral">
               {authErrorDescription || t("login.errorDescription")}
             </Typography>
           </div>

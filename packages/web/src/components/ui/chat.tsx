@@ -43,12 +43,12 @@ const ChatItem = ({ className, variant = "assistant", ...props }: ChatItemProps)
 };
 
 const chatContentVariants = cva(
-  ["flex flex-col", "max-w-3/4", "gap-4 px-4 py-3", "rounded-xl border border-gray-250"],
+  ["flex flex-col", "gap-4 px-4 py-3", "rounded-xl border border-gray-250"],
   {
     variants: {
       variant: {
-        user: "bg-gray-200 rounded-tr-none",
-        assistant: "w-3/4 rounded-tl-none",
+        user: "bg-gray-200 max-w-3/4 rounded-tr-none",
+        assistant: "w-full max-w-full md:max-w-3/4 md:w-3/4 rounded-tl-none",
       },
     },
     defaultVariants: {
