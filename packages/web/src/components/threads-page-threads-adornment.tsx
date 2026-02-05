@@ -1,5 +1,6 @@
 "use client";
 
+import { not } from "ramda";
 import { isServer } from "@tanstack/react-query";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -23,8 +24,9 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   if (variant === "start") {
-    if (!lg) return null;
-
+    if (not(lg)) {
+      return null;
+    }
     return (
       <DividerGridRow>
         <DividerGridEdge position="left" className="col-span-1" />
@@ -58,8 +60,9 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
   }
 
   if (variant === "end") {
-    if (!lg) return null;
-
+    if (not(lg)) {
+      return null;
+    }
     return (
       <DividerGridRow>
         <DividerGridCell className="col-span-1" />
