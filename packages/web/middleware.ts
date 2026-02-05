@@ -1,12 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_ROUTES = ["/", "/auth/login", "/auth/callback"];
+const PUBLIC_ROUTES = ["/", "/auth/login", "/auth/callback", "/threads"];
 
 const isPublicRoute = (pathname: string): boolean => {
   if (PUBLIC_ROUTES.includes(pathname)) return true;
   if (pathname.startsWith("/api/")) return true;
   if (pathname.startsWith("/monitoring")) return true; // Sentry tunnel
+  if (pathname.startsWith("/threads/")) return true; // Public threads via RLS
   return false;
 };
 
