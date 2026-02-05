@@ -3,7 +3,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { isServer, useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue, useMediaQuery } from "usehooks-ts";
 import { not, isEmpty } from "ramda";
 
@@ -46,7 +46,7 @@ const ThreadsPageThreadsContainer = ({
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
-  const lg = useMediaQuery(breakpoints.lg);
+  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   const [query, setQuery] = useState(initialQuery);
   const [queryDebounced] = useDebounceValue(query, SEARCH_DEBOUNCE_MS);
