@@ -60,10 +60,7 @@ const tabsTriggerVariantClassNames: Record<TabsVariant, string> = {
   list: "justify-start w-full rounded-lg text-left data-[state=active]:bg-gray-100 data-[state=active]:text-white data-[state=inactive]:line-through",
 } as const;
 
-const TabsTrigger = ({
-  className,
-  ...props
-}: ComponentProps<typeof TabsPrimitive.Trigger>) => {
+const TabsTrigger = ({ className, ...props }: ComponentProps<typeof TabsPrimitive.Trigger>) => {
   const variant = useContext(TabsContext);
 
   return (
@@ -85,10 +82,7 @@ const TabsTrigger = ({
   );
 };
 
-const TabsContent = ({
-  className,
-  ...props
-}: ComponentProps<typeof TabsPrimitive.Content>) => {
+const TabsContent = ({ className, ...props }: ComponentProps<typeof TabsPrimitive.Content>) => {
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"

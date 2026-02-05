@@ -1,8 +1,9 @@
 "use client";
 
-import { isServer } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
+import { isServer } from "@tanstack/react-query";
 
 import type { FileEditBlock } from "@/supabase/types/message";
 
@@ -40,8 +41,11 @@ const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEdi
   const t = useTranslations();
   const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
-  const diff = toDiff(block.old_string, block.new_string);
   const filename = block.file_path.split("/").pop() ?? block.file_path;
+  const diff = useMemo(
+    () => toDiff(block.old_string, block.new_string),
+    [block.old_string, block.new_string],
+  );
 
   const lineCount = diff.split("\n").length;
   const linesAdded = block.new_string.split("\n").length;
