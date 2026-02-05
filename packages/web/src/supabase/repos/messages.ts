@@ -71,6 +71,32 @@ const getBySessionId = async (
   };
 };
 
+const getByRange = async (
+  supabase: SupabaseClient<Database>,
+  sessionId: string,
+  fromIdx: number,
+  toIdx: number,
+): Promise<PaginatedMessages> => {
+  const { data, error, count } = await supabase
+    .from("messages")
+    .select("*", { count: "exact" })
+    .eq("sessionId", sessionId)
+    .gte("idx", fromIdx)
+    .lte("idx", toIdx)
+    .eq("isMeta", false)
+    .eq("isSidechain", false)
+    .order("idx", { ascending: true });
+
+  if (error) {
+    throw new Error(`Failed to fetch messages: ${error.message}`);
+  }
+
+  return {
+    messages: (data ?? []).map(mapRowToMessage),
+    total: count ?? 0,
+  };
+};
+
 const insertBatch = async (
   supabase: SupabaseClient<Database>,
   rows: MessagesInsert[],
@@ -82,4 +108,4 @@ const insertBatch = async (
   }
 };
 
-export const messages = { getBySessionId, insertBatch };
+export const messages = { getBySessionId, getByRange, insertBatch };
