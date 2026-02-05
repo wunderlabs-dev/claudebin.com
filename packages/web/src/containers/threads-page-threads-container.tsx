@@ -78,45 +78,55 @@ const ThreadsPageThreadsContainer = ({
     <DividerGrid>
       <DividerGridRow>
         <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-6 border-b">
-          <DividerGridDivider variant="top" />
-        </DividerGridCell>
-        <DividerGridCell className="col-span-4 flex justify-between border-b">
-          <DividerGridDivider variant="top" />
-          <DividerGridDivider variant="top" />
-        </DividerGridCell>
-        <DividerGridEdge position="right" className="col-span-1" />
-      </DividerGridRow>
-
-      <DividerGridRow>
-        <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-9 border-t border-r border-b border-l lg:col-span-6 lg:border-t-0">
-          <FormControl className="flex-row items-center">
-            <Input
-              placeholder={t("threads.searchPlaceholder")}
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <Button variant="outline" disabled={hasActiveSearch}>
-              <SvgIconMagnifier size="sm" />
-              {hasActiveSearch ? t("threads.searching") : t("threads.search")}
-            </Button>
-          </FormControl>
-        </DividerGridCell>
-        <DividerGridCell className="col-span-3 flex items-center justify-end border-t border-r border-b px-3 lg:col-span-4 lg:border-t-0">
-          {hasSearchQuery ? (
-            <Typography variant="small" color="muted">
-              {t("threads.threadCount", { count: threads.length })}
-            </Typography>
-          ) : null}
+        <DividerGridCell className="grid grid-cols-12 col-span-10  border-b">
+          <DividerGridCell className="col-span-8 flex justify-between">
+            <DividerGridDivider variant="top" />
+            <DividerGridDivider variant="top" />
+          </DividerGridCell>
+          <DividerGridCell className="col-span-4 flex justify-end">
+            <DividerGridDivider variant="top" />
+          </DividerGridCell>
         </DividerGridCell>
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
       <DividerGridRow>
         <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="col-span-9 border-r border-b border-l py-6 lg:col-span-6" />
-        <DividerGridCell className="col-span-3 flex items-center justify-end border-r border-b py-6 lg:col-span-4" />
+        <DividerGridCell className="grid grid-cols-12 col-span-10 border-r border-b border-l">
+          <DividerGridRow>
+            <DividerGridCell className="col-span-8 border-r">
+              <FormControl className="flex-row items-center">
+                <Input
+                  placeholder={t("threads.searchPlaceholder")}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+                <Button variant="outline" disabled={hasActiveSearch}>
+                  <SvgIconMagnifier size="sm" />
+                  {hasActiveSearch ? t("threads.searching") : t("threads.search")}
+                </Button>
+              </FormControl>
+            </DividerGridCell>
+            <DividerGridCell className="col-span-4 flex items-center justify-end px-4">
+              {hasSearchQuery ? (
+                <Typography variant="small" color="muted">
+                  {t("threads.threadCount", { count: threads.length })}
+                </Typography>
+              ) : null}
+            </DividerGridCell>
+          </DividerGridRow>
+        </DividerGridCell>
+        <DividerGridEdge position="right" className="col-span-1" />
+      </DividerGridRow>
+
+      <DividerGridRow>
+        <DividerGridEdge position="left" className="col-span-1" />
+        <DividerGridCell className="grid grid-cols-12 col-span-10 border-r border-b border-l">
+          <DividerGridRow>
+            <DividerGridCell className="col-span-8 border-r py-6" />
+            <DividerGridCell className="col-span-4 flex items-center justify-end px-4" />
+          </DividerGridRow>
+        </DividerGridCell>
         <DividerGridEdge position="right" className="col-span-1" />
       </DividerGridRow>
 
