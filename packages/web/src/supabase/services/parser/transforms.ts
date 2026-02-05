@@ -50,6 +50,12 @@ export const ToolInputSchema = {
   Glob: z.object({ pattern: z.string(), path: z.string().optional() }),
   Grep: z.object({ pattern: z.string(), path: z.string().optional(), glob: z.string().optional() }),
   Task: z.object({ description: z.string(), prompt: z.string(), subagent_type: z.string() }),
+  TaskOutput: z.object({
+    task_id: z.string(),
+    block: z.boolean().optional(),
+    timeout: z.number().optional(),
+  }),
+  TaskStop: z.object({ task_id: z.string() }),
   WebFetch: z.object({ url: z.string(), prompt: z.string() }),
   WebSearch: z.object({ query: z.string() }),
   TaskCreate: z.object({ subject: z.string(), description: z.string().optional() }),
@@ -144,6 +150,14 @@ export const transformToolUse = (
     case RawTool.TASK: {
       const data = parseToolInput(ToolInputSchema.Task, input);
       return data ? { type: BlockType.TASK, id, ...data } : fallback;
+    }
+    case RawTool.TASK_OUTPUT: {
+      const data = parseToolInput(ToolInputSchema.TaskOutput, input);
+      return data ? { type: BlockType.TASK_OUTPUT, id, ...data } : fallback;
+    }
+    case RawTool.TASK_STOP: {
+      const data = parseToolInput(ToolInputSchema.TaskStop, input);
+      return data ? { type: BlockType.TASK_STOP, id, ...data } : fallback;
     }
     case RawTool.WEB_FETCH: {
       const data = parseToolInput(ToolInputSchema.WebFetch, input);
@@ -243,6 +257,18 @@ const enhanceQuestion = (data: z.infer<typeof ToolUseResultSchema.AskUserQuestio
   answers: data.answers,
 });
 
+const enhanceTaskOutput = (data: z.infer<typeof ToolUseResultSchema.TaskOutput>) => ({
+  status: data.task.status,
+  task_type: data.task.task_type,
+  description: data.task.description,
+  output: data.task.output ? sanitize(data.task.output) : undefined,
+  exitCode: data.task.exitCode,
+});
+
+const enhanceTaskStop = (data: z.infer<typeof ToolUseResultSchema.TaskStop>) => ({
+  success: data.success,
+});
+
 const outputEnhancers = {
   [RawTool.READ]: { schema: ToolUseResultSchema.Read, enhance: enhanceRead },
   [RawTool.GLOB]: { schema: ToolUseResultSchema.Glob, enhance: enhanceGlob },
@@ -254,6 +280,14 @@ const outputEnhancers = {
   [RawTool.ASK_USER_QUESTION]: {
     schema: ToolUseResultSchema.AskUserQuestion,
     enhance: enhanceQuestion,
+  },
+  [RawTool.TASK_OUTPUT]: {
+    schema: ToolUseResultSchema.TaskOutput,
+    enhance: enhanceTaskOutput,
+  },
+  [RawTool.TASK_STOP]: {
+    schema: ToolUseResultSchema.TaskStop,
+    enhance: enhanceTaskStop,
   },
 } as const;
 

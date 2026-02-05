@@ -18,6 +18,8 @@ export const BlockType = {
   GLOB: "glob",
   GREP: "grep",
   TASK: "task",
+  TASK_OUTPUT: "task_output",
+  TASK_STOP: "task_stop",
   WEB_FETCH: "web_fetch",
   WEB_SEARCH: "web_search",
   TASKS: "tasks",
@@ -37,6 +39,8 @@ export type ContentBlock =
   | GlobBlock
   | GrepBlock
   | TaskBlock
+  | TaskOutputBlock
+  | TaskStopBlock
   | WebFetchBlock
   | WebSearchBlock
   | TasksBlock
@@ -174,6 +178,26 @@ export interface TaskBlock extends ToolBase {
   output?: string;
 }
 
+export interface TaskOutputBlock extends ToolBase {
+  type: typeof BlockType.TASK_OUTPUT;
+  task_id: string;
+  block?: boolean;
+  timeout?: number;
+  // Output
+  status?: string;
+  task_type?: string;
+  description?: string;
+  output?: string;
+  exitCode?: number;
+}
+
+export interface TaskStopBlock extends ToolBase {
+  type: typeof BlockType.TASK_STOP;
+  task_id: string;
+  // Output
+  success?: boolean;
+}
+
 export interface WebFetchBlock extends ToolBase {
   type: typeof BlockType.WEB_FETCH;
   url: string;
@@ -222,6 +246,8 @@ export enum RawTool {
   GLOB = "Glob",
   GREP = "Grep",
   TASK = "Task",
+  TASK_OUTPUT = "TaskOutput",
+  TASK_STOP = "TaskStop",
   WEB_FETCH = "WebFetch",
   WEB_SEARCH = "WebSearch",
   TASK_CREATE = "TaskCreate",
@@ -239,6 +265,8 @@ export const RAW_TOOL_TO_BLOCK_TYPE: Record<string, string> = {
   [RawTool.GLOB]: BlockType.GLOB,
   [RawTool.GREP]: BlockType.GREP,
   [RawTool.TASK]: BlockType.TASK,
+  [RawTool.TASK_OUTPUT]: BlockType.TASK_OUTPUT,
+  [RawTool.TASK_STOP]: BlockType.TASK_STOP,
   [RawTool.WEB_FETCH]: BlockType.WEB_FETCH,
   [RawTool.WEB_SEARCH]: BlockType.WEB_SEARCH,
 };

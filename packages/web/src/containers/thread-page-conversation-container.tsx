@@ -26,6 +26,8 @@ import { ThreadPageConversationFileEdit } from "@/components/thread-page-convers
 import { ThreadPageConversationGlob } from "@/components/thread-page-conversation-glob";
 import { ThreadPageConversationGrep } from "@/components/thread-page-conversation-grep";
 import { ThreadPageConversationTask } from "@/components/thread-page-conversation-task";
+import { ThreadPageConversationTaskOutput } from "@/components/thread-page-conversation-task-output";
+import { ThreadPageConversationTaskStop } from "@/components/thread-page-conversation-task-stop";
 import { ThreadPageConversationTasks } from "@/components/thread-page-conversation-tasks";
 import { ThreadPageConversationQuestions } from "@/components/thread-page-conversation-questions";
 import { ThreadPageConversationWebFetch } from "@/components/thread-page-conversation-web-fetch";
@@ -77,6 +79,10 @@ const renderer = {
         return <ThreadPageConversationGrep key={index} block={block} />;
       case BlockType.TASK:
         return <ThreadPageConversationTask key={index} block={block} />;
+      case BlockType.TASK_OUTPUT:
+        return <ThreadPageConversationTaskOutput key={index} block={block} />;
+      case BlockType.TASK_STOP:
+        return <ThreadPageConversationTaskStop key={index} block={block} />;
       case BlockType.TASKS:
         return <ThreadPageConversationTasks key={index} block={block} />;
       case BlockType.QUESTION:

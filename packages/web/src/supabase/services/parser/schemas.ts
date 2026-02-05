@@ -99,6 +99,20 @@ export const ToolUseResultSchema = {
     ),
     answers: z.record(z.string(), z.string()),
   }),
+  TaskOutput: z.object({
+    retrieval_status: z.string(),
+    task: z.object({
+      task_id: z.string(),
+      task_type: z.string().optional(),
+      status: z.string(),
+      description: z.string().optional(),
+      output: z.string().optional(),
+      exitCode: z.number().optional(),
+    }),
+  }),
+  TaskStop: z.object({
+    success: z.boolean(),
+  }),
 } as const;
 
 const BaseMessageFields = {
