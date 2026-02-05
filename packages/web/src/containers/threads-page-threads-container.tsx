@@ -44,7 +44,7 @@ const ThreadsPageThreadsContainer = ({
   initialQuery,
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
-  const lg = useMediaQuery("(min-width: 1024px)");
+  const lg = useMediaQuery("(min-width: 1024px)", { initializeWithValue: false });
   const router = useRouter();
 
   const [query, setQuery] = useState(initialQuery);
