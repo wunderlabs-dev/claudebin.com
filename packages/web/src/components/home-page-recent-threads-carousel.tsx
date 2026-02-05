@@ -33,11 +33,11 @@ const HomePageRecentThreadsCarousel = ({
   const handleNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   return (
-    <section className={cn("flex flex-col gap-12", className)} {...props}>
-      <Container size="lg" spacing="lg" className="flex flex-col">
+    <section className={cn("flex flex-col gap-8 md:gap-12", className)} {...props}>
+      <Container size="lg" spacing="lg" className="flex flex-col gap-2 md:gap-0">
         <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-0 items-start md:items-center justify-between">
           <Typography variant="body" color="neutral" className="whitespace-break-spaces leading-8">
             {t("home.recentThreadsDescription")}
           </Typography>

@@ -2,8 +2,10 @@
 
 import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "usehooks-ts";
 
 import { renderers } from "@/utils/renderers";
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconGlitters } from "@/components/icon";
 
@@ -19,6 +21,7 @@ type HomePageHeroIntroductionProps = ComponentProps<"section">;
 
 const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroductionProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md);
 
   return (
     <Container as="section" size="lg" className={className} {...props}>
@@ -39,22 +42,28 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                 {t("home.description")}
               </Typography>
 
-              <Tabs defaultValue="cli" className="flex shrink-0 flex-col gap-4 lg:w-md">
-                <div className="flex items-center justify-between">
-                  <TabsList>
-                    <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>
-                    <TabsTrigger value="editor">{t("home.editorInstall")}</TabsTrigger>
-                  </TabsList>
+              {md ? (
+                <Tabs defaultValue="cli" className="flex shrink-0 flex-col gap-4 lg:w-md">
+                  <div className="flex items-center justify-between">
+                    <TabsList>
+                      <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>
+                      <TabsTrigger value="editor">{t("home.editorInstall")}</TabsTrigger>
+                    </TabsList>
+                    <Button variant="secondary">{t("home.viewDemo")}</Button>
+                  </div>
+
+                  <TabsContent value="cli">
+                    <CopyInput value={t("home.commandCli")} />
+                  </TabsContent>
+                  <TabsContent value="editor">
+                    <CopyInput value={t("home.commandEditor")} />
+                  </TabsContent>
+                </Tabs>
+              ) : (
+                <div className="shrink-0">
                   <Button variant="secondary">{t("home.viewDemo")}</Button>
                 </div>
-
-                <TabsContent value="cli">
-                  <CopyInput value={t("home.commandCli")} />
-                </TabsContent>
-                <TabsContent value="editor">
-                  <CopyInput value={t("home.commandEditor")} />
-                </TabsContent>
-              </Tabs>
+              )}
             </div>
           </div>
         </div>
