@@ -28,7 +28,7 @@ type CodeElementProps = {
   className?: string;
 };
 
-type ChatPageChatContentTextProps = {
+type ThreadPageConversationTextProps = {
   block: TextBlock;
 };
 
@@ -89,7 +89,7 @@ const createComponents = (role: Role) => ({
   },
 });
 
-const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
+const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) => {
   const role = useChatItemRole();
   const components = useMemo(() => createComponents(role), [role]);
 
@@ -102,4 +102,4 @@ const ChatPageChatContentText = ({ block }: ChatPageChatContentTextProps) => {
   );
 };
 
-export { ChatPageChatContentText };
+export { ThreadPageConversationText };

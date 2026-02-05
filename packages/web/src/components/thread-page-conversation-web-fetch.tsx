@@ -17,9 +17,9 @@ import {
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentWebFetchProps = {
+type ThreadPageConversationWebFetchProps = {
   block: WebFetchBlock;
 };
 
@@ -34,7 +34,7 @@ const getStatusColor = (statusCode: number) => {
   return statusCodeColorClassNames[head(String(statusCode)) as string];
 };
 
-const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps) => {
+const ThreadPageConversationWebFetch = ({ block }: ThreadPageConversationWebFetchProps) => {
   const t = useTranslations();
 
   return (
@@ -56,7 +56,7 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
             </Typography>
           ) : null}
 
-          <ChatPageChatContentChip label={block.url} />
+          <ThreadPageConversationChip label={block.url} />
         </AccordionTrigger>
 
         <AccordionContent>
@@ -83,4 +83,4 @@ const ChatPageChatContentWebFetch = ({ block }: ChatPageChatContentWebFetchProps
   );
 };
 
-export { ChatPageChatContentWebFetch };
+export { ThreadPageConversationWebFetch };

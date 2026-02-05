@@ -8,11 +8,11 @@ import type { QuestionBlock } from "@/supabase/types/message";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Typography } from "@/components/ui/typography";
 
-type ChatPageChatContentQuestionsProps = {
+type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
-const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsProps) => {
+const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
   const t = useTranslations();
 
   return (
@@ -56,4 +56,4 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
   );
 };
 
-export { ChatPageChatContentQuestions };
+export { ThreadPageConversationQuestions };

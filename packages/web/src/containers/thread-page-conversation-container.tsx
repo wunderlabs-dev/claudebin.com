@@ -18,21 +18,22 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { ChatPageChatContentText } from "@/components/chat-page-chat-content-text";
-import { ChatPageChatContentBash } from "@/components/chat-page-chat-content-bash";
-import { ChatPageChatContentFileRead } from "@/components/chat-page-chat-content-file-read";
-import { ChatPageChatContentFileWrite } from "@/components/chat-page-chat-content-file-write";
-import { ChatPageChatContentFileEdit } from "@/components/chat-page-chat-content-file-edit";
-import { ChatPageChatContentGlob } from "@/components/chat-page-chat-content-glob";
-import { ChatPageChatContentGrep } from "@/components/chat-page-chat-content-grep";
-import { ChatPageChatContentTask } from "@/components/chat-page-chat-content-task";
-import { ChatPageChatContentTasks } from "@/components/chat-page-chat-content-tasks";
-import { ChatPageChatContentQuestions } from "@/components/chat-page-chat-content-questions";
-import { ChatPageChatContentWebFetch } from "@/components/chat-page-chat-content-web-fetch";
-import { ChatPageChatContentWebSearch } from "@/components/chat-page-chat-content-web-search";
-import { ChatPageChatContentMcp } from "@/components/chat-page-chat-content-mcp";
-import { ChatPageChatContentGeneric } from "@/components/chat-page-chat-content-generic";
-import { ChatPageChatContentSkill } from "@/components/chat-page-chat-content-skill";
+import { ThreadPageConversationText } from "@/components/thread-page-conversation-text";
+import { ThreadPageConversationBash } from "@/components/thread-page-conversation-bash";
+import { ThreadPageConversationFileRead } from "@/components/thread-page-conversation-file-read";
+import { ThreadPageConversationFileWrite } from "@/components/thread-page-conversation-file-write";
+import { ThreadPageConversationFileEdit } from "@/components/thread-page-conversation-file-edit";
+import { ThreadPageConversationGlob } from "@/components/thread-page-conversation-glob";
+import { ThreadPageConversationGrep } from "@/components/thread-page-conversation-grep";
+import { ThreadPageConversationTask } from "@/components/thread-page-conversation-task";
+import { ThreadPageConversationTasks } from "@/components/thread-page-conversation-tasks";
+import { ThreadPageConversationQuestions } from "@/components/thread-page-conversation-questions";
+import { ThreadPageConversationWebFetch } from "@/components/thread-page-conversation-web-fetch";
+import { ThreadPageConversationWebSearch } from "@/components/thread-page-conversation-web-search";
+import { ThreadPageConversationMcp } from "@/components/thread-page-conversation-mcp";
+import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
+import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
+import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -49,8 +50,8 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
 
       return assistant
         ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
+          { ...previous, content: concat(previous.content, message.content) },
+        ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
@@ -61,35 +62,35 @@ const renderer = {
   message: (block: ContentBlock, index: number): ReactNode => {
     switch (block.type) {
       case BlockType.TEXT:
-        return <ChatPageChatContentText key={index} block={block} />;
+        return <ThreadPageConversationText key={index} block={block} />;
       case BlockType.BASH:
-        return <ChatPageChatContentBash key={index} block={block} />;
+        return <ThreadPageConversationBash key={index} block={block} />;
       case BlockType.FILE_READ:
-        return <ChatPageChatContentFileRead key={index} block={block} />;
+        return <ThreadPageConversationFileRead key={index} block={block} />;
       case BlockType.FILE_WRITE:
-        return <ChatPageChatContentFileWrite key={index} block={block} />;
+        return <ThreadPageConversationFileWrite key={index} block={block} />;
       case BlockType.FILE_EDIT:
-        return <ChatPageChatContentFileEdit key={index} block={block} />;
+        return <ThreadPageConversationFileEdit key={index} block={block} />;
       case BlockType.GLOB:
-        return <ChatPageChatContentGlob key={index} block={block} />;
+        return <ThreadPageConversationGlob key={index} block={block} />;
       case BlockType.GREP:
-        return <ChatPageChatContentGrep key={index} block={block} />;
+        return <ThreadPageConversationGrep key={index} block={block} />;
       case BlockType.TASK:
-        return <ChatPageChatContentTask key={index} block={block} />;
+        return <ThreadPageConversationTask key={index} block={block} />;
       case BlockType.TASKS:
-        return <ChatPageChatContentTasks key={index} block={block} />;
+        return <ThreadPageConversationTasks key={index} block={block} />;
       case BlockType.QUESTION:
-        return <ChatPageChatContentQuestions key={index} block={block} />;
+        return <ThreadPageConversationQuestions key={index} block={block} />;
       case BlockType.WEB_FETCH:
-        return <ChatPageChatContentWebFetch key={index} block={block} />;
+        return <ThreadPageConversationWebFetch key={index} block={block} />;
       case BlockType.WEB_SEARCH:
-        return <ChatPageChatContentWebSearch key={index} block={block} />;
+        return <ThreadPageConversationWebSearch key={index} block={block} />;
       case BlockType.MCP:
-        return <ChatPageChatContentMcp key={index} block={block} />;
+        return <ThreadPageConversationMcp key={index} block={block} />;
       case BlockType.GENERIC:
-        return <ChatPageChatContentGeneric key={index} block={block} />;
+        return <ThreadPageConversationGeneric key={index} block={block} />;
       case BlockType.SKILL:
-        return <ChatPageChatContentSkill key={index} block={block} />;
+        return <ThreadPageConversationSkill key={index} block={block} />;
       default:
         return null;
     }
@@ -109,7 +110,7 @@ const ThreadPageConversationContainer = ({
   });
 
   if (isLoading) {
-    return null;
+    return <ThreadPageConversationSkeleton />;
   }
 
   const [fallback] = [...author];

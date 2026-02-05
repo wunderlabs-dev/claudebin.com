@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
 
-type ChatPageChatContentBashProps = {
+type ThreadPageConversationBashProps = {
   block: BashBlock;
 };
 
-const ChatPageChatContentBash = ({ block }: ChatPageChatContentBashProps) => {
+const ThreadPageConversationBash = ({ block }: ThreadPageConversationBashProps) => {
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="bash">
@@ -33,4 +33,4 @@ const ChatPageChatContentBash = ({ block }: ChatPageChatContentBashProps) => {
   );
 };
 
-export { ChatPageChatContentBash };
+export { ThreadPageConversationBash };

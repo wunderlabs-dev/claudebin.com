@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentSkillProps = {
+type ThreadPageConversationSkillProps = {
   block: SkillBlock;
 };
 
-const ChatPageChatContentSkill = ({ block }: ChatPageChatContentSkillProps) => {
+const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps) => {
   const t = useTranslations();
   const hasContent = block.instructions || block.output;
 
@@ -29,7 +29,7 @@ const ChatPageChatContentSkill = ({ block }: ChatPageChatContentSkillProps) => {
         <AccordionTrigger disabled={!hasContent}>
           <SvgIconGlitters size="sm" color="primary" />
           {t("chat.skill")}
-          <ChatPageChatContentChip label={block.commandName} />
+          <ThreadPageConversationChip label={block.commandName} />
         </AccordionTrigger>
         {hasContent ? (
           <AccordionContent>
@@ -42,4 +42,4 @@ const ChatPageChatContentSkill = ({ block }: ChatPageChatContentSkillProps) => {
   );
 };
 
-export { ChatPageChatContentSkill };
+export { ThreadPageConversationSkill };

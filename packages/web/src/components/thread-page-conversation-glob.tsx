@@ -14,13 +14,13 @@ import {
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentGlobProps = {
+type ThreadPageConversationGlobProps = {
   block: GlobBlock;
 };
 
-const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
+const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) => {
   const t = useTranslations();
 
   return (
@@ -34,7 +34,7 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
               {t("common.files", { count: block.numFiles })}
             </Typography>
           ) : null}
-          <ChatPageChatContentChip label={block.pattern} />
+          <ThreadPageConversationChip label={block.pattern} />
         </AccordionTrigger>
         <AccordionContent>
           {block.filenames ? (
@@ -48,4 +48,4 @@ const ChatPageChatContentGlob = ({ block }: ChatPageChatContentGlobProps) => {
   );
 };
 
-export { ChatPageChatContentGlob };
+export { ThreadPageConversationGlob };
