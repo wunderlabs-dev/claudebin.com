@@ -14,11 +14,16 @@ import { Button } from "@/components/ui/button";
 type ThreadPageConversationContinueProps = {
   id: string;
   isAuthor: boolean;
+  isPublic: boolean;
 };
 
 const EXPIRY_SECONDS = 5 * 60;
 
-const ThreadPageConversationContinue = ({ id, isAuthor }: ThreadPageConversationContinueProps) => {
+const ThreadPageConversationContinue = ({
+  id,
+  isAuthor,
+  isPublic,
+}: ThreadPageConversationContinueProps) => {
   const t = useTranslations();
 
   const [curlCommand, setCurlCommand] = useState<string | null>(null);
@@ -82,11 +87,13 @@ const ThreadPageConversationContinue = ({ id, isAuthor }: ThreadPageConversation
         <div className="flex flex-col gap-2">
           <Typography variant="h4">{t("thread.continueTitle")}</Typography>
           <Typography variant="small" color="muted">
-            {isAuthor ? t("thread.continueDescriptionAuthor") : t("thread.continueDescription")}
+            {isAuthor && isPublic
+              ? t("thread.continueDescriptionAuthor")
+              : t("thread.continueDescription")}
           </Typography>
         </div>
 
-        {isAuthor ? (
+        {isAuthor && isPublic ? (
           <div className="flex flex-col gap-3">
             {curlCommand ? (
               <>

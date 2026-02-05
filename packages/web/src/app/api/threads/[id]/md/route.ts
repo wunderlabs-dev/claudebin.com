@@ -38,6 +38,15 @@ export const GET = async (request: NextRequest, context: RouteContext) => {
     return NextResponse.json({ error: "Session not found" }, { status: 404 });
   }
 
+  // Only allow markdown export for public sessions to prevent private content leakage
+  // via shared/leaked token URLs
+  if (!session.isPublic) {
+    return NextResponse.json(
+      { error: "Markdown export is only available for public sessions" },
+      { status: 403 },
+    );
+  }
+
   const result = await messages.getBySessionId(supabase, id, {
     excludeMeta: true,
     excludeSidechain: true,

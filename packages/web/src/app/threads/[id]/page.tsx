@@ -62,6 +62,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           avatarUrl={thread.profiles?.avatarUrl}
           author={thread.profiles?.username ?? t("common.deactivated")}
           isAuthor={isAuthor}
+          isPublic={thread.isPublic}
         />
       </div>
 

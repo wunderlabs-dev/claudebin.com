@@ -34,6 +34,14 @@ export const POST = async (_request: NextRequest, context: RouteContext) => {
     );
   }
 
+  // Only allow token generation for public sessions to prevent private content leakage
+  if (!session.isPublic) {
+    return NextResponse.json(
+      { error: "Continue tokens can only be generated for public sessions" },
+      { status: 403 },
+    );
+  }
+
   const token = await createContinueToken({
     sessionId: id,
     userId: user.id,
