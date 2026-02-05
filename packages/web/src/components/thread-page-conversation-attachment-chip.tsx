@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 
 import type { Attachment } from "@/supabase/types/message";
 
+import { THREAD_ATTACHMENT_SIZE } from "@/utils/constants";
+
 import { SvgIconFile } from "@/components/icon";
 import { Chip } from "@/components/ui/chip";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
@@ -13,7 +15,7 @@ type ThreadPageConversationAttachmentChipProps = {
   attachment: Attachment;
 };
 
-const getImageSrc = (attachment: Attachment) => {
+const srcFromDataUrl = (attachment: Attachment) => {
   if (attachment.sourceType === "url") {
     return attachment.data;
   }
@@ -37,11 +39,11 @@ const ThreadPageConversationAttachmentChip = ({
         </TooltipTrigger>
         <TooltipContent>
           <Image
-            src={getImageSrc(attachment)}
-            alt={t("common.image")}
-            width={200}
-            height={200}
+            src={srcFromDataUrl(attachment)}
             className="rounded"
+            width={THREAD_ATTACHMENT_SIZE}
+            height={THREAD_ATTACHMENT_SIZE}
+            alt={t("common.image")}
           />
         </TooltipContent>
       </Tooltip>

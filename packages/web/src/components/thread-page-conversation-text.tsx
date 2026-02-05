@@ -103,9 +103,11 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
         </Markdown>
       ) : null}
 
-      {block.attachments?.map((attachment) => (
-        <ThreadPageConversationAttachmentChip key={attachment.data} attachment={attachment} />
-      ))}
+      <div className="flex gap-2">
+        {block.attachments?.map((attachment) => (
+          <ThreadPageConversationAttachmentChip key={attachment.data} attachment={attachment} />
+        ))}
+      </div>
     </div>
   );
 };

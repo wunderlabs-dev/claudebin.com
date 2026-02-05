@@ -1,6 +1,7 @@
 export const AVATAR_FALLBACK_DELAY_MS = 0;
 export const AVATAR_ASSISTANT_IMAGE_SRC = "/images/assistant.jpg";
 
+export const THREAD_ATTACHMENT_SIZE = 200;
 export const THREAD_TITLE_TRUNCATE_LENGTH = 56;
 export const THREAD_GRID_TITLE_TRUNCATE_LENGTH = 36;
 export const THREAD_CARD_LAYOUTS = [
@@ -19,5 +20,6 @@ export const AUTH_TOKEN_LENGTH = 21;
 export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 
 export const SEARCH_DEBOUNCE_MS = 300;
+
 
 export const APP_THREADS_URL = "https://claudebin.com/threads";
