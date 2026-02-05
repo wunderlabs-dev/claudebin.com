@@ -81,7 +81,7 @@ const CardBody = ({ className, ...props }: CardBodyProps) => {
 const cardHeaderVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
   list: "flex flex-row justify-between gap-3",
-  grid: "flex flex-col gap-1 px-3",
+  grid: "flex flex-col gap-1 px-4 md:px-3",
 } as const;
 
 type CardHeaderProps = React.ComponentProps<"div">;
@@ -141,7 +141,7 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
 const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
   list: "flex flex-col gap-3 md:gap-1 pl-4 pr-4 md:pl-8 md:pr-3",
-  grid: "flex flex-col gap-3 px-3",
+  grid: "flex flex-col gap-3 px-4 md:px-3",
 } as const;
 
 type CardSectionProps = React.ComponentProps<"div">;

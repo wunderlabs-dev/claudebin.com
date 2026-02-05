@@ -26,10 +26,12 @@ import {
   DividerGridRow,
   DividerGridEdge,
   DividerGridCell,
-  DividerGridDivider,
 } from "@/components/ui/divider-grid";
 
 import { ThreadsPageThreadGridItem } from "@/components/threads-page-thread-grid-item";
+import { ThreadsPageThreadsAdornmentStart } from "@/components/threads-page-threads-adornment-start";
+import { ThreadsPageThreadsAdornmentSpacer } from "@/components/threads-page-threads-adornment-spacer";
+import { ThreadsPageThreadsAdornmentEnd } from "@/components/threads-page-threads-adornment-end";
 
 type ThreadsPageThreadsContainerProps = {
   initialThreads: ThreadWithAuthor[];
@@ -78,21 +80,7 @@ const ThreadsPageThreadsContainer = ({
 
   return (
     <DividerGrid>
-      {lg ? (
-        <DividerGridRow>
-          <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="grid grid-cols-12 col-span-10 border-b">
-            <DividerGridCell className="flex justify-between col-span-8">
-              <DividerGridDivider variant="top" />
-              <DividerGridDivider variant="top" />
-            </DividerGridCell>
-            <DividerGridCell className="flex justify-end col-span-4">
-              <DividerGridDivider variant="top" />
-            </DividerGridCell>
-          </DividerGridCell>
-          <DividerGridEdge position="right" className="col-span-1" />
-        </DividerGridRow>
-      ) : null}
+      <ThreadsPageThreadsAdornmentStart />
 
       <DividerGridRow>
         {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
@@ -123,16 +111,7 @@ const ThreadsPageThreadsContainer = ({
         {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
       </DividerGridRow>
 
-      <DividerGridRow>
-        {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
-        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-r border-l">
-          <DividerGridRow>
-            <DividerGridCell className="col-span-9 lg:col-span-8 py-6 border-r" />
-            <DividerGridCell className="col-span-3 lg:col-span-4 flex items-center justify-end px-4" />
-          </DividerGridRow>
-        </DividerGridCell>
-        {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
-      </DividerGridRow>
+      <ThreadsPageThreadsAdornmentSpacer />
 
       {hasNoResult ? (
         <DividerGridRow>
@@ -187,26 +166,7 @@ const ThreadsPageThreadsContainer = ({
         </Fragment>
       ) : null}
 
-      {lg ? (
-        <DividerGridRow>
-          <DividerGridCell className="col-span-1" />
-          <DividerGridCell className="col-span-10">
-            <DividerGridRow>
-              <DividerGridCell className="flex justify-between col-span-4">
-                <DividerGridDivider variant="bottom" />
-                <DividerGridDivider variant="bottom" />
-              </DividerGridCell>
-              <DividerGridCell className="flex justify-end col-span-4">
-                <DividerGridDivider variant="bottom" />
-              </DividerGridCell>
-              <DividerGridCell className="flex justify-end col-span-4">
-                <DividerGridDivider variant="bottom" />
-              </DividerGridCell>
-            </DividerGridRow>
-          </DividerGridCell>
-          <DividerGridCell className="col-span-1" />
-        </DividerGridRow>
-      ) : null}
+      <ThreadsPageThreadsAdornmentEnd />
     </DividerGrid>
   );
 };
