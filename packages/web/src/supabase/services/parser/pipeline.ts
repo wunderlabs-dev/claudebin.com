@@ -88,9 +88,11 @@ export const createPipeline = () => {
     msg.blocks.push(block);
   };
 
+  const cloneTasks = (): TaskItem[] => pipeline.currentTasks.map((task) => ({ ...task }));
+
   const flushPendingTasks = (): void => {
     if (pipeline.hasPendingTaskSnapshot && pipeline.currentTasks.length > 0) {
-      emit({ type: BlockType.TASKS, tasks: [...pipeline.currentTasks] });
+      emit({ type: BlockType.TASKS, tasks: cloneTasks() });
       pipeline.hasPendingTaskSnapshot = false;
     }
   };
