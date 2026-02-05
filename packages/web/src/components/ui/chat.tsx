@@ -50,7 +50,7 @@ const chatContentVariants = cva(
     variants: {
       variant: {
         user: "max-w-3/4 bg-gray-200 rounded-tr-none",
-        assistant: "md:max-w-3/4 rounded-tl-none",
+        assistant: "w-full md:max-w-3/4 rounded-tl-none",
       },
     },
     defaultVariants: {

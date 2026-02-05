@@ -49,6 +49,7 @@ const parseCodeBlock = (children: ReactNode) => {
 };
 
 const createComponents = (role: Role) => ({
+  hr: () => <Divider />,
   table: ({ children }: { children?: ReactNode }) => <Table variant={role}>{children}</Table>,
   thead: ({ children }: { children?: ReactNode }) => <TableHeader>{children}</TableHeader>,
   tbody: ({ children }: { children?: ReactNode }) => <TableBody>{children}</TableBody>,
@@ -68,11 +69,6 @@ const createComponents = (role: Role) => ({
   ),
   p: ({ children }: { children?: ReactNode }) => (
     <Typography variant="small">{children}</Typography>
-  ),
-  hr: () => (
-    <div className="py-2">
-      <Divider />
-    </div>
   ),
   a: ({ href, children }: { href?: string; children?: ReactNode }) => (
     <a href={href} className="text-orange-50 hover:underline">
