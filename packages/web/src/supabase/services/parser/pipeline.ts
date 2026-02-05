@@ -59,6 +59,7 @@ export const createPipeline = () => {
     pendingTools: new Map<string, PendingTool>(),
     taskToolMap: new Map<string, TrackedTaskTool>(),
     currentTasks: [] as TaskItem[],
+    hasPendingTaskSnapshot: false,
     pendingSkillCommand: null as SkillCommandData | null,
     toolUseResult: undefined as unknown,
   };
@@ -87,11 +88,16 @@ export const createPipeline = () => {
     msg.blocks.push(block);
   };
 
+  const flushPendingTasks = (): void => {
+    if (pipeline.hasPendingTaskSnapshot && pipeline.currentTasks.length > 0) {
+      emit({ type: BlockType.TASKS, tasks: [...pipeline.currentTasks] });
+      pipeline.hasPendingTaskSnapshot = false;
+    }
+  };
+
   const emitTasksSnapshot = (taskTool: TrackedTaskTool, result: string): void => {
     const taskId = extractTaskId(result);
     if (!taskId) return;
-
-    let changed = false;
 
     if (taskTool.name === "TaskCreate") {
       const parsed = ToolInputSchema.TaskCreate.safeParse(taskTool.input);
@@ -102,7 +108,7 @@ export const createPipeline = () => {
           description: parsed.data.description,
           status: "pending",
         });
-        changed = true;
+        pipeline.hasPendingTaskSnapshot = true;
       }
     }
 
@@ -111,12 +117,9 @@ export const createPipeline = () => {
       const task = pipeline.currentTasks.find((t) => t.id === parsed.data?.taskId);
       if (parsed.success && task && parsed.data.status && task.status !== parsed.data.status) {
         task.status = parsed.data.status;
-        changed = true;
+        flushPendingTasks();
+        emit({ type: BlockType.TASKS, tasks: [...pipeline.currentTasks] });
       }
-    }
-
-    if (changed) {
-      emit({ type: BlockType.TASKS, tasks: [...pipeline.currentTasks] });
     }
   };
 
@@ -133,6 +136,8 @@ export const createPipeline = () => {
     const pending = pipeline.pendingTools.get(raw.tool_use_id);
     if (!pending) return;
     pipeline.pendingTools.delete(raw.tool_use_id);
+
+    flushPendingTasks();
 
     const buildBlock = (extraFields: Record<string, unknown>): ContentBlock =>
       ({ ...pending.block, ...extraFields, is_error: raw.is_error }) as ContentBlock;
@@ -166,6 +171,7 @@ export const createPipeline = () => {
   const ingestDefault = (raw: RawContentBlock): void => {
     const block = normalizeBlock(raw);
     if (!block || isFilteredBlock(block)) return;
+    flushPendingTasks();
     emit(block);
   };
 
@@ -186,7 +192,7 @@ export const createPipeline = () => {
   };
 
   const isContentArray = (
-    content: string | RawContentBlock[] | undefined
+    content: string | RawContentBlock[] | undefined,
   ): content is RawContentBlock[] => Array.isArray(content);
 
   const hasToolResultContent = (content: string | RawContentBlock[] | undefined): boolean =>
@@ -330,6 +336,8 @@ export const createPipeline = () => {
   };
 
   const flush = (): void => {
+    flushPendingTasks();
+
     for (const { block } of pipeline.pendingTools.values()) {
       emit(block);
     }
