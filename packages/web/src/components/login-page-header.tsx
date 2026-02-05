@@ -10,7 +10,7 @@ const LoginPageHeader = () => {
   const t = useTranslations();
 
   return (
-    <header className="flex flex-col items-start gap-18">
+    <header className="flex flex-col items-start gap-12 md:gap-18">
       <Typography variant="h1" leading="none" className="whitespace-break-spaces">
         {t.rich("login.title", renderers)}
       </Typography>
