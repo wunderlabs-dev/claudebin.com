@@ -117,7 +117,7 @@ export const createPipeline = () => {
       const task = pipeline.currentTasks.find((t) => t.id === parsed.data?.taskId);
       if (parsed.success && task && parsed.data.status && task.status !== parsed.data.status) {
         task.status = parsed.data.status;
-        flushPendingTasks();
+        pipeline.hasPendingTaskSnapshot = false;
         emit({ type: BlockType.TASKS, tasks: [...pipeline.currentTasks] });
       }
     }
