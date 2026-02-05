@@ -15,7 +15,7 @@ const ThreadPageConversationSkeleton = () => {
 
       <ChatItem variant="assistant">
         <SkeletonAvatar />
-        <ChatContent className="w-3/4">
+        <ChatContent className="w-full md:w-3/4">
           <SkeletonBar className="w-full" />
           <SkeletonBar className="w-full" />
           <SkeletonBar className="w-2/3" />
@@ -24,6 +24,7 @@ const ThreadPageConversationSkeleton = () => {
 
       <ChatItem variant="user">
         <ChatContent className="w-1/3">
+          <SkeletonBar className="w-1/3" />
           <SkeletonBar className="w-full" />
         </ChatContent>
         <SkeletonAvatar />
@@ -31,7 +32,7 @@ const ThreadPageConversationSkeleton = () => {
 
       <ChatItem variant="assistant">
         <SkeletonAvatar />
-        <ChatContent className="w-2/3">
+        <ChatContent className="w-full md:w-2/3">
           <SkeletonBar className="w-full" />
           <SkeletonBar className="w-full" />
           <SkeletonBar className="w-4/5" />
