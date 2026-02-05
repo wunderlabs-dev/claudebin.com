@@ -50,8 +50,8 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
 
       return assistant
         ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
+          { ...previous, content: concat(previous.content, message.content) },
+        ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
@@ -119,7 +119,7 @@ const ThreadPageConversationContainer = ({
   }
 
   return (
-    <div className="lg:min-h-screen lg:pr-12">
+    <div className="lg:pr-12">
       <Virtuoso
         useWindowScroll
         data={messages}
