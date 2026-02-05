@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Fragment } from "react";
+import { useState, useMemo, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { isServer, useInfiniteQuery } from "@tanstack/react-query";
@@ -62,7 +62,7 @@ const ThreadsPageThreadsContainer = ({
     },
   });
 
-  const threads = data?.pages.flatMap((page) => page.threads) ?? [];
+  const threads = useMemo(() => data?.pages.flatMap((page) => page.threads) ?? [], [data?.pages]);
 
   const hasSearchQuery = queryDebounced?.trim().length;
   const hasActiveSearch = isFetching && not(isFetchingNextPage);

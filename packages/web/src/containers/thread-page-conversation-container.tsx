@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
@@ -109,12 +109,12 @@ const ThreadPageConversationContainer = ({
     queryFn: () => getMessagesBySessionId(id),
   });
 
+  const [fallback] = [...author];
+  const messages = useMemo(() => compact(data?.messages), [data?.messages]);
+
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
-
-  const [fallback] = [...author];
-  const messages = compact(data?.messages);
 
   return (
     <Chat className="min-h-screen lg:pr-12">

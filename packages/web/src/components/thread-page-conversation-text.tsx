@@ -34,6 +34,8 @@ type ThreadPageConversationTextProps = {
   block: TextBlock;
 };
 
+const REMARK_PLUGINS = [remarkGfm];
+
 const parseCodeBlock = (children: ReactNode) => {
   const firstChild = head(Children.toArray(children));
 
@@ -98,16 +100,18 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
   return (
     <div className="flex flex-col max-w-full gap-4 [&>*:first-child]:mt-0">
       {block.text.trim().length ? (
-        <Markdown remarkPlugins={[remarkGfm]} components={components}>
+        <Markdown remarkPlugins={REMARK_PLUGINS} components={components}>
           {block.text}
         </Markdown>
       ) : null}
 
-      <div className="flex gap-2">
-        {block.attachments?.map((attachment) => (
-          <ThreadPageConversationAttachmentChip key={attachment.data} attachment={attachment} />
-        ))}
-      </div>
+      {block.attachments?.length ? (
+        <div className="flex gap-2">
+          {block.attachments?.map((attachment) => (
+            <ThreadPageConversationAttachmentChip key={attachment.data} attachment={attachment} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
