@@ -13,7 +13,7 @@ const Accordion = ({ className, ...props }: AccordionProps) => {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={cn("min-w-xl rounded-xl border border-gray-200 px-4", className)}
+      className={cn("min-w-full lg:min-w-md xl:min-w-xl rounded-xl border border-gray-200 px-4", className)}
       {...props}
     />
   );

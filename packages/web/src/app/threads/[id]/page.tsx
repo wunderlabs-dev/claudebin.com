@@ -40,7 +40,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-1 md:grid-cols-12">
-      <div className="col-span-1 md:col-span-9 flex flex-col gap-18 pt-9 pb-12 md:pb-0">
+      <div className="col-span-1 md:col-span-9 flex flex-col gap-12 md:gap-18 pt-9 pb-12 md:pb-0">
         <div className="flex flex-col items-start gap-9">
           <NavLink href="/threads">
             <SvgIconArrowLeft size="sm" />
