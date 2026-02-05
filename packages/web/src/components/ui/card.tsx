@@ -140,7 +140,7 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
 
 const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
-  list: "flex flex-col gap-3 pl-8 pr-8 md:gap-1 md:pr-3",
+  list: "flex flex-col gap-3 pl-4 pr-4 md:gap-1 md:pr-3 md:pl-8",
   grid: "flex flex-col gap-3 px-3",
 } as const;
 
