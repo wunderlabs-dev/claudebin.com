@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
+import { cn } from "@/utils/helpers";
+
 import {
   SvgIconBrain,
   SvgIconCalendar,
@@ -28,6 +30,7 @@ type ThreadPageThreadMetaProps = {
   messageCount?: number | null;
   initialLiked?: boolean;
   isPublic?: boolean;
+  className?: string;
 };
 
 const ThreadPageThreadMeta = ({
@@ -41,11 +44,12 @@ const ThreadPageThreadMeta = ({
   messageCount,
   initialLiked,
   isPublic,
+  className,
 }: ThreadPageThreadMetaProps) => {
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className={cn("flex flex-col gap-6", className)}>
       <Badge variant="neutral">
         <SvgIconGlobe size="sm" />
         {isPublic ? t("common.public") : t("common.private")}
