@@ -1,8 +1,9 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
+import { last, concat, init, reduce } from "ramda";
 
-import { BlockType } from "@/supabase/types/message";
+import { BlockType, MessageRole } from "@/supabase/types/message";
 import type { ContentBlock } from "@/supabase/types/message";
 import type { Message } from "@/supabase/repos/messages";
 
@@ -36,6 +37,23 @@ type ThreadEmbedContainerProps = {
   messages: Message[];
   range: { from: number; to: number };
 };
+
+const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
+  reduce<Message, Message[]>(
+    (accumulator, message) => {
+      const previous = last(accumulator);
+      const assistant =
+        previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
+
+      return assistant
+        ? concat(init(accumulator), [
+            { ...previous, content: concat(previous.content, message.content) },
+          ])
+        : concat(accumulator, [{ ...message }]);
+    },
+    [],
+    [...messages],
+  );
 
 const renderer = {
   message: (block: ContentBlock, index: number): ReactNode => {
@@ -87,6 +105,7 @@ const ThreadEmbedContainer = ({
   range,
 }: ThreadEmbedContainerProps): ReactNode => {
   const threadUrl = `${APP_THREADS_URL}/${sessionId}`;
+  const compactedMessages = useMemo(() => compact(messages), [messages]);
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -105,7 +124,7 @@ const ThreadEmbedContainer = ({
       </div>
 
       <Chat>
-        {messages.map((message) => (
+        {compactedMessages.map((message) => (
           <ChatItem key={message.uuid} variant={message.role}>
             {message.role === "assistant" ? (
               <Avatar size="sm">

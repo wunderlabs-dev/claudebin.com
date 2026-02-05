@@ -27,7 +27,10 @@ export const GET = async (request: NextRequest, context: RouteContext) => {
   }
 
   if (fromIdx > toIdx) {
-    return NextResponse.json({ error: "'from' must be less than or equal to 'to'" }, { status: 400 });
+    return NextResponse.json(
+      { error: "'from' must be less than or equal to 'to'" },
+      { status: 400 },
+    );
   }
 
   const supabase = await createClient();
