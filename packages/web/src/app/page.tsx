@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 
@@ -12,11 +10,11 @@ const HomePage = async () => {
   const { threads } = await sessions.getPublicThreads(supabase);
 
   return (
-    <Fragment>
+    <div className="overflow-hidden [--util-grid-columns:10] md:[--util-grid-columns:20] lg:[--util-grid-columns:30]">
       <HomePageHeroIntroduction />
       <HomePageTutorialsList />
       <HomePageRecentThreadsCarousel threads={threads} />
-    </Fragment>
+    </div>
   );
 };
 

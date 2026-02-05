@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentFileReadProps = {
+type ThreadPageConversationFileReadProps = {
   block: FileReadBlock;
 };
 
-const ChatPageChatContentFileRead = ({ block }: ChatPageChatContentFileReadProps) => {
+const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileReadProps) => {
   const t = useTranslations();
 
   return (
@@ -28,7 +28,7 @@ const ChatPageChatContentFileRead = ({ block }: ChatPageChatContentFileReadProps
         <AccordionTrigger>
           <SvgIconEye size="sm" color="primary" />
           {t("chat.read")}
-          <ChatPageChatContentChip label={block.file_path} />
+          <ThreadPageConversationChip label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent>{block.content ? <Code code={block.content} /> : null}</AccordionContent>
       </AccordionItem>
@@ -36,4 +36,4 @@ const ChatPageChatContentFileRead = ({ block }: ChatPageChatContentFileReadProps
   );
 };
 
-export { ChatPageChatContentFileRead };
+export { ThreadPageConversationFileRead };

@@ -29,8 +29,9 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
       <AvatarPrimitive.Root
         data-slot="avatar"
         className={cn(
-          "relative flex shrink-0 select-none overflow-hidden rounded-full",
-          "bg-orange-50/10 outline outline-orange-150",
+          "relative flex shrink-0 overflow-hidden",
+          "bg-orange-50/10 rounded-full outline outline-orange-150",
+          "select-none",
           avatarSizeClassNames[size],
           className,
         )}
@@ -71,7 +72,7 @@ const AvatarFallback = ({
       data-slot="avatar-fallback"
       delayMs={delayMs}
       className={cn(
-        "flex size-full items-center justify-center rounded-full",
+        "flex items-center justify-center size-full rounded-full",
         "font-bold text-orange-50 uppercase",
         avatarFallbackFontSizeClassNames[size],
         className,

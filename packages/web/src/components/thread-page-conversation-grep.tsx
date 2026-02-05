@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentGrepProps = {
+type ThreadPageConversationGrepProps = {
   block: GrepBlock;
 };
 
-const ChatPageChatContentGrep = ({ block }: ChatPageChatContentGrepProps) => {
+const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) => {
   const t = useTranslations();
 
   return (
@@ -28,7 +28,7 @@ const ChatPageChatContentGrep = ({ block }: ChatPageChatContentGrepProps) => {
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.grep")}
-          <ChatPageChatContentChip label={block.pattern} />
+          <ThreadPageConversationChip label={block.pattern} />
         </AccordionTrigger>
 
         <AccordionContent>
@@ -43,4 +43,4 @@ const ChatPageChatContentGrep = ({ block }: ChatPageChatContentGrepProps) => {
   );
 };
 
-export { ChatPageChatContentGrep };
+export { ThreadPageConversationGrep };

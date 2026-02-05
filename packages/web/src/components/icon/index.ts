@@ -12,6 +12,7 @@ export { SvgIconArrowLink } from "./svg-icon-arrow-link";
 export { SvgIconArrowRight } from "./svg-icon-arrow-right";
 export { SvgIconArrowTop } from "./svg-icon-arrow-top";
 export { SvgIconBash } from "./svg-icon-bash";
+export { SvgIconBrain } from "./svg-icon-brain";
 export { SvgIconCalendar } from "./svg-icon-calendar";
 export { SvgIconChat } from "./svg-icon-chat";
 export { SvgIconCheck } from "./svg-icon-check";

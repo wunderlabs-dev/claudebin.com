@@ -8,18 +8,17 @@ import type { QuestionBlock } from "@/supabase/types/message";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Typography } from "@/components/ui/typography";
 
-type ChatPageChatContentQuestionsProps = {
+type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
-const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsProps) => {
+const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
   const t = useTranslations();
 
   return (
     <Fragment>
       {block.questions.map((question) => {
         const answer = block.answers?.[question.question];
-
         const isPredefinedAnswer =
           answer && question.options.some((option) => option.label === answer);
         const isUserAnswer = answer && not(isPredefinedAnswer);
@@ -57,4 +56,4 @@ const ChatPageChatContentQuestions = ({ block }: ChatPageChatContentQuestionsPro
   );
 };
 
-export { ChatPageChatContentQuestions };
+export { ThreadPageConversationQuestions };

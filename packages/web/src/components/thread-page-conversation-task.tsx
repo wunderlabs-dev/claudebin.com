@@ -7,11 +7,11 @@ import type { TaskBlock } from "@/supabase/types/message";
 import { SvgIconHammer } from "@/components/icon";
 import { Action } from "@/components/ui/action";
 
-type ChatPageChatContentTaskProps = {
+type ThreadPageConversationTaskProps = {
   block: TaskBlock;
 };
 
-const ChatPageChatContentTask = ({ block }: ChatPageChatContentTaskProps) => {
+const ThreadPageConversationTask = ({ block }: ThreadPageConversationTaskProps) => {
   const t = useTranslations();
 
   return (
@@ -21,4 +21,4 @@ const ChatPageChatContentTask = ({ block }: ChatPageChatContentTaskProps) => {
   );
 };
 
-export { ChatPageChatContentTask };
+export { ThreadPageConversationTask };

@@ -5,12 +5,12 @@ import type { ReactNode } from "react";
 import { Chip } from "@/components/ui/chip";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
-type ChatPageChatContentChipProps = {
+type ThreadPageConversationChipProps = {
   icon?: ReactNode;
   label: string;
 };
 
-const ChatPageChatContentChip = ({ icon, label }: ChatPageChatContentChipProps) => {
+const ThreadPageConversationChip = ({ icon, label }: ThreadPageConversationChipProps) => {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -23,4 +23,4 @@ const ChatPageChatContentChip = ({ icon, label }: ChatPageChatContentChipProps) 
   );
 };
 
-export { ChatPageChatContentChip };
+export { ThreadPageConversationChip };

@@ -14,13 +14,13 @@ import {
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentFileWriteProps = {
+type ThreadPageConversationFileWriteProps = {
   block: FileWriteBlock;
 };
 
-const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWriteProps) => {
+const ThreadPageConversationFileWrite = ({ block }: ThreadPageConversationFileWriteProps) => {
   const t = useTranslations();
   const lineCount = block.content.split("\n").length;
 
@@ -30,7 +30,7 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
         <AccordionTrigger>
           <SvgIconPen size="sm" color="primary" />
           {t("chat.write")}
-          <ChatPageChatContentChip label={block.file_path} />
+          <ThreadPageConversationChip label={block.file_path} />
         </AccordionTrigger>
         <AccordionContent>
           <div className="flex justify-end">
@@ -45,4 +45,4 @@ const ChatPageChatContentFileWrite = ({ block }: ChatPageChatContentFileWritePro
   );
 };
 
-export { ChatPageChatContentFileWrite };
+export { ThreadPageConversationFileWrite };

@@ -84,7 +84,6 @@
   --util-fade-to: 75%;
   --util-fade-size: calc(var(--spacing) * 220);
   --util-grid-start: 0;
-  --util-grid-columns: 30;
   --util-grid-width: 1px;
   --util-grid-opacity: 10%;
   --util-grid-color: color-mix(

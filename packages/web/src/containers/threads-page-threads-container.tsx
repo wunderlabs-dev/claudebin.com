@@ -5,20 +5,22 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue, useMediaQuery } from "usehooks-ts";
+import { isServer } from "@tanstack/react-query";
 import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
+import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
 import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 
 import { renderers } from "@/utils/renderers";
-import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
+import { breakpoints } from "@/utils/breakpoints";
 
+import { SvgIconMagnifier } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
 import { FormControl, Input } from "@/components/ui/form-control";
 import { Typography } from "@/components/ui/typography";
-import { SvgIconMagnifier } from "@/components/icon";
 
 import {
   DividerGrid,
@@ -44,8 +46,8 @@ const ThreadsPageThreadsContainer = ({
   initialQuery,
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
-  const lg = useMediaQuery("(min-width: 1024px)");
   const router = useRouter();
+  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   const [query, setQuery] = useState(initialQuery);
   const [queryDebounced] = useDebounceValue(query, SEARCH_DEBOUNCE_MS);
@@ -144,11 +146,11 @@ const ThreadsPageThreadsContainer = ({
         <>
           {threads.map((thread) => (
             <DividerGridRow key={thread.id}>
-              {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
+              <DividerGridEdge position="left" className="col-span-1" />
               <DividerGridCell className="col-span-12 lg:col-span-10">
                 <ThreadsPageThreadGridItem thread={thread} />
               </DividerGridCell>
-              {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
+              <DividerGridEdge position="right" className="col-span-1" />
             </DividerGridRow>
           ))}
 

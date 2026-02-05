@@ -25,7 +25,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   if (isNil(code)) {
     return (
       <Container as="main" size="sm" spacing="md">
-        <div className="flex flex-col gap-18">
+        <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
           <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
@@ -45,7 +45,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   if (isNil(cliSession)) {
     return (
       <Container as="main" size="sm" spacing="md">
-        <div className="flex flex-col gap-18">
+        <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
           <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
@@ -62,7 +62,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   if (cliSession.completedAt) {
     return (
       <Container as="main" size="sm" spacing="md">
-        <div className="flex flex-col gap-18">
+        <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
           <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
@@ -79,7 +79,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   if (cliSession.expiresAt && isPast(cliSession.expiresAt)) {
     return (
       <Container as="main" size="sm" spacing="md">
-        <div className="flex flex-col gap-18">
+        <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
           <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
@@ -121,7 +121,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
   } catch {
     return (
       <Container as="main" size="sm" spacing="md">
-        <div className="flex flex-col gap-18">
+        <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
           <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
@@ -137,7 +137,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
 
   return (
     <Container as="main" size="sm" spacing="md">
-      <div className="flex flex-col gap-18">
+      <div className="flex flex-col gap-12 md:gap-18">
         <CliAuthPageHeader />
         <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
           <Typography variant="h4" className="flex items-center gap-2">

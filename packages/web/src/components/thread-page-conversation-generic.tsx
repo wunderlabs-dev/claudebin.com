@@ -1,10 +1,10 @@
 import type { GenericBlock } from "@/supabase/types/message";
 
-type ChatPageChatContentGenericProps = {
+type ThreadPageConversationGenericProps = {
   block: GenericBlock;
 };
 
-const ChatPageChatContentGeneric = ({ block }: ChatPageChatContentGenericProps) => {
+const ThreadPageConversationGeneric = ({ block }: ThreadPageConversationGenericProps) => {
   return (
     <div className="flex items-center gap-2 text-gray-600 text-xs">
       <span className="font-medium">{block.name}</span>
@@ -15,4 +15,4 @@ const ChatPageChatContentGeneric = ({ block }: ChatPageChatContentGenericProps) 
   );
 };
 
-export { ChatPageChatContentGeneric };
+export { ThreadPageConversationGeneric };

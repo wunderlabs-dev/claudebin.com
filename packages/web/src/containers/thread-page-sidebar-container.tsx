@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 
 import {
+  SvgIconBrain,
   SvgIconChat,
   SvgIconEye,
   SvgIconFile,
@@ -25,6 +26,7 @@ type ThreadPageSidebarContainerProps = {
   viewCount: number;
   likeCount: number;
   workingDir?: string | null;
+  modelName?: string | null;
   messageCount?: number | null;
   isPublic: boolean;
   initialLiked?: boolean;
@@ -36,6 +38,7 @@ const ThreadPageSidebarContainer = ({
   initialLiked,
   createdAt,
   workingDir,
+  modelName,
   viewCount,
   fileCount,
   likeCount,
@@ -54,6 +57,7 @@ const ThreadPageSidebarContainer = ({
         <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
           {t("thread.created", { date: createdAt })}
         </ListItem>
+        <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
         <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
         {messageCount ? (
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>

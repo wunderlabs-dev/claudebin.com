@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { cn } from "@/utils/helpers";
-import { spacingClassNames, type Spacing } from "@/utils/constants";
+import { spacingClassNames, type Spacing } from "@/utils/spacing";
 
 import { SvgIconOrbits } from "@/components/icon";
 
@@ -15,7 +15,7 @@ type BackdropProps = {
 const backdropSizeClassNames: Record<BackdropSize, string> = {
   full: "inset-y-0",
   half: "top-0 h-1/2 border-b border-gray-500/10",
-};
+} as const;
 
 const Backdrop = ({
   size = "full",

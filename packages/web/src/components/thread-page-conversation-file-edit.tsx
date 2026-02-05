@@ -14,9 +14,9 @@ import {
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentFileEditProps = {
+type ThreadPageConversationFileEditProps = {
   block: FileEditBlock;
 };
 
@@ -32,7 +32,7 @@ const toDiff = (oldString: string, newString: string): string => {
   return `${removed}\n${added}`;
 };
 
-const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps) => {
+const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEditProps) => {
   const t = useTranslations();
 
   const diff = toDiff(block.old_string, block.new_string);
@@ -48,7 +48,7 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
         <AccordionTrigger>
           <SvgIconFile size="sm" color="primary" />
           {t("chat.edit")}
-          <ChatPageChatContentChip label={filename} />
+          <ThreadPageConversationChip label={filename} />
         </AccordionTrigger>
         <AccordionContent>
           <div className="flex items-center justify-between">
@@ -56,7 +56,7 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
               {t("chat.lines", { count: lineCount })}
             </Typography>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex items-center justify-end gap-3">
               <Typography variant="small" className="text-green-50">
                 +{linesAdded}
               </Typography>
@@ -72,4 +72,4 @@ const ChatPageChatContentFileEdit = ({ block }: ChatPageChatContentFileEditProps
   );
 };
 
-export { ChatPageChatContentFileEdit };
+export { ThreadPageConversationFileEdit };

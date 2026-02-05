@@ -7,11 +7,11 @@ import type { WebSearchBlock } from "@/supabase/types/message";
 import { SvgIconWorld } from "@/components/icon";
 import { Action } from "@/components/ui/action";
 
-type ChatPageChatContentWebSearchProps = {
+type ThreadPageConversationWebSearchProps = {
   block: WebSearchBlock;
 };
 
-const ChatPageChatContentWebSearch = ({ block }: ChatPageChatContentWebSearchProps) => {
+const ThreadPageConversationWebSearch = ({ block }: ThreadPageConversationWebSearchProps) => {
   const t = useTranslations();
 
   return (
@@ -21,4 +21,4 @@ const ChatPageChatContentWebSearch = ({ block }: ChatPageChatContentWebSearchPro
   );
 };
 
-export { ChatPageChatContentWebSearch };
+export { ThreadPageConversationWebSearch };

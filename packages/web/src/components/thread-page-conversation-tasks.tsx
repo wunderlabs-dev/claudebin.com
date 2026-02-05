@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { Todo, TodoItem, TodoItemIcon, TodoItemLabel } from "@/components/ui/todo";
 
-type ChatPageChatContentTasksProps = {
+type ThreadPageConversationTasksProps = {
   block: TasksBlock;
 };
 
@@ -24,7 +24,7 @@ const icons: Record<TaskItem["status"], ReactNode> = {
   completed: <SvgIconCheck size="sm" />,
 };
 
-const ChatPageChatContentTasks = ({ block }: ChatPageChatContentTasksProps) => {
+const ThreadPageConversationTasks = ({ block }: ThreadPageConversationTasksProps) => {
   const t = useTranslations();
   return (
     <Accordion type="single" collapsible>
@@ -48,4 +48,4 @@ const ChatPageChatContentTasks = ({ block }: ChatPageChatContentTasksProps) => {
   );
 };
 
-export { ChatPageChatContentTasks };
+export { ThreadPageConversationTasks };

@@ -23,8 +23,8 @@ type CardProps = {
 
 const cardVariantClassNames: CardVariantMapping = {
   card: "flex shrink-0 flex-col justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
-  list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 hover:z-10 lg:divide-y-0 lg:divide-x",
-  grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 hover:z-10 lg:grid-cols-3 lg:divide-y-0 lg:divide-x",
+  list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 lg:divide-y-0 lg:divide-x hover:z-10",
+  grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 lg:grid-cols-3 lg:divide-y-0 lg:divide-x hover:z-10",
 } as const;
 
 const Card = ({ variant = "card", href, className, children, ...props }: CardProps) => {
@@ -60,7 +60,7 @@ const Card = ({ variant = "card", href, className, children, ...props }: CardPro
 
 const cardBodyVariantClassNames: CardVariantMapping = {
   card: "flex flex-col self-start max-w-3xs gap-3 p-4 bg-gray-100",
-  list: "flex flex-col col-span-12 gap-3 py-3 md:col-span-5",
+  list: "flex flex-col col-span-12 gap-3 py-3 lg:col-span-5",
   grid: "relative flex flex-col justify-end col-span-1 gap-3 py-6",
 } as const;
 
@@ -140,7 +140,7 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
 
 const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
-  list: "flex flex-col gap-3 pl-8 pr-8 md:gap-1 md:pr-3",
+  list: "flex flex-col gap-3 pl-4 pr-4 md:gap-1 md:pr-3 md:pl-8",
   grid: "flex flex-col gap-3 px-3",
 } as const;
 

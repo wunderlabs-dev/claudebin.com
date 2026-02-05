@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
 
-import { ChatPageChatContentChip } from "@/components/chat-page-chat-content-chip";
+import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
-type ChatPageChatContentMcpProps = {
+type ThreadPageConversationMcpProps = {
   block: McpBlock;
 };
 
@@ -28,7 +28,7 @@ const formatInput = (input: Record<string, unknown>): string => {
     .join("\n");
 };
 
-const ChatPageChatContentMcp = ({ block }: ChatPageChatContentMcpProps) => {
+const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) => {
   const t = useTranslations();
   const input = formatInput(block.input);
 
@@ -38,7 +38,7 @@ const ChatPageChatContentMcp = ({ block }: ChatPageChatContentMcpProps) => {
         <AccordionTrigger>
           <SvgIconMcp size="sm" color="primary" />
           {t("chat.mcp")}
-          <ChatPageChatContentChip label={`${block.server} → ${block.tool}`} />
+          <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} />
         </AccordionTrigger>
         <AccordionContent>
           {input ? <Code code={input} /> : null}
@@ -57,4 +57,4 @@ const ChatPageChatContentMcp = ({ block }: ChatPageChatContentMcpProps) => {
   );
 };
 
-export { ChatPageChatContentMcp };
+export { ThreadPageConversationMcp };
