@@ -1,7 +1,6 @@
 "use client";
 
-import type * as React from "react";
-import { createContext, useContext } from "react";
+import { forwardRef, createContext, useContext, type ComponentProps } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import type { Role } from "@/supabase/types/message";
@@ -10,13 +9,13 @@ import { cn } from "@/utils/helpers";
 
 const ChatItemContext = createContext<Role>("assistant");
 
-type ChatProps = React.ComponentProps<"div">;
+type ChatProps = ComponentProps<"div">;
 
 const Chat = ({ className, ...props }: ChatProps) => {
   return <div data-slot="chat" className={cn("flex flex-col gap-8", className)} {...props} />;
 };
 
-const chatItemVariants = cva(["flex items-start gap-4"], {
+const chatItemVariants = cva(["flex items-start gap-4 pb-8"], {
   variants: {
     variant: {
       user: "justify-end",
@@ -28,19 +27,22 @@ const chatItemVariants = cva(["flex items-start gap-4"], {
   },
 });
 
-type ChatItemProps = React.ComponentProps<"div"> & VariantProps<typeof chatItemVariants>;
+type ChatItemProps = ComponentProps<"div"> & VariantProps<typeof chatItemVariants>;
 
-const ChatItem = ({ className, variant = "assistant", ...props }: ChatItemProps) => {
-  return (
-    <ChatItemContext.Provider value={variant || "assistant"}>
-      <div
-        data-slot="chat-item"
-        className={cn(chatItemVariants({ variant, className }))}
-        {...props}
-      />
-    </ChatItemContext.Provider>
-  );
-};
+const ChatItem = forwardRef<HTMLDivElement, ChatItemProps>(
+  ({ className, variant = "assistant", ...props }, ref) => {
+    return (
+      <ChatItemContext.Provider value={variant || "assistant"}>
+        <div
+          ref={ref}
+          data-slot="chat-item"
+          className={cn(chatItemVariants({ variant, className }))}
+          {...props}
+        />
+      </ChatItemContext.Provider>
+    );
+  },
+);
 
 const chatContentVariants = cva(
   ["flex flex-col gap-4 min-w-0 px-4 py-3 rounded-xl border border-gray-250"],
@@ -57,7 +59,7 @@ const chatContentVariants = cva(
   },
 );
 
-type ChatContentProps = React.ComponentProps<"article">;
+type ChatContentProps = ComponentProps<"article">;
 
 const ChatContent = ({ className, ...props }: ChatContentProps) => {
   const variant = useContext(ChatItemContext);

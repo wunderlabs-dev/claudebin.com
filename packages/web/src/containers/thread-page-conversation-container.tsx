@@ -2,20 +2,17 @@
 
 import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-
 import { last, concat, init, reduce } from "ramda";
+import { Virtuoso } from "react-virtuoso";
 
 import { BlockType, MessageRole } from "@/supabase/types/message";
-import type { ContentBlock } from "@/supabase/types/message";
 import type { Message } from "@/supabase/repos/messages";
+import type { ContentBlock } from "@/supabase/types/message";
+
 import { getMessagesBySessionId } from "@/actions/messages";
+import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
-import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
-
-import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
-import { CopyInput } from "@/components/ui/copy-input";
-import { Typography } from "@/components/ui/typography";
+import { ChatItem, ChatContent } from "@/components/ui/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { ThreadPageConversationText } from "@/components/thread-page-conversation-text";
@@ -36,6 +33,7 @@ import { ThreadPageConversationMcp } from "@/components/thread-page-conversation
 import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
 import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
+import { ThreadPageConversationContinue } from "@/components/thread-page-conversation-continue";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -52,8 +50,8 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
 
       return assistant
         ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
+          { ...previous, content: concat(previous.content, message.content) },
+        ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
@@ -108,8 +106,6 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
-  const t = useTranslations();
-
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
@@ -123,42 +119,31 @@ const ThreadPageConversationContainer = ({
   }
 
   return (
-    <Chat className="min-h-screen lg:pr-12">
-      {messages.map((message) => (
-        <ChatItem key={message.uuid} variant={message.role}>
-          {message.role === "assistant" ? (
-            <Avatar size="sm">
-              <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-            </Avatar>
-          ) : null}
-
-          <ChatContent>{message.content.map(renderer.message)}</ChatContent>
-
-          {message.role === "user" ? (
-            <Avatar size="sm">
-              <AvatarImage src={avatarUrl ?? undefined} />
-              <AvatarFallback>{fallback}</AvatarFallback>
-            </Avatar>
-          ) : null}
-        </ChatItem>
-      ))}
-
-      <ChatItem variant="assistant">
-        <Avatar size="sm">
-          <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-        </Avatar>
-
-        <ChatContent className="w-auto" data-continue-conversation>
-          <div className="flex flex-col gap-2">
-            <Typography variant="h4">{t("thread.continueTitle")}</Typography>
-            <Typography variant="small" color="muted">
-              {t("thread.continueDescription")}
-            </Typography>
-          </div>
-          <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-        </ChatContent>
-      </ChatItem>
-    </Chat>
+    <div className="lg:min-h-screen lg:pr-12">
+      <Virtuoso
+        useWindowScroll
+        data={messages}
+        itemContent={(_, message) => (
+          <ChatItem key={message.uuid} variant={message.role}>
+            {message.role === "assistant" ? (
+              <Avatar size="sm">
+                <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+              </Avatar>
+            ) : null}
+            <ChatContent>{message.content.map(renderer.message)}</ChatContent>
+            {message.role === "user" ? (
+              <Avatar size="sm">
+                <AvatarImage src={avatarUrl ?? undefined} />
+                <AvatarFallback>{fallback}</AvatarFallback>
+              </Avatar>
+            ) : null}
+          </ChatItem>
+        )}
+        components={{
+          Footer: () => <ThreadPageConversationContinue id={id} />,
+        }}
+      />
+    </div>
   );
 };
 

@@ -1,0 +1,37 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
+import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
+
+import { ChatItem, ChatContent } from "@/components/ui/chat";
+import { CopyInput } from "@/components/ui/copy-input";
+import { Typography } from "@/components/ui/typography";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+
+type ThreadPageConversationContinueProps = {
+  id: string;
+};
+
+const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinueProps) => {
+  const t = useTranslations();
+
+  return (
+    <ChatItem variant="assistant">
+      <Avatar size="sm">
+        <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+      </Avatar>
+      <ChatContent className="w-auto" data-continue-conversation>
+        <div className="flex flex-col gap-2">
+          <Typography variant="h4">{t("thread.continueTitle")}</Typography>
+          <Typography variant="small" color="muted">
+            {t("thread.continueDescription")}
+          </Typography>
+        </div>
+        <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
+      </ChatContent>
+    </ChatItem>
+  );
+};
+
+export { ThreadPageConversationContinue };

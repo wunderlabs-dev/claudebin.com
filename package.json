@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@tanstack/react-virtual": "^3.13.18",
     "lodash.truncate": "^4.4.2",
+    "react-virtuoso": "^4.18.1",
     "remark-gfm": "^4.0.1",
     "web": "^0.0.2"
   }
