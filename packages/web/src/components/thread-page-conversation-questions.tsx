@@ -1,44 +1,55 @@
 "use client";
 
 import { Fragment } from "react";
-import { not } from "ramda";
+import { isNil, not } from "ramda";
 
 import type { QuestionBlock } from "@/supabase/types/message";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Options, OptionsListItem } from "@/components/ui/options";
 import { Typography } from "@/components/ui/typography";
 
 type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
+const parseAnswers = (
+  rawAnswer: string | string[] | undefined,
+  isMultiSelect: boolean,
+): string[] => {
+  if (isNil(rawAnswer)) return [];
+  if (Array.isArray(rawAnswer)) return rawAnswer;
+  return isMultiSelect ? rawAnswer.split(", ") : [rawAnswer];
+};
+
 const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
   return (
     <Fragment>
       {block.questions.map((question) => {
-        const answer = block.answers?.[question.question];
-        const isPredefinedAnswer =
-          answer && question.options.some((option) => option.label === answer);
-        const isUserAnswer = answer && not(isPredefinedAnswer);
+        const rawAnswer = block.answers?.[question.question];
+        const answers = parseAnswers(rawAnswer, question.multiSelect);
+        const options = question.options.map((option) => option.label);
+        const selectedPredefined = answers.filter((answer) => options.includes(answer));
+        const customAnswers = answers.filter((answer) => not(options.includes(answer)));
 
         return (
           <div key={question.header} className="flex flex-col gap-4">
             <Typography variant="h4">{question.question}</Typography>
 
-            <Tabs variant="list" value={answer}>
-              <TabsList>
-                {question.options.map((option) => (
-                  <TabsTrigger key={option.label} value={option.label}>
-                    {option.label}
-                  </TabsTrigger>
-                ))}
-                {isUserAnswer ? (
-                  <TabsTrigger key={answer} value={answer}>
-                    {answer}
-                  </TabsTrigger>
-                ) : null}
-              </TabsList>
-            </Tabs>
+            <Options>
+              {question.options.map((option) => (
+                <OptionsListItem
+                  key={option.label}
+                  selected={selectedPredefined.includes(option.label)}
+                >
+                  {option.label}
+                </OptionsListItem>
+              ))}
+              {customAnswers.map((customAnswer) => (
+                <OptionsListItem key={customAnswer} selected>
+                  {customAnswer}
+                </OptionsListItem>
+              ))}
+            </Options>
           </div>
         );
       })}

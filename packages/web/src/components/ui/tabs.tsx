@@ -5,7 +5,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/utils/helpers";
 
-const TabsVariants = ["default", "transparent", "list"] as const;
+const TabsVariants = ["default", "transparent"] as const;
 
 type TabsVariant = (typeof TabsVariants)[number];
 
@@ -31,7 +31,6 @@ const Tabs = ({ className, variant = "default", ...props }: TabsProps) => {
 const tabsListVariantClassNames: Record<TabsVariant, string> = {
   default: "p-1 bg-gray-200 border border-gray-50 rounded-full",
   transparent: "p-1 border border-transparent rounded-full",
-  list: "flex-col items-start h-auto p-1 bg-gray-200 border border-gray-50 rounded-xl",
 } as const;
 
 const TabsList = ({ className, ...props }: ComponentProps<typeof TabsPrimitive.List>) => {
@@ -57,7 +56,6 @@ const tabsTriggerVariantClassNames: Record<TabsVariant, string> = {
     "cursor-pointer hover:text-white data-[state=active]:bg-gray-100 data-[state=active]:text-white",
   transparent:
     "border border-transparent cursor-pointer hover:text-white data-[state=active]:border-gray-50 data-[state=active]:text-white",
-  list: "justify-start w-full rounded-lg text-left data-[state=active]:bg-gray-100 data-[state=active]:text-white data-[state=inactive]:line-through",
 } as const;
 
 const TabsTrigger = ({ className, ...props }: ComponentProps<typeof TabsPrimitive.Trigger>) => {
