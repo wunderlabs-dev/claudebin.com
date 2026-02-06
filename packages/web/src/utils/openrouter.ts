@@ -5,14 +5,14 @@ const MODEL = "openai/gpt-4o-mini";
 
 const TITLE_SYSTEM_PROMPT = `<role>You are a title generator for coding sessions.</role>
 
-<task>Generate a short, descriptive title (max 50 chars) from the user's first message.</task>
+<task>Generate a short, descriptive title (max 50 chars) from the user's prompts.</task>
 
 <rules>
   <rule>Be concise and descriptive</rule>
-  <rule>Focus on the main task or topic</rule>
+  <rule>Identify the main theme or goal across all prompts</rule>
   <rule>Use title case</rule>
   <rule>No quotes or punctuation at the end</rule>
-  <rule>If the message is unclear, extract the key action or topic</rule>
+  <rule>If prompts cover multiple topics, focus on the primary one</rule>
   <rule>Output ONLY the title, nothing else</rule>
 </rules>
 
@@ -22,22 +22,28 @@ const TITLE_SYSTEM_PROMPT = `<role>You are a title generator for coding sessions
     <output>Fix Login Bug</output>
   </example>
   <example>
-    <input>I want to add dark mode to my app</input>
+    <input>I want to add dark mode to my app
+---
+can you also add a toggle in settings?</input>
     <output>Add Dark Mode Feature</output>
   </example>
   <example>
-    <input>refactor the auth module</input>
+    <input>refactor the auth module
+---
+now let's add tests for it</input>
     <output>Refactor Auth Module</output>
   </example>
 </examples>`;
 
-export const generateTitle = async (firstMessage: string): Promise<string | null> => {
+export const generateTitle = async (prompts: string[]): Promise<string | null> => {
   const apiKey = process.env.OPENROUTER_API_KEY;
 
   if (!apiKey) {
     console.warn("OPENROUTER_API_KEY not set, falling back to simple title");
     return null;
   }
+
+  const combinedPrompts = prompts.join("\n---\n").slice(0, 2000);
 
   try {
     const response = await fetch(API_URL, {
@@ -52,7 +58,7 @@ export const generateTitle = async (firstMessage: string): Promise<string | null
         model: MODEL,
         messages: [
           { role: "system", content: TITLE_SYSTEM_PROMPT },
-          { role: "user", content: firstMessage.slice(0, 500) },
+          { role: "user", content: combinedPrompts },
         ],
         max_tokens: 50,
         temperature: 0.3,

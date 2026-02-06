@@ -10,7 +10,7 @@ import { messages } from "@/supabase/repos/messages";
 import { parseJsonl } from "@/supabase/services/parser";
 import { sessions } from "@/supabase/repos/sessions";
 import { SessionStatus } from "@/trpc/routers/sessions";
-import { BlockType } from "@/supabase/types/message";
+import { BlockType, MessageRole } from "@/supabase/types/message";
 import { generateTitle } from "@/utils/openrouter";
 
 const DEFAULT_BATCH_SIZE = 100;
@@ -66,20 +66,33 @@ const fallbackTitle = (text: string): string | null => {
   return truncate(firstLine, AUTO_TITLE_MAX_LENGTH);
 };
 
+const MAX_PROMPTS_FOR_TITLE = 5;
+const MAX_CHARS_FOR_TITLE = 2000;
+
+const shouldCollectPrompt = (message: ParsedMessage, collected: string[]): boolean => {
+  if (message.role !== MessageRole.USER) return false;
+  if (collected.length >= MAX_PROMPTS_FOR_TITLE) return false;
+  if (!message.textPreview.trim()) return false;
+
+  const totalChars = collected.reduce((sum, p) => sum + p.length, 0);
+  return totalChars < MAX_CHARS_FOR_TITLE;
+};
+
 const createAccumulator = (existingTitle: string | null) => {
   let workingDir: string | null = null;
   let modelName: string | null = null;
-  let firstMessageText: string | null = null;
   let messageCount = 0;
   const filePaths = new Set<string>();
+  const userPrompts: string[] = [];
 
   const resolveTitle = async (): Promise<string | null> => {
     if (existingTitle) return existingTitle;
 
-    if (firstMessageText) {
-      const llmTitle = await generateTitle(firstMessageText);
+    const prompts = userPrompts.filter((p) => p.trim());
+    if (prompts.length > 0) {
+      const llmTitle = await generateTitle(prompts);
       if (llmTitle) return llmTitle;
-      return fallbackTitle(firstMessageText);
+      return fallbackTitle(prompts[0]);
     }
 
     return null;
@@ -101,8 +114,8 @@ const createAccumulator = (existingTitle: string | null) => {
 
       const isCountable = !message.isMeta && !message.isSidechain;
       if (isCountable) {
-        if (firstMessageText === null) {
-          firstMessageText = message.textPreview;
+        if (shouldCollectPrompt(message, userPrompts)) {
+          userPrompts.push(message.textPreview);
         }
         messageCount += 1;
       }
