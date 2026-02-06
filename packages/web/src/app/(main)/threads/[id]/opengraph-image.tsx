@@ -4,6 +4,7 @@ import { ImageResponse } from "next/og";
 import { format } from "date-fns";
 import { isNil, not } from "ramda";
 
+import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 
@@ -139,23 +140,34 @@ const SvgIconBrain = () => (
   </svg>
 );
 
-const Image = async ({ params }: Props) => {
-  const { id } = await params;
+const SvgIconClaudebin = () => (
+  <svg
+    role="img"
+    aria-label="Claudebin"
+    height={sizes.iconSm}
+    viewBox="0 0 614 24"
+    fill={colors.white}
+  >
+    <path d="M53.2 8.7h-3.7V6.1c0-4-2.2-6.1-6.1-6.1H6.1C2.2 0 0 2.2 0 6.1v10.1c0 4 2.2 6.1 6.1 6.1h47.1c4 0 6.1-2.2 6.1-6.1v-1.4c0-4-2.1-6.1-6.1-6.1zm-1.3 8.7H7.4c-1.6 0-1.8-.2-1.8-1.8V6.9c0-1.6.2-1.9 1.8-1.9h34.7c1.6 0 1.8.2 1.8 1.8v1.8h-14v5h22c1.6 0 1.8.3 1.8 1.8 0 1.7-.2 2-1.8 2zM123.3 6.5v10.1c0 4 2.2 6.1 6.1 6.1H153v-5h-22.3c-1.6 0-1.8-.2-1.8-1.8V7.2c0-1.6.2-1.8 1.8-1.8H153v-5h-23.6c-3.9-.1-6.1 2.1-6.1 6.1zM189.7.3H184v22.4h28.8v-5h-23.1zM254 .3 238.1 22v.7h5.9l12.8-17.3 12.9 17.3h6V22L259.8.3zM329.8 15.9c0 1.6-.2 1.8-1.8 1.8h-16.8c-1.6 0-1.8-.2-1.8-1.8V.3h-5.6v16.3c0 4 2.2 6.1 6.1 6.1h19.4c4 0 6.1-2.2 6.1-6.1V.3h-5.6v15.6zM389.6.3h-23.3v5h22c1.6 0 1.8.2 1.8 1.8v8.7c0 1.6-.2 1.8-1.8 1.8h-22v5h23.3c4 0 6.1-2.2 6.1-6.1v-10c.1-4-2.1-6.2-6.1-6.2zM427.3.3h27.5v5h-27.5zM427.5 9h10.3v5h-10.3zM427.3 17.7h27.9v5h-27.9zM509.1 9h-3.7V6.5c0-4-2.2-6.1-6.1-6.1h-13.7v5H498c1.6 0 1.8.2 1.8 1.8V9h-14v5h22c1.6 0 1.8.3 1.8 1.8 0 1.6-.2 1.8-1.8 1.8h-22.2v5h23.5c4 0 6.1-2.2 6.1-6.1v-1.4c0-3.9-2.2-6.1-6.1-6.1zM544.1.3h5.6v22.4h-5.6zM607 .3v14.6L584.2 0h-2.8v22.7h5.6V7.9L609.8 23h2.8V.3z" />
+  </svg>
+);
 
-  const supabase = await createClient();
-  const thread = await sessions.getByIdWithAuthor(supabase, id);
+type OpenGraphContentProps = {
+  thread: ThreadWithAuthor;
+};
 
-  if (isNil(thread) || not(thread.isPublic)) {
-    return new Response("Not found", { status: 404 });
-  }
-
-  const image = (
+const OpenGraphContent = ({ thread }: OpenGraphContentProps) => (
+  <div
+    tw="flex flex-col justify-between w-full h-full py-20 px-25"
+    style={{
+      color: colors.white,
+      backgroundSize: "cover",
+      backgroundImage: `url(${backgroundSrc})`,
+    }}
+  >
     <div
-      tw="flex flex-col justify-center p-25 w-full h-full"
+      tw="flex flex-col justify-center"
       style={{
-        color: colors.white,
-        backgroundImage: `url(${backgroundSrc})`,
-        backgroundSize: "cover",
         gap: sizes.gapXl,
       }}
     >
@@ -193,7 +205,7 @@ const Image = async ({ params }: Props) => {
         }}
       >
         <div
-          tw="font-bold text-7xl p-6 rounded-3xl rounded-tr-none"
+          tw="p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
           style={{
             borderStyle: "solid",
             borderWidth: sizes.border,
@@ -254,9 +266,22 @@ const Image = async ({ params }: Props) => {
         </div>
       </div>
     </div>
-  );
 
-  return new ImageResponse(image, {
+    <SvgIconClaudebin />
+  </div>
+);
+
+const Image = async ({ params }: Props) => {
+  const { id } = await params;
+
+  const supabase = await createClient();
+  const thread = await sessions.getByIdWithAuthor(supabase, id);
+
+  if (isNil(thread) || not(thread.isPublic)) {
+    return new Response("Not found", { status: 404 });
+  }
+
+  return new ImageResponse(<OpenGraphContent thread={thread} />, {
     width: sizes.width,
     height: sizes.height,
     fonts: [
