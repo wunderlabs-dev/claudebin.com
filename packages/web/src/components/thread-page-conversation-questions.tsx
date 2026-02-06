@@ -14,7 +14,10 @@ type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
-const parseAnswer = (rawAnswer: string | string[] | undefined, isMultiSelect: boolean): string[] => {
+const parseAnswer = (
+  rawAnswer: string | string[] | undefined,
+  isMultiSelect: boolean,
+): string[] => {
   if (!rawAnswer) return [];
   if (Array.isArray(rawAnswer)) return rawAnswer;
   // Claude Code sends multiSelect answers as comma-separated strings
