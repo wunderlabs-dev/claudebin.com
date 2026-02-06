@@ -1,5 +1,9 @@
 "use client";
 
+import { isServer } from "@tanstack/react-query";
+import { useMediaQuery } from "usehooks-ts";
+
+import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";
 
 import { CopyInput } from "@/components/ui/copy-input";
@@ -32,25 +36,27 @@ const ThreadPageSidebarContainer = ({
   likeCount,
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
+  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
+
   return (
     <div className="flex flex-col items-start gap-6">
-      <ThreadPageThreadMeta
-        className="hidden lg:flex"
-        id={id}
-        isPublic={isPublic}
-        createdAt={createdAt}
-        fileCount={fileCount}
-        viewCount={viewCount}
-        likeCount={likeCount}
-        workingDir={workingDir}
-        modelName={modelName}
-        messageCount={messageCount}
-        initialLiked={initialLiked}
-      />
+      {lg ? (
+        <ThreadPageThreadMeta
+          id={id}
+          isPublic={isPublic}
+          createdAt={createdAt}
+          fileCount={fileCount}
+          viewCount={viewCount}
+          likeCount={likeCount}
+          workingDir={workingDir}
+          modelName={modelName}
+          messageCount={messageCount}
+          initialLiked={initialLiked}
+        />
+      ) : null}
 
       <div className="flex flex-col w-full gap-8">
         <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-        <CopyInput variant="snippet" value="npx claudebin publish" />
         <ThreadPageSidebarContinueConversation />
       </div>
     </div>

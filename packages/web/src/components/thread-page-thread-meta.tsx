@@ -49,7 +49,7 @@ const ThreadPageThreadMeta = ({
   const t = useTranslations();
 
   return (
-    <div className={cn("flex flex-col gap-6", className)}>
+    <div className={cn("flex flex-col items-start gap-6", className)}>
       <Badge variant="neutral">
         <SvgIconGlobe size="sm" />
         {isPublic ? t("common.public") : t("common.private")}
