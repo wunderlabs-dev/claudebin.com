@@ -97,7 +97,7 @@ export const ToolUseResultSchema = {
         multiSelect: z.boolean(),
       }),
     ),
-    answers: z.record(z.string(), z.string()),
+    answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
   }),
   TaskOutput: z.object({
     retrieval_status: z.string(),

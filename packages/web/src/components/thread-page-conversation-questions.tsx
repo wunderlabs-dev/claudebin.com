@@ -1,47 +1,50 @@
 "use client";
 
 import { Fragment } from "react";
-import { useTranslations } from "next-intl";
 import { not } from "ramda";
 
 import type { QuestionBlock } from "@/supabase/types/message";
 
 import { Typography } from "@/components/ui/typography";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { QuestionOptionsMulti } from "@/components/question-options-multi";
+import { QuestionOptionsSingle } from "@/components/question-options-single";
+import { QuestionCustomAnswer } from "@/components/question-custom-answer";
 
 type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
-const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
-  const t = useTranslations();
+const parseAnswer = (
+  rawAnswer: string | string[] | undefined,
+  isMultiSelect: boolean,
+): string[] => {
+  if (!rawAnswer) return [];
+  if (Array.isArray(rawAnswer)) return rawAnswer;
+  // Claude Code sends multiSelect answers as comma-separated strings
+  return isMultiSelect ? rawAnswer.split(", ") : [rawAnswer];
+};
 
+const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
   return (
     <Fragment>
       {block.questions.map((question) => {
-        const answer = block.answers?.[question.question];
-        const isPredefinedAnswer =
-          answer && question.options.some((option) => option.label === answer);
-        const isUserAnswer = answer && not(isPredefinedAnswer);
+        const rawAnswer = block.answers?.[question.question];
+        const answers = parseAnswer(rawAnswer, question.multiSelect);
+        const predefinedLabels = question.options.map((opt) => opt.label);
+        const selectedPredefined = answers.filter((a) => predefinedLabels.includes(a));
+        const customAnswers = answers.filter((a) => not(predefinedLabels.includes(a)));
 
         return (
           <div key={question.header} className="flex flex-col gap-4">
             <Typography variant="h4">{question.question}</Typography>
 
-            <Tabs variant="list" value={answer}>
-              <TabsList>
-                {question.options.map((option) => (
-                  <TabsTrigger key={option.label} value={option.label}>
-                    {option.label}
-                  </TabsTrigger>
-                ))}
-                {isUserAnswer ? (
-                  <TabsTrigger key={answer} value={answer}>
-                    {answer}
-                  </TabsTrigger>
-                ) : null}
-              </TabsList>
-            </Tabs>
+            {question.multiSelect ? (
+              <QuestionOptionsMulti options={question.options} selected={selectedPredefined} />
+            ) : (
+              <QuestionOptionsSingle options={question.options} selected={selectedPredefined[0]} />
+            )}
+
+            <QuestionCustomAnswer answers={customAnswers} />
           </div>
         );
       })}

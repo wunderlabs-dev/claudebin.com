@@ -31,6 +31,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   } = await supabase.auth.getUser();
 
   const thread = await sessions.getByIdWithAuthor(supabase, id, user?.id);
+  const isAuthor = user?.id === thread?.userId;
 
   if (isNil(thread)) {
     notFound();
@@ -60,6 +61,8 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           id={thread.id}
           avatarUrl={thread.profiles?.avatarUrl}
           author={thread.profiles?.username ?? t("common.deactivated")}
+          isAuthor={isAuthor}
+          isPublic={thread.isPublic}
         />
       </div>
 
@@ -75,6 +78,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           viewCount={thread.viewCount}
           likeCount={thread.likeCount}
           messageCount={thread.messageCount}
+          isAuthor={isAuthor}
         />
       </div>
     </Container>
