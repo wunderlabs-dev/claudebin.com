@@ -27,6 +27,11 @@
     "login": "Login",
     "logout": "Logout"
   },
+  "notFound": {
+    "title": "Page <gradient>not found</gradient>",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "backToHome": "Back to home"
+  },
   "home": {
     "headline": "<gradient>Share AI Sessions</gradient>\nlike never before",
     "badge": "Get started for free",
