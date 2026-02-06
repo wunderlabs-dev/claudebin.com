@@ -45,7 +45,7 @@ const ChatItem = forwardRef<HTMLDivElement, ChatItemProps>(
 );
 
 const chatContentVariants = cva(
-  ["flex flex-col min-w-0 gap-4 px-4 py-3 border border-gray-250 rounded-xl"],
+  ["flex flex-col", "min-w-0", "gap-4 px-4 py-3", "border border-gray-250 rounded-xl"],
   {
     variants: {
       variant: {

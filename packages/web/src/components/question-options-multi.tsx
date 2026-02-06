@@ -16,7 +16,7 @@ const QuestionOptionsMulti = ({ options, selected }: QuestionOptionsMultiProps) 
         return (
           <div
             key={option.label}
-            className={`rounded-sm px-3 py-1 text-sm ${
+            className={`px-3 py-1 rounded-sm text-sm ${
               isSelected ? "bg-orange-50 text-gray-900" : "bg-gray-800 text-gray-400"
             }`}
           >

@@ -28,7 +28,7 @@ const ThreadPageAuthorMeta = ({
   const [fallback] = [...author];
 
   return (
-    <div className="flex flex-col min-w-full gap-1 pb-4 lg:pl-12 border-b border-gray-250">
+    <div className="flex flex-col min-w-full gap-1 pb-4 border-b border-gray-250 lg:pl-12">
       <Typography variant="h3">{title}</Typography>
 
       <div className="flex items-center gap-3">

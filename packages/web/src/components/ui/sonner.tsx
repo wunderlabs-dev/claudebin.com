@@ -15,7 +15,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       toastOptions={{
         classNames: {
-          title: "font-normal text-base leading-6",
+          title: "text-base font-normal leading-6",
         },
       }}
       style={

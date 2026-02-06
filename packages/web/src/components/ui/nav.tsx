@@ -13,8 +13,9 @@ const Nav = ({ className, ...props }: NavProps) => {
 const navLinkVariants = cva(
   [
     "group",
-    "inline-flex items-center gap-3",
-    "whitespace-nowrap font-medium text-white",
+    "inline-flex items-center",
+    "gap-3",
+    "font-medium text-white whitespace-nowrap",
     "cursor-pointer select-none",
   ],
   {

@@ -33,8 +33,8 @@ const ThreadNotFound = async () => {
 
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
-          <DividerGridCell className="col-span-10 border-r border-b border-l px-8 py-12">
-            <div className="mx-auto flex max-w-lg flex-col items-start gap-6">
+          <DividerGridCell className="col-span-10 px-8 py-12 border-r border-b border-l">
+            <div className="flex flex-col items-start max-w-lg mx-auto gap-6">
               <Typography variant="h2" leading="normal">
                 {t.rich("thread.notFoundTitle", { gradient })}
               </Typography>

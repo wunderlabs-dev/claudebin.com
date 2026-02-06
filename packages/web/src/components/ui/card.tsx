@@ -22,9 +22,9 @@ type CardProps = {
 } & Omit<React.ComponentProps<typeof Link>, "href">;
 
 const cardVariantClassNames: CardVariantMapping = {
-  card: "flex shrink-0 flex-col justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
-  list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 lg:divide-y-0 lg:divide-x hover:z-10",
-  grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 lg:grid-cols-3 lg:divide-y-0 lg:divide-x hover:z-10",
+  card: "flex flex-col shrink-0 justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
+  list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 hover:z-10 lg:divide-y-0 lg:divide-x",
+  grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 hover:z-10 lg:grid-cols-3 lg:divide-y-0 lg:divide-x",
 } as const;
 
 const Card = ({ variant = "card", href, className, children, ...props }: CardProps) => {
@@ -140,7 +140,7 @@ const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
 
 const cardSectionVariantClassNames: CardVariantMapping = {
   card: "flex flex-col gap-1",
-  list: "flex flex-col gap-3 md:gap-1 pl-4 pr-4 md:pl-8 md:pr-3",
+  list: "flex flex-col gap-3 pl-4 pr-4 md:gap-1 md:pl-8 md:pr-3",
   grid: "flex flex-col gap-3 px-4 md:px-3",
 } as const;
 
@@ -162,7 +162,11 @@ type CardDividerProps = React.ComponentProps<"div">;
 
 const CardDivider = ({ className, ...props }: CardDividerProps) => {
   return (
-    <div data-slot="card-divider" className={cn("w-full h-px bg-gray-200", className)} {...props} />
+    <div
+      data-slot="card-divider"
+      className={cn("w-full h-px", "bg-gray-200", className)}
+      {...props}
+    />
   );
 };
 

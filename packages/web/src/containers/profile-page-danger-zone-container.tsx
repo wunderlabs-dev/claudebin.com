@@ -30,7 +30,7 @@ const ProfilePageDangerZoneContainer = ({
 
   return (
     <div
-      className={cn("flex flex-col items-start gap-3 border border-gray-250 p-8", className)}
+      className={cn("flex flex-col items-start gap-3 p-8 border border-gray-250", className)}
       {...props}
     >
       <div className="flex items-center gap-3">

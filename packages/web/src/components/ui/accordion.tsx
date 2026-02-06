@@ -20,8 +20,8 @@ const Accordion = ({ className, ...props }: AccordionProps) => {
         "min-w-full md:min-w-sm lg:min-w-md xl:min-w-xl",
         "px-4",
         "border rounded-xl",
-        "[&_svg]:shrink-0",
         variant === "user" ? "border-gray-250" : "border-gray-200",
+        "[&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -50,11 +50,12 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
         data-slot="accordion-trigger"
         className={cn(
           "group",
-          "flex flex-1 items-center justify-between gap-3 w-full",
-          "py-3",
-          "font-medium font-mono text-left text-base",
-          "transition ease-in-out",
+          "flex flex-1 items-center justify-between",
+          "w-full",
+          "gap-3 py-3",
+          "font-mono font-medium text-left text-base",
           "cursor-pointer",
+          "transition ease-in-out",
           "disabled:pointer-events-none disabled:opacity-50",
           "[&[data-state=open]>span]:rotate-180",
           className,
@@ -79,7 +80,7 @@ const AccordionContent = ({ className, children, ...props }: AccordionContentPro
       className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
       {...props}
     >
-      <div className={cn("flex flex-col items-start gap-2 pb-4 text-gray-400", className)}>
+      <div className={cn("flex flex-col items-start gap-2 pb-4", "text-gray-400", className)}>
         {children}
       </div>
     </AccordionPrimitive.Content>

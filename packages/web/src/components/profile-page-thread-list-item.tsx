@@ -49,7 +49,7 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
         </CardSection>
       </CardBody>
 
-      <CardBody className="col-span-12 min-h-12 bg-dot text-gray-500/40 lg:col-span-1 lg:min-h-auto transition-colors group-hover:text-orange-50" />
+      <CardBody className="col-span-12 min-h-12 bg-dot text-gray-500/40 transition-colors lg:col-span-1 lg:min-h-auto group-hover:text-orange-50" />
     </Card>
   );
 };

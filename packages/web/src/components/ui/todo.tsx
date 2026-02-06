@@ -10,7 +10,7 @@ const Todo = ({ className, ...props }: TodoProps) => {
   return <ul data-slot="todo" className={cn("flex flex-col gap-2", className)} {...props} />;
 };
 
-const todoItemVariants = cva(["flex items-center gap-2"], {
+const todoItemVariants = cva(["flex items-center", "gap-2"], {
   variants: {
     variant: {
       pending: "text-gray-600",

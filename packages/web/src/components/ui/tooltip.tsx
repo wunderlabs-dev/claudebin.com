@@ -32,10 +32,12 @@ const TooltipContent = ({ className, sideOffset = 6, ...props }: TooltipContentP
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          "z-50 max-w-sm",
+          "z-50",
+          "max-w-sm",
           "px-3 py-1.5",
-          "rounded-lg border border-gray-250 bg-gray-100",
-          "break-all text-white text-xs",
+          "bg-gray-100",
+          "border border-gray-250 rounded-lg",
+          "text-white text-xs break-all",
           "fade-in-0 zoom-in-95 animate-in",
           className,
         )}

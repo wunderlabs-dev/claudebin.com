@@ -34,7 +34,7 @@ export const EmbedPageFooter = ({
   const t = useTranslations();
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 py-3 pl-3 pr-6">
+    <div className="flex items-center justify-between py-3 pl-3 pr-6 border-t border-gray-200">
       <Link href="/">
         <SvgIconClaudebinXs size="auto" className="w-14 hover:text-orange-50" />
       </Link>

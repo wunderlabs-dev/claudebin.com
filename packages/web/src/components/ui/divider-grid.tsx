@@ -27,7 +27,7 @@ const edgeVariantClassNames = {
 const DividerGridEdge = ({ position, className }: DividerGridEdgeProps) => (
   <div
     className={cn(
-      "flex col-span-2 items-end",
+      "flex items-end col-span-2",
       position === "left" ? "justify-end" : "justify-start",
       className,
     )}

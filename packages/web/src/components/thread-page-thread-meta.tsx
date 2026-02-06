@@ -55,7 +55,7 @@ const ThreadPageThreadMeta = ({
         {isPublic ? t("common.public") : t("common.private")}
       </Badge>
 
-      <List className="w-full gap-3 pb-9 lg:pb-0 border-b lg:border-b-0 border-gray-250">
+      <List className="w-full gap-3 pb-9 border-b border-gray-250 lg:pb-0 lg:border-b-0">
         <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
         <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
           {t("thread.created", { date: createdAt })}

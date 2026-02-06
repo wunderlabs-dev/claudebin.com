@@ -60,7 +60,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
       <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
         {threads.length ? (
-          <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
+          <div className="flex justify-between col-span-12 p-4 md:p-8 border border-gray-250 lg:items-center">
             <div className="flex items-center gap-3">
               <SvgIconLine size="md" color="accent" />
               <Typography variant="h4">{t("user.recentThreads")}</Typography>

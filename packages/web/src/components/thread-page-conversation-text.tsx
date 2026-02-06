@@ -79,7 +79,7 @@ const createComponents = (role: Role) => ({
     <strong className="font-semibold">{children}</strong>
   ),
   code: ({ children }: { children?: ReactNode }) => (
-    <code className="text-base font-mono">{children}</code>
+    <code className="font-mono text-base">{children}</code>
   ),
   pre: ({ children }: { children?: ReactNode }) => {
     const parsed = parseCodeBlock(children);

@@ -12,9 +12,11 @@ const Chip = ({ icon, label, className, ...props }: ChipProps) => {
     <span
       data-slot="chip"
       className={cn(
-        "inline-flex items-center max-w-xs gap-2",
-        "px-2 py-1",
-        "bg-gray-100 border border-gray-250 rounded-full",
+        "inline-flex items-center",
+        "max-w-xs",
+        "gap-2 px-2 py-1",
+        "bg-gray-100",
+        "border border-gray-250 rounded-full",
         "text-gray-400 text-xs",
         className,
       )}

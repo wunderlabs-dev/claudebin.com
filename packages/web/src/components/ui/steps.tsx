@@ -25,7 +25,7 @@ const Steps = ({ variant = "outlined", className, children, ...props }: StepsPro
     <StepsContext.Provider value={variant}>
       <ol
         className={cn(
-          "flex w-full flex-col items-start gap-4 [counter-reset:step]",
+          "flex flex-col items-start w-full gap-4 [counter-reset:step]",
           variant === "outlined" ? "gap-4" : "gap-2",
           className,
         )}
@@ -52,7 +52,7 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
 
   return (
     <li
-      className={cn("flex w-full items-start gap-4 [counter-increment:step]", className)}
+      className={cn("flex items-start w-full gap-4 [counter-increment:step]", className)}
       {...props}
     >
       <span className={cn("flex shrink-0 items-center", stepsItemIconClassNames[variant])}>

@@ -82,7 +82,7 @@ const ThreadsPageThreadsContainer = ({
 
       <DividerGridRow>
         {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
-        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-t lg:border-t-0 border-r border-b border-l">
+        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-t border-r border-b border-l lg:border-t-0">
           <DividerGridRow>
             <DividerGridCell className="col-span-9 lg:col-span-8 border-r">
               <FormControl className="flex-row items-center">
@@ -114,7 +114,7 @@ const ThreadsPageThreadsContainer = ({
       {hasNoResult ? (
         <DividerGridRow>
           {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
-          <DividerGridCell className="col-span-12 px-8 py-24 lg:px-12 border-l border-r border-t border-b">
+          <DividerGridCell className="col-span-12 px-8 py-24 lg:px-12 border-t border-r border-b border-l">
             <div className="flex flex-col max-w-lg mx-auto gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { gradient, query: queryDebounced })}

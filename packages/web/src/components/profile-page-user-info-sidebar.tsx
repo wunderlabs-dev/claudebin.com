@@ -59,7 +59,7 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-3 border-b">
           <DividerGridDivider variant="top" />
         </DividerGridCell>
-        <DividerGridCell className="col-span-5 flex justify-between border-b">
+        <DividerGridCell className="flex justify-between col-span-5 border-b">
           <DividerGridDivider variant="top" />
           <DividerGridDivider variant="top" />
         </DividerGridCell>
@@ -77,12 +77,12 @@ const ProfilePageUserInfoSidebar = ({
             )}
           </Avatar>
         </DividerGridCell>
-        <DividerGridCell className="col-span-5 border-r border-l" />
+        <DividerGridCell className="col-span-5 border-l border-r" />
         <DividerGridCell className="col-span-2" />
       </DividerGridRow>
 
       <DividerGridRow>
-        <DividerGridCell className="col-span-12 flex flex-col gap-1 border px-6 py-6">
+        <DividerGridCell className="flex flex-col col-span-12 gap-1 px-6 py-6 border">
           <Typography variant="h4">{username}</Typography>
           <div className="flex items-center gap-1">
             <SvgIconCalendar size="sm" color="neutral" />
@@ -96,7 +96,7 @@ const ProfilePageUserInfoSidebar = ({
       {stats.map((stat) => (
         <DividerGridRow key={stat.key}>
           <DividerGridEdge position="left" />
-          <DividerGridCell className="col-span-8 flex items-center justify-center gap-2 border-x border-b px-3 py-3">
+          <DividerGridCell className="flex items-center justify-center col-span-8 gap-2 px-3 py-3 border-x border-b">
             {stat.icon}
             <Typography variant="caption" color="accent" leading="normal">
               {stat.label}
@@ -111,7 +111,7 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-3">
           <DividerGridDivider variant="bottom" />
         </DividerGridCell>
-        <DividerGridCell className="col-span-5 flex justify-between">
+        <DividerGridCell className="flex justify-between col-span-5">
           <DividerGridDivider variant="bottom" />
           <DividerGridDivider variant="bottom" />
         </DividerGridCell>

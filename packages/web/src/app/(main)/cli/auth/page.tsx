@@ -27,7 +27,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
       <Container as="main" size="sm" spacing="md">
         <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
-          <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
             <Typography variant="h4" className="flex items-center gap-2">
               <SvgIconKey />
               {t("cliAuth.invalidLinkTitle")}
@@ -47,7 +47,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
       <Container as="main" size="sm" spacing="md">
         <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
-          <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
             <Typography variant="h4" className="flex items-center gap-2">
               <SvgIconKey />
               {t("cliAuth.invalidCodeTitle")}
@@ -64,7 +64,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
       <Container as="main" size="sm" spacing="md">
         <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
-          <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
             <Typography variant="h4" className="flex items-center gap-2">
               <SvgIconLock />
               {t("cliAuth.successTitle")}
@@ -81,7 +81,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
       <Container as="main" size="sm" spacing="md">
         <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
-          <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
             <Typography variant="h4" className="flex items-center gap-2">
               <SvgIconClock />
               {t("cliAuth.expiredTitle")}
@@ -123,7 +123,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
       <Container as="main" size="sm" spacing="md">
         <div className="flex flex-col gap-12 md:gap-18">
           <CliAuthPageHeader />
-          <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
+          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
             <Typography variant="h4" className="flex items-center gap-2">
               <SvgIconSkull />
               {t("cliAuth.failedTitle")}
@@ -139,7 +139,7 @@ const CliAuthPage = async ({ searchParams }: Props) => {
     <Container as="main" size="sm" spacing="md">
       <div className="flex flex-col gap-12 md:gap-18">
         <CliAuthPageHeader />
-        <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
+        <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
           <Typography variant="h4" className="flex items-center gap-2">
             <SvgIconLock />
             {t("cliAuth.successTitle")}

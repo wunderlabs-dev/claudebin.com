@@ -6,9 +6,10 @@ import { cn } from "@/utils/helpers";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center",
-    "h-12 gap-3 px-5 py-3",
+    "h-12",
+    "gap-3 px-5 py-3",
     "rounded-full",
-    "whitespace-nowrap text-white",
+    "text-white whitespace-nowrap",
     "cursor-pointer select-none",
     "transition ease-in-out",
     "disabled:pointer-events-none",
@@ -48,7 +49,7 @@ const buttonVariants = cva(
           "active:bg-red-50/60",
           "disabled:border-transparent disabled:bg-red-50/10 disabled:text-gray-450",
         ],
-        link: ["group", "h-auto px-0 py-0 rounded-none", "disabled:text-gray-250"],
+        link: ["group", "h-auto", "px-0 py-0", "rounded-none", "disabled:text-gray-250"],
       },
       color: {
         default: [],
@@ -109,7 +110,8 @@ const ButtonText = ({ className, ...props }: ButtonTextProps) => {
       className={cn(
         "relative",
         "after:absolute after:inset-x-0 after:top-full",
-        "after:h-px after:bg-orange-50",
+        "after:h-px",
+        "after:bg-orange-50",
         "after:origin-left after:scale-x-0",
         "after:transition-transform after:ease-in-out",
         "group-hover:after:scale-x-100 group-active:text-orange-50",
