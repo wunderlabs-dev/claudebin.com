@@ -27,7 +27,7 @@ export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Met
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
 
-  if (!thread || !thread.isPublic) {
+  if (!thread) {
     return { title: "Thread Not Found" };
   }
 
@@ -104,6 +104,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
       <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 px-0 pt-12 border-t border-gray-250 overflow-y-auto lg:col-span-3 lg:h-screen lg:px-6 lg:pt-24 lg:pb-12 lg:border-t-0 lg:border-l">
         <ThreadPageSidebarContainer
           id={thread.id}
+          isAuthor={isAuthor}
           isPublic={thread.isPublic}
           initialLiked={thread.hasLiked}
           createdAt={format(thread.createdAt, "MM/dd/yyyy")}

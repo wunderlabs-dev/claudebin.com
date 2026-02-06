@@ -9,7 +9,7 @@
     "copied": "Copied!",
     "copySnippet": "Copy snippet",
     "public": "Public",
-    "private": "Private",
+    "unlisted": "Unlisted",
     "untitled": "Untitled",
     "ago": "{date} ago",
     "messages": "{count} messages",

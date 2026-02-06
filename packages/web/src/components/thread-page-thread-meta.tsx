@@ -11,13 +11,12 @@ import {
   SvgIconEye,
   SvgIconFile,
   SvgIconFolder,
-  SvgIconGlobe,
 } from "@/components/icon";
 
-import { Badge } from "@/components/ui/badge";
 import { List, ListItem } from "@/components/ui/list";
 
 import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
+import { ThreadPageVisibilityToggleContainer } from "@/containers/thread-page-visibility-toggle-container";
 
 type ThreadPageThreadMetaProps = {
   id: string;
@@ -30,6 +29,7 @@ type ThreadPageThreadMetaProps = {
   messageCount?: number | null;
   initialLiked?: boolean;
   isPublic?: boolean;
+  isAuthor?: boolean;
   className?: string;
 };
 
@@ -44,16 +44,18 @@ const ThreadPageThreadMeta = ({
   messageCount,
   initialLiked,
   isPublic,
+  isAuthor,
   className,
 }: ThreadPageThreadMetaProps) => {
   const t = useTranslations();
 
   return (
     <div className={cn("flex flex-col items-start gap-6", className)}>
-      <Badge variant="neutral">
-        <SvgIconGlobe size="sm" />
-        {isPublic ? t("common.public") : t("common.private")}
-      </Badge>
+      <ThreadPageVisibilityToggleContainer
+        id={id}
+        initialIsPublic={isPublic ?? true}
+        isAuthor={isAuthor ?? false}
+      />
 
       <List className="w-full gap-3 pb-9 border-b border-gray-250 lg:pb-0 lg:border-b-0">
         <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>

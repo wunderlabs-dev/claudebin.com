@@ -61,7 +61,12 @@ export const registerShare = (server: McpServer): void => {
       inputSchema: {
         project_path: z.string().describe("Absolute path to the project directory"),
         title: z.string().optional().describe("Optional title for the session"),
-        is_public: z.boolean().default(true).describe("Whether the session is public"),
+        is_public: z
+          .boolean()
+          .default(true)
+          .describe(
+            "Whether the session appears in public listings (false = unlisted, accessible via link)",
+          ),
       },
     },
     async ({ project_path, title, is_public }) => {

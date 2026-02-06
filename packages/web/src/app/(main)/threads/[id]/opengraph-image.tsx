@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { format } from "date-fns";
-import { isNil, not } from "ramda";
+import { isNil } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 import { createClient } from "@/supabase/server";
@@ -276,8 +276,7 @@ const Image = async ({ params }: Props) => {
 
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
-
-  if (isNil(thread) || not(thread.isPublic)) {
+  if (isNil(thread)) {
     return new Response("Not found", { status: 404 });
   }
 

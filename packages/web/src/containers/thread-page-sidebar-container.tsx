@@ -21,12 +21,14 @@ type ThreadPageSidebarContainerProps = {
   modelName?: string | null;
   messageCount?: number | null;
   isPublic: boolean;
+  isAuthor: boolean;
   initialLiked?: boolean;
 };
 
 const ThreadPageSidebarContainer = ({
   id,
   isPublic,
+  isAuthor,
   initialLiked,
   createdAt,
   workingDir,
@@ -44,6 +46,7 @@ const ThreadPageSidebarContainer = ({
         <ThreadPageThreadMeta
           id={id}
           isPublic={isPublic}
+          isAuthor={isAuthor}
           createdAt={createdAt}
           fileCount={fileCount}
           viewCount={viewCount}
