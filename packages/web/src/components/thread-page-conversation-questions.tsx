@@ -1,20 +1,20 @@
 "use client";
 
-import { type ReactNode, Fragment } from "react";
-import { useTranslations } from "next-intl";
+import { Fragment } from "react";
 import { not } from "ramda";
+
 import type { QuestionBlock } from "@/supabase/types/message";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Typography } from "@/components/ui/typography";
+import { QuestionOptionsMulti } from "@/components/question-options-multi";
+import { QuestionOptionsSingle } from "@/components/question-options-single";
+import { QuestionCustomAnswer } from "@/components/question-custom-answer";
 
 type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
 const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
-  const t = useTranslations();
-
   return (
     <Fragment>
       {block.questions.map((question) => {
@@ -29,41 +29,12 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
             <Typography variant="h4">{question.question}</Typography>
 
             {question.multiSelect ? (
-              <div className="flex flex-wrap gap-2">
-                {question.options.map((option) => {
-                  const isSelected = selectedPredefined.includes(option.label);
-                  return (
-                    <div
-                      key={option.label}
-                      className={`rounded-sm px-3 py-1 text-sm ${
-                        isSelected ? "bg-orange-50 text-gray-900" : "bg-gray-800 text-gray-400"
-                      }`}
-                    >
-                      {option.label}
-                    </div>
-                  );
-                })}
-              </div>
+              <QuestionOptionsMulti options={question.options} selected={selectedPredefined} />
             ) : (
-              <Tabs variant="list" value={selectedPredefined[0]}>
-                <TabsList>
-                  {question.options.map((option) => (
-                    <TabsTrigger key={option.label} value={option.label}>
-                      {option.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
+              <QuestionOptionsSingle options={question.options} selected={selectedPredefined[0]} />
             )}
 
-            {customAnswers.length > 0 ? (
-              <Typography variant="small">
-                {t.rich("chat.customAnswer", {
-                  answer: customAnswers.join(", "),
-                  underline: (chunks: ReactNode) => <span className="border-b">{chunks}</span>,
-                })}
-              </Typography>
-            ) : null}
+            <QuestionCustomAnswer answers={customAnswers} />
           </div>
         );
       })}
