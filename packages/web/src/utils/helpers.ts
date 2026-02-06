@@ -1,6 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
-import { isNil, last } from "ramda";
+import { concat, init, isNil, last, reduce } from "ramda";
 import { twMerge } from "tailwind-merge";
+
+import { MessageRole } from "@/supabase/types/message";
+import type { Message } from "@/supabase/repos/messages";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -18,3 +21,20 @@ export const getProjectName = (workingDir: string | null) => {
   }
   return last(workingDir.split("/"));
 };
+
+export const compactConversation = (messages: ReadonlyArray<Message> = []): Message[] =>
+  reduce<Message, Message[]>(
+    (accumulator, message) => {
+      const previous = last(accumulator);
+      const isConsecutiveAssistant =
+        previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
+
+      return isConsecutiveAssistant
+        ? concat(init(accumulator), [
+            { ...previous, content: concat(previous.content, message.content) },
+          ])
+        : concat(accumulator, [{ ...message }]);
+    },
+    [],
+    [...messages],
+  );

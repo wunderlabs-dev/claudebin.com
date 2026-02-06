@@ -13,9 +13,6 @@ import { cn } from "@/utils/helpers";
 
 import { AuthProvider } from "@/context/auth";
 import { QueryProvider } from "@/context/query";
-import { AppBar } from "@/components/ui/app-bar";
-import { Footer } from "@/components/ui/footer";
-import { Toaster } from "@/components/ui/sonner";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -51,12 +48,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
       <body className="min-h-screen bg-fade bg-gray-100 font-sans text-white antialiased selection:bg-orange-50 selection:text-white">
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>
-            <AuthProvider initialUser={user}>
-              <AppBar />
-              <main>{children}</main>
-              <Footer />
-              <Toaster />
-            </AuthProvider>
+            <AuthProvider initialUser={user}>{children}</AuthProvider>
           </NextIntlClientProvider>
         </QueryProvider>
       </body>
