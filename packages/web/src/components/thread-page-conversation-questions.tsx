@@ -5,7 +5,8 @@ import { isNil, not } from "ramda";
 
 import type { QuestionBlock } from "@/supabase/types/message";
 
-import { Options, OptionsListItem } from "@/components/ui/options";
+import { cn } from "@/utils/helpers";
+
 import { Typography } from "@/components/ui/typography";
 
 type ThreadPageConversationQuestionsProps = {
@@ -39,21 +40,30 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
           <div key={question.header} className="flex flex-col gap-4">
             <Typography variant="h4">{question.question}</Typography>
 
-            <Options>
-              {question.options.map((option) => (
-                <OptionsListItem
-                  key={option.label}
-                  selected={selectedPredefined.includes(option.label)}
-                >
-                  {option.label}
-                </OptionsListItem>
-              ))}
+            <div className="flex flex-col items-start w-fit gap-1 p-1 bg-gray-200 border border-gray-50 rounded-xl">
+              {question.options.map((option) => {
+                const isSelected = selectedPredefined.includes(option.label);
+                return (
+                  <div
+                    key={option.label}
+                    className={cn(
+                      "inline-flex items-center justify-start w-full px-3 py-2 rounded-lg text-base font-normal transition ease-in-out",
+                      isSelected ? "bg-gray-100 text-white" : "text-gray-450 line-through",
+                    )}
+                  >
+                    {option.label}
+                  </div>
+                );
+              })}
               {customAnswers.map((customAnswer) => (
-                <OptionsListItem key={customAnswer} selected>
+                <div
+                  key={customAnswer}
+                  className="inline-flex items-center justify-start w-full px-3 py-2 rounded-lg bg-gray-100 text-base font-normal text-white transition ease-in-out"
+                >
                   {customAnswer}
-                </OptionsListItem>
+                </div>
               ))}
-            </Options>
+            </div>
           </div>
         );
       })}
