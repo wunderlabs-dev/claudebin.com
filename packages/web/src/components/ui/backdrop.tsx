@@ -27,7 +27,7 @@ const Backdrop = ({
   return (
     <div data-slot="backdrop" className={cn("relative w-full", className)} {...props}>
       {size === "half" ? (
-        <SvgIconOrbits className="absolute top-3/4 left-1/2 -z-10 -translate-x-1/2 h-auto w-container text-gray-500/40" />
+        <SvgIconOrbits className="absolute top-3/4 left-1/2 -z-10 h-auto w-container -translate-x-1/2 text-gray-500/40" />
       ) : null}
       <div
         className={cn(

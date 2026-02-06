@@ -53,7 +53,7 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
           "flex flex-1 items-center justify-between",
           "w-full",
           "gap-3 py-3",
-          "font-mono font-medium text-left text-base",
+          "font-mono text-left text-base font-medium",
           "cursor-pointer",
           "transition ease-in-out",
           "disabled:pointer-events-none disabled:opacity-50",

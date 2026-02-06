@@ -58,7 +58,7 @@ const HomePageRecentThreadsCarousel = ({
       </Container>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex cursor-grab select-none gap-4 border-y border-transparent active:cursor-grabbing">
+        <div className="flex gap-4 border-y border-transparent cursor-grab select-none active:cursor-grabbing">
           <div className="w-container-start shrink-0" aria-hidden="true" />
           {threads.map((thread) => (
             <div key={thread.id} className="bg-gray-100">

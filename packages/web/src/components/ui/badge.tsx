@@ -9,7 +9,7 @@ const badgeVariants = cva(
     "h-8",
     "gap-2 px-4 py-2",
     "rounded-full",
-    "font-mono font-normal text-base uppercase leading-normal whitespace-nowrap",
+    "font-mono text-base font-normal uppercase leading-normal whitespace-nowrap",
     "[&>svg]:pointer-events-none",
   ],
   {

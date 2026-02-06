@@ -105,7 +105,7 @@ const TableHead = ({ className, ...props }: TableHeadProps) => {
         "align-middle",
         "px-4 py-3",
         "border-r border-gray-200",
-        "font-medium text-left text-lg text-white whitespace-nowrap",
+        "text-left text-lg font-medium text-white whitespace-nowrap",
         "transition-colors",
         "last:border-r-0 group-hover:border-gray-100",
         className,

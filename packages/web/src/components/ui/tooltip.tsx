@@ -37,7 +37,7 @@ const TooltipContent = ({ className, sideOffset = 6, ...props }: TooltipContentP
           "px-3 py-1.5",
           "bg-gray-100",
           "border border-gray-250 rounded-lg",
-          "text-white text-xs break-all",
+          "text-xs text-white break-all",
           "fade-in-0 zoom-in-95 animate-in",
           className,
         )}

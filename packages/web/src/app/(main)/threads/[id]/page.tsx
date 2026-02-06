@@ -41,7 +41,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   return (
     <Container size="lg" spacing="none" className="grid grid-cols-1 lg:grid-cols-12">
-      <div className="flex flex-col col-span-1 lg:col-span-9 gap-12 lg:gap-18 pt-9 pb-12 lg:pb-0">
+      <div className="flex flex-col col-span-1 gap-12 pt-9 pb-12 lg:col-span-9 lg:gap-18 lg:pb-0">
         <div className="flex flex-col items-start gap-9">
           <NavLink href="/threads">
             <SvgIconArrowLeft size="sm" />
@@ -66,7 +66,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         />
       </div>
 
-      <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 lg:col-span-3 lg:h-screen px-0 lg:px-6 pt-12 lg:pt-24 lg:pb-12 border-t lg:border-t-0 lg:border-l border-gray-250 overflow-y-auto">
+      <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 px-0 pt-12 border-t border-gray-250 overflow-y-auto lg:col-span-3 lg:h-screen lg:px-6 lg:pt-24 lg:pb-12 lg:border-t-0 lg:border-l">
         <ThreadPageSidebarContainer
           id={thread.id}
           isPublic={thread.isPublic}

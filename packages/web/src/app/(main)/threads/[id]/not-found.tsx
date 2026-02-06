@@ -25,7 +25,7 @@ const ThreadNotFound = async () => {
           <DividerGridCell className="col-span-6 border-b">
             <DividerGridDivider variant="top" />
           </DividerGridCell>
-          <DividerGridCell className="col-span-4 flex justify-end border-b">
+          <DividerGridCell className="flex justify-end col-span-4 border-b">
             <DividerGridDivider variant="top" />
           </DividerGridCell>
           <DividerGridEdge position="right" className="col-span-1" />
@@ -34,7 +34,7 @@ const ThreadNotFound = async () => {
         <DividerGridRow>
           <DividerGridEdge position="left" className="col-span-1" />
           <DividerGridCell className="col-span-10 px-8 py-12 border-r border-b border-l">
-            <div className="flex flex-col items-start max-w-lg mx-auto gap-6">
+            <div className="flex flex-col items-start max-w-lg gap-6 mx-auto">
               <Typography variant="h2" leading="normal">
                 {t.rich("thread.notFoundTitle", { gradient })}
               </Typography>
@@ -54,7 +54,7 @@ const ThreadNotFound = async () => {
           <DividerGridCell className="col-span-6">
             <DividerGridDivider variant="bottom" />
           </DividerGridCell>
-          <DividerGridCell className="col-span-4 flex justify-end">
+          <DividerGridCell className="flex justify-end col-span-4">
             <DividerGridDivider variant="bottom" />
           </DividerGridCell>
           <DividerGridCell className="col-span-1" />

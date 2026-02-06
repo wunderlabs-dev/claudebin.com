@@ -111,7 +111,7 @@ const textareaVariants = cva(
     "px-4 py-3",
     "bg-gray-200",
     "rounded-lg",
-    "font-mono font-normal text-base leading-6",
+    "font-mono text-base font-normal leading-6",
     "resize-none outline-none",
     "transition ease-in-out",
     "placeholder:text-white",

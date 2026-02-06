@@ -71,7 +71,7 @@ const TabsTrigger = ({ className, ...props }: ComponentProps<typeof TabsPrimitiv
         "h-full",
         "px-6 py-2",
         "rounded-full",
-        "font-normal text-base text-gray-450",
+        "text-base font-normal text-gray-450",
         "transition ease-in-out",
         "disabled:pointer-events-none disabled:opacity-50",
         tabsTriggerVariantClassNames[variant],

@@ -59,7 +59,7 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-3 border-b">
           <DividerGridDivider variant="top" />
         </DividerGridCell>
-        <DividerGridCell className="flex justify-between col-span-5 border-b">
+        <DividerGridCell className="flex col-span-5 justify-between border-b">
           <DividerGridDivider variant="top" />
           <DividerGridDivider variant="top" />
         </DividerGridCell>
@@ -96,7 +96,7 @@ const ProfilePageUserInfoSidebar = ({
       {stats.map((stat) => (
         <DividerGridRow key={stat.key}>
           <DividerGridEdge position="left" />
-          <DividerGridCell className="flex items-center justify-center col-span-8 gap-2 px-3 py-3 border-x border-b">
+          <DividerGridCell className="flex col-span-8 items-center justify-center gap-2 px-3 py-3 border-x border-b">
             {stat.icon}
             <Typography variant="caption" color="accent" leading="normal">
               {stat.label}
@@ -111,7 +111,7 @@ const ProfilePageUserInfoSidebar = ({
         <DividerGridCell className="col-span-3">
           <DividerGridDivider variant="bottom" />
         </DividerGridCell>
-        <DividerGridCell className="flex justify-between col-span-5">
+        <DividerGridCell className="flex col-span-5 justify-between">
           <DividerGridDivider variant="bottom" />
           <DividerGridDivider variant="bottom" />
         </DividerGridCell>

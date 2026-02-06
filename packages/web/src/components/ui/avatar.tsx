@@ -31,7 +31,8 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
         className={cn(
           "relative flex shrink-0 overflow-hidden",
           "bg-orange-50/10",
-          "rounded-full outline outline-orange-150",
+          "rounded-full",
+          "outline outline-orange-150",
           "select-none",
           avatarSizeClassNames[size],
           className,
@@ -76,7 +77,7 @@ const AvatarFallback = ({
         "flex items-center justify-center",
         "size-full",
         "rounded-full",
-        "font-bold text-orange-50 uppercase",
+        "text-orange-50 font-bold uppercase",
         avatarFallbackFontSizeClassNames[size],
         className,
       )}
