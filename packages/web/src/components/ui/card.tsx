@@ -22,7 +22,7 @@ type CardProps = {
 } & Omit<React.ComponentProps<typeof Link>, "href">;
 
 const cardVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col shrink-0 justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
+  card: "flex flex-col shrink-0 justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50 hover:-translate-y-0.5",
   list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 hover:z-10 lg:divide-y-0 lg:divide-x",
   grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 hover:z-10 lg:grid-cols-3 lg:divide-y-0 lg:divide-x",
 } as const;
@@ -36,7 +36,7 @@ const Card = ({ variant = "card", href, className, children, ...props }: CardPro
           data-slot="card"
           data-variant={variant}
           className={cn(
-            "group border border-gray-250 hover:border-orange-50",
+            "group border border-gray-250 transition-all duration-200 ease-out hover:border-orange-50 active:scale-99",
             cardVariantClassNames[variant],
             className,
           )}
@@ -48,7 +48,11 @@ const Card = ({ variant = "card", href, className, children, ...props }: CardPro
         <article
           data-slot="card"
           data-variant={variant}
-          className={cn("group border border-gray-250", cardVariantClassNames[variant], className)}
+          className={cn(
+            "group border border-gray-250 transition-all duration-200 ease-out",
+            cardVariantClassNames[variant],
+            className,
+          )}
           {...props}
         >
           {children}
@@ -184,7 +188,11 @@ const CardActions = ({ className, ...props }: CardActionsProps) => {
       className={cn("cursor-pointer", cardActionsVariantClassNames[variant], className)}
       {...props}
     >
-      <SvgIconArrowLink size="sm" color="accent" />
+      <SvgIconArrowLink
+        size="sm"
+        color="accent"
+        className="transition-transform duration-150 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+      />
     </button>
   );
 };

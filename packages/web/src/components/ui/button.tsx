@@ -11,7 +11,7 @@ const buttonVariants = cva(
     "rounded-full",
     "text-white whitespace-nowrap",
     "cursor-pointer select-none",
-    "transition ease-in-out",
+    "transition ease-in-out duration-150",
     "disabled:pointer-events-none",
   ],
   {
@@ -20,19 +20,19 @@ const buttonVariants = cva(
         default: [
           "bg-orange-50",
           "hover:bg-linear-to-br hover:to-orange-150",
-          "active:ridge-t active:to-orange-50",
+          "active:ridge-t active:scale-98 active:to-orange-50",
           "disabled:bg-orange-50/20 disabled:text-gray-450",
         ],
         secondary: [
           "border border-gray-50 bg-gray-200",
           "hover:bg-linear-to-br hover:to-gray-50",
-          "active:ridge-t active:border-gray-200 active:to-gray-200",
+          "active:ridge-t active:scale-98 active:border-gray-200 active:to-gray-200",
           "disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-450",
         ],
         outline: [
           "border border-orange-50 bg-orange-50/20",
           "hover:bg-orange-50",
-          "active:bg-orange-50/60",
+          "active:scale-98 active:bg-orange-50/60",
           "disabled:border-transparent disabled:bg-orange-50/10",
         ],
         icon: [
@@ -40,13 +40,13 @@ const buttonVariants = cva(
           "px-3",
           "border border-gray-50 bg-gray-200",
           "hover:border-orange-50 hover:bg-linear-to-br hover:bg-orange-50 hover:to-orange-150",
-          "active:ridge-t active:border-orange-50 active:bg-orange-50 active:to-orange-50",
+          "active:ridge-t active:scale-98 active:border-orange-50 active:bg-orange-50 active:to-orange-50",
           "disabled:border-transparent disabled:bg-gray-200 disabled:text-gray-450",
         ],
         danger: [
           "border border-red-50 bg-red-50/25",
           "hover:bg-red-50",
-          "active:bg-red-50/60",
+          "active:scale-98 active:bg-red-50/60",
           "disabled:border-transparent disabled:bg-red-50/10 disabled:text-gray-450",
         ],
         link: ["group", "h-auto", "px-0 py-0", "rounded-none", "disabled:text-gray-250"],

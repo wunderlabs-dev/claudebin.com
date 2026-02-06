@@ -17,11 +17,12 @@ const navLinkVariants = cva(
     "gap-3",
     "text-white font-medium whitespace-nowrap",
     "cursor-pointer select-none",
+    "transition-colors duration-150 ease-in-out",
   ],
   {
     variants: {
       variant: {
-        default: [],
+        default: "hover:text-orange-50",
         active: "text-orange-50 [&>svg]:text-white",
       },
     },
