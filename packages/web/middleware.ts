@@ -1,15 +1,20 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_ROUTES = ["/", "/auth/login", "/auth/callback", "/threads"];
+const PUBLIC_ROUTES = [
+  "/",
+  "/auth/*",
+  "/api/*",
+  "/monitoring/*",
+  "/threads",
+  "/threads/*",
+  "/profile/*",
+];
 
-const isPublicRoute = (pathname: string): boolean => {
-  if (PUBLIC_ROUTES.includes(pathname)) return true;
-  if (pathname.startsWith("/api/")) return true;
-  if (pathname.startsWith("/monitoring")) return true; // Sentry tunnel
-  if (pathname.startsWith("/threads/")) return true; // Public threads via RLS
-  return false;
-};
+const isPublicRoute = (pathname: string): boolean =>
+  PUBLIC_ROUTES.some((route) =>
+    route.endsWith("/*") ? pathname.startsWith(route.slice(0, -1)) : pathname === route
+  );
 
 export const middleware = async (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
