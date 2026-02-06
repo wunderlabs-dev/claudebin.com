@@ -166,13 +166,13 @@ const Image = async ({ params }: Props) => {
         }}
       >
         <div
-          tw="flex items-center text-2xl"
+          tw="flex items-center text-xl"
           style={{
             gap: sizes.gapMd,
             color: colors.gray400,
           }}
         >
-          <span style={{ color: colors.orange50 }}>{thread.profiles?.username ?? "anonymous"}</span>
+          <span style={{ color: colors.orange50 }}>{thread.profiles?.username}</span>
           <span style={{ color: colors.white }}>/</span>
           <div
             tw="flex items-center"
@@ -181,7 +181,7 @@ const Image = async ({ params }: Props) => {
             }}
           >
             <SvgIconCalendar />
-            <span>Created {format(new Date(thread.createdAt), "dd/MM/yyyy")}</span>
+            <span>{format(new Date(thread.createdAt), "dd/MM/yyyy")}</span>
           </div>
         </div>
       </div>
@@ -261,7 +261,7 @@ const Image = async ({ params }: Props) => {
     height: sizes.height,
     fonts: [
       { name: "Host Grotesk", data: await hostGroteskRegular, weight: 400, style: "normal" },
-      { name: "Host Grotesk", data: await hostGroteskBold, weight: 800, style: "normal" },
+      { name: "Host Grotesk", data: await hostGroteskBold, weight: 800, style: "normal", },
     ],
   });
 };
