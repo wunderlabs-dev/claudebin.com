@@ -8,7 +8,7 @@ import { toggleVisibility } from "@/actions/visibility";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconGlobe } from "@/components/icon";
+import { SvgIconGlobe } from "@/components/icon/svg-icon-globe";
 import { Badge } from "@/components/ui/badge";
 
 type ThreadPageVisibilityToggleContainerProps = {
