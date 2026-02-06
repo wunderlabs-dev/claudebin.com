@@ -193,6 +193,7 @@ export type Database = {
           errorMessage: string | null;
           fileCount: number;
           id: string;
+          isFeatured: boolean;
           isPublic: boolean;
           likeCount: number;
           messageCount: number | null;
@@ -210,6 +211,7 @@ export type Database = {
           errorMessage?: string | null;
           fileCount?: number;
           id: string;
+          isFeatured?: boolean;
           isPublic?: boolean;
           likeCount?: number;
           messageCount?: number | null;
@@ -227,6 +229,7 @@ export type Database = {
           errorMessage?: string | null;
           fileCount?: number;
           id?: string;
+          isFeatured?: boolean;
           isPublic?: boolean;
           likeCount?: number;
           messageCount?: number | null;
