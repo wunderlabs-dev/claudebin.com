@@ -36,7 +36,7 @@ const Card = ({ variant = "card", href, className, children, ...props }: CardPro
           data-slot="card"
           data-variant={variant}
           className={cn(
-            "group border border-gray-250 transition-all duration-200 ease-out hover:border-orange-50 active:scale-99",
+            "group border border-gray-250 transition-colors duration-200 ease-out hover:border-orange-50",
             cardVariantClassNames[variant],
             className,
           )}
