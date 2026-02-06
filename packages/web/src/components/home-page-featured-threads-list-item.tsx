@@ -22,14 +22,14 @@ import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 
-type HomePageRecentThreadsListItemProps = {
+type HomePageFeaturedThreadsListItemProps = {
   thread: ThreadWithAuthor;
 } & ComponentProps<typeof Card>;
 
-const HomePageRecentThreadsListItem = ({
+const HomePageFeaturedThreadsListItem = ({
   thread,
   ...props
-}: HomePageRecentThreadsListItemProps) => {
+}: HomePageFeaturedThreadsListItemProps) => {
   const t = useTranslations();
 
   return (
@@ -69,4 +69,4 @@ const HomePageRecentThreadsListItem = ({
   );
 };
 
-export { HomePageRecentThreadsListItem };
+export { HomePageFeaturedThreadsListItem };
