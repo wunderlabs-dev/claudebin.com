@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { isNil } from "ramda";
 import { format } from "date-fns";
 
-import { getProjectName } from "@/utils/helpers";
+import { getProjectName, formatModelName } from "@/utils/helpers";
 
 import { sessions } from "@/supabase/repos/sessions";
 import { createClient } from "@/supabase/server";
@@ -18,6 +19,39 @@ import { ThreadPageConversationContainer } from "@/containers/thread-page-conver
 
 type ThreadPageProps = {
   params: Promise<{ id: string }>;
+};
+
+export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata> => {
+  const { id } = await params;
+  const supabase = await createClient();
+  const thread = await sessions.getByIdWithAuthor(supabase, id);
+
+  if (!thread || !thread.isPublic) {
+    return { title: "Thread Not Found" };
+  }
+
+  const title = thread.title ?? "Untitled Session";
+  const author = thread.profiles?.username ?? "Anonymous";
+  const model = formatModelName(thread.modelName);
+  const promptCount = thread.messageCount ?? 0;
+
+  const description = `${author} • ${model} • ${promptCount} prompts`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      authors: [author],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
 };
 
 const ThreadPage = async ({ params }: ThreadPageProps) => {

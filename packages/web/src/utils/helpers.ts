@@ -22,6 +22,12 @@ export const getProjectName = (workingDir: string | null) => {
   return last(workingDir.split("/"));
 };
 
+export const formatModelName = (modelName: string | null): string => {
+  if (!modelName) return "Claude";
+  // "claude-opus-4-5-20251101" -> "claude-opus-4.5"
+  return modelName.replace(/-\d{8}$/, "").replace(/-(\d+)-(\d+)$/, "-$1.$2");
+};
+
 export const compactConversation = (messages: ReadonlyArray<Message> = []): Message[] =>
   reduce<Message, Message[]>(
     (accumulator, message) => {
