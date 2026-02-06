@@ -11,16 +11,16 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-export const alt = "Claudebin Thread";
+export const alt = "Claudebin";
 export const contentType = "image/png";
 
 const hostGroteskRegular = fetch(
   "https://fonts.gstatic.com/s/hostgrotesk/v5/co3UmWBnlCJ3U42vbbfdwMjzqHAXOdFzqU5PuefOzhY.ttf",
-).then((res) => res.arrayBuffer());
+).then((result) => result.arrayBuffer());
 
 const hostGroteskBold = fetch(
   "https://fonts.gstatic.com/s/hostgrotesk/v5/co3UmWBnlCJ3U42vbbfdwMjzqHAXOdFzqU5PuWfJzhY.ttf",
-).then((res) => res.arrayBuffer());
+).then((result) => result.arrayBuffer());
 
 const assistantSrc = `data:image/jpeg;base64,${readFileSync(
   join(process.cwd(), "public/images/assistant.jpg"),
@@ -53,12 +53,12 @@ const sizes = {
   radiusFull: "50%",
 } as const;
 
-const SvgIconCalendar = ({ size = sizes.iconLg }: { size?: number }) => (
+const SvgIconCalendar = () => (
   <svg
     role="img"
     aria-label="Calendar"
-    width={size}
-    height={size}
+    width={sizes.iconLg}
+    height={sizes.iconLg}
     viewBox="0 0 24 24"
     fill="none"
     stroke={colors.gray400}
@@ -73,12 +73,12 @@ const SvgIconCalendar = ({ size = sizes.iconLg }: { size?: number }) => (
   </svg>
 );
 
-const SvgIconMessage = ({ size = sizes.iconSm }: { size?: number }) => (
+const SvgIconMessage = () => (
   <svg
     role="img"
     aria-label="Message"
-    width={size}
-    height={size}
+    width={sizes.iconSm}
+    height={sizes.iconSm}
     viewBox="0 0 24 24"
     fill="none"
     stroke={colors.gray400}
@@ -90,12 +90,12 @@ const SvgIconMessage = ({ size = sizes.iconSm }: { size?: number }) => (
   </svg>
 );
 
-const SvgIconFile = ({ size = sizes.iconSm }: { size?: number }) => (
+const SvgIconFile = () => (
   <svg
     role="img"
     aria-label="File"
-    width={size}
-    height={size}
+    width={sizes.iconSm}
+    height={sizes.iconSm}
     viewBox="0 0 24 24"
     fill="none"
     stroke={colors.gray400}
@@ -108,12 +108,12 @@ const SvgIconFile = ({ size = sizes.iconSm }: { size?: number }) => (
   </svg>
 );
 
-const SvgIconEye = ({ size = sizes.iconSm }: { size?: number }) => (
+const SvgIconEye = () => (
   <svg
     role="img"
     aria-label="Eye"
-    width={size}
-    height={size}
+    width={sizes.iconSm}
+    height={sizes.iconSm}
     viewBox="0 0 24 24"
     fill="none"
     stroke={colors.gray400}
@@ -123,6 +123,19 @@ const SvgIconEye = ({ size = sizes.iconSm }: { size?: number }) => (
   >
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
     <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const SvgIconBrain = () => (
+  <svg
+    role="img"
+    aria-label="Brain"
+    width={sizes.iconSm}
+    height={sizes.iconSm}
+    viewBox="0 0 16 16"
+    fill={colors.gray400}
+  >
+    <path d="m3.7 10.3 2.8-1.5v-.2H4.3L3 8.4H1.6l-.3-.1-.3-.4v-.2l.3-.2h.4l.9.1 1.3.1 1 .1 1.4.1h.2v-.2h-.1l-1.3-1-1.5-1-.8-.5-.4-.3-.2-.3-.1-.6.4-.4h.6l.5.4 1.1 1 1.5 1 .2.2.1-.1-.1-.2-.8-1.4-.8-1.4-.4-.6-.1-.4c0-.1-.1-.3-.1-.4l.4-.6.3-.1.6.1.2.2.4.8.6 1.3.9 1.8.3.5.1.5v.1h.1l.1-1L8.3 4l.1-1.6V2l.2-.5.4-.3.3.2.3.4v1.3l-.3 1.7-.2 1.1h.1l.1-.1.6-.8 1-1.2.4-.5.5-.5.3-.3h.6l.4.7-.1.7-.6.8-.5.7-.7 1-.5.8v.1h.1l1.7-.4.9-.2 1.1-.2.5.2V7l-.2.5-1.2.3-1.3.2-2 .5.9.1h1.3l1.8.1.4.3.3.4v.3l-.7.4-1-.2-2.2-.5-.8-.2h-.1v.1l.6.6L12 11l1.5 1.4.1.3-.2.3h-.2l-1.3-1-.5-.4-1.1-.9h-.1v.1l.3.4 1.4 2.1.1.6-.1.2-.4.1-.5-.3-.8-1.1-.8-1.3-.7-1.1-.1.1-.4 4.2-.2.2-.4.1-.4-.3-.2-.4.2-.9.2-1.1.2-.9.2-1.1.2-.4h-.1L7 11.1l-1.3 1.7-1 1.1-.2.1-.4-.2v-.4l.3-.4 1.4-1.8.8-1.1.5-.6v-.1l-3.7 2.4-.7.1-.3-.3v-.4l.1-.1 1.2-.8z" />
   </svg>
 );
 
@@ -232,6 +245,11 @@ const Image = async ({ params }: Props) => {
           <div tw="flex items-center" style={{ gap: sizes.gapSm }}>
             <SvgIconEye />
             <span>{thread.viewCount} views</span>
+          </div>
+          <span style={{ color: colors.white }}>/</span>
+          <div tw="flex items-center" style={{ gap: sizes.gapSm }}>
+            <SvgIconBrain />
+            <span>{thread.modelName}</span>
           </div>
         </div>
       </div>
