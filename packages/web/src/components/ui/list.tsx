@@ -54,7 +54,7 @@ const ListItem = ({ icon, align = "start", children, className, ...props }: List
     <div
       data-slot="list-item"
       className={cn(
-        "flex items-center gap-1 transition-colors duration-150 ease-in-out",
+        "flex items-center gap-1",
         listItemAlignClassNames[align],
         className,
       )}

@@ -79,10 +79,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
       <div className="flex flex-col col-span-1 gap-12 pt-9 pb-12 lg:col-span-9 lg:gap-18 lg:pb-0">
         <div className="flex flex-col items-start gap-9">
           <NavLink href="/threads">
-            <SvgIconArrowLeft
-              size="sm"
-              className="transition-transform duration-150 ease-out group-hover:-translate-x-1"
-            />
+            <SvgIconArrowLeft size="sm" />
             <NavLabel>{t("thread.backToThreads")}</NavLabel>
           </NavLink>
 
