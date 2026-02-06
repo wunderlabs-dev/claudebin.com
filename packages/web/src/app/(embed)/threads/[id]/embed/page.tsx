@@ -70,7 +70,7 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
           />
 
           <div className="flex justify-end">
-            <Link href={`/threads/${id}`} className="flex items-center gap-3">
+            <Link href={`/threads/${id}`} target="_blank" className="flex items-center gap-3">
               <Typography variant="small" fontWeight="bold" color="accent">
                 {t("embed.openFullConversation")}
               </Typography>
@@ -80,6 +80,7 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
         </div>
 
         <EmbedPageFooter
+          id={id}
           workingDir={getProjectName(thread.workingDir)}
           modelName={thread.modelName}
           fileCount={thread.fileCount}

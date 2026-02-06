@@ -15,6 +15,7 @@ import {
 import { List, ListItem } from "@/components/ui/list";
 
 type EmbedPageFooterProps = {
+  id: string;
   workingDir?: string | null;
   modelName?: string | null;
   fileCount: number;
@@ -24,6 +25,7 @@ type EmbedPageFooterProps = {
 };
 
 export const EmbedPageFooter = ({
+  id,
   workingDir,
   modelName,
   fileCount,
@@ -35,7 +37,7 @@ export const EmbedPageFooter = ({
 
   return (
     <div className="flex items-center justify-between py-3 pl-3 pr-6 bg-gray-100 border-t border-gray-200">
-      <Link href="/">
+      <Link href={`/threads/${id}`} target="_blank">
         <SvgIconClaudebinXs size="auto" className="w-14 hover:text-orange-50" />
       </Link>
 
