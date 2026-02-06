@@ -27,19 +27,21 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
             <Typography variant="h4">{question.question}</Typography>
 
             <div className="flex flex-col items-start w-fit gap-1 p-1 bg-gray-200 border border-gray-50 rounded-xl">
-              {question.options.map((option) => (
-                <div
-                  key={option.label}
-                  className={cn(
-                    "inline-flex items-center justify-start w-full px-3 py-2 rounded-lg text-base font-normal",
-                    selected?.includes(option.label)
-                      ? "bg-gray-100 text-white"
-                      : "text-gray-450 line-through",
-                  )}
-                >
-                  {option.label}
-                </div>
-              ))}
+              {question.options.map((option) => {
+                const active = selected?.includes(option.label);
+
+                return (
+                  <div
+                    key={option.label}
+                    className={cn(
+                      "inline-flex items-center justify-start w-full px-3 py-2 rounded-lg text-base font-normal",
+                      active ? "bg-gray-100 text-white" : "text-gray-450 line-through",
+                    )}
+                  >
+                    {option.label}
+                  </div>
+                );
+              })}
               {isCustomAnswer?.map((answer) => (
                 <div
                   key={answer}
