@@ -33,7 +33,7 @@ const OptionsListItem = ({ className, selected, ...props }: OptionsListItemProps
       className={cn(
         "inline-flex items-center justify-start",
         "w-full",
-        "px-6 py-2",
+        "px-3 py-2",
         "rounded-lg",
         "text-base font-normal",
         "transition ease-in-out",
