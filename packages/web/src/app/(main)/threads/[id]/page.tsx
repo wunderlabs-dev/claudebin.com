@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { isNil } from "ramda";
 import { format } from "date-fns";
 
-import { getProjectName, formatModelName } from "@/utils/helpers";
+import { getProjectName } from "@/utils/helpers";
 
 import { sessions } from "@/supabase/repos/sessions";
 import { createClient } from "@/supabase/server";
@@ -23,6 +23,7 @@ type ThreadPageProps = {
 
 export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata> => {
   const { id } = await params;
+
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
 
@@ -32,7 +33,7 @@ export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Met
 
   const title = thread.title ?? "Untitled Session";
   const author = thread.profiles?.username ?? "Anonymous";
-  const model = formatModelName(thread.modelName);
+  const model = thread.modelName;
   const promptCount = thread.messageCount ?? 0;
 
   const description = `${author} • ${model} • ${promptCount} prompts`;

@@ -2,8 +2,6 @@ import { ImageResponse } from "next/og";
 
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
-import { messages } from "@/supabase/repos/messages";
-import { formatModelName } from "@/utils/helpers";
 
 export const alt = "Claudebin Thread";
 export const size = { width: 1200, height: 630 };
@@ -13,27 +11,9 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-const getFirstUserMessage = (messageList: { role: string; content: unknown }[]): string => {
-  const userMessage = messageList.find((m) => m.role === "user");
-  if (!userMessage) return "";
-
-  const content = userMessage.content;
-  if (typeof content === "string") return content;
-  if (Array.isArray(content)) {
-    const textBlock = content.find((b) => b.type === "text");
-    return textBlock?.text ?? "";
-  }
-  return "";
-};
-
-const truncate = (text: string, maxLength: number): string => {
-  const cleaned = text.replace(/<[^>]*>/g, "").trim();
-  if (cleaned.length <= maxLength) return cleaned;
-  return `${cleaned.slice(0, maxLength).trim()}...`;
-};
-
 const Image = async ({ params }: Props) => {
   const { id } = await params;
+
   const supabase = await createClient();
 
   const thread = await sessions.getByIdWithAuthor(supabase, id);
@@ -41,25 +21,18 @@ const Image = async ({ params }: Props) => {
     return new Response("Not found", { status: 404 });
   }
 
-  const { messages: messageList } = await messages.getBySessionId(supabase, id, {
-    excludeMeta: true,
-    excludeSidechain: true,
-    limit: 10,
-  });
-
-  const firstMessage = getFirstUserMessage(messageList as { role: string; content: unknown }[]);
-  const preview = truncate(firstMessage, 120);
-
   const title = thread.title ?? "Untitled Session";
   const username = thread.profiles?.username ?? "Anonymous";
   const avatarUrl = thread.profiles?.avatarUrl;
-  const model = formatModelName(thread.modelName);
-  const promptCount = thread.messageCount ?? 0;
   const date = new Date(thread.createdAt).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
+  const messageCount = thread.messageCount ?? 0;
+  const fileCount = thread.fileCount ?? 0;
+  const viewCount = thread.viewCount ?? 0;
+  const likeCount = thread.likeCount ?? 0;
 
   const avatarElement = avatarUrl ? (
     // biome-ignore lint/a11y/useAltText: OG images use Satori which requires native img
@@ -93,8 +66,9 @@ const Image = async ({ params }: Props) => {
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "60px",
-        backgroundColor: "#191919",
-        fontFamily: "system-ui, sans-serif",
+        backgroundColor: "#0C0C0C",
+        backgroundImage: "linear-gradient(to bottom, #141414 0%, #0C0C0C 100%)",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* Title */}
@@ -108,29 +82,28 @@ const Image = async ({ params }: Props) => {
           maxWidth: "90%",
         }}
       >
-        {truncate(title, 80)}
+        {title}
       </div>
 
-      {/* Preview */}
-      {preview && (
-        <div
-          style={{
-            display: "flex",
-            padding: "24px 28px",
-            backgroundColor: "#252525",
-            borderRadius: 12,
-            border: "1px solid #3a3a3a",
-            fontSize: 22,
-            color: "#a3a3a3",
-            fontFamily: "monospace",
-            lineHeight: 1.5,
-          }}
-        >
-          "{preview}"
-        </div>
-      )}
+      {/* Stats */}
+      <div
+        style={{
+          display: "flex",
+          gap: 24,
+          fontSize: 20,
+          color: "#8c8c8c",
+        }}
+      >
+        <span>{messageCount} messages</span>
+        <span>•</span>
+        <span>{fileCount} files</span>
+        <span>•</span>
+        <span>{viewCount} views</span>
+        <span>•</span>
+        <span>{likeCount} likes</span>
+      </div>
 
-      {/* Bottom row: metadata + watermark */}
+      {/* Bottom row: author + watermark */}
       <div
         style={{
           display: "flex",
@@ -138,7 +111,7 @@ const Image = async ({ params }: Props) => {
           alignItems: "center",
         }}
       >
-        {/* Metadata */}
+        {/* Author */}
         <div
           style={{
             display: "flex",
@@ -150,10 +123,6 @@ const Image = async ({ params }: Props) => {
         >
           {avatarElement}
           <span style={{ color: "#ffffff", fontWeight: 500 }}>{username}</span>
-          <span>•</span>
-          <span>{model}</span>
-          <span>•</span>
-          <span>{promptCount} prompts</span>
           <span>•</span>
           <span>{date}</span>
         </div>
