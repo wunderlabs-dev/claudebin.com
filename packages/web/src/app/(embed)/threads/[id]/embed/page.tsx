@@ -56,7 +56,7 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
 
   return (
     <div className="flex min-h-screen min-w-full bg-gray-100">
-      <div className="shrink-0 w-14 bg-dot border-r border-gray-200 text-gray-500/40" />
+      <div className="shrink-0 w-14 bg-dot bg-fixed border-r border-gray-200 text-gray-500/40" />
 
       <div className="flex flex-col w-full gap-3">
         <div className="flex flex-col gap-3 pt-3 pr-6 pl-3">

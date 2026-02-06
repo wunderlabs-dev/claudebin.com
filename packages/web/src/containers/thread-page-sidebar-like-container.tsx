@@ -67,12 +67,12 @@ const ThreadPageSidebarLikeContainer = ({
       onClick={handleClick}
       disabled={isPending}
       className={cn(
-        "flex cursor-pointer items-center gap-1",
+        "flex cursor-pointer items-center gap-1 transition-colors duration-150 ease-in-out active:scale-95",
         liked ? "text-red-500" : "text-gray-500 hover:text-red-400",
         isPending ? "opacity-50" : "opacity-100",
       )}
     >
-      <span className="shrink-0">
+      <span className="shrink-0 transition-transform duration-150 ease-out active:scale-90">
         {liked ? <SvgIconHeartSolid size="sm" /> : <SvgIconHeart size="sm" />}
       </span>
       <Typography as="span" variant="caption" color="neutral" leading="normal">

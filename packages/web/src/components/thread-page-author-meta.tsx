@@ -38,7 +38,11 @@ const ThreadPageAuthorMeta = ({
               {avatarUrl ? <AvatarImage src={avatarUrl} alt={author} /> : null}
               <AvatarFallback>{fallback}</AvatarFallback>
             </Avatar>
-            <Typography variant="small" color="accent" className="underline">
+            <Typography
+              variant="small"
+              color="accent"
+              className="underline decoration-orange-50/0 underline-offset-2 transition-colors duration-150 ease-in-out group-hover:decoration-orange-50"
+            >
               {username}
             </Typography>
           </NavLink>
