@@ -2,7 +2,7 @@
 
 import type { BashBlock } from "@/supabase/types/message";
 
-import { SvgIconBash } from "@/components/icon";
+import { SvgIconBash } from "@/components/icon/svg-icon-bash";
 import {
   Accordion,
   AccordionItem,

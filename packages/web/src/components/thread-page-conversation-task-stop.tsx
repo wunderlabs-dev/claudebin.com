@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import type { TaskStopBlock } from "@/supabase/types/message";
 
-import { SvgIconCircle } from "@/components/icon";
+import { SvgIconCircle } from "@/components/icon/svg-icon-circle";
 import { Action } from "@/components/ui/action";
 
 type ThreadPageConversationTaskStopProps = {

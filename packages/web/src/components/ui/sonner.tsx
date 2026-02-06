@@ -2,7 +2,8 @@
 
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
-import { SvgIconCheck, SvgIconSkull } from "@/components/icon";
+import { SvgIconCheck } from "@/components/icon/svg-icon-check";
+import { SvgIconSkull } from "@/components/icon/svg-icon-skull";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   return (

@@ -8,7 +8,7 @@ import type { FileReadBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconEye } from "@/components/icon";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
 import {
   Accordion,
   AccordionItem,

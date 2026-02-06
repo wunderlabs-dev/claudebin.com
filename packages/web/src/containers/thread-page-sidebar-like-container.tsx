@@ -11,7 +11,8 @@ import { useAuth } from "@/context/auth";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconHeart, SvgIconHeartSolid } from "@/components/icon";
+import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
+import { SvgIconHeartSolid } from "@/components/icon/svg-icon-heart-solid";
 import { Typography } from "@/components/ui/typography";
 
 type ThreadPageSidebarLikeContainerProps = {

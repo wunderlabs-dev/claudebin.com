@@ -11,7 +11,7 @@ import type { WebFetchBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconDownload } from "@/components/icon";
+import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 import {
   Accordion,
   AccordionItem,

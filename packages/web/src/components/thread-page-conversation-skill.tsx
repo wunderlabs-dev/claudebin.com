@@ -8,7 +8,7 @@ import type { SkillBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconGlitters } from "@/components/icon";
+import { SvgIconGlitters } from "@/components/icon/svg-icon-glitters";
 import {
   Accordion,
   AccordionContent,

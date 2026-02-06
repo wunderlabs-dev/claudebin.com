@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import { cn } from "@/utils/helpers";
 import { spacingClassNames, type Spacing } from "@/utils/spacing";
 
-import { SvgIconOrbits } from "@/components/icon";
+import { SvgIconOrbits } from "@/components/icon/svg-icon-orbits";
 
 type BackdropSize = "full" | "half";
 

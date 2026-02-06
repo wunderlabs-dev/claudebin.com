@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
-import { SvgIconClock } from "@/components/icon";
+import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { List, ListItem } from "@/components/ui/list";

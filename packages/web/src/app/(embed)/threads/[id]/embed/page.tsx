@@ -10,7 +10,7 @@ import { messages } from "@/supabase/repos/messages";
 
 import { getProjectName, compactConversation } from "@/utils/helpers";
 
-import { SvgIconArrowLink } from "@/components/icon";
+import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
 import { Typography } from "@/components/ui/typography";
 import { EmbedPageFooter } from "@/components/embed-page-footer";
 import { EmbedPageConversation } from "@/components/embed-page-conversation";

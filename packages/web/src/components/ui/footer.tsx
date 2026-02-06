@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Typography } from "@/components/ui/typography";
 
-import { SvgIconClaudebin } from "@/components/icon";
+import { SvgIconClaudebin } from "@/components/icon/svg-icon-claudebin";
 
 type FooterProps = ComponentProps<"footer">;
 

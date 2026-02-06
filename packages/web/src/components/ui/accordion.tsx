@@ -5,7 +5,7 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconArrowBottom } from "@/components/icon";
+import { SvgIconArrowBottom } from "@/components/icon/svg-icon-arrow-bottom";
 import { useChatItemRole } from "@/components/ui/chat";
 
 type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;

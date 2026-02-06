@@ -7,7 +7,7 @@ import { createContext, useContext } from "react";
 import { cn } from "@/utils/helpers";
 
 import { Typography, type TypographyVariant } from "@/components/ui/typography";
-import { SvgIconArrowLink } from "@/components/icon";
+import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
 
 const CardVariants = ["card", "list", "grid"] as const;
 

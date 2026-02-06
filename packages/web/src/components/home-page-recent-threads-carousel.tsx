@@ -10,7 +10,8 @@ import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 import { cn } from "@/utils/helpers";
 import { gradient } from "@/utils/renderers";
 
-import { SvgIconArrowLeft, SvgIconArrowRight } from "@/components/icon";
+import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
+import { SvgIconArrowRight } from "@/components/icon/svg-icon-arrow-right";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";

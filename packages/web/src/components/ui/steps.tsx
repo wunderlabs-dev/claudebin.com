@@ -4,7 +4,7 @@ import { createContext, useContext, type HTMLAttributes, type ReactNode } from "
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconDot } from "@/components/icon";
+import { SvgIconDot } from "@/components/icon/svg-icon-dot";
 import { Typography } from "@/components/ui/typography";
 
 const StepsVariants = ["ordered", "outlined", "unordered"] as const;

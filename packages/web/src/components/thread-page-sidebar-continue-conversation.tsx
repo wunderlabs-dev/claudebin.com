@@ -7,7 +7,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { breakpoints } from "@/utils/breakpoints";
 
 import { Button } from "@/components/ui/button";
-import { SvgIconChat } from "@/components/icon";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
 
 const ThreadPageSidebarContinueConversation = () => {
   const t = useTranslations();

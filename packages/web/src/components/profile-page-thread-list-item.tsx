@@ -10,7 +10,9 @@ import { THREAD_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 import { Card, CardBody, CardHeader, CardTitle, CardSection } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import { SvgIconChat, SvgIconClock, SvgIconHeart } from "@/components/icon";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconClock } from "@/components/icon/svg-icon-clock";
+import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 
 type ProfilePageThreadListItemProps = {
   thread: Session;

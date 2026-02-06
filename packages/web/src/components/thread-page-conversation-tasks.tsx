@@ -5,7 +5,10 @@ import { useTranslations } from "next-intl";
 
 import type { TasksBlock, TaskItem } from "@/supabase/types/message";
 
-import { SvgIconCircleLine, SvgIconCheck, SvgIconGauge, SvgIconLine } from "@/components/icon";
+import { SvgIconCircleLine } from "@/components/icon/svg-icon-circle-line";
+import { SvgIconCheck } from "@/components/icon/svg-icon-check";
+import { SvgIconGauge } from "@/components/icon/svg-icon-gauge";
+import { SvgIconLine } from "@/components/icon/svg-icon-line";
 import {
   Accordion,
   AccordionItem,

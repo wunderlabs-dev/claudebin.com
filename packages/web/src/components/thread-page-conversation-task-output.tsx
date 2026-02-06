@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import type { TaskOutputBlock } from "@/supabase/types/message";
 
-import { SvgIconDownload } from "@/components/icon";
+import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 import {
   Accordion,
   AccordionItem,

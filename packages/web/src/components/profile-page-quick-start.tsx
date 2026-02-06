@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconBash } from "@/components/icon";
+import { SvgIconBash } from "@/components/icon/svg-icon-bash";
 
 import { CopyInput } from "@/components/ui/copy-input";
 import { Steps, StepsItem } from "@/components/ui/steps";

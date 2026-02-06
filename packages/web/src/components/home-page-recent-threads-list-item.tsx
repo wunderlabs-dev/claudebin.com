@@ -17,7 +17,10 @@ import {
 } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import { SvgIconChat, SvgIconClock, SvgIconFile, SvgIconHeart } from "@/components/icon";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconClock } from "@/components/icon/svg-icon-clock";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
+import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 
 type HomePageRecentThreadsListItemProps = {
   thread: ThreadWithAuthor;

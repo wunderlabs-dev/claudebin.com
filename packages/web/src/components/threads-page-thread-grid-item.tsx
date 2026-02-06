@@ -24,14 +24,12 @@ import {
 } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import {
-  SvgIconChat,
-  SvgIconClock,
-  SvgIconEye,
-  SvgIconFile,
-  SvgIconFolder,
-  SvgIconHeart,
-} from "@/components/icon";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconClock } from "@/components/icon/svg-icon-clock";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
+import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
+import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 
 type ThreadsPageThreadGridItemProps = {
   thread: ThreadWithAuthor;

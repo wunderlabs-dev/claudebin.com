@@ -4,7 +4,7 @@ import { gradient } from "@/utils/renderers";
 
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
-import { SvgIconShield } from "@/components/icon";
+import { SvgIconShield } from "@/components/icon/svg-icon-shield";
 
 const CliAuthPageHeader = () => {
   const t = useTranslations();

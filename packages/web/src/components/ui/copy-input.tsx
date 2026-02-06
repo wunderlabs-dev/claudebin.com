@@ -5,7 +5,9 @@ import type { ReactNode } from "react";
 import { useCopyToClipboard } from "usehooks-ts";
 import { useTranslations } from "next-intl";
 
-import { SvgIconBash, SvgIconCheck, SvgIconCopy } from "@/components/icon";
+import { SvgIconBash } from "@/components/icon/svg-icon-bash";
+import { SvgIconCheck } from "@/components/icon/svg-icon-check";
+import { SvgIconCopy } from "@/components/icon/svg-icon-copy";
 
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/form-control";

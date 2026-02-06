@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import type { TaskBlock } from "@/supabase/types/message";
 
-import { SvgIconHammer } from "@/components/icon";
+import { SvgIconHammer } from "@/components/icon/svg-icon-hammer";
 import { Action } from "@/components/ui/action";
 
 type ThreadPageConversationTaskProps = {

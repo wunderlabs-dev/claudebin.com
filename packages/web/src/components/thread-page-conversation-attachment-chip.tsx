@@ -7,7 +7,7 @@ import type { Attachment } from "@/supabase/types/message";
 
 import { THREAD_ATTACHMENT_SIZE } from "@/utils/constants";
 
-import { SvgIconFile } from "@/components/icon";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import { Chip } from "@/components/ui/chip";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 

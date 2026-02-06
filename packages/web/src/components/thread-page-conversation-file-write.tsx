@@ -8,7 +8,7 @@ import type { FileWriteBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconPen } from "@/components/icon";
+import { SvgIconPen } from "@/components/icon/svg-icon-pen";
 import {
   Accordion,
   AccordionItem,

@@ -7,7 +7,8 @@ import { createClient } from "@/supabase/server";
 import { profiles } from "@/supabase/repos/profiles";
 import { sessions } from "@/supabase/repos/sessions";
 
-import { SvgIconLine, SvgIconArrowRight } from "@/components/icon";
+import { SvgIconLine } from "@/components/icon/svg-icon-line";
+import { SvgIconArrowRight } from "@/components/icon/svg-icon-arrow-right";
 
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";

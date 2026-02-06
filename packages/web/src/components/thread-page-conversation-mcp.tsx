@@ -8,7 +8,7 @@ import type { McpBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconMcp } from "@/components/icon";
+import { SvgIconMcp } from "@/components/icon/svg-icon-mcp";
 import {
   Accordion,
   AccordionItem,

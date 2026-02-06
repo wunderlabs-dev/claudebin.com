@@ -8,7 +8,7 @@ import type { GrepBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconMagnifier } from "@/components/icon";
+import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
 import {
   Accordion,
   AccordionItem,

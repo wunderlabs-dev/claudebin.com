@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -9,11 +10,12 @@ import { getProjectName } from "@/utils/helpers";
 import { sessions } from "@/supabase/repos/sessions";
 import { createClient } from "@/supabase/server";
 
-import { SvgIconArrowLeft } from "@/components/icon";
+import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 import { Container } from "@/components/ui/container";
 import { NavLink, NavLabel } from "@/components/ui/nav";
 
 import { ThreadPageAuthorMeta } from "@/components/thread-page-author-meta";
+import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
 import { ThreadPageSidebarContainer } from "@/containers/thread-page-sidebar-container";
 import { ThreadPageConversationContainer } from "@/containers/thread-page-conversation-container";
 
@@ -92,13 +94,15 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           />
         </div>
 
-        <ThreadPageConversationContainer
-          id={thread.id}
-          avatarUrl={thread.profiles?.avatarUrl}
-          author={thread.profiles?.username ?? t("common.deactivated")}
-          isAuthor={isAuthor}
-          isPublic={thread.isPublic}
-        />
+        <Suspense fallback={<ThreadPageConversationSkeleton />}>
+          <ThreadPageConversationContainer
+            id={thread.id}
+            avatarUrl={thread.profiles?.avatarUrl}
+            author={thread.profiles?.username ?? t("common.deactivated")}
+            isAuthor={isAuthor}
+            isPublic={thread.isPublic}
+          />
+        </Suspense>
       </div>
 
       <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 px-0 pt-12 border-t border-gray-250 overflow-y-auto lg:col-span-3 lg:h-screen lg:px-6 lg:pt-24 lg:pb-12 lg:border-t-0 lg:border-l">

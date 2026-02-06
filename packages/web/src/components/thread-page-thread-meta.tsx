@@ -4,14 +4,12 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
-import {
-  SvgIconBrain,
-  SvgIconCalendar,
-  SvgIconChat,
-  SvgIconEye,
-  SvgIconFile,
-  SvgIconFolder,
-} from "@/components/icon";
+import { SvgIconBrain } from "@/components/icon/svg-icon-brain";
+import { SvgIconCalendar } from "@/components/icon/svg-icon-calendar";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
+import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
 
 import { List, ListItem } from "@/components/ui/list";
 

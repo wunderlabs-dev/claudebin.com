@@ -6,7 +6,8 @@ import { useBoolean } from "usehooks-ts";
 
 import { createClient } from "@/supabase/client";
 
-import { SvgIconGithub, SvgIconSkull } from "@/components/icon";
+import { SvgIconGithub } from "@/components/icon/svg-icon-github";
+import { SvgIconSkull } from "@/components/icon/svg-icon-skull";
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 

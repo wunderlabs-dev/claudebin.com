@@ -15,7 +15,7 @@ import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 import { gradient } from "@/utils/renderers";
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconMagnifier } from "@/components/icon";
+import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
 import { FormControl, Input } from "@/components/ui/form-control";

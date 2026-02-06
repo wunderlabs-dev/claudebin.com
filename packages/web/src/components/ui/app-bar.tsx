@@ -16,7 +16,9 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
-import { SvgIconClaudebinXs, SvgIconHome, SvgIconUser } from "@/components/icon";
+import { SvgIconClaudebinXs } from "@/components/icon/svg-icon-claudebin-xs";
+import { SvgIconHome } from "@/components/icon/svg-icon-home";
+import { SvgIconUser } from "@/components/icon/svg-icon-user";
 
 type AppBarProps = ComponentProps<"header">;
 

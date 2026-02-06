@@ -8,7 +8,10 @@ import { cliAuth } from "@/supabase/repos/cli-auth";
 import { createClient } from "@/supabase/server";
 import { createServiceClient } from "@/supabase/service";
 
-import { SvgIconClock, SvgIconKey, SvgIconLock, SvgIconSkull } from "@/components/icon";
+import { SvgIconClock } from "@/components/icon/svg-icon-clock";
+import { SvgIconKey } from "@/components/icon/svg-icon-key";
+import { SvgIconLock } from "@/components/icon/svg-icon-lock";
+import { SvgIconSkull } from "@/components/icon/svg-icon-skull";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 

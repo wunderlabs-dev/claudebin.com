@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import type { WebSearchBlock } from "@/supabase/types/message";
 
-import { SvgIconWorld } from "@/components/icon";
+import { SvgIconWorld } from "@/components/icon/svg-icon-world";
 import { Action } from "@/components/ui/action";
 
 type ThreadPageConversationWebSearchProps = {

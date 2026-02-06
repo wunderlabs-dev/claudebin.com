@@ -4,7 +4,9 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconCalendar, SvgIconChat, SvgIconEye } from "@/components/icon";
+import { SvgIconCalendar } from "@/components/icon/svg-icon-calendar";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {

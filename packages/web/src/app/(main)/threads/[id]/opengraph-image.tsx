@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { isNil } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 

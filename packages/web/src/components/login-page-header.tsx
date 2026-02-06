@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 
 import { gradient } from "@/utils/renderers";
 
-import { SvgIconLock } from "@/components/icon";
+import { SvgIconLock } from "@/components/icon/svg-icon-lock";
 import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
 

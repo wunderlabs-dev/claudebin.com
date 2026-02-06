@@ -8,7 +8,7 @@ import { isServer } from "@tanstack/react-query";
 import { gradient } from "@/utils/renderers";
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconGlitters } from "@/components/icon";
+import { SvgIconGlitters } from "@/components/icon/svg-icon-glitters";
 
 import { Backdrop } from "@/components/ui/backdrop";
 import { Badge } from "@/components/ui/badge";

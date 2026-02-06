@@ -9,7 +9,7 @@ import type { FileEditBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconFile } from "@/components/icon";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import {
   Accordion,
   AccordionItem,

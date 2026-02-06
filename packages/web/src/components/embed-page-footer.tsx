@@ -3,15 +3,13 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import {
-  SvgIconClaudebinXs,
-  SvgIconBrain,
-  SvgIconChat,
-  SvgIconFolder,
-  SvgIconFile,
-  SvgIconEye,
-  SvgIconHeart,
-} from "@/components/icon";
+import { SvgIconClaudebinXs } from "@/components/icon/svg-icon-claudebin-xs";
+import { SvgIconBrain } from "@/components/icon/svg-icon-brain";
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
+import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 import { List, ListItem } from "@/components/ui/list";
 
 type EmbedPageFooterProps = {
