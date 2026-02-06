@@ -261,7 +261,7 @@ const Image = async ({ params }: Props) => {
     height: sizes.height,
     fonts: [
       { name: "Host Grotesk", data: await hostGroteskRegular, weight: 400, style: "normal" },
-      { name: "Host Grotesk", data: await hostGroteskBold, weight: 800, style: "normal", },
+      { name: "Host Grotesk", data: await hostGroteskBold, weight: 800, style: "normal" },
     ],
   });
 };
