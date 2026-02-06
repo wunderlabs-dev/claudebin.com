@@ -21,9 +21,10 @@ type EmbedPageProps = {
 };
 
 const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
+  const t = await getTranslations();
+
   const { id } = await params;
   const { from, to } = await searchParams;
-  const t = await getTranslations();
 
   if (isNil(from) || isNil(to)) {
     notFound();
