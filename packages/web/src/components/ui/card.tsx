@@ -22,7 +22,7 @@ type CardProps = {
 } & Omit<React.ComponentProps<typeof Link>, "href">;
 
 const cardVariantClassNames: CardVariantMapping = {
-  card: "flex flex-col shrink-0 justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50 hover:-translate-y-0.5",
+  card: "flex flex-col shrink-0 justify-between size-76 bg-dot text-gray-500/40 hover:text-orange-50",
   list: "relative grid grid-cols-6 -mt-px divide-y divide-gray-250 hover:z-10 lg:divide-y-0 lg:divide-x",
   grid: "relative grid grid-cols-1 -mt-px divide-y divide-gray-250 hover:z-10 lg:grid-cols-3 lg:divide-y-0 lg:divide-x",
 } as const;
@@ -188,11 +188,7 @@ const CardActions = ({ className, ...props }: CardActionsProps) => {
       className={cn("cursor-pointer", cardActionsVariantClassNames[variant], className)}
       {...props}
     >
-      <SvgIconArrowLink
-        size="sm"
-        color="accent"
-        className="transition-transform duration-150 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-      />
+      <SvgIconArrowLink size="sm" color="accent" />
     </button>
   );
 };

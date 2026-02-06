@@ -42,14 +42,15 @@ const inputVariants = cva(
     "bg-gray-200",
     "font-mono text-base text-white",
     "outline-none",
-    "transition ease-in-out",
+    "transition-all duration-150 ease-in-out",
     "placeholder:text-gray-450",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
     variants: {
       variant: {
-        default: "rounded-full border border-gray-50 focus:border-orange-50",
+        default:
+          "rounded-full border border-gray-50 focus:border-orange-50 focus:ring-1 focus:ring-orange-50/30",
         error:
           "rounded-full border border-red-50 text-red-50 placeholder:text-red-50 focus:border-red-50",
         filled: "px-4 rounded-lg border-none",
