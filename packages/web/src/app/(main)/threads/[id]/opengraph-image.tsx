@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { format } from "date-fns";
 
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
@@ -24,15 +25,7 @@ const Image = async ({ params }: Props) => {
   const title = thread.title ?? "Untitled Session";
   const username = thread.profiles?.username ?? "Anonymous";
   const avatarUrl = thread.profiles?.avatarUrl;
-  const date = new Date(thread.createdAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  const messageCount = thread.messageCount ?? 0;
-  const fileCount = thread.fileCount ?? 0;
-  const viewCount = thread.viewCount ?? 0;
-  const likeCount = thread.likeCount ?? 0;
+  const date = format(new Date(thread.createdAt), "MMM d, yyyy");
 
   const avatarElement = avatarUrl ? (
     // biome-ignore lint/a11y/useAltText: OG images use Satori which requires native img
@@ -94,13 +87,13 @@ const Image = async ({ params }: Props) => {
           color: "#8c8c8c",
         }}
       >
-        <span>{messageCount} messages</span>
-        <span>•</span>
-        <span>{fileCount} files</span>
-        <span>•</span>
-        <span>{viewCount} views</span>
-        <span>•</span>
-        <span>{likeCount} likes</span>
+        {thread.messageCount ? <span>{thread.messageCount} messages</span> : null}
+        {thread.messageCount && thread.fileCount ? <span>•</span> : null}
+        {thread.fileCount ? <span>{thread.fileCount} files</span> : null}
+        {thread.fileCount && thread.viewCount ? <span>•</span> : null}
+        {thread.viewCount ? <span>{thread.viewCount} views</span> : null}
+        {thread.viewCount && thread.likeCount ? <span>•</span> : null}
+        {thread.likeCount ? <span>{thread.likeCount} likes</span> : null}
       </div>
 
       {/* Bottom row: author + watermark */}
