@@ -1,12 +1,13 @@
 "use client";
 
-import { type ReactNode, Fragment } from "react";
+import { Fragment } from "react";
 import { useTranslations } from "next-intl";
 import { not } from "ramda";
+
 import type { QuestionBlock } from "@/supabase/types/message";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Typography } from "@/components/ui/typography";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
@@ -34,17 +35,13 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
                     {option.label}
                   </TabsTrigger>
                 ))}
+                {isUserAnswer ? (
+                  <TabsTrigger key={answer} value={answer}>
+                    {answer}
+                  </TabsTrigger>
+                ) : null}
               </TabsList>
             </Tabs>
-
-            {isUserAnswer ? (
-              <Typography variant="small">
-                {t.rich("chat.customAnswer", {
-                  answer,
-                  underline: (chunks: ReactNode) => <span className="border-b">{chunks}</span>,
-                })}
-              </Typography>
-            ) : null}
           </div>
         );
       })}
