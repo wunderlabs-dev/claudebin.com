@@ -3,9 +3,6 @@ import { getTranslations } from "next-intl/server";
 
 import { gradient } from "@/utils/renderers";
 
-import { AppBar } from "@/components/ui/app-bar";
-import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
 import {
   DividerGrid,
   DividerGridRow,
@@ -13,6 +10,10 @@ import {
   DividerGridCell,
   DividerGridDivider,
 } from "@/components/ui/divider-grid";
+
+import { AppBar } from "@/components/ui/app-bar";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 import { Footer } from "@/components/ui/footer";
 import { Typography } from "@/components/ui/typography";
 
@@ -22,6 +23,7 @@ const NotFound = async () => {
   return (
     <>
       <AppBar />
+
       <Container as="section" size="md" spacing="md">
         <DividerGrid>
           <DividerGridRow>
@@ -65,6 +67,7 @@ const NotFound = async () => {
           </DividerGridRow>
         </DividerGrid>
       </Container>
+
       <Footer />
     </>
   );

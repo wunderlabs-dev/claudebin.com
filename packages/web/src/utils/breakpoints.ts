@@ -1,4 +1,3 @@
-// ABOUTME: Tailwind CSS v4 default breakpoints (https://tailwindcss.com/docs/screens)
 export type Breakpoint = "sm" | "md" | "lg" | "xl" | "2xl";
 
 export const breakpoints: Record<Breakpoint, string> = {
