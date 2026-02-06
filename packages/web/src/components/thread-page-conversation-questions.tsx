@@ -19,7 +19,7 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
     <Fragment>
       {block.questions.map((question) => {
         const rawAnswer = block.answers?.[question.question];
-        const answers = Array.isArray(rawAnswer) ? rawAnswer : rawAnswer ? [rawAnswer] : [];
+        const answers = [rawAnswer ?? []].flat();
         const predefinedLabels = question.options.map((opt) => opt.label);
         const selectedPredefined = answers.filter((a) => predefinedLabels.includes(a));
         const customAnswers = answers.filter((a) => not(predefinedLabels.includes(a)));
