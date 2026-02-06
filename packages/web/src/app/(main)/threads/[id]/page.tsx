@@ -78,7 +78,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           viewCount={thread.viewCount}
           likeCount={thread.likeCount}
           messageCount={thread.messageCount}
-          isAuthor={isAuthor}
         />
       </div>
     </Container>

@@ -36,8 +36,8 @@ const ThreadPageConversationContainer = ({
     queryFn: () => getMessagesBySessionId(id),
   });
 
-  const messages = useMemo(() => compactConversation(data?.messages), [data?.messages]);
   const [fallback] = [...author];
+  const messages = useMemo(() => compactConversation(data?.messages), [data?.messages]);
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
