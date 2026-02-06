@@ -14,12 +14,19 @@ type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
+const parseAnswer = (rawAnswer: string | string[] | undefined, isMultiSelect: boolean): string[] => {
+  if (!rawAnswer) return [];
+  if (Array.isArray(rawAnswer)) return rawAnswer;
+  // Claude Code sends multiSelect answers as comma-separated strings
+  return isMultiSelect ? rawAnswer.split(", ") : [rawAnswer];
+};
+
 const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
   return (
     <Fragment>
       {block.questions.map((question) => {
         const rawAnswer = block.answers?.[question.question];
-        const answers = [rawAnswer ?? []].flat();
+        const answers = parseAnswer(rawAnswer, question.multiSelect);
         const predefinedLabels = question.options.map((opt) => opt.label);
         const selectedPredefined = answers.filter((a) => predefinedLabels.includes(a));
         const customAnswers = answers.filter((a) => not(predefinedLabels.includes(a)));
