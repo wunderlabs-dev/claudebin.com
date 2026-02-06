@@ -257,9 +257,29 @@ const enhanceWebFetch = (data: z.infer<typeof ToolUseResultSchema.WebFetch>) => 
   durationMs: data.durationMs,
 });
 
-const enhanceQuestion = (data: z.infer<typeof ToolUseResultSchema.AskUserQuestion>) => ({
-  answers: data.answers,
-});
+const normalizeAnswer = (
+  answer: string | string[],
+  question: { multiSelect: boolean } | undefined,
+): string[] => {
+  if (Array.isArray(answer)) {
+    return answer;
+  }
+  if (question?.multiSelect) {
+    return answer.split(", ");
+  }
+  return [answer];
+};
+
+const enhanceQuestion = (data: z.infer<typeof ToolUseResultSchema.AskUserQuestion>) => {
+  const questionMap = new Map(data.questions.map((q) => [q.question, q]));
+
+  const normalizedAnswers: Record<string, string[]> = {};
+  for (const [questionText, answer] of Object.entries(data.answers)) {
+    normalizedAnswers[questionText] = normalizeAnswer(answer, questionMap.get(questionText));
+  }
+
+  return { answers: normalizedAnswers };
+};
 
 const enhanceTaskOutput = (data: z.infer<typeof ToolUseResultSchema.TaskOutput>) => ({
   status: data.task.status,

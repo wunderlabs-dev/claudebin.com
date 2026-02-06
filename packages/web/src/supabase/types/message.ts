@@ -102,8 +102,8 @@ export interface QuestionBlock extends ToolBase {
     }>;
     multiSelect: boolean;
   }>;
-  // Output - string for single select, string[] for multiSelect
-  answers?: Record<string, string | string[]>;
+  // Output - always normalized to string[]
+  answers?: Record<string, string[]>;
 }
 
 export interface BashBlock extends ToolBase {
