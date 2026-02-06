@@ -1,7 +1,7 @@
 import type { Message } from "@/supabase/repos/messages";
 
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
-import { renderBlock } from "@/utils/renderers";
+import { block } from "@/utils/renderers";
 
 import { ChatItem, ChatContent } from "@/components/ui/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,7 +28,7 @@ export const EmbedPageConversation = ({
               <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
             </Avatar>
           ) : null}
-          <ChatContent>{message.content.map(renderBlock)}</ChatContent>
+          <ChatContent>{message.content.map(block)}</ChatContent>
           {message.role === "user" ? (
             <Avatar size="sm">
               <AvatarImage src={avatarUrl ?? undefined} />

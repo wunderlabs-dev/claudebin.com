@@ -21,50 +21,48 @@ import { ThreadPageConversationMcp } from "@/components/thread-page-conversation
 import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
 import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
 
-export const renderers = {
-  gradient: (chunks: ReactNode) => (
-    <span className="inline-block bg-linear-to-r from-orange-200 to-orange-50 bg-clip-text text-transparent">
-      {chunks}
-    </span>
-  ),
-};
+export const gradient = (chunks: ReactNode) => (
+  <span className="inline-block bg-linear-to-r from-orange-200 to-orange-50 bg-clip-text text-transparent">
+    {chunks}
+  </span>
+);
 
-export const renderBlock = (block: ContentBlock, index: number): ReactNode => {
-  switch (block.type) {
+export const block = (content: ContentBlock, index: number): ReactNode => {
+  switch (content.type) {
     case BlockType.TEXT:
-      return <ThreadPageConversationText key={index} block={block} />;
+      return <ThreadPageConversationText key={index} block={content} />;
     case BlockType.BASH:
-      return <ThreadPageConversationBash key={index} block={block} />;
+      return <ThreadPageConversationBash key={index} block={content} />;
     case BlockType.FILE_READ:
-      return <ThreadPageConversationFileRead key={index} block={block} />;
+      return <ThreadPageConversationFileRead key={index} block={content} />;
     case BlockType.FILE_WRITE:
-      return <ThreadPageConversationFileWrite key={index} block={block} />;
+      return <ThreadPageConversationFileWrite key={index} block={content} />;
     case BlockType.FILE_EDIT:
-      return <ThreadPageConversationFileEdit key={index} block={block} />;
+      return <ThreadPageConversationFileEdit key={index} block={content} />;
     case BlockType.GLOB:
-      return <ThreadPageConversationGlob key={index} block={block} />;
+      return <ThreadPageConversationGlob key={index} block={content} />;
     case BlockType.GREP:
-      return <ThreadPageConversationGrep key={index} block={block} />;
+      return <ThreadPageConversationGrep key={index} block={content} />;
     case BlockType.TASK:
-      return <ThreadPageConversationTask key={index} block={block} />;
+      return <ThreadPageConversationTask key={index} block={content} />;
     case BlockType.TASK_OUTPUT:
-      return <ThreadPageConversationTaskOutput key={index} block={block} />;
+      return <ThreadPageConversationTaskOutput key={index} block={content} />;
     case BlockType.TASK_STOP:
-      return <ThreadPageConversationTaskStop key={index} block={block} />;
+      return <ThreadPageConversationTaskStop key={index} block={content} />;
     case BlockType.TASKS:
-      return <ThreadPageConversationTasks key={index} block={block} />;
+      return <ThreadPageConversationTasks key={index} block={content} />;
     case BlockType.QUESTION:
-      return <ThreadPageConversationQuestions key={index} block={block} />;
+      return <ThreadPageConversationQuestions key={index} block={content} />;
     case BlockType.WEB_FETCH:
-      return <ThreadPageConversationWebFetch key={index} block={block} />;
+      return <ThreadPageConversationWebFetch key={index} block={content} />;
     case BlockType.WEB_SEARCH:
-      return <ThreadPageConversationWebSearch key={index} block={block} />;
+      return <ThreadPageConversationWebSearch key={index} block={content} />;
     case BlockType.MCP:
-      return <ThreadPageConversationMcp key={index} block={block} />;
+      return <ThreadPageConversationMcp key={index} block={content} />;
     case BlockType.GENERIC:
-      return <ThreadPageConversationGeneric key={index} block={block} />;
+      return <ThreadPageConversationGeneric key={index} block={content} />;
     case BlockType.SKILL:
-      return <ThreadPageConversationSkill key={index} block={block} />;
+      return <ThreadPageConversationSkill key={index} block={content} />;
     default:
       return null;
   }

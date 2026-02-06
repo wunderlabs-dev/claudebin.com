@@ -29,8 +29,8 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
     notFound();
   }
 
-  const fromIdx = Number.parseInt(from);
-  const toIdx = Number.parseInt(to);
+  const fromIdx = Number.parseInt(from, 10);
+  const toIdx = Number.parseInt(to, 10);
 
   if (Number.isNaN(fromIdx) || Number.isNaN(toIdx) || fromIdx > toIdx) {
     notFound();
@@ -55,6 +55,8 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
 
   return (
     <div className="flex min-h-screen min-w-full flex-col bg-gray-100">
+      <div className="bg-dot text-gray-500/40 hover:text-orange-50" />
+
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 py-3 pl-3 pr-6">
           <Typography variant="body" fontWeight="semibold">

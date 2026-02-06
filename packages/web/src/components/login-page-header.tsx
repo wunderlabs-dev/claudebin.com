@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-import { renderers } from "@/utils/renderers";
+import { gradient } from "@/utils/renderers";
 
 import { SvgIconLock } from "@/components/icon";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,7 @@ const LoginPageHeader = () => {
   return (
     <header className="flex flex-col items-start gap-12 md:gap-18">
       <Typography variant="h1" leading="none" className="whitespace-break-spaces">
-        {t.rich("login.title", renderers)}
+        {t.rich("login.title", { gradient })}
       </Typography>
       <div className="flex flex-col items-start gap-5">
         <Badge>

@@ -8,7 +8,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
 import { cn } from "@/utils/helpers";
-import { renderers } from "@/utils/renderers";
+import { gradient } from "@/utils/renderers";
 
 import { SvgIconArrowLeft, SvgIconArrowRight } from "@/components/icon";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ const HomePageRecentThreadsCarousel = ({
   return (
     <section className={cn("flex flex-col gap-8 md:gap-12", className)} {...props}>
       <Container size="lg" spacing="lg" className="flex flex-col">
-        <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
+        <Typography variant="h2">{t.rich("home.recentThreadsTitle", { gradient })}</Typography>
 
         <div className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center md:gap-0">
           <Typography

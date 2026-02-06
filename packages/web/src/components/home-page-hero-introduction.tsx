@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 import { isServer } from "@tanstack/react-query";
 
-import { renderers } from "@/utils/renderers";
+import { gradient } from "@/utils/renderers";
 import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconGlitters } from "@/components/icon";
@@ -29,7 +29,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
       <Backdrop spacing="md" className="px-4 lg:px-12">
         <div className="flex max-w-4xl flex-col gap-12 xl:gap-18">
           <Typography variant="h1" leading="none" className="whitespace-break-spaces">
-            {t.rich("home.headline", renderers)}
+            {t.rich("home.headline", { gradient })}
           </Typography>
 
           <div className="flex flex-col items-start gap-6">

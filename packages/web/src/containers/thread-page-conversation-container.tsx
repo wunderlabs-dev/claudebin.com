@@ -6,7 +6,7 @@ import { Virtuoso } from "react-virtuoso";
 
 import { getMessagesBySessionId } from "@/actions/messages";
 
-import { renderBlock } from "@/utils/renderers";
+import { block } from "@/utils/renderers";
 import { compactConversation } from "@/utils/helpers";
 
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
@@ -55,7 +55,7 @@ const ThreadPageConversationContainer = ({
                 <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
               </Avatar>
             ) : null}
-            <ChatContent>{message.content.map(renderBlock)}</ChatContent>
+            <ChatContent>{message.content.map(block)}</ChatContent>
             {message.role === "user" ? (
               <Avatar size="sm">
                 <AvatarImage src={avatarUrl ?? undefined} />

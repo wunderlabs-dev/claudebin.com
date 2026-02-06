@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 
-import { renderers } from "@/utils/renderers";
+import { gradient } from "@/utils/renderers";
 
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
@@ -25,7 +25,7 @@ const ThreadsPage = async ({ searchParams }: ThreadsPageProps) => {
     <Container size="md" spacing="md" className="flex flex-col gap-8">
       <div className="flex flex-col gap-12 xl:gap-18">
         <Typography variant="h1" leading="none" className="whitespace-break-spaces">
-          {t.rich("threads.title", renderers)}
+          {t.rich("threads.title", { gradient })}
         </Typography>
         <Typography variant="body" color="muted">
           {t("threads.description")}

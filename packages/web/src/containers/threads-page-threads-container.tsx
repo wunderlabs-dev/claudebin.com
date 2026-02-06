@@ -12,7 +12,7 @@ import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
 import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 
-import { renderers } from "@/utils/renderers";
+import { gradient } from "@/utils/renderers";
 import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconMagnifier } from "@/components/icon";
@@ -117,7 +117,7 @@ const ThreadsPageThreadsContainer = ({
           <DividerGridCell className="col-span-12 px-8 py-24 lg:px-12 border-l border-r border-t border-b">
             <div className="flex flex-col max-w-lg mx-auto gap-6">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
-                {t.rich("threads.emptyTitle", { ...renderers, query: queryDebounced })}
+                {t.rich("threads.emptyTitle", { gradient, query: queryDebounced })}
               </Typography>
               <Typography variant="body" color="muted">
                 {t("threads.emptyDescription")}
