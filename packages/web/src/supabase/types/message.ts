@@ -226,9 +226,18 @@ export interface TaskItem {
   status: "pending" | "in_progress" | "completed";
 }
 
+export type TaskChangeAction = "created" | "updated";
+
+export interface TaskChange {
+  taskId: string;
+  action: TaskChangeAction;
+  newStatus: TaskItem["status"];
+}
+
 export interface TasksBlock {
   type: typeof BlockType.TASKS;
   tasks: TaskItem[];
+  lastChange?: TaskChange;
 }
 
 export interface SkillBlock {

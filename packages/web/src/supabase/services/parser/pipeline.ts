@@ -1,4 +1,4 @@
-import type { ContentBlock, TaskItem } from "@/supabase/types/message";
+import type { ContentBlock, TaskItem, TaskChange } from "@/supabase/types/message";
 
 import type { z } from "zod";
 
@@ -60,6 +60,7 @@ export const createPipeline = () => {
     taskToolMap: new Map<string, TrackedTaskTool>(),
     currentTasks: [] as TaskItem[],
     hasPendingTaskSnapshot: false,
+    lastTaskChange: null as TaskChange | null,
     pendingSkillCommand: null as SkillCommandData | null,
     toolUseResult: undefined as unknown,
   };
@@ -92,8 +93,13 @@ export const createPipeline = () => {
 
   const flushPendingTasks = (): void => {
     if (pipeline.hasPendingTaskSnapshot && pipeline.currentTasks.length > 0) {
-      emit({ type: BlockType.TASKS, tasks: cloneTasks() });
+      emit({
+        type: BlockType.TASKS,
+        tasks: cloneTasks(),
+        lastChange: pipeline.lastTaskChange ?? undefined,
+      });
       pipeline.hasPendingTaskSnapshot = false;
+      pipeline.lastTaskChange = null;
     }
   };
 
@@ -110,6 +116,7 @@ export const createPipeline = () => {
           description: parsed.data.description,
           status: "pending",
         });
+        pipeline.lastTaskChange = { taskId, action: "created", newStatus: "pending" };
         pipeline.hasPendingTaskSnapshot = true;
       }
     }
@@ -119,6 +126,7 @@ export const createPipeline = () => {
       const task = pipeline.currentTasks.find((t) => t.id === parsed.data?.taskId);
       if (parsed.success && task && parsed.data.status && task.status !== parsed.data.status) {
         task.status = parsed.data.status;
+        pipeline.lastTaskChange = { taskId, action: "updated", newStatus: parsed.data.status };
         pipeline.hasPendingTaskSnapshot = true;
       }
     }

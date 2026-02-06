@@ -129,6 +129,10 @@
   },
   "chat": {
     "todos": "Todos",
+    "taskCreated": "created",
+    "taskPending": "pending",
+    "taskInProgress": "in progress",
+    "taskCompleted": "completed",
     "read": "Read",
     "write": "Write",
     "edit": "Edit",
