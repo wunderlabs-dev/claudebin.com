@@ -10,12 +10,12 @@ import { messages } from "@/supabase/repos/messages";
 import { parseJsonl } from "@/supabase/services/parser";
 import { sessions } from "@/supabase/repos/sessions";
 import { SessionStatus } from "@/trpc/routers/sessions";
-import { BlockType, MessageRole } from "@/supabase/types/message";
+import { type Block, BlockType, MessageRole } from "@/supabase/types/message";
 import { generateTitle } from "@/utils/openrouter";
 
 const DEFAULT_BATCH_SIZE = 100;
 const AUTO_TITLE_MAX_LENGTH = 100;
-const FILE_BLOCK_TYPES = [BlockType.FILE_READ, BlockType.FILE_WRITE, BlockType.FILE_EDIT];
+const FILE_BLOCK_TYPES: readonly Block[] = [BlockType.FILE_READ, BlockType.FILE_WRITE, BlockType.FILE_EDIT];
 
 type SessionMetadata = {
   workingDir: string | null;
@@ -26,7 +26,7 @@ type SessionMetadata = {
 };
 
 type ContentBlockJson = {
-  type: string;
+  type: Block;
   file_path?: string;
 };
 
@@ -43,7 +43,7 @@ const getFilePaths = (content: Json): string[] => {
 
   const paths: string[] = [];
   for (const block of content as ContentBlockJson[]) {
-    if (FILE_BLOCK_TYPES.includes(block.type as typeof BlockType.FILE_READ) && block.file_path) {
+    if (FILE_BLOCK_TYPES.includes(block.type) && block.file_path) {
       paths.push(block.file_path);
     }
   }

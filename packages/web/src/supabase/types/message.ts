@@ -26,6 +26,8 @@ export const BlockType = {
   SKILL: "skill",
 } as const;
 
+export type Block = (typeof BlockType)[keyof typeof BlockType];
+
 export type ContentBlock =
   | TextBlock
   | ThinkingBlock
