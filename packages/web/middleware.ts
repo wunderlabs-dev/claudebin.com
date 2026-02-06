@@ -13,7 +13,7 @@ const PUBLIC_ROUTES = [
 
 const isPublicRoute = (pathname: string): boolean =>
   PUBLIC_ROUTES.some((route) =>
-    route.endsWith("/*") ? pathname.startsWith(route.slice(0, -1)) : pathname === route
+    route.endsWith("/*") ? pathname.startsWith(route.slice(0, -1)) : pathname === route,
   );
 
 export const middleware = async (request: NextRequest) => {

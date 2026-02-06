@@ -15,7 +15,11 @@ import { generateTitle } from "@/utils/openrouter";
 
 const DEFAULT_BATCH_SIZE = 100;
 const AUTO_TITLE_MAX_LENGTH = 100;
-const FILE_BLOCK_TYPES: readonly Block[] = [BlockType.FILE_READ, BlockType.FILE_WRITE, BlockType.FILE_EDIT];
+const FILE_BLOCK_TYPES: readonly Block[] = [
+  BlockType.FILE_READ,
+  BlockType.FILE_WRITE,
+  BlockType.FILE_EDIT,
+];
 
 type SessionMetadata = {
   workingDir: string | null;
