@@ -43,8 +43,8 @@
     "viewDemo": "View Demo",
     "installation": "Installation",
     "howToUse": "How to Use",
-    "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
-    "recentThreadsDescription": "See what the community is building\nwith Claude."
+    "featuredThreadsTitle": "/Featured <gradient>threads</gradient>",
+    "featuredThreadsDescription": "Curated conversations from the community."
   },
   "profile": {
     "notFoundTitle": "User <gradient>not found</gradient>",
