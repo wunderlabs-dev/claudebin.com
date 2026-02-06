@@ -30,7 +30,7 @@ const Avatar = ({ className, size = "md", ...props }: AvatarProps) => {
         data-slot="avatar"
         className={cn(
           "relative flex shrink-0 overflow-hidden",
-          "rounded-full bg-orange-50/10 outline outline-orange-150",
+          "bg-orange-50/10 rounded-full outline outline-orange-150",
           "select-none",
           avatarSizeClassNames[size],
           className,
@@ -72,7 +72,8 @@ const AvatarFallback = ({
       data-slot="avatar-fallback"
       delayMs={delayMs}
       className={cn(
-        "flex items-center justify-center size-full rounded-full",
+        "flex items-center justify-center size-full",
+        "rounded-full",
         "font-bold text-orange-50 uppercase",
         avatarFallbackFontSizeClassNames[size],
         className,

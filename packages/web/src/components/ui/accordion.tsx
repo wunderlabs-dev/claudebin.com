@@ -18,7 +18,8 @@ const Accordion = ({ className, ...props }: AccordionProps) => {
       data-slot="accordion"
       className={cn(
         "min-w-full md:min-w-sm lg:min-w-md xl:min-w-xl",
-        "rounded-xl border px-4",
+        "px-4",
+        "border rounded-xl",
         "[&_svg]:shrink-0",
         variant === "user" ? "border-gray-250" : "border-gray-200",
         className,
@@ -49,9 +50,9 @@ const AccordionTrigger = ({ className, children, ...props }: AccordionTriggerPro
         data-slot="accordion-trigger"
         className={cn(
           "group",
-          "flex flex-1 items-center justify-between w-full gap-3",
+          "flex flex-1 items-center justify-between gap-3 w-full",
           "py-3",
-          "text-left font-medium font-mono text-base",
+          "font-medium font-mono text-left text-base",
           "transition ease-in-out",
           "cursor-pointer",
           "disabled:pointer-events-none disabled:opacity-50",

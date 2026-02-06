@@ -79,7 +79,7 @@ const createComponents = (role: Role) => ({
     <strong className="font-semibold">{children}</strong>
   ),
   code: ({ children }: { children?: ReactNode }) => (
-    <code className="font-mono text-base">{children}</code>
+    <code className="text-base font-mono">{children}</code>
   ),
   pre: ({ children }: { children?: ReactNode }) => {
     const parsed = parseCodeBlock(children);
@@ -96,7 +96,7 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
   const components = useMemo(() => createComponents(role), [role]);
 
   return (
-    <div className="flex flex-col max-w-full gap-4 [&>*:first-child]:mt-0 break-all">
+    <div className="flex flex-col max-w-full gap-4 break-all [&>*:first-child]:mt-0">
       {block.text.trim().length ? (
         <Markdown remarkPlugins={REMARK_PLUGINS} components={components}>
           {block.text}

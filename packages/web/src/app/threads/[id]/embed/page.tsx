@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
-import { isNil } from "ramda";
+import { isNil, not } from "ramda";
+
+import { createClient } from "@/supabase/server";
 
 import { sessions } from "@/supabase/repos/sessions";
 import { messages } from "@/supabase/repos/messages";
-import { createClient } from "@/supabase/server";
 
 import { ThreadEmbedContainer } from "@/containers/thread-embed-container";
 
@@ -16,12 +17,12 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
   const { id } = await params;
   const { from, to } = await searchParams;
 
-  if (!from || !to) {
+  if (isNil(from) || isNil(to)) {
     notFound();
   }
 
-  const fromIdx = Number.parseInt(from, 10);
-  const toIdx = Number.parseInt(to, 10);
+  const fromIdx = Number.parseInt(from);
+  const toIdx = Number.parseInt(to);
 
   if (Number.isNaN(fromIdx) || Number.isNaN(toIdx) || fromIdx > toIdx) {
     notFound();
@@ -38,8 +39,7 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
   if (isNil(session)) {
     notFound();
   }
-
-  if (!session.isPublic && session.userId !== user?.id) {
+  if (not(session.isPublic) && session.userId !== user?.id) {
     notFound();
   }
 

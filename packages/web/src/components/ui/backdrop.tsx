@@ -31,7 +31,7 @@ const Backdrop = ({
       ) : null}
       <div
         className={cn(
-          "pointer-events-none absolute inset-x-0 -z-10 bg-grid",
+          "absolute inset-x-0 -z-10 pointer-events-none bg-grid",
           backdropSizeClassNames[size],
         )}
       />

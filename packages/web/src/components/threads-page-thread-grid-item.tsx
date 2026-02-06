@@ -88,7 +88,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
     </CardBody>,
     <CardBody
       key="dot"
-      className="min-h-12 bg-dot text-gray-500/40 group-hover:text-orange-50 lg:min-h-auto"
+      className="min-h-12 bg-dot text-gray-500/40 lg:min-h-auto group-hover:text-orange-50"
     />,
   ] as const;
 

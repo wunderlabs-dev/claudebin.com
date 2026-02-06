@@ -55,7 +55,7 @@ const StepsItem = ({ children, className, ...props }: StepsItemProps) => {
       className={cn("flex w-full items-start gap-4 [counter-increment:step]", className)}
       {...props}
     >
-      <span className={cn("flex items-center shrink-0", stepsItemIconClassNames[variant])}>
+      <span className={cn("flex shrink-0 items-center", stepsItemIconClassNames[variant])}>
         {variant === "unordered" ? <SvgIconDot color="accent" /> : null}
       </span>
       <Typography

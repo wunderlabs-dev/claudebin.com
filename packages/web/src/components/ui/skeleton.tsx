@@ -8,7 +8,7 @@ const Skeleton = ({ className, ...props }: SkeletonProps) => {
   return (
     <div
       data-slot="skeleton"
-      className={cn("rounded bg-gray-300 animate-pulse", className)}
+      className={cn("bg-gray-300 rounded animate-pulse", className)}
       {...props}
     />
   );

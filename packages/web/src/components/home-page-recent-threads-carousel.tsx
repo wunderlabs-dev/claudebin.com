@@ -37,11 +37,11 @@ const HomePageRecentThreadsCarousel = ({
       <Container size="lg" spacing="lg" className="flex flex-col">
         <Typography variant="h2">{t.rich("home.recentThreadsTitle", renderers)}</Typography>
 
-        <div className="flex flex-col md:flex-row gap-2 md:gap-0 items-start md:items-center justify-between">
+        <div className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center md:gap-0">
           <Typography
             variant="body"
             color="neutral"
-            className="md:whitespace-break-spaces leading-8"
+            className="leading-8 md:whitespace-break-spaces"
           >
             {t("home.recentThreadsDescription")}
           </Typography>
@@ -58,7 +58,7 @@ const HomePageRecentThreadsCarousel = ({
       </Container>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex cursor-grab select-none gap-4 border-transparent border-y active:cursor-grabbing">
+        <div className="flex cursor-grab select-none gap-4 border-y border-transparent active:cursor-grabbing">
           <div className="w-container-start shrink-0" aria-hidden="true" />
           {threads.map((thread) => (
             <div key={thread.id} className="bg-gray-100">

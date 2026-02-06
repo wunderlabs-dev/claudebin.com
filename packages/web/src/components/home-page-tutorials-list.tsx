@@ -27,7 +27,7 @@ const HomePageTutorialsList = ({ ...props }: HomePageTutorialsListProps) => {
     <Container as="section" size="lg" {...props}>
       <Tabs defaultValue="installation" className="flex flex-col items-center gap-8">
         <Backdrop size="half" spacing="lg" className="sm:px-4 lg:px-12">
-          <div className="mx-auto w-full max-w-6xl rounded-3xl border border-gray-500/20 bg-gray-200/50 p-2">
+          <div className="w-full max-w-6xl mx-auto p-2 bg-gray-200/50 border border-gray-500/20 rounded-3xl">
             {tutorials.map((tutorial) => (
               <TabsContent key={tutorial.id} value={tutorial.id}>
                 <video src={tutorial.src} className="size-full rounded-2xl" controls>
