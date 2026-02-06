@@ -16,17 +16,17 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 
-import { HomePageRecentThreadsListItem } from "@/components/home-page-recent-threads-list-item";
+import { HomePageFeaturedThreadsListItem } from "@/components/home-page-featured-threads-list-item";
 
-type HomePageRecentThreadsCarouselProps = {
+type HomePageFeaturedThreadsCarouselProps = {
   threads: ThreadWithAuthor[];
 } & ComponentProps<"section">;
 
-const HomePageRecentThreadsCarousel = ({
+const HomePageFeaturedThreadsCarousel = ({
   threads,
   className,
   ...props
-}: HomePageRecentThreadsCarouselProps) => {
+}: HomePageFeaturedThreadsCarouselProps) => {
   const t = useTranslations();
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", dragFree: true });
 
@@ -36,7 +36,7 @@ const HomePageRecentThreadsCarousel = ({
   return (
     <section className={cn("flex flex-col gap-8 md:gap-12", className)} {...props}>
       <Container size="lg" spacing="lg" className="flex flex-col">
-        <Typography variant="h2">{t.rich("home.recentThreadsTitle", { gradient })}</Typography>
+        <Typography variant="h2">{t.rich("home.featuredThreadsTitle", { gradient })}</Typography>
 
         <div className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center md:gap-0">
           <Typography
@@ -44,7 +44,7 @@ const HomePageRecentThreadsCarousel = ({
             color="neutral"
             className="leading-8 md:whitespace-break-spaces"
           >
-            {t("home.recentThreadsDescription")}
+            {t("home.featuredThreadsDescription")}
           </Typography>
 
           <div className="flex items-center gap-2">
@@ -63,7 +63,7 @@ const HomePageRecentThreadsCarousel = ({
           <div className="w-container-start shrink-0" aria-hidden="true" />
           {threads.map((thread) => (
             <div key={thread.id} className="bg-gray-100">
-              <HomePageRecentThreadsListItem thread={thread} />
+              <HomePageFeaturedThreadsListItem thread={thread} />
             </div>
           ))}
           <div className="w-container-start shrink-0" aria-hidden="true" />
@@ -73,4 +73,4 @@ const HomePageRecentThreadsCarousel = ({
   );
 };
 
-export { HomePageRecentThreadsCarousel };
+export { HomePageFeaturedThreadsCarousel };
