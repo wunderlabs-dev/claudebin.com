@@ -53,11 +53,7 @@ const ListItem = ({ icon, align = "start", children, className, ...props }: List
   return (
     <div
       data-slot="list-item"
-      className={cn(
-        "flex items-center gap-1",
-        listItemAlignClassNames[align],
-        className,
-      )}
+      className={cn("flex items-center gap-1", listItemAlignClassNames[align], className)}
       {...props}
     >
       <div className="shrink-0">{icon}</div>
