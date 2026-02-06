@@ -12,13 +12,17 @@ type ThreadPageConversationQuestionsProps = {
   block: QuestionBlock;
 };
 
-const parseAnswers = (
-  rawAnswer: string | string[] | undefined,
-  isMultiSelect: boolean,
-): string[] => {
-  if (isNil(rawAnswer)) return [];
-  if (Array.isArray(rawAnswer)) return rawAnswer;
-  return isMultiSelect ? rawAnswer.split(", ") : [rawAnswer];
+const toAnswerArray = (answer: string | string[] | undefined, isMultiSelect: boolean): string[] => {
+  if (isNil(answer)) {
+    return [];
+  }
+  if (Array.isArray(answer)) {
+    return answer;
+  }
+  if (isMultiSelect) {
+    return answer.split(", ");
+  }
+  return [answer];
 };
 
 const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuestionsProps) => {
@@ -26,7 +30,7 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
     <Fragment>
       {block.questions.map((question) => {
         const rawAnswer = block.answers?.[question.question];
-        const answers = parseAnswers(rawAnswer, question.multiSelect);
+        const answers = toAnswerArray(rawAnswer, question.multiSelect);
         const options = question.options.map((option) => option.label);
         const selectedPredefined = answers.filter((answer) => options.includes(answer));
         const customAnswers = answers.filter((answer) => not(options.includes(answer)));
