@@ -69,6 +69,29 @@ const getPublicThreads = async (
   return { threads, total, nextOffset };
 };
 
+const getFeaturedThreads = async (
+  supabase: SupabaseClient<Database>,
+  limit = 10,
+): Promise<ThreadWithAuthor[]> => {
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("*, profiles(username, avatarUrl, deletedAt)")
+    .eq("isPublic", true)
+    .eq("isFeatured", true)
+    .eq("status", "ready")
+    .order("createdAt", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(`Failed to fetch featured threads: ${error.message}`);
+  }
+
+  return (data ?? []).map((thread) => ({
+    ...thread,
+    profiles: sanitizeProfile(thread.profiles),
+  }));
+};
+
 const getByUserId = async (
   supabase: SupabaseClient<Database>,
   userId: string,
@@ -223,6 +246,7 @@ const incrementViewCount = async (
 
 export const sessions = {
   getPublicThreads,
+  getFeaturedThreads,
   getByUserId,
   getById,
   getByIdWithAuthor,
