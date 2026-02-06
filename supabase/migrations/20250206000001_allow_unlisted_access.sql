@@ -11,4 +11,4 @@ CREATE POLICY "sessions_select_all"
   USING (true);
 
 -- Update comment to reflect new behavior
-COMMENT ON COLUMN sessions.is_public IS 'When false, session is unlisted (accessible via link, not shown in listings)';
+COMMENT ON COLUMN sessions."isPublic" IS 'When false, session is unlisted (accessible via link, not shown in listings)';
