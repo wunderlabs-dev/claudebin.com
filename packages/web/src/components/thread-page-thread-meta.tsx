@@ -49,11 +49,7 @@ const ThreadPageThreadMeta = ({
 
   return (
     <div className={cn("flex flex-col items-start gap-6", className)}>
-      <ThreadPageVisibilityContainer
-        id={id}
-        initialIsPublic={isPublic ?? true}
-        isAuthor={isAuthor ?? false}
-      />
+      <ThreadPageVisibilityContainer id={id} initialIsPublic={isPublic} isAuthor={isAuthor} />
 
       <List className="w-full gap-3 pb-9 border-b border-gray-250 lg:pb-0 lg:border-b-0">
         <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
