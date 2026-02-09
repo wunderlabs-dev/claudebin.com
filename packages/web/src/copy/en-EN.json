@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Claudebin - Share Your Claude Sessions",
-    "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
+    "description": "ClaudeBin lets developers share AI coding sessions. Publish Claude conversations as clean, well-structured, linkable artifacts."
   },
   "common": {
     "loading": "Loading...",
