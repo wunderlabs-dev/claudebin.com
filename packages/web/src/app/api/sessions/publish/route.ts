@@ -12,7 +12,9 @@ import {
   type SessionsPublishResponse,
 } from "@/api/schemas/sessions";
 
-export const POST = async (request: NextRequest): Promise<NextResponse<SessionsPublishResponse | { error: string }>> => {
+export const POST = async (
+  request: NextRequest,
+): Promise<NextResponse<SessionsPublishResponse | { error: string }>> => {
   const body = await request.json();
   const parsed = sessionsPublishInputSchema.safeParse(body);
 
@@ -39,7 +41,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse<SessionsP
   if (sizeBytes > SESSION_MAX_SIZE_BYTES) {
     return NextResponse.json(
       { error: `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit` },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

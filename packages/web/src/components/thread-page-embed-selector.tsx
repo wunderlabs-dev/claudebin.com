@@ -36,7 +36,7 @@ const ThreadPageEmbedSelector = ({
       className={cn(
         "fixed bottom-4 left-1/2 z-50 -translate-x-1/2",
         "flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg",
-        "dark:border-gray-700 dark:bg-gray-800"
+        "dark:border-gray-700 dark:bg-gray-800",
       )}
     >
       <Typography variant="small" color="muted">

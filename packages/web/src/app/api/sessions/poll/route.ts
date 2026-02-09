@@ -3,7 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { config } from "@/supabase/config/env";
 import { sessions } from "@/supabase/repos/sessions";
 import { createServiceClient } from "@/supabase/service";
-import { sessionsPollInputSchema, SessionStatus, type SessionsPollResponse } from "@/api/schemas/sessions";
+import {
+  sessionsPollInputSchema,
+  SessionStatus,
+  type SessionsPollResponse,
+} from "@/api/schemas/sessions";
 
 export const GET = async (request: NextRequest): Promise<NextResponse<SessionsPollResponse>> => {
   const { searchParams } = new URL(request.url);
@@ -11,7 +15,10 @@ export const GET = async (request: NextRequest): Promise<NextResponse<SessionsPo
 
   const parsed = sessionsPollInputSchema.safeParse({ id });
   if (!parsed.success) {
-    return NextResponse.json({ status: SessionStatus.FAILED, error: "Invalid input" }, { status: 400 });
+    return NextResponse.json(
+      { status: SessionStatus.FAILED, error: "Invalid input" },
+      { status: 400 },
+    );
   }
 
   const supabase = createServiceClient();
