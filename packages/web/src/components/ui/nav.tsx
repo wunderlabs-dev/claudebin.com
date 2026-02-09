@@ -45,6 +45,20 @@ const NavLink = ({ className, variant = "default", ...props }: NavLinkProps) => 
   );
 };
 
+type NavButtonProps = React.ComponentProps<"button"> & VariantProps<typeof navLinkVariants>;
+
+const NavButton = ({ className, variant = "default", ...props }: NavButtonProps) => {
+  return (
+    <button
+      type="button"
+      data-slot="nav-button"
+      data-variant={variant}
+      className={cn(navLinkVariants({ variant, className }))}
+      {...props}
+    />
+  );
+};
+
 const navLabelVariants = cva(
   [
     "relative",
@@ -79,4 +93,4 @@ const NavLabel = ({ className, variant = "default", ...props }: NavLabelProps) =
   );
 };
 
-export { Nav, NavLink, navLinkVariants, NavLabel, navLabelVariants };
+export { Nav, NavLink, NavButton, navLinkVariants, NavLabel, navLabelVariants };

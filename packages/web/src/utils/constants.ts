@@ -1,6 +1,7 @@
 export const AVATAR_FALLBACK_DELAY_MS = 0;
 export const AVATAR_ASSISTANT_IMAGE_SRC = "/images/assistant-640x640.png";
 
+export const THREAD_SNIPPET_TEXTAREA_ROWS = 6;
 export const THREAD_ATTACHMENT_SIZE = 200;
 export const THREAD_TITLE_TRUNCATE_LENGTH = 56;
 export const THREAD_GRID_TITLE_TRUNCATE_LENGTH = 36;

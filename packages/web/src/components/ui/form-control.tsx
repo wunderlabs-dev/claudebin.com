@@ -45,6 +45,7 @@ const inputVariants = cva(
     "transition-all duration-150 ease-in-out",
     "placeholder:text-gray-450",
     "disabled:pointer-events-none disabled:opacity-50",
+    "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
   ],
   {
     variants: {

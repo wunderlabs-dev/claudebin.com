@@ -9,6 +9,8 @@ import { SvgIconBash } from "@/components/icon/svg-icon-bash";
 import { SvgIconCheck } from "@/components/icon/svg-icon-check";
 import { SvgIconCopy } from "@/components/icon/svg-icon-copy";
 
+import { THREAD_SNIPPET_TEXTAREA_ROWS } from "@/utils/constants";
+
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/form-control";
 
@@ -66,7 +68,7 @@ const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode =
 
   return (
     <div className="flex flex-col gap-4">
-      <Textarea value={value} readOnly />
+      <Textarea value={value} rows={THREAD_SNIPPET_TEXTAREA_ROWS} readOnly />
       <Button
         variant="outline"
         color={copiedText === value ? "success" : "default"}

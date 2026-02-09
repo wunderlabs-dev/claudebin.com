@@ -1,14 +1,19 @@
 "use client";
 
+import { Fragment, useState } from "react";
 import { isServer } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
 import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";
 
+import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
+import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
 
 import { ThreadPageThreadMeta } from "@/components/thread-page-thread-meta";
+import { ThreadPageThreadEmbed } from "@/components/thread-page-thread-embed";
 import { ThreadPageSidebarContinueConversation } from "@/components/thread-page-sidebar-continue-conversation";
 
 type ThreadPageSidebarContainerProps = {
@@ -38,30 +43,55 @@ const ThreadPageSidebarContainer = ({
   likeCount,
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
+  const t = useTranslations();
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
+
+  const [view, setView] = useState<"stats" | "embed">("stats");
+
+  const handleEmbedClick = () => {
+    if (view === "embed") {
+      setView("stats");
+    } else {
+      setView("embed");
+    }
+  };
 
   return (
     <div className="flex flex-col items-start gap-6">
-      {lg ? (
-        <ThreadPageThreadMeta
-          id={id}
-          isPublic={isPublic}
-          isAuthor={isAuthor}
-          createdAt={createdAt}
-          fileCount={fileCount}
-          viewCount={viewCount}
-          likeCount={likeCount}
-          workingDir={workingDir}
-          modelName={modelName}
-          messageCount={messageCount}
-          initialLiked={initialLiked}
-        />
-      ) : null}
+      {view === "stats" ? (
+        <Fragment>
+          {lg ? (
+            <ThreadPageThreadMeta
+              id={id}
+              isPublic={isPublic}
+              isAuthor={isAuthor}
+              createdAt={createdAt}
+              fileCount={fileCount}
+              viewCount={viewCount}
+              likeCount={likeCount}
+              workingDir={workingDir}
+              modelName={modelName}
+              messageCount={messageCount}
+              initialLiked={initialLiked}
+            />
+          ) : null}
 
-      <div className="flex flex-col w-full gap-8">
-        <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-        <ThreadPageSidebarContinueConversation />
-      </div>
+          <div className="flex flex-col w-full gap-8">
+            <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
+
+            <div className="flex flex-col gap-4">
+              <Button variant="secondary" onClick={handleEmbedClick}>
+                <SvgIconArrowLink />
+                {t("thread.embedConversation")}
+              </Button>
+
+              <ThreadPageSidebarContinueConversation />
+            </div>
+          </div>
+        </Fragment>
+      ) : (
+        <ThreadPageThreadEmbed id={id} onClose={() => setView("stats")} />
+      )}
     </div>
   );
 };
