@@ -209,12 +209,7 @@ const ThreadPageConversationContainer = ({
         </ChatItem>
       </Chat>
 
-      <ThreadPageEmbedSelector
-        sessionId={id}
-        fromIdx={fromIdx}
-        toIdx={toIdx}
-        onClear={handleClearSelection}
-      />
+      <ThreadPageEmbedSelector fromIdx={fromIdx} toIdx={toIdx} onClear={handleClearSelection} />
     </>
   );
 };

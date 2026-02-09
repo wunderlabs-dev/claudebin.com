@@ -208,12 +208,14 @@ export const createPipeline = () => {
     isContentArray(content) && content.some((b) => b.type === "tool_result");
 
   const ingestSkillMeta = (content: string | RawContentBlock[] | undefined): void => {
+    if (!pipeline.pendingSkillCommand) return;
+
     const text = typeof content === "string" ? content : extractText(content);
     const skillMeta = parseSkillMeta(text);
     resetMessageState();
     emit({
       type: BlockType.SKILL,
-      ...pipeline.pendingSkillCommand!,
+      ...pipeline.pendingSkillCommand,
       instructions: skillMeta.instructions,
       output: skillMeta.output,
     });

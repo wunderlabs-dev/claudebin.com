@@ -8,18 +8,12 @@ import { Typography } from "@/components/ui/typography";
 import { X } from "lucide-react";
 
 type ThreadPageEmbedSelectorProps = {
-  sessionId: string;
   fromIdx: number | null;
   toIdx: number | null;
   onClear: () => void;
 };
 
-const ThreadPageEmbedSelector = ({
-  sessionId,
-  fromIdx,
-  toIdx,
-  onClear,
-}: ThreadPageEmbedSelectorProps) => {
+const ThreadPageEmbedSelector = ({ fromIdx, toIdx, onClear }: ThreadPageEmbedSelectorProps) => {
   const t = useTranslations();
 
   const hasSelection = fromIdx !== null;
