@@ -37,7 +37,7 @@
   "home": {
     "headline": "<gradient>Pastebin</gradient>\nfor Claude Code",
     "badge": "Get started for free",
-    "description": "ClaudeBin is the modern pastebin for developers who code with AI. Share your Claude conversations, collaborate seamlessly.",
+    "description": "ClaudeBin lets developers share AI coding sessions. Publish Claude conversations as clean, well-structured, linkable artifacts.",
     "commandCli": "npm i -g claudebin",
     "commandEditor": "brew install claudebin",
     "cliInstall": "CLI Install",
