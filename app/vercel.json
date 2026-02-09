@@ -1,3 +1,3 @@
 {
-  "buildCommand": "cd ../.. && turbo run build --filter=claudebin-web"
+  "buildCommand": "bun run build"
 }
