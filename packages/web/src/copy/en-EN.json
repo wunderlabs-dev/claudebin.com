@@ -35,7 +35,7 @@
     "backToHome": "Back to home"
   },
   "home": {
-    "headline": "<gradient>Share AI Sessions</gradient>\nlike never before",
+    "headline": "<gradient>Pastebin</gradient>\nfor Claude Code",
     "badge": "Get started for free",
     "description": "ClaudeBin is the modern pastebin for developers who code with AI. Share your Claude conversations, collaborate seamlessly.",
     "commandCli": "npm i -g claudebin",
