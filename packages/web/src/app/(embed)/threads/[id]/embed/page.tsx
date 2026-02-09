@@ -55,41 +55,37 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
   const result = await messages.getByRange(supabase, id, fromIdx, toIdx);
 
   return (
-    <div className="flex min-h-screen min-w-full bg-gray-100">
-      <div className="shrink-0 w-14 bg-dot bg-fixed border-r border-gray-200 text-gray-500/40" />
+    <div className="flex flex-col gap-3 min-h-screen min-w-full bg-gray-100">
+      <div className="flex flex-col gap-3 pt-3 px-3">
+        <Typography variant="body" fontWeight="semibold">
+          {thread.title}
+        </Typography>
 
-      <div className="flex flex-col w-full gap-3">
-        <div className="flex flex-col gap-3 pt-3 pr-6 pl-3">
-          <Typography variant="body" fontWeight="semibold">
-            {thread.title}
-          </Typography>
-
-          <EmbedPageConversation
-            messages={compactConversation(result.messages)}
-            avatarUrl={thread.profiles?.avatarUrl}
-            author={thread.profiles?.username ?? t("common.deactivated")}
-          />
-
-          <div className="flex justify-end">
-            <Link href={`/threads/${id}`} target="_blank" className="flex items-center gap-3">
-              <Typography variant="small" fontWeight="bold" color="accent">
-                {t("embed.openFullConversation")}
-              </Typography>
-              <SvgIconArrowLink size="sm" className="text-orange-50" />
-            </Link>
-          </div>
-        </div>
-
-        <EmbedPageFooter
-          id={id}
-          workingDir={getProjectName(thread.workingDir)}
-          modelName={thread.modelName}
-          fileCount={thread.fileCount}
-          viewCount={thread.viewCount}
-          likeCount={thread.likeCount}
-          messageCount={thread.messageCount}
+        <EmbedPageConversation
+          messages={compactConversation(result.messages)}
+          avatarUrl={thread.profiles?.avatarUrl}
+          author={thread.profiles?.username ?? t("common.deactivated")}
         />
+
+        <div className="flex justify-end">
+          <Link href={`/threads/${id}`} target="_blank" className="flex items-center gap-3">
+            <Typography variant="small" fontWeight="bold" color="accent">
+              {t("embed.openFullConversation")}
+            </Typography>
+            <SvgIconArrowLink size="sm" className="text-orange-50" />
+          </Link>
+        </div>
       </div>
+
+      <EmbedPageFooter
+        id={id}
+        workingDir={getProjectName(thread.workingDir)}
+        modelName={thread.modelName}
+        fileCount={thread.fileCount}
+        viewCount={thread.viewCount}
+        likeCount={thread.likeCount}
+        messageCount={thread.messageCount}
+      />
     </div>
   );
 };

@@ -34,7 +34,7 @@ export const EmbedPageFooter = ({
   const t = useTranslations();
 
   return (
-    <div className="sticky bottom-0 flex items-center justify-between py-3 pl-3 pr-6 bg-gray-100 border-t border-gray-200">
+    <div className="sticky bottom-0 flex items-center justify-between p-3 bg-gray-100 border-t border-gray-200">
       <Link href={`/threads/${id}`} target="_blank">
         <SvgIconClaudebinXs
           size="auto"
