@@ -277,6 +277,7 @@ const Image = async ({ params }: Props) => {
 
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
+
   if (isNil(thread)) {
     return new Response("Not found", { status: 404 });
   }

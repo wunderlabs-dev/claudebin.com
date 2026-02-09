@@ -10,6 +10,8 @@
     "copySnippet": "Copy snippet",
     "public": "Public",
     "unlisted": "Unlisted",
+    "visibilityChanged": "Visibility changed",
+    "visibilityChangeError": "Failed to change visibility",
     "untitled": "Untitled",
     "ago": "{date} ago",
     "messages": "{count} messages",

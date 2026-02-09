@@ -14,7 +14,7 @@ import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
 import { List, ListItem } from "@/components/ui/list";
 
 import { ThreadPageSidebarLikeContainer } from "@/containers/thread-page-sidebar-like-container";
-import { ThreadPageVisibilityToggleContainer } from "@/containers/thread-page-visibility-toggle-container";
+import { ThreadPageVisibilityContainer } from "@/containers/thread-page-visibility-container";
 
 type ThreadPageThreadMetaProps = {
   id: string;
@@ -49,7 +49,7 @@ const ThreadPageThreadMeta = ({
 
   return (
     <div className={cn("flex flex-col items-start gap-6", className)}>
-      <ThreadPageVisibilityToggleContainer
+      <ThreadPageVisibilityContainer
         id={id}
         initialIsPublic={isPublic ?? true}
         isAuthor={isAuthor ?? false}
