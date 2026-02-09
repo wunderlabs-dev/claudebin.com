@@ -98,7 +98,7 @@ const ProfilePageUserInfoSidebar = ({
       {stats.map((stat) => (
         <DividerGridRow key={stat.key}>
           <DividerGridEdge position="left" />
-          <DividerGridCell className="flex col-span-8 items-center justify-center gap-2 px-3 py-3 border-x border-b transition-colors duration-150 ease-in-out hover:bg-gray-200/50">
+          <DividerGridCell className="flex col-span-8 items-center justify-center gap-2 px-3 py-3 border-x border-b">
             {stat.icon}
             <Typography variant="caption" color="accent" leading="normal">
               {stat.label}
