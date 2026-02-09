@@ -96,7 +96,9 @@ const refresh = async (): Promise<boolean> => {
       auth: {
         token: result.access_token,
         refresh_token: result.refresh_token,
-        expires_at: result.expires_at ? result.expires_at * 1_000 : Date.now() + DEFAULT_TOKEN_TTL_MS,
+        expires_at: result.expires_at
+          ? result.expires_at * 1_000
+          : Date.now() + DEFAULT_TOKEN_TTL_MS,
       },
     });
 

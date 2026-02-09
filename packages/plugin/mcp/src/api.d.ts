@@ -4,314 +4,322 @@
  */
 
 export interface paths {
-    "/api/auth/start": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Start CLI authentication flow */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Authentication session created */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AuthStartResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/api/auth/start": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/poll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Start CLI authentication flow */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Authentication session created */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["AuthStartResponse"];
+          };
         };
-        /** Poll for authentication completion */
-        get: {
-            parameters: {
-                query: {
-                    code: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Poll status */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AuthPollResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Refresh access token */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["AuthRefreshInput"];
-                };
-            };
-            responses: {
-                /** @description Token refresh result */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AuthRefreshResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/poll": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/validate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Poll for authentication completion */
+    get: {
+      parameters: {
+        query: {
+          code: string;
         };
-        /** Validate access token */
-        get: {
-            parameters: {
-                query: {
-                    token: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Validation result */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AuthValidateResponse"];
-                    };
-                };
-            };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Poll status */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["AuthPollResponse"];
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/sessions/publish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Publish a Claude Code session */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["SessionsPublishInput"];
-                };
-            };
-            responses: {
-                /** @description Session published */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["SessionsPublishResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/sessions/poll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Refresh access token */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": components["schemas"]["AuthRefreshInput"];
         };
-        /** Poll for session processing status */
-        get: {
-            parameters: {
-                query: {
-                    id: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Processing status */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["SessionsPollResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description Token refresh result */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["AuthRefreshResponse"];
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/validate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Validate access token */
+    get: {
+      parameters: {
+        query: {
+          token: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Validation result */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["AuthValidateResponse"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sessions/publish": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Publish a Claude Code session */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": components["schemas"]["SessionsPublishInput"];
+        };
+      };
+      responses: {
+        /** @description Session published */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["SessionsPublishResponse"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sessions/poll": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Poll for session processing status */
+    get: {
+      parameters: {
+        query: {
+          id: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Processing status */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["SessionsPollResponse"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        AuthStartResponse: {
-            code: string;
-            /** Format: uri */
-            url: string;
-            /** Format: date-time */
-            expires_at: string;
-        };
-        AuthPollResponse: {
-            /** @enum {string} */
-            status: "pending";
-        } | {
-            /** @enum {string} */
-            status: "expired";
-        } | {
-            /** @enum {string} */
-            status: "success";
-            token: string;
-            refresh_token: string;
-            user: components["schemas"]["User"];
-        };
-        User: {
-            id: string;
-            name: string | null;
-            email: string | null;
-            avatar_url: string | null;
-        };
-        AuthRefreshResponse: {
-            /** @enum {boolean} */
-            success: true;
-            access_token: string;
-            refresh_token: string;
-            expires_at?: number;
-        } | {
-            /** @enum {boolean} */
-            success: false;
-            error?: string;
-        };
-        AuthRefreshInput: {
-            refresh_token: string;
-        };
-        AuthValidateResponse: {
-            valid: boolean;
-        };
-        SessionsPublishResponse: {
-            id: string;
-            /** @enum {string} */
-            status: "processing" | "ready" | "failed";
-        };
-        SessionsPublishInput: {
-            title?: string;
-            conversation_data: string;
-            /** @default true */
-            is_public: boolean;
-            access_token: string;
-        };
-        SessionsPollResponse: {
-            /** @enum {string} */
-            status: "processing";
-        } | {
-            /** @enum {string} */
-            status: "ready";
-            /** Format: uri */
-            url: string;
-        } | {
-            /** @enum {string} */
-            status: "failed";
-            error: string;
-        };
+  schemas: {
+    AuthStartResponse: {
+      code: string;
+      /** Format: uri */
+      url: string;
+      /** Format: date-time */
+      expires_at: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    AuthPollResponse:
+      | {
+          /** @enum {string} */
+          status: "pending";
+        }
+      | {
+          /** @enum {string} */
+          status: "expired";
+        }
+      | {
+          /** @enum {string} */
+          status: "success";
+          token: string;
+          refresh_token: string;
+          user: components["schemas"]["User"];
+        };
+    User: {
+      id: string;
+      name: string | null;
+      email: string | null;
+      avatar_url: string | null;
+    };
+    AuthRefreshResponse:
+      | {
+          /** @enum {boolean} */
+          success: true;
+          access_token: string;
+          refresh_token: string;
+          expires_at?: number;
+        }
+      | {
+          /** @enum {boolean} */
+          success: false;
+          error?: string;
+        };
+    AuthRefreshInput: {
+      refresh_token: string;
+    };
+    AuthValidateResponse: {
+      valid: boolean;
+    };
+    SessionsPublishResponse: {
+      id: string;
+      /** @enum {string} */
+      status: "processing" | "ready" | "failed";
+    };
+    SessionsPublishInput: {
+      title?: string;
+      conversation_data: string;
+      /** @default true */
+      is_public: boolean;
+      access_token: string;
+    };
+    SessionsPollResponse:
+      | {
+          /** @enum {string} */
+          status: "processing";
+        }
+      | {
+          /** @enum {string} */
+          status: "ready";
+          /** Format: uri */
+          url: string;
+        }
+      | {
+          /** @enum {string} */
+          status: "failed";
+          error: string;
+        };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

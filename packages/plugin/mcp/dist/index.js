@@ -30,7 +30,7 @@ var readConfig = async () => {
 var writeConfig = async (config) => {
   await fs.mkdir(CONFIG_DIR, { recursive: true, mode: 448 });
   await fs.writeFile(CONFIG_PATH, JSON.stringify(config, null, 2), {
-    mode: 384
+    mode: 384,
   });
 };
 
@@ -46,42 +46,42 @@ var createApiClient = () => {
       },
       poll: async (code) => {
         const { data, error } = await client.GET("/api/auth/poll", {
-          params: { query: { code } }
+          params: { query: { code } },
         });
         if (error) throw new Error("Failed to poll auth");
         return data;
       },
       refresh: async (input) => {
         const { data, error } = await client.POST("/api/auth/refresh", {
-          body: input
+          body: input,
         });
         if (error) throw new Error("Failed to refresh token");
         return data;
       },
       validate: async (token) => {
         const { data, error } = await client.GET("/api/auth/validate", {
-          params: { query: { token } }
+          params: { query: { token } },
         });
         if (error) throw new Error("Failed to validate token");
         return data;
-      }
+      },
     },
     sessions: {
       publish: async (input) => {
         const { data, error } = await client.POST("/api/sessions/publish", {
-          body: input
+          body: input,
         });
         if (error) throw new Error("Failed to publish session");
         return data;
       },
       poll: async (id) => {
         const { data, error } = await client.GET("/api/sessions/poll", {
-          params: { query: { id } }
+          params: { query: { id } },
         });
         if (error) throw new Error("Failed to poll session");
         return data;
-      }
-    }
+      },
+    },
   };
 };
 
@@ -98,7 +98,8 @@ var MAX_SESSION_SIZE_BYTES = 50 * 1024 * 1024;
 import { exec } from "child_process";
 var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 var poll = async (options) => {
-  const { fn, isSuccess, isFailure, getFailureError, intervalMs, timeoutMs, timeoutError } = options;
+  const { fn, isSuccess, isFailure, getFailureError, intervalMs, timeoutMs, timeoutError } =
+    options;
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     try {
@@ -150,7 +151,7 @@ var pollForAuthCompletion = async (code, timeoutMs = AUTH_POLL_TIMEOUT_MS) => {
     getFailureError: () => "Authentication code expired",
     intervalMs: POLL_INTERVAL_MS,
     timeoutMs,
-    timeoutError: "Authentication timed out"
+    timeoutError: "Authentication timed out",
   });
   if (!isAuthSuccess(result)) {
     throw new Error("Invalid authentication response");
@@ -158,7 +159,7 @@ var pollForAuthCompletion = async (code, timeoutMs = AUTH_POLL_TIMEOUT_MS) => {
   return {
     token: result.token,
     refresh_token: result.refresh_token,
-    user: result.user
+    user: result.user,
   };
 };
 var start = async () => {
@@ -168,7 +169,7 @@ var start = async () => {
     return { code: data.code, url: data.url };
   } catch (error) {
     throw new Error(
-      `Failed to connect to Claudebin: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to connect to Claudebin: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 };
@@ -180,9 +181,9 @@ var run = async () => {
     auth: {
       token,
       refresh_token,
-      expires_at: Date.now() + AUTH_TOKEN_TTL_MS
+      expires_at: Date.now() + AUTH_TOKEN_TTL_MS,
     },
-    user
+    user,
   };
   await writeConfig(config);
   return token;
@@ -193,7 +194,7 @@ var refresh = async () => {
   const api = createApiClient();
   try {
     const result = await api.auth.refresh({
-      refresh_token: config.auth.refresh_token
+      refresh_token: config.auth.refresh_token,
     });
     if (!result.success) {
       return false;
@@ -203,8 +204,8 @@ var refresh = async () => {
       auth: {
         token: result.access_token,
         refresh_token: result.refresh_token,
-        expires_at: result.expires_at ? result.expires_at * 1e3 : Date.now() + DEFAULT_TOKEN_TTL_MS
-      }
+        expires_at: result.expires_at ? result.expires_at * 1e3 : Date.now() + DEFAULT_TOKEN_TTL_MS,
+      },
     });
     return true;
   } catch {
@@ -264,11 +265,14 @@ var getFilesWithStats = async (files, directoryPath) => {
       const filePath = path2.join(directoryPath, file);
       const stats = await fs2.stat(filePath);
       return { file, mtime: stats.mtime };
-    })
+    }),
   );
 };
 var findMostRecentSession = (files) => {
-  const sessions = files.filter((entry) => entry.file.endsWith(".jsonl")).filter((entry) => !entry.file.startsWith("agent-")).sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+  const sessions = files
+    .filter((entry) => entry.file.endsWith(".jsonl"))
+    .filter((entry) => !entry.file.startsWith("agent-"))
+    .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
   return sessions.length > 0 ? sessions[0].file : null;
 };
 var extract = async (projectPath) => {
@@ -287,7 +291,7 @@ var extract = async (projectPath) => {
   const mostRecentSession = findMostRecentSession(filesWithStats);
   if (!mostRecentSession) {
     throw new Error(
-      `No valid session files found (excluding agent-* files) in: ${claudeProjectPath}`
+      `No valid session files found (excluding agent-* files) in: ${claudeProjectPath}`,
     );
   }
   const sessionPath = path2.join(claudeProjectPath, mostRecentSession);
@@ -308,10 +312,10 @@ var pollForProcessing = async (sessionId, timeoutMs = SESSION_POLL_TIMEOUT_MS) =
     fn: () => api.sessions.poll(sessionId),
     isSuccess: isSessionReady,
     isFailure: isSessionFailed,
-    getFailureError: (data) => isSessionFailed(data) ? data.error : "Processing failed",
+    getFailureError: (data) => (isSessionFailed(data) ? data.error : "Processing failed"),
     intervalMs: POLL_INTERVAL_MS,
     timeoutMs,
-    timeoutError: "Processing timed out after 2 minutes"
+    timeoutError: "Processing timed out after 2 minutes",
   });
   if (!isSessionReady(result)) {
     throw new Error("Invalid session response");
@@ -322,14 +326,18 @@ var registerShare = (server) => {
   server.registerTool(
     "share",
     {
-      description: "Share the current Claude Code session to Claudebin. Authenticates automatically if needed.",
+      description:
+        "Share the current Claude Code session to Claudebin. Authenticates automatically if needed.",
       inputSchema: {
         project_path: z.string().describe("Absolute path to the project directory"),
         title: z.string().optional().describe("Optional title for the session"),
-        is_public: z.boolean().default(true).describe(
-          "Whether the session appears in public listings (false = unlisted, accessible via link)"
-        )
-      }
+        is_public: z
+          .boolean()
+          .default(true)
+          .describe(
+            "Whether the session appears in public listings (false = unlisted, accessible via link)",
+          ),
+      },
     },
     async ({ project_path, title, is_public }) => {
       try {
@@ -338,7 +346,7 @@ var registerShare = (server) => {
         const sizeBytes = new TextEncoder().encode(content).length;
         if (sizeBytes > MAX_SESSION_SIZE_BYTES) {
           throw new Error(
-            `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`
+            `Session too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`,
           );
         }
         const api = createApiClient();
@@ -346,25 +354,25 @@ var registerShare = (server) => {
           title,
           conversation_data: content,
           is_public,
-          access_token: token
+          access_token: token,
         });
         const url = await pollForProcessing(result.id);
         safeOpenUrl(url);
         return {
-          content: [{ type: "text", text: url }]
+          content: [{ type: "text", text: url }],
         };
       } catch (error) {
         return {
           content: [
             {
               type: "text",
-              text: error instanceof Error ? error.message : String(error)
-            }
+              text: error instanceof Error ? error.message : String(error),
+            },
           ],
-          isError: true
+          isError: true,
         };
       }
-    }
+    },
   );
 };
 var registerAllTools = (server) => {
@@ -375,7 +383,7 @@ var registerAllTools = (server) => {
 var main = async () => {
   const server = new McpServer({
     name: "claudebin",
-    version: "0.1.0"
+    version: "0.1.0",
   });
   registerAllTools(server);
   const transport = new StdioServerTransport();

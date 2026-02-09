@@ -3,14 +3,10 @@ import type { paths, components } from "./api.d.js";
 import { getApiBaseUrl } from "./config.js";
 
 // Re-export schema types for consumers
-export type AuthStartResponse = components["schemas"]["AuthStartResponse"];
 export type AuthPollResponse = components["schemas"]["AuthPollResponse"];
 export type AuthRefreshInput = components["schemas"]["AuthRefreshInput"];
-export type AuthRefreshResponse = components["schemas"]["AuthRefreshResponse"];
-export type AuthValidateResponse = components["schemas"]["AuthValidateResponse"];
 export type User = components["schemas"]["User"];
 export type SessionsPublishInput = components["schemas"]["SessionsPublishInput"];
-export type SessionsPublishResponse = components["schemas"]["SessionsPublishResponse"];
 export type SessionsPollResponse = components["schemas"]["SessionsPollResponse"];
 
 export const createApiClient = () => {
