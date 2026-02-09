@@ -39,11 +39,12 @@ npx claudebin publish
 ## Architecture
 
 ```
-packages/
-├── plugin/mcp/   # MCP server plugin (claudebin-mcp)
-├── web/          # Next.js 16 web app (claudebin.com)
-└── cli/          # CLI tool (claudebin)
+app/              # Next.js 16 web app (claudebin.com)
+docs/             # Documentation
+supabase/         # Database migrations
 ```
+
+The MCP plugin and CLI are published separately at [claudebin](https://github.com/wunderlabs-dev/claudebin).
 
 ## Development
 
@@ -54,15 +55,14 @@ bun install
 # Start web app
 bun dev
 
-# Start plugin in watch mode
-bun plugin
+# Build
+bun run build
 
-# Test plugin locally
-claude mcp add claudebin-dev /path/to/packages/plugin/mcp/dist/index.js
+# Lint & format
+bun check
 ```
 
 ## Tech Stack
 
-- **Web**: Next.js 16, Turbopack, Supabase, tRPC
-- **Plugin**: MCP SDK, tRPC client
-- **Tooling**: Bun, Turborepo, Biome
+- **Web**: Next.js 16, Turbopack, Supabase
+- **Tooling**: Bun, Biome

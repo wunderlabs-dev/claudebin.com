@@ -98,18 +98,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-### For CLI (`packages/cli/.env` - development only):
-```
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-```
-
 Find these values in your Supabase dashboard under Settings > API.
 
 ## Next Steps
 
 1. Set up GitHub OAuth in Supabase (see `docs/12-12-2025-authentication.md`)
-2. Configure environment variables in both packages
+2. Configure environment variables
 3. Test the authentication flow
 
 ## Troubleshooting
