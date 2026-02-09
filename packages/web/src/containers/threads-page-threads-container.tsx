@@ -3,8 +3,8 @@
 import { useState, useMemo, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { isServer, useInfiniteQuery } from "@tanstack/react-query";
-import { useDebounceValue, useMediaQuery } from "usehooks-ts";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useDebounceValue } from "usehooks-ts";
 import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
@@ -13,7 +13,6 @@ import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
 import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
 
 import { gradient } from "@/utils/renderers";
-import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,6 @@ const ThreadsPageThreadsContainer = ({
 }: ThreadsPageThreadsContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
-  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
   const [query, setQuery] = useState(initialQuery);
   const [queryDebounced] = useDebounceValue(query, SEARCH_DEBOUNCE_MS);
@@ -81,7 +79,7 @@ const ThreadsPageThreadsContainer = ({
       <ThreadsPageThreadsAdornment variant="start" />
 
       <DividerGridRow>
-        {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
+        <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
         <DividerGridCell className="grid grid-cols-12 col-span-12 border-t border-r border-b border-l lg:col-span-10 lg:border-t-0">
           <DividerGridRow>
             <DividerGridCell className="col-span-9 border-r lg:col-span-8">
@@ -106,15 +104,15 @@ const ThreadsPageThreadsContainer = ({
             </DividerGridCell>
           </DividerGridRow>
         </DividerGridCell>
-        {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
+        <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
       </DividerGridRow>
 
       <ThreadsPageThreadsAdornment variant="spacer" />
 
       {hasNoResult ? (
         <DividerGridRow>
-          {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
-          <DividerGridCell className="col-span-12 px-8 py-24 border-t border-r border-b border-l lg:px-12">
+          <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
+          <DividerGridCell className="col-span-12 px-8 py-24 border-t border-r border-b border-l lg:col-span-10 lg:px-12">
             <div className="flex flex-col max-w-lg gap-6 mx-auto">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { gradient, query: queryDebounced })}
@@ -124,7 +122,7 @@ const ThreadsPageThreadsContainer = ({
               </Typography>
             </div>
           </DividerGridCell>
-          {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
+          <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
         </DividerGridRow>
       ) : null}
 
@@ -142,10 +140,10 @@ const ThreadsPageThreadsContainer = ({
 
           {hasNextPage ? (
             <DividerGridRow>
-              {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
+              <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
               <DividerGridCell className="col-span-12 lg:col-span-10">
                 <Card variant="grid">
-                  {lg ? <CardBody /> : null}
+                  <CardBody className="hidden lg:flex" />
                   <CardBody className="items-center justify-center md:p-0">
                     <Button
                       variant="secondary"
@@ -155,10 +153,10 @@ const ThreadsPageThreadsContainer = ({
                       {isFetchingNextPage ? t("threads.loadingMore") : t("threads.loadMore")}
                     </Button>
                   </CardBody>
-                  {lg ? <CardBody /> : null}
+                  <CardBody className="hidden lg:flex" />
                 </Card>
               </DividerGridCell>
-              {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
+              <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
             </DividerGridRow>
           ) : null}
         </Fragment>

@@ -1,11 +1,3 @@
-"use client";
-
-import { not } from "ramda";
-import { isServer } from "@tanstack/react-query";
-import { useMediaQuery } from "usehooks-ts";
-
-import { breakpoints } from "@/utils/breakpoints";
-
 import {
   DividerGridRow,
   DividerGridEdge,
@@ -21,14 +13,9 @@ type ThreadsPageThreadsAdornmentProps = {
 };
 
 const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentProps) => {
-  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
-
   if (variant === "start") {
-    if (not(lg)) {
-      return null;
-    }
     return (
-      <DividerGridRow>
+      <DividerGridRow className="hidden lg:grid">
         <DividerGridEdge position="left" className="col-span-1" />
         <DividerGridCell className="grid col-span-10 grid-cols-12 border-b">
           <DividerGridCell className="flex col-span-8 justify-between">
@@ -47,24 +34,21 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
   if (variant === "spacer") {
     return (
       <DividerGridRow>
-        {lg ? <DividerGridEdge position="left" className="col-span-1" /> : null}
+        <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
         <DividerGridCell className="grid col-span-12 grid-cols-12 border-l border-r lg:col-span-10">
           <DividerGridRow>
             <DividerGridCell className="col-span-9 py-6 border-r lg:col-span-8" />
             <DividerGridCell className="flex col-span-3 items-center justify-end px-4 lg:col-span-4" />
           </DividerGridRow>
         </DividerGridCell>
-        {lg ? <DividerGridEdge position="right" className="col-span-1" /> : null}
+        <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
       </DividerGridRow>
     );
   }
 
   if (variant === "end") {
-    if (not(lg)) {
-      return null;
-    }
     return (
-      <DividerGridRow>
+      <DividerGridRow className="hidden lg:grid">
         <DividerGridCell className="col-span-1" />
         <DividerGridCell className="col-span-10">
           <DividerGridRow>
