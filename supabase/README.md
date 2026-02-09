@@ -91,7 +91,7 @@ You should see 4 policies for profiles and 4 policies for sessions.
 
 After setting up the database, you'll need to configure environment variables for the web and CLI packages.
 
-### For Web App (`packages/web/.env.local`):
+### For Web App (`app/.env.local`):
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key

@@ -4,48 +4,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Claudebin is a "pastebin for vibes" - a tool for publishing and sharing Claude Code sessions. Users run `npx claudebin publish` after a coding session to get a shareable link.
+Claudebin is a "pastebin for vibes" - a web app for publishing and sharing Claude Code sessions.
 
 ## Commands
 
 ```bash
 # Development
 bun dev               # Start web app in dev mode
-bun plugin            # Start MCP server in watch mode
 
 # Build
-bun build             # Build all packages
+bun build             # Build the app
 
 # Code Quality
 bun check             # Biome check (runs on pre-commit)
 bun format            # Biome format
 bun lint              # Biome lint
-bun type-check        # TypeScript check all packages
-
-# Package-specific
-bun --filter cli build        # Build CLI only
-bun --filter cli type-check   # Type-check CLI only
-bun --filter web dev          # Run Next.js dev server
-
-# Plugin (local development)
-claude --plugin-dir ./packages/plugin   # Start with plugin loaded
+bun type-check        # TypeScript check
 ```
 
 ## Architecture
 
-**Monorepo Structure (bun workspaces):**
-- `packages/cli/` - Publishable npm package (`claudebin`), built with tsup
-- `packages/web/` - Next.js 16 web app (App Router, Turbopack)
+**Structure:**
+- `app/` - Next.js 16 web app (App Router, Turbopack)
 - `docs/` - Architecture documentation
 - `supabase/` - Database migrations
 
-**CLI Package:**
-- Entry: `src/index.ts` (Commander.js)
-- Commands: `src/commands/` (publish, list, whoami)
-- Core logic: `src/lib/` (session discovery, user management, Supabase client)
-- Utilities: `src/helpers/` (constants, utils, status codes)
-
-**Web Package (`packages/web/src/`):**
+**App Structure (`app/src/`):**
 ```
 src/
 ├── app/          # Next.js App Router pages
@@ -59,10 +43,9 @@ src/
 ```
 
 **Key Libraries:**
-- CLI: Commander.js, chalk, ora, @clack/prompts
 - Web: next-intl, shadcn/ui (Base UI), Tailwind CSS
 - Data: @supabase/supabase-js, ramda
-- Build: tsup (CLI), Next.js (web)
+- Build: Next.js
 
 ## Code Conventions
 
@@ -193,22 +176,6 @@ Translation strings use XML-like tags matching renderer keys:
   "error404.doesNotExist": "The page does <serif>not exist</serif>."
 }
 ```
-
-## Session Discovery
-
-Sessions are read from `~/.claude/projects/[normalized-path]/` where the path is normalized by replacing `/` with `-`. Only sessions modified in the last hour are considered. Agent sessions (prefixed `agent-`) are filtered out.
-
-## Configuration
-
-User config is stored at `~/.claudebin/config.json` containing auth token and user info.
-
-## Plugin Commands
-
-When running with `--plugin-dir ./packages/plugin`:
-- `/share` - Publish current session to claudebin.com and get shareable URL
-- `/auth` - Authenticate with Claudebin via GitHub
-- `/whoami` - Check current authentication status
-- `/logout` - Clear saved credentials
 
 ## Commit Convention
 
