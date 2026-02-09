@@ -150,6 +150,8 @@
     "taskStopped": "Agent task stopped",
     "taskStopFailed": "Failed to stop agent task",
     "exitCode": "Exit code: {code}",
+    "tool": "Tool",
+    "unknownTool": "Unknown tool",
     "mcp": "MCP",
     "skill": "Skill",
     "customAnswer": "Custom answer: <underline>{answer}</underline>",
