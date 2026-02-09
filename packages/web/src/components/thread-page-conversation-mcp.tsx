@@ -1,5 +1,5 @@
 "use client";
-
+// @TODO: refactor
 import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
@@ -45,9 +45,11 @@ const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) =>
           {t("chat.mcp")}
           {md ? <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} />}
           {input ? <Code code={input} /> : null}
+
           {block.output ? (
             <Code
               code={

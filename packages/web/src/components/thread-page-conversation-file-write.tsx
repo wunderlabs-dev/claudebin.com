@@ -9,12 +9,14 @@ import type { FileWriteBlock } from "@/supabase/types/message";
 import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconPen } from "@/components/icon/svg-icon-pen";
+
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
 
@@ -37,8 +39,10 @@ const ThreadPageConversationFileWrite = ({ block }: ThreadPageConversationFileWr
           {t("chat.write")}
           {md ? <ThreadPageConversationChip label={block.file_path} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.file_path} />}
+
           <div className="flex justify-end">
             <Typography variant="small" className="text-green-50">
               +{t("chat.lines", { count: lineCount })}

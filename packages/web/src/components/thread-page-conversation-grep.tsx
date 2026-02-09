@@ -35,6 +35,7 @@ const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) 
           {t("chat.grep")}
           {md ? <ThreadPageConversationChip label={block.pattern} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.pattern} />}
           <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />

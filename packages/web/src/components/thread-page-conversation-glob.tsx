@@ -34,13 +34,16 @@ const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) 
         <AccordionTrigger>
           <SvgIconMagnifier size="sm" color="primary" />
           {t("chat.glob")}
+
           {block.numFiles ? (
             <Typography variant="caption" color="muted">
               {t("common.files", { count: block.numFiles })}
             </Typography>
           ) : null}
+
           {md ? <ThreadPageConversationChip label={block.pattern} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.pattern} />}
           <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />

@@ -50,7 +50,9 @@ const ThreadPageConversationTaskOutput = ({ block }: ThreadPageConversationTaskO
                 {block.description}
               </Typography>
             ) : null}
+
             {block.output ? <Code code={block.output} /> : null}
+
             {block.exitCode ? (
               <Typography variant="small" color="muted">
                 {t("chat.exitCode", { code: block.exitCode })}

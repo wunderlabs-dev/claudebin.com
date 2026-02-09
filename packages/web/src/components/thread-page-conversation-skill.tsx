@@ -35,6 +35,7 @@ const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps
           {t("chat.skill")}
           {md ? <ThreadPageConversationChip label={block.commandName} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.commandName} />}
           {block.instructions ? <Code code={block.instructions} /> : null}
