@@ -8,7 +8,8 @@
     "dev": "tsup src/index.ts --format esm --watch",
     "type-check": "tsc --noEmit",
     "generate-types": "openapi-typescript http://localhost:3000/api/openapi.json -o src/api.d.ts",
-    "generate-types:prod": "openapi-typescript https://claudebin.com/api/openapi.json -o src/api.d.ts"
+    "generate-types:prod": "openapi-typescript https://claudebin.com/api/openapi.json -o src/api.d.ts",
+    "prebuild:types": "bun run generate-types:prod"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

@@ -1,44 +1,24 @@
+import type { components } from "./api.d.js";
 import { getApiBaseUrl } from "./config.js";
 
-// Types based on the API schemas
-type AuthStartResponse = {
-  code: string;
-  url: string;
-  expires_at: string;
+// Re-export schema types for consumers
+export type AuthStartResponse = components["schemas"]["AuthStartResponse"];
+export type AuthPollResponse = components["schemas"]["AuthPollResponse"];
+export type AuthRefreshInput = components["schemas"]["AuthRefreshInput"];
+export type AuthRefreshResponse = components["schemas"]["AuthRefreshResponse"];
+export type AuthValidateResponse = components["schemas"]["AuthValidateResponse"];
+export type User = components["schemas"]["User"];
+export type SessionsPublishInput = components["schemas"]["SessionsPublishInput"];
+export type SessionsPublishResponse = components["schemas"]["SessionsPublishResponse"];
+export type SessionsPollResponse = components["schemas"]["SessionsPollResponse"];
+
+const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  }
+  return (await res.json()) as T;
 };
-
-type AuthPollResponse =
-  | { status: "pending" }
-  | { status: "expired" }
-  | { status: "success"; token: string; refresh_token: string; user: User };
-
-type User = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  avatar_url: string | null;
-};
-
-type AuthRefreshInput = { refresh_token: string };
-type AuthRefreshResponse =
-  | { success: true; access_token: string; refresh_token: string; expires_at?: number }
-  | { success: false; error?: string };
-
-type AuthValidateResponse = { valid: boolean };
-
-type SessionsPublishInput = {
-  title?: string;
-  conversation_data: string;
-  is_public: boolean;
-  access_token: string;
-};
-
-type SessionsPublishResponse = { id: string; status: string };
-
-type SessionsPollResponse =
-  | { status: "processing" }
-  | { status: "ready"; url: string }
-  | { status: "failed"; error: string };
 
 export const createApiClient = () => {
   const baseUrl = getApiBaseUrl();
@@ -46,38 +26,32 @@ export const createApiClient = () => {
   return {
     auth: {
       start: async (): Promise<AuthStartResponse> => {
-        const res = await fetch(`${baseUrl}/api/auth/start`, { method: "POST" });
-        return res.json();
+        return fetchJson(`${baseUrl}/api/auth/start`, { method: "POST" });
       },
       poll: async (code: string): Promise<AuthPollResponse> => {
-        const res = await fetch(`${baseUrl}/api/auth/poll?code=${encodeURIComponent(code)}`);
-        return res.json();
+        return fetchJson(`${baseUrl}/api/auth/poll?code=${encodeURIComponent(code)}`);
       },
       refresh: async (input: AuthRefreshInput): Promise<AuthRefreshResponse> => {
-        const res = await fetch(`${baseUrl}/api/auth/refresh`, {
+        return fetchJson(`${baseUrl}/api/auth/refresh`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input),
         });
-        return res.json();
       },
       validate: async (token: string): Promise<AuthValidateResponse> => {
-        const res = await fetch(`${baseUrl}/api/auth/validate?token=${encodeURIComponent(token)}`);
-        return res.json();
+        return fetchJson(`${baseUrl}/api/auth/validate?token=${encodeURIComponent(token)}`);
       },
     },
     sessions: {
       publish: async (input: SessionsPublishInput): Promise<SessionsPublishResponse> => {
-        const res = await fetch(`${baseUrl}/api/sessions/publish`, {
+        return fetchJson(`${baseUrl}/api/sessions/publish`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input),
         });
-        return res.json();
       },
       poll: async (id: string): Promise<SessionsPollResponse> => {
-        const res = await fetch(`${baseUrl}/api/sessions/poll?id=${encodeURIComponent(id)}`);
-        return res.json();
+        return fetchJson(`${baseUrl}/api/sessions/poll?id=${encodeURIComponent(id)}`);
       },
     },
   };

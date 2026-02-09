@@ -32,43 +32,44 @@ var writeConfig = async (config) => {
 };
 
 // src/api.ts
+var fetchJson = async (url, options) => {
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  }
+  return await res.json();
+};
 var createApiClient = () => {
   const baseUrl = getApiBaseUrl();
   return {
     auth: {
       start: async () => {
-        const res = await fetch(`${baseUrl}/api/auth/start`, { method: "POST" });
-        return res.json();
+        return fetchJson(`${baseUrl}/api/auth/start`, { method: "POST" });
       },
       poll: async (code) => {
-        const res = await fetch(`${baseUrl}/api/auth/poll?code=${encodeURIComponent(code)}`);
-        return res.json();
+        return fetchJson(`${baseUrl}/api/auth/poll?code=${encodeURIComponent(code)}`);
       },
       refresh: async (input) => {
-        const res = await fetch(`${baseUrl}/api/auth/refresh`, {
+        return fetchJson(`${baseUrl}/api/auth/refresh`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input)
         });
-        return res.json();
       },
       validate: async (token) => {
-        const res = await fetch(`${baseUrl}/api/auth/validate?token=${encodeURIComponent(token)}`);
-        return res.json();
+        return fetchJson(`${baseUrl}/api/auth/validate?token=${encodeURIComponent(token)}`);
       }
     },
     sessions: {
       publish: async (input) => {
-        const res = await fetch(`${baseUrl}/api/sessions/publish`, {
+        return fetchJson(`${baseUrl}/api/sessions/publish`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input)
         });
-        return res.json();
       },
       poll: async (id) => {
-        const res = await fetch(`${baseUrl}/api/sessions/poll?id=${encodeURIComponent(id)}`);
-        return res.json();
+        return fetchJson(`${baseUrl}/api/sessions/poll?id=${encodeURIComponent(id)}`);
       }
     }
   };
@@ -82,15 +83,6 @@ var POLL_INTERVAL_MS = 2e3;
 var AUTH_POLL_TIMEOUT_MS = 5 * 6e4;
 var SESSION_POLL_TIMEOUT_MS = 12e4;
 var MAX_SESSION_SIZE_BYTES = 50 * 1024 * 1024;
-var PollStatus = {
-  SUCCESS: "success",
-  EXPIRED: "expired"
-};
-var SessionStatus = {
-  PROCESSING: "processing",
-  READY: "ready",
-  FAILED: "failed"
-};
 
 // src/utils.ts
 import { exec } from "child_process";
@@ -136,25 +128,28 @@ var safeOpenUrl = (url) => {
 };
 
 // src/auth.ts
+var isAuthSuccess = (data) => {
+  return data.status === "success";
+};
 var pollForAuthCompletion = async (code, timeoutMs = AUTH_POLL_TIMEOUT_MS) => {
   const api = createApiClient();
   const result = await poll({
-    fn: async () => {
-      const data = await api.auth.poll(code);
-      return data;
-    },
-    isSuccess: (data) => data.status === PollStatus.SUCCESS && data.token !== void 0 && data.refresh_token !== void 0 && data.user !== void 0,
+    fn: () => api.auth.poll(code),
+    isSuccess: isAuthSuccess,
     isFailure: (data) => data.status === "expired",
     getFailureError: () => "Authentication code expired",
     intervalMs: POLL_INTERVAL_MS,
     timeoutMs,
     timeoutError: "Authentication timed out"
   });
-  const { token, refresh_token, user } = result;
-  if (!token || !refresh_token || !user) {
+  if (!isAuthSuccess(result)) {
     throw new Error("Invalid authentication response");
   }
-  return { token, refresh_token, user };
+  return {
+    token: result.token,
+    refresh_token: result.refresh_token,
+    user: result.user
+  };
 };
 var start = async () => {
   const api = createApiClient();
@@ -291,21 +286,24 @@ var extract = async (projectPath) => {
 var session = { extract };
 
 // src/tools.ts
+var isSessionReady = (data) => {
+  return data.status === "ready";
+};
+var isSessionFailed = (data) => {
+  return data.status === "failed";
+};
 var pollForProcessing = async (sessionId, timeoutMs = SESSION_POLL_TIMEOUT_MS) => {
   const api = createApiClient();
   const result = await poll({
-    fn: async () => {
-      const data = await api.sessions.poll(sessionId);
-      return data;
-    },
-    isSuccess: (data) => data.status === SessionStatus.READY && data.url !== void 0,
-    isFailure: (data) => data.status === SessionStatus.FAILED,
-    getFailureError: (data) => data.error || "Processing failed",
+    fn: () => api.sessions.poll(sessionId),
+    isSuccess: isSessionReady,
+    isFailure: isSessionFailed,
+    getFailureError: (data) => isSessionFailed(data) ? data.error : "Processing failed",
     intervalMs: POLL_INTERVAL_MS,
     timeoutMs,
     timeoutError: "Processing timed out after 2 minutes"
   });
-  if (!result.url) {
+  if (!isSessionReady(result)) {
     throw new Error("Invalid session response");
   }
   return result.url;

@@ -1,39 +1,30 @@
-import { createApiClient } from "./api.js";
+import { createApiClient, type AuthPollResponse, type User } from "./api.js";
 import { readConfig, writeConfig } from "./config.js";
 import {
   AUTH_POLL_TIMEOUT_MS,
   AUTH_TOKEN_TTL_MS,
   DEFAULT_TOKEN_TTL_MS,
   POLL_INTERVAL_MS,
-  PollStatus,
   TOKEN_REFRESH_BUFFER_MS,
 } from "./constants.js";
-import type { Config, UserConfig } from "./types.js";
+import type { Config } from "./types.js";
 import { poll, safeOpenUrl } from "./utils.js";
 
-interface AuthPollData {
-  status: string;
-  token?: string;
-  refresh_token?: string;
-  user?: UserConfig;
-}
+const isAuthSuccess = (
+  data: AuthPollResponse,
+): data is Extract<AuthPollResponse, { status: "success" }> => {
+  return data.status === "success";
+};
 
 const pollForAuthCompletion = async (
   code: string,
   timeoutMs = AUTH_POLL_TIMEOUT_MS,
-): Promise<{ token: string; refresh_token: string; user: UserConfig }> => {
+): Promise<{ token: string; refresh_token: string; user: User }> => {
   const api = createApiClient();
 
-  const result = await poll<AuthPollData>({
-    fn: async () => {
-      const data = await api.auth.poll(code);
-      return data as AuthPollData;
-    },
-    isSuccess: (data) =>
-      data.status === PollStatus.SUCCESS &&
-      data.token !== undefined &&
-      data.refresh_token !== undefined &&
-      data.user !== undefined,
+  const result = await poll<AuthPollResponse>({
+    fn: () => api.auth.poll(code),
+    isSuccess: isAuthSuccess,
     isFailure: (data) => data.status === "expired",
     getFailureError: () => "Authentication code expired",
     intervalMs: POLL_INTERVAL_MS,
@@ -41,13 +32,15 @@ const pollForAuthCompletion = async (
     timeoutError: "Authentication timed out",
   });
 
-  const { token, refresh_token, user } = result;
-
-  if (!token || !refresh_token || !user) {
+  if (!isAuthSuccess(result)) {
     throw new Error("Invalid authentication response");
   }
 
-  return { token, refresh_token, user };
+  return {
+    token: result.token,
+    refresh_token: result.refresh_token,
+    user: result.user,
+  };
 };
 
 const start = async (): Promise<{ code: string; url: string }> => {
@@ -103,9 +96,7 @@ const refresh = async (): Promise<boolean> => {
       auth: {
         token: result.access_token,
         refresh_token: result.refresh_token,
-        expires_at: result.expires_at
-          ? result.expires_at * 1_000
-          : Date.now() + DEFAULT_TOKEN_TTL_MS,
+        expires_at: result.expires_at ? result.expires_at * 1_000 : Date.now() + DEFAULT_TOKEN_TTL_MS,
       },
     });
 

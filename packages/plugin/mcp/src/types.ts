@@ -1,9 +1,7 @@
-export type UserConfig = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  avatar_url: string | null;
-};
+import type { User } from "./api.js";
+
+// Re-export User as UserConfig for backward compatibility
+export type UserConfig = User;
 
 export type AuthConfig = {
   token: string;

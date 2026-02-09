@@ -6,14 +6,3 @@ export const AUTH_POLL_TIMEOUT_MS = 5 * 60_000;
 export const SESSION_POLL_TIMEOUT_MS = 120_000;
 
 export const MAX_SESSION_SIZE_BYTES = 50 * 1024 * 1024;
-
-export const PollStatus = {
-  SUCCESS: "success",
-  EXPIRED: "expired",
-} as const;
-
-export const SessionStatus = {
-  PROCESSING: "processing",
-  READY: "ready",
-  FAILED: "failed",
-} as const;

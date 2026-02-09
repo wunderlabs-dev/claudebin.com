@@ -1,21 +1,22 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { createApiClient } from "./api.js";
+import { createApiClient, type SessionsPollResponse } from "./api.js";
 import { auth } from "./auth.js";
-import {
-  MAX_SESSION_SIZE_BYTES,
-  POLL_INTERVAL_MS,
-  SESSION_POLL_TIMEOUT_MS,
-  SessionStatus,
-} from "./constants.js";
+import { MAX_SESSION_SIZE_BYTES, POLL_INTERVAL_MS, SESSION_POLL_TIMEOUT_MS } from "./constants.js";
 import { session } from "./session.js";
 import { poll, safeOpenUrl } from "./utils.js";
 
-interface SessionPollData {
-  status: string;
-  url?: string;
-  error?: string;
-}
+const isSessionReady = (
+  data: SessionsPollResponse,
+): data is Extract<SessionsPollResponse, { status: "ready" }> => {
+  return data.status === "ready";
+};
+
+const isSessionFailed = (
+  data: SessionsPollResponse,
+): data is Extract<SessionsPollResponse, { status: "failed" }> => {
+  return data.status === "failed";
+};
 
 const pollForProcessing = async (
   sessionId: string,
@@ -23,20 +24,17 @@ const pollForProcessing = async (
 ): Promise<string> => {
   const api = createApiClient();
 
-  const result = await poll<SessionPollData>({
-    fn: async () => {
-      const data = await api.sessions.poll(sessionId);
-      return data as SessionPollData;
-    },
-    isSuccess: (data) => data.status === SessionStatus.READY && data.url !== undefined,
-    isFailure: (data) => data.status === SessionStatus.FAILED,
-    getFailureError: (data) => data.error || "Processing failed",
+  const result = await poll<SessionsPollResponse>({
+    fn: () => api.sessions.poll(sessionId),
+    isSuccess: isSessionReady,
+    isFailure: isSessionFailed,
+    getFailureError: (data) => (isSessionFailed(data) ? data.error : "Processing failed"),
     intervalMs: POLL_INTERVAL_MS,
     timeoutMs,
     timeoutError: "Processing timed out after 2 minutes",
   });
 
-  if (!result.url) {
+  if (!isSessionReady(result)) {
     throw new Error("Invalid session response");
   }
 
