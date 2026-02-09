@@ -43,6 +43,8 @@ type ThreadPageConversationContainerProps = {
   id: string;
   author: string;
   avatarUrl?: string | null;
+  isAuthor?: boolean;
+  isPublic?: boolean;
 };
 
 const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
@@ -123,32 +125,38 @@ const ThreadPageConversationContainer = ({
   const [fallback] = [...author];
   const messages = useMemo(() => compact(data?.messages), [data?.messages]);
 
-  const handleMessageClick = useCallback((idx: number) => {
-    if (fromIdx === null) {
-      setFromIdx(idx);
-    } else if (toIdx === null) {
-      if (idx < fromIdx) {
-        setToIdx(fromIdx);
+  const handleMessageClick = useCallback(
+    (idx: number) => {
+      if (fromIdx === null) {
         setFromIdx(idx);
+      } else if (toIdx === null) {
+        if (idx < fromIdx) {
+          setToIdx(fromIdx);
+          setFromIdx(idx);
+        } else {
+          setToIdx(idx);
+        }
       } else {
-        setToIdx(idx);
+        setFromIdx(idx);
+        setToIdx(null);
       }
-    } else {
-      setFromIdx(idx);
-      setToIdx(null);
-    }
-  }, [fromIdx, toIdx]);
+    },
+    [fromIdx, toIdx],
+  );
 
   const handleClearSelection = useCallback(() => {
     setFromIdx(null);
     setToIdx(null);
   }, []);
 
-  const isInRange = useCallback((idx: number) => {
-    if (fromIdx === null) return false;
-    if (toIdx === null) return idx === fromIdx;
-    return idx >= fromIdx && idx <= toIdx;
-  }, [fromIdx, toIdx]);
+  const isInRange = useCallback(
+    (idx: number) => {
+      if (fromIdx === null) return false;
+      if (toIdx === null) return idx === fromIdx;
+      return idx >= fromIdx && idx <= toIdx;
+    },
+    [fromIdx, toIdx],
+  );
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
