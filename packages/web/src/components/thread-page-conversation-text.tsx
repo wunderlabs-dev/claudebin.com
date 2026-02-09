@@ -1,12 +1,9 @@
 "use client";
 
 import { Children, isValidElement, useMemo, type ReactNode } from "react";
-import dynamic from "next/dynamic";
-import { isServer } from "@tanstack/react-query";
-import { head, last, not, split } from "ramda";
+import { head, last, split } from "ramda";
 import remarkGfm from "remark-gfm";
-
-const Markdown = dynamic(() => import("react-markdown"), { ssr: not(isServer) });
+import Markdown from "react-markdown";
 
 import type { Role, TextBlock } from "@/supabase/types/message";
 
