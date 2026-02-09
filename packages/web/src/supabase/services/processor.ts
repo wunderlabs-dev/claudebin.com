@@ -9,7 +9,7 @@ import type { ParsedMessage } from "@/supabase/services/parser";
 import { messages } from "@/supabase/repos/messages";
 import { parseJsonl } from "@/supabase/services/parser";
 import { sessions } from "@/supabase/repos/sessions";
-import { SessionStatus } from "@/trpc/routers/sessions";
+import { SessionStatus } from "@/api/schemas/sessions";
 import { type Block, BlockType, MessageRole } from "@/supabase/types/message";
 import { generateTitle } from "@/utils/openrouter";
 

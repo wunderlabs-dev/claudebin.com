@@ -1,5 +1,6 @@
 node_modules/
 dist/
+!packages/plugin/mcp/dist/
 .next/
 .env
 .env.local
