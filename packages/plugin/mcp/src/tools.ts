@@ -1,15 +1,15 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { createApiClient } from "../api.js";
-import { auth } from "../auth.js";
+import { createApiClient } from "./api.js";
+import { auth } from "./auth.js";
 import {
   MAX_SESSION_SIZE_BYTES,
   POLL_INTERVAL_MS,
   SESSION_POLL_TIMEOUT_MS,
   SessionStatus,
-} from "../constants.js";
-import { session } from "../session.js";
-import { poll, safeOpenUrl } from "../utils.js";
+} from "./constants.js";
+import { session } from "./session.js";
+import { poll, safeOpenUrl } from "./utils.js";
 
 interface SessionPollData {
   status: string;
@@ -43,7 +43,7 @@ const pollForProcessing = async (
   return result.url;
 };
 
-export const registerShare = (server: McpServer): void => {
+const registerShare = (server: McpServer): void => {
   server.registerTool(
     "share",
     {
@@ -100,4 +100,8 @@ export const registerShare = (server: McpServer): void => {
       }
     },
   );
+};
+
+export const registerAllTools = (server: McpServer): void => {
+  registerShare(server);
 };

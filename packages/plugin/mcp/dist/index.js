@@ -4,7 +4,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
-// src/tools/share.ts
+// src/tools.ts
 import { z } from "zod";
 
 // src/config.ts
@@ -290,7 +290,7 @@ var extract = async (projectPath) => {
 };
 var session = { extract };
 
-// src/tools/share.ts
+// src/tools.ts
 var pollForProcessing = async (sessionId, timeoutMs = SESSION_POLL_TIMEOUT_MS) => {
   const api = createApiClient();
   const result = await poll({
@@ -359,8 +359,6 @@ var registerShare = (server) => {
     }
   );
 };
-
-// src/tools/index.ts
 var registerAllTools = (server) => {
   registerShare(server);
 };
