@@ -1,12 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { isServer } from "@tanstack/react-query";
+import { useMediaQuery } from "usehooks-ts";
 
 import type { TaskOutputBlock } from "@/supabase/types/message";
 import type { VariantProps } from "class-variance-authority";
 
 import type { badgeVariants } from "@/components/ui/badge";
+
+import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconCode } from "@/components/icon/svg-icon-code";
 
@@ -27,6 +31,7 @@ type ThreadPageConversationTaskOutputProps = {
 
 const ThreadPageConversationTaskOutput = ({ block }: ThreadPageConversationTaskOutputProps) => {
   const t = useTranslations();
+  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
 
   const badgeVariant = useMemo((): VariantProps<typeof badgeVariants>["variant"] => {
     if (block.status === "completed") {
@@ -45,17 +50,31 @@ const ThreadPageConversationTaskOutput = ({ block }: ThreadPageConversationTaskO
           <SvgIconCode size="sm" color="primary" />
           {t("chat.taskOutput")}
 
-          {block.status ? (
-            <Badge size="sm" variant={badgeVariant}>
-              {block.status}
-            </Badge>
+          {md ? (
+            <Fragment>
+              {block.status ? (
+                <Badge size="sm" variant={badgeVariant}>
+                  {block.status}
+                </Badge>
+              ) : null}
+              <Badge size="sm">{block.task_id}</Badge>
+            </Fragment>
           ) : null}
-
-          <Badge size="sm">{block.task_id}</Badge>
         </AccordionTrigger>
 
         <AccordionContent>
           <div className="flex flex-col gap-2">
+            {md ? null : (
+              <div className="flex items-center gap-2">
+                {block.status ? (
+                  <Badge size="sm" variant={badgeVariant}>
+                    {block.status}
+                  </Badge>
+                ) : null}
+                <Badge size="sm">{block.task_id}</Badge>
+              </div>
+            )}
+
             {block.description ? (
               <Typography variant="small" color="muted">
                 {block.description}

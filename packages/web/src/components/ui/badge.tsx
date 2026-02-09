@@ -5,7 +5,8 @@ import { cn } from "@/utils/helpers";
 
 const badgeVariants = cva(
   [
-    "inline-flex items-center justify-center gap-2",
+    "inline-flex items-center justify-center",
+    "gap-2",
     "rounded-full",
     "font-mono font-normal uppercase leading-normal whitespace-nowrap",
     "[&>svg]:pointer-events-none",

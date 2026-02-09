@@ -14,7 +14,7 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
   return (
     <div
       data-slot="action"
-      className={cn("flex gap-3 items-center", "text-base", className)}
+      className={cn("flex flex-wrap items-center gap-3 text-base", className)}
       {...props}
     >
       <div className="shrink-0">{icon}</div>

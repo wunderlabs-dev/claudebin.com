@@ -1,4 +1,8 @@
+// @TODO: style
 import type { GenericBlock } from "@/supabase/types/message";
+
+import { Code } from "@/components/ui/code";
+import { Typography } from "@/components/ui/typography";
 
 type ThreadPageConversationGenericProps = {
   block: GenericBlock;
@@ -6,11 +10,9 @@ type ThreadPageConversationGenericProps = {
 
 const ThreadPageConversationGeneric = ({ block }: ThreadPageConversationGenericProps) => {
   return (
-    <div className="flex items-center gap-2 text-xs text-gray-600">
-      <span className="font-medium">{block.name}</span>
-      <pre className="overflow-x-auto px-1.5 py-0.5 bg-gray-100 rounded scrollbar-hidden">
-        <code>{JSON.stringify(block.input, null, 2)}</code>
-      </pre>
+    <div className="flex flex-col gap-4">
+      <Typography variant="small">{block.name}</Typography>
+      <Code code={JSON.stringify(block.input)} />
     </div>
   );
 };
