@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
 import type { TasksBlock, TaskItem } from "@/supabase/types/message";
@@ -39,6 +39,7 @@ const ThreadPageConversationTasks = ({ block }: ThreadPageConversationTasksProps
           <SvgIconLine size="sm" color="primary" />
           {t("chat.todos")}
         </AccordionTrigger>
+
         <AccordionContent>
           <Todo>
             {block.tasks.map((task) => (

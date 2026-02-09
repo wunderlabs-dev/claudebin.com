@@ -18,9 +18,9 @@ const ThreadPageConversationTaskStop = ({ block }: ThreadPageConversationTaskSto
   const statusText = block.success ? t("chat.taskStopped") : t("chat.taskStopFailed");
 
   return (
-    <Action icon={<SvgIconCircle size="sm" color="primary" />} title={t("chat.taskStop")}>
+    <Action icon={<SvgIconCircle size="sm" color="primary" />} title={t("chat.taskStop")} className="gap-1">
       <span className={statusColor}>{statusText}</span>
-      <span className="ml-1 text-gray-500">({block.task_id})</span>
+      <span className="text-gray-500">({block.task_id})</span>
     </Action>
   );
 };
