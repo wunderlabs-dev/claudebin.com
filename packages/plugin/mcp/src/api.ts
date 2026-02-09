@@ -1,4 +1,5 @@
-import type { components } from "./api.d.js";
+import createClient from "openapi-fetch";
+import type { paths, components } from "./api.d.js";
 import { getApiBaseUrl } from "./config.js";
 
 // Re-export schema types for consumers
@@ -12,46 +13,52 @@ export type SessionsPublishInput = components["schemas"]["SessionsPublishInput"]
 export type SessionsPublishResponse = components["schemas"]["SessionsPublishResponse"];
 export type SessionsPollResponse = components["schemas"]["SessionsPollResponse"];
 
-const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
-  const res = await fetch(url, options);
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-  }
-  return (await res.json()) as T;
-};
-
 export const createApiClient = () => {
-  const baseUrl = getApiBaseUrl();
+  const client = createClient<paths>({ baseUrl: getApiBaseUrl() });
 
   return {
     auth: {
-      start: async (): Promise<AuthStartResponse> => {
-        return fetchJson(`${baseUrl}/api/auth/start`, { method: "POST" });
+      start: async () => {
+        const { data, error } = await client.POST("/api/auth/start");
+        if (error) throw new Error("Failed to start auth");
+        return data;
       },
-      poll: async (code: string): Promise<AuthPollResponse> => {
-        return fetchJson(`${baseUrl}/api/auth/poll?code=${encodeURIComponent(code)}`);
-      },
-      refresh: async (input: AuthRefreshInput): Promise<AuthRefreshResponse> => {
-        return fetchJson(`${baseUrl}/api/auth/refresh`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(input),
+      poll: async (code: string) => {
+        const { data, error } = await client.GET("/api/auth/poll", {
+          params: { query: { code } },
         });
+        if (error) throw new Error("Failed to poll auth");
+        return data;
       },
-      validate: async (token: string): Promise<AuthValidateResponse> => {
-        return fetchJson(`${baseUrl}/api/auth/validate?token=${encodeURIComponent(token)}`);
+      refresh: async (input: AuthRefreshInput) => {
+        const { data, error } = await client.POST("/api/auth/refresh", {
+          body: input,
+        });
+        if (error) throw new Error("Failed to refresh token");
+        return data;
+      },
+      validate: async (token: string) => {
+        const { data, error } = await client.GET("/api/auth/validate", {
+          params: { query: { token } },
+        });
+        if (error) throw new Error("Failed to validate token");
+        return data;
       },
     },
     sessions: {
-      publish: async (input: SessionsPublishInput): Promise<SessionsPublishResponse> => {
-        return fetchJson(`${baseUrl}/api/sessions/publish`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(input),
+      publish: async (input: SessionsPublishInput) => {
+        const { data, error } = await client.POST("/api/sessions/publish", {
+          body: input,
         });
+        if (error) throw new Error("Failed to publish session");
+        return data;
       },
-      poll: async (id: string): Promise<SessionsPollResponse> => {
-        return fetchJson(`${baseUrl}/api/sessions/poll?id=${encodeURIComponent(id)}`);
+      poll: async (id: string) => {
+        const { data, error } = await client.GET("/api/sessions/poll", {
+          params: { query: { id } },
+        });
+        if (error) throw new Error("Failed to poll session");
+        return data;
       },
     },
   };

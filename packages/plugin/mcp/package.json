@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "openapi-fetch": "^0.16.0",
     "zod": "^3.25.0"
   },
   "devDependencies": {

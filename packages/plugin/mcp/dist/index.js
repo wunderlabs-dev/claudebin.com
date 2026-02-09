@@ -7,6 +7,9 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 // src/tools.ts
 import { z } from "zod";
 
+// src/api.ts
+import createClient from "openapi-fetch";
+
 // src/config.ts
 import fs from "fs/promises";
 import os from "os";
@@ -32,44 +35,51 @@ var writeConfig = async (config) => {
 };
 
 // src/api.ts
-var fetchJson = async (url, options) => {
-  const res = await fetch(url, options);
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-  }
-  return await res.json();
-};
 var createApiClient = () => {
-  const baseUrl = getApiBaseUrl();
+  const client = createClient({ baseUrl: getApiBaseUrl() });
   return {
     auth: {
       start: async () => {
-        return fetchJson(`${baseUrl}/api/auth/start`, { method: "POST" });
+        const { data, error } = await client.POST("/api/auth/start");
+        if (error) throw new Error("Failed to start auth");
+        return data;
       },
       poll: async (code) => {
-        return fetchJson(`${baseUrl}/api/auth/poll?code=${encodeURIComponent(code)}`);
+        const { data, error } = await client.GET("/api/auth/poll", {
+          params: { query: { code } }
+        });
+        if (error) throw new Error("Failed to poll auth");
+        return data;
       },
       refresh: async (input) => {
-        return fetchJson(`${baseUrl}/api/auth/refresh`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(input)
+        const { data, error } = await client.POST("/api/auth/refresh", {
+          body: input
         });
+        if (error) throw new Error("Failed to refresh token");
+        return data;
       },
       validate: async (token) => {
-        return fetchJson(`${baseUrl}/api/auth/validate?token=${encodeURIComponent(token)}`);
+        const { data, error } = await client.GET("/api/auth/validate", {
+          params: { query: { token } }
+        });
+        if (error) throw new Error("Failed to validate token");
+        return data;
       }
     },
     sessions: {
       publish: async (input) => {
-        return fetchJson(`${baseUrl}/api/sessions/publish`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(input)
+        const { data, error } = await client.POST("/api/sessions/publish", {
+          body: input
         });
+        if (error) throw new Error("Failed to publish session");
+        return data;
       },
       poll: async (id) => {
-        return fetchJson(`${baseUrl}/api/sessions/poll?id=${encodeURIComponent(id)}`);
+        const { data, error } = await client.GET("/api/sessions/poll", {
+          params: { query: { id } }
+        });
+        if (error) throw new Error("Failed to poll session");
+        return data;
       }
     }
   };
