@@ -1,6 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { createApiClient } from "../api-client.js";
+import { createApiClient } from "../api.js";
 import { auth } from "../auth.js";
 import {
   MAX_SESSION_SIZE_BYTES,

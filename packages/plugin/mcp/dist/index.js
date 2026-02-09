@@ -31,7 +31,7 @@ var writeConfig = async (config) => {
   });
 };
 
-// src/api-client.ts
+// src/api.ts
 var createApiClient = () => {
   const baseUrl = getApiBaseUrl();
   return {

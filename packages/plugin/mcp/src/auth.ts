@@ -1,4 +1,4 @@
-import { createApiClient } from "./api-client.js";
+import { createApiClient } from "./api.js";
 import { readConfig, writeConfig } from "./config.js";
 import {
   AUTH_POLL_TIMEOUT_MS,
