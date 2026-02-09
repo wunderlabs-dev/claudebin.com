@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "claudebin": {
-      "command": "bun",
-      "args": ["run", "${CLAUDE_PLUGIN_ROOT}/mcp/dist/index.js"],
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/dist/index.js"],
       "type": "stdio"
     }
   }
