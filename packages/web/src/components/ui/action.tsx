@@ -14,22 +14,16 @@ const Action = ({ icon, title, children, className, ...props }: ActionProps) => 
   return (
     <div
       data-slot="action"
-      className={cn(
-        "flex items-center",
-        "gap-4 px-4 py-3",
-        "border border-gray-200 rounded-xl",
-        "font-mono text-base",
-        className,
-      )}
+      className={cn("flex gap-3 items-center", "text-base", className)}
       {...props}
     >
       <div className="shrink-0">{icon}</div>
-      <Typography variant="small" className="font-mono">
+
+      <Typography variant="small" color="inherit">
         {title}
       </Typography>
-      <code className="overflow-x-auto scrollbar-hidden max-w-full px-2 py-0.5 bg-gray-200 rounded-sm text-gray-600 whitespace-nowrap">
-        {children}
-      </code>
+
+      {children}
     </div>
   );
 };

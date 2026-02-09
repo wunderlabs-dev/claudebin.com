@@ -4,7 +4,12 @@ import { useTranslations } from "next-intl";
 
 import type { TaskStopBlock } from "@/supabase/types/message";
 
-import { SvgIconCircle } from "@/components/icon/svg-icon-circle";
+import { cn } from "@/utils/helpers";
+
+import { SvgIconGauge } from "@/components/icon/svg-icon-gauge";
+import { SvgIconCheck } from "@/components/icon/svg-icon-check";
+
+import { Badge } from "@/components/ui/badge";
 import { Action } from "@/components/ui/action";
 
 type ThreadPageConversationTaskStopProps = {
@@ -16,14 +21,13 @@ const ThreadPageConversationTaskStop = ({ block }: ThreadPageConversationTaskSto
 
   return (
     <Action
-      className="gap-1"
-      title={t("chat.taskStop")}
-      icon={<SvgIconCircle size="sm" color="primary" />}
+      title={block.success ? t("chat.taskStopped") : t("chat.taskStopFailed")}
+      icon={block.success ? <SvgIconCheck size="sm" /> : <SvgIconGauge size="sm" />}
+      className={cn(block.success ? "text-green-50" : "text-red-50")}
     >
-      <span className={block.success ? "text-green-600" : "text-red-500"}>
-        {block.success ? t("chat.taskStopped") : t("chat.taskStopFailed")}
-      </span>
-      <span className="text-gray-500">({block.task_id})</span>
+      <Badge variant={block.success ? "success" : "error"} size="sm">
+        {block.task_id}
+      </Badge>
     </Action>
   );
 };

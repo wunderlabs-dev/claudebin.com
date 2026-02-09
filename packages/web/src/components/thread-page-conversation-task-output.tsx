@@ -1,12 +1,14 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 
 import type { TaskOutputBlock } from "@/supabase/types/message";
+import type { VariantProps } from "class-variance-authority";
 
-import { cn } from "@/utils/helpers";
+import type { badgeVariants } from "@/components/ui/badge";
 
-import { SvgIconDownload } from "@/components/icon/svg-icon-download";
+import { SvgIconCode } from "@/components/icon/svg-icon-code";
 
 import {
   Accordion,
@@ -15,6 +17,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 
+import { Badge } from "@/components/ui/badge";
 import { Code } from "@/components/ui/code";
 import { Typography } from "@/components/ui/typography";
 
@@ -25,22 +28,30 @@ type ThreadPageConversationTaskOutputProps = {
 const ThreadPageConversationTaskOutput = ({ block }: ThreadPageConversationTaskOutputProps) => {
   const t = useTranslations();
 
+  const badgeVariant = useMemo((): VariantProps<typeof badgeVariants>["variant"] => {
+    if (block.status === "completed") {
+      return "success";
+    }
+    if (block.status === "running") {
+      return "default";
+    }
+    return "neutral";
+  }, [block.status]);
+
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="task-output">
         <AccordionTrigger>
-          <SvgIconDownload size="sm" color="primary" />
-          {t("chat.taskOutput", { taskId: block.task_id })}
-          <span
-            className={cn(
-              "ml-2 text-xs",
-              block.status === "completed" ? "text-green-600" : undefined,
-              block.status === "running" ? "text-orange-500" : undefined,
-              block.status === "pending" ? "text-gray-500" : undefined,
-            )}
-          >
-            {block.status}
-          </span>
+          <SvgIconCode size="sm" color="primary" />
+          {t("chat.taskOutput")}
+
+          {block.status ? (
+            <Badge size="sm" variant={badgeVariant}>
+              {block.status}
+            </Badge>
+          ) : null}
+
+          <Badge size="sm">{block.task_id}</Badge>
         </AccordionTrigger>
 
         <AccordionContent>

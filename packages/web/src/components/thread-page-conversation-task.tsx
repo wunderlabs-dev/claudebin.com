@@ -4,7 +4,9 @@ import { useTranslations } from "next-intl";
 
 import type { TaskBlock } from "@/supabase/types/message";
 
-import { SvgIconHammer } from "@/components/icon/svg-icon-hammer";
+import { SvgIconCircle } from "@/components/icon/svg-icon-circle";
+
+import { Badge } from "@/components/ui/badge";
 import { Action } from "@/components/ui/action";
 
 type ThreadPageConversationTaskProps = {
@@ -15,8 +17,10 @@ const ThreadPageConversationTask = ({ block }: ThreadPageConversationTaskProps) 
   const t = useTranslations();
 
   return (
-    <Action icon={<SvgIconHammer size="sm" color="primary" />} title={t("chat.task")}>
-      {block.description}
+    <Action icon={<SvgIconCircle size="sm" color="neutral" />} title={t("chat.agent")}>
+      <Badge variant="neutral" size="sm">
+        {block.description}
+      </Badge>
     </Action>
   );
 };
