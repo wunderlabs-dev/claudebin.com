@@ -16,7 +16,7 @@ const ThreadPageConversationWebSearch = ({ block }: ThreadPageConversationWebSea
 
   return (
     <Action icon={<SvgIconMagnifier size="sm" color="primary" />} title={t("chat.search")}>
-      <pre className="font-mono text-sm inline-block rounded-sm py-1 px-2 bg-gray-200">
+      <pre className="inline-block py-1 px-2 bg-gray-200 rounded-lg font-mono text-sm">
         {block.query}
       </pre>
     </Action>
