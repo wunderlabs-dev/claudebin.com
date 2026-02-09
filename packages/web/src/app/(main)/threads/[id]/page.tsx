@@ -5,10 +5,12 @@ import { getTranslations } from "next-intl/server";
 import { isNil } from "ramda";
 import { format } from "date-fns";
 
-import { getProjectName } from "@/utils/helpers";
+import copy from "@/copy/en-EN.json";
 
 import { sessions } from "@/supabase/repos/sessions";
 import { createClient } from "@/supabase/server";
+
+import { getProjectName } from "@/utils/helpers";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 import { Container } from "@/components/ui/container";
@@ -23,36 +25,29 @@ type ThreadPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata | null> => {
   const { id } = await params;
 
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
 
-  if (isNil(thread)) {
-    return { title: "Thread Not Found" };
+  if (isNil(thread) || isNil(thread.title) || isNil(thread.profiles?.username)) {
+    return null;
   }
 
-  const title = thread.title ?? "Untitled Session";
-  const author = thread.profiles?.username ?? "Anonymous";
-  const model = thread.modelName;
-  const promptCount = thread.messageCount ?? 0;
-
-  const description = `${author} • ${model} • ${promptCount} prompts`;
-
   return {
-    title,
-    description,
+    title: thread.title,
+    description: copy.metadata.description,
     openGraph: {
-      title,
-      description,
+      title: thread.title,
+      description: copy.metadata.description,
       type: "article",
-      authors: [author],
+      authors: [thread.profiles.username],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: thread.title,
+      description: copy.metadata.description,
     },
   };
 };
