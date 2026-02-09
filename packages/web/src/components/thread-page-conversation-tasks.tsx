@@ -1,7 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { isNil } from "ramda";
 
 import type { TasksBlock, TaskItem } from "@/supabase/types/message";
 
@@ -10,14 +11,16 @@ import { SvgIconCheck } from "@/components/icon/svg-icon-check";
 import { SvgIconGauge } from "@/components/icon/svg-icon-gauge";
 import { SvgIconLine } from "@/components/icon/svg-icon-line";
 import { SvgIconDot } from "@/components/icon/svg-icon-dot";
+
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Todo, TodoItem, TodoItemIcon, TodoItemLabel } from "@/components/ui/todo";
+
 import { Chip } from "@/components/ui/chip";
+import { Todo, TodoItem, TodoItemIcon, TodoItemLabel } from "@/components/ui/todo";
 
 type ThreadPageConversationTasksProps = {
   block: TasksBlock;
@@ -38,19 +41,22 @@ const statusChipIcons: Record<TaskItem["status"], ReactNode> = {
 const ThreadPageConversationTasks = ({ block }: ThreadPageConversationTasksProps) => {
   const t = useTranslations();
 
-  const statusLabels: Record<TaskItem["status"], string> = {
-    pending: t("chat.taskPending"),
-    in_progress: t("chat.taskInProgress"),
-    completed: t("chat.taskCompleted"),
-  };
+  const label = useMemo(() => {
+    if (isNil(block.lastChange)) {
+      return null;
+    }
+    if (block.lastChange.action === "created") {
+      return t("chat.taskCreated");
+    }
 
-  const getChangeLabel = (): string | null => {
-    if (!block.lastChange) return null;
-    if (block.lastChange.action === "created") return t("chat.taskCreated");
-    return statusLabels[block.lastChange.newStatus];
-  };
+    const labels: Record<TaskItem["status"], string> = {
+      pending: t("chat.taskPending"),
+      completed: t("chat.taskCompleted"),
+      in_progress: t("chat.taskInProgress"),
+    };
 
-  const changeLabel = getChangeLabel();
+    return labels[block.lastChange.newStatus];
+  }, [block.lastChange, t]);
 
   return (
     <Accordion type="single" collapsible>
@@ -58,9 +64,9 @@ const ThreadPageConversationTasks = ({ block }: ThreadPageConversationTasksProps
         <AccordionTrigger>
           <SvgIconLine size="sm" color="primary" />
           {t("chat.todos")}
-          {block.lastChange && changeLabel && (
-            <Chip icon={statusChipIcons[block.lastChange.newStatus]} label={changeLabel} />
-          )}
+          {block.lastChange && label ? (
+            <Chip icon={statusChipIcons[block.lastChange.newStatus]} label={label} />
+          ) : null}
         </AccordionTrigger>
         <AccordionContent>
           <Todo>
