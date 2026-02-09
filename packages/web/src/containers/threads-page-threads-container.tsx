@@ -9,8 +9,8 @@ import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
 
-import { SEARCH_DEBOUNCE_MS } from "@/utils/constants";
-import { getPublicThreads, THREADS_PAGE_INITIAL } from "@/actions/threads";
+import { SEARCH_DEBOUNCE_MS, THREADS_PAGE_INITIAL } from "@/utils/constants";
+import { getPublicThreads } from "@/actions/threads";
 
 import { gradient } from "@/utils/renderers";
 

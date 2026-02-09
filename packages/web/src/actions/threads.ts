@@ -2,9 +2,7 @@
 
 import { createClient } from "@/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/supabase/repos/sessions";
-
-const THREADS_PAGE_SIZE = 20;
-const THREADS_PAGE_INITIAL = 0;
+import { THREADS_PAGE_SIZE, THREADS_PAGE_INITIAL } from "@/utils/constants";
 
 export const getPublicThreads = async (
   query?: string,
@@ -19,5 +17,3 @@ export const getPublicThreads = async (
     limit,
   });
 };
-
-export { THREADS_PAGE_INITIAL };

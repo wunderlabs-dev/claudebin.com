@@ -21,4 +21,7 @@ export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 
 export const SEARCH_DEBOUNCE_MS = 300;
 
+export const THREADS_PAGE_SIZE = 20;
+export const THREADS_PAGE_INITIAL = 0;
+
 export const APP_THREADS_URL = "https://claudebin.com/threads";
