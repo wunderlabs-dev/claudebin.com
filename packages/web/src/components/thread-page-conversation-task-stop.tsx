@@ -14,12 +14,15 @@ type ThreadPageConversationTaskStopProps = {
 const ThreadPageConversationTaskStop = ({ block }: ThreadPageConversationTaskStopProps) => {
   const t = useTranslations();
 
-  const statusColor = block.success ? "text-green-600" : "text-red-500";
-  const statusText = block.success ? t("chat.taskStopped") : t("chat.taskStopFailed");
-
   return (
-    <Action icon={<SvgIconCircle size="sm" color="primary" />} title={t("chat.taskStop")} className="gap-1">
-      <span className={statusColor}>{statusText}</span>
+    <Action
+      className="gap-1"
+      title={t("chat.taskStop")}
+      icon={<SvgIconCircle size="sm" color="primary" />}
+    >
+      <span className={block.success ? "text-green-600" : "text-red-500"}>
+        {block.success ? t("chat.taskStopped") : t("chat.taskStopFailed")}
+      </span>
       <span className="text-gray-500">({block.task_id})</span>
     </Action>
   );
