@@ -1,5 +1,5 @@
 import { createApiClient } from "./api-client.js";
-import { getApiBaseUrl, readConfig, writeConfig } from "./config.js";
+import { readConfig, writeConfig } from "./config.js";
 import {
   AUTH_POLL_TIMEOUT_MS,
   AUTH_TOKEN_TTL_MS,
