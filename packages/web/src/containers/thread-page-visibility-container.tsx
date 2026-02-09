@@ -15,8 +15,8 @@ import { Badge } from "@/components/ui/badge";
 
 type ThreadPageVisibilityContainerProps = {
   id: string;
-  initialIsPublic: boolean;
-  isAuthor: boolean;
+  initialIsPublic?: boolean;
+  isAuthor?: boolean;
 };
 
 const ThreadPageVisibilityContainer = ({
@@ -33,11 +33,11 @@ const ThreadPageVisibilityContainer = ({
     onMutate: () => setIsPublic(not),
     onError: () => {
       setIsPublic(not);
-      toast.error(t("common.visibilityChangeError"));
+      toast.error(t("common.sharingSettingsUpdateError"));
     },
     onSuccess: (result) => {
       setIsPublic(result.isPublic);
-      toast.success(t("common.visibilityChanged"));
+      toast.success(t("common.sharingSettingsUpdated"));
     },
   });
 
