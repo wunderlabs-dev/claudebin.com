@@ -29,7 +29,7 @@ export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Met
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
 
-  if (!thread) {
+  if (isNil(thread)) {
     return { title: "Thread Not Found" };
   }
 
