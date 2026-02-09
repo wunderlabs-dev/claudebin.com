@@ -1,5 +1,5 @@
 export const AVATAR_FALLBACK_DELAY_MS = 0;
-export const AVATAR_ASSISTANT_IMAGE_SRC = "/images/assistant.jpg";
+export const AVATAR_ASSISTANT_IMAGE_SRC = "/images/assistant-640x640.jpg";
 
 export const THREAD_ATTACHMENT_SIZE = 200;
 export const THREAD_TITLE_TRUNCATE_LENGTH = 56;

@@ -25,7 +25,7 @@ const hostGroteskBold = fetch(
 ).then((result) => result.arrayBuffer());
 
 const assistantSrc = `data:image/jpeg;base64,${readFileSync(
-  join(process.cwd(), "public/images/assistant.jpg"),
+  join(process.cwd(), "public/images/assistant-640x640.jpg"),
 ).toString("base64")}`;
 
 const backgroundSrc = `data:image/png;base64,${readFileSync(
