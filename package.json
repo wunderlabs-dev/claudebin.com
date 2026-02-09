@@ -1,14 +1,11 @@
 {
-  "name": "claudebin-monorepo",
+  "name": "claudebin",
   "private": true,
   "packageManager": "bun@1.3.5",
-  "workspaces": [
-    "app"
-  ],
   "scripts": {
-    "dev": "turbo run dev --filter=claudebin-web",
-    "build": "turbo run build",
-    "type-check": "turbo run type-check",
+    "dev": "bun --cwd app dev",
+    "build": "bun --cwd app build",
+    "type-check": "bun --cwd app type-check",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",
@@ -16,15 +13,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
-    "@types/lodash.truncate": "^4.4.9",
     "husky": "^9.1.7",
-    "turbo": "^2.7.5",
     "typescript": "^5.3.0"
-  },
-  "dependencies": {
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "lodash.truncate": "^4.4.2",
-    "react-virtuoso": "^4.18.1",
-    "remark-gfm": "^4.0.1"
   }
 }
