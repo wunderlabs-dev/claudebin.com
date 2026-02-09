@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
+import { APP_THREADS_URL } from "@/utils/constants";
+
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 
 import { CopyInput } from "@/components/ui/copy-input";
@@ -25,7 +27,7 @@ const ThreadPageThreadEmbed = ({ id: _id, onClose }: ThreadPageThreadEmbedProps)
         <NavLabel>{t("thread.hideEmbedPanel")}</NavLabel>
       </NavButton>
 
-      <CopyInput variant="snippet" />
+      <CopyInput variant="snippet" value={APP_THREADS_URL} />
 
       <Divider />
 
