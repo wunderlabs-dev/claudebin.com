@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { createApiClient } from "../api-client.js";
 import { auth } from "../auth.js";
-import { getApiBaseUrl } from "../config.js";
 import {
   MAX_SESSION_SIZE_BYTES,
   POLL_INTERVAL_MS,
@@ -9,7 +9,6 @@ import {
   SessionStatus,
 } from "../constants.js";
 import { session } from "../session.js";
-import { createApiClient } from "../trpc.js";
 import { poll, safeOpenUrl } from "../utils.js";
 
 interface SessionPollData {
@@ -18,25 +17,17 @@ interface SessionPollData {
   error?: string;
 }
 
-const fetchSessionPollData = async (
-  sessionId: string,
-  apiUrl: string,
-): Promise<SessionPollData | null> => {
-  const url = `${apiUrl}/api/trpc/sessions.poll?input=${encodeURIComponent(
-    JSON.stringify({ id: sessionId }),
-  )}`;
-  const res = await fetch(url);
-  const json = await res.json();
-  return json.result?.data ?? null;
-};
-
 const pollForProcessing = async (
   sessionId: string,
-  apiUrl: string,
   timeoutMs = SESSION_POLL_TIMEOUT_MS,
 ): Promise<string> => {
+  const api = createApiClient();
+
   const result = await poll<SessionPollData>({
-    fn: () => fetchSessionPollData(sessionId, apiUrl),
+    fn: async () => {
+      const data = await api.sessions.poll(sessionId);
+      return data as SessionPollData;
+    },
     isSuccess: (data) => data.status === SessionStatus.READY && data.url !== undefined,
     isFailure: (data) => data.status === SessionStatus.FAILED,
     getFailureError: (data) => data.error || "Processing failed",
@@ -82,16 +73,15 @@ export const registerShare = (server: McpServer): void => {
         }
 
         const api = createApiClient();
-        const apiUrl = getApiBaseUrl();
 
-        const result = await api.sessions.publish.mutate({
+        const result = await api.sessions.publish({
           title,
           conversation_data: content,
           is_public,
           access_token: token,
         });
 
-        const url = await pollForProcessing(result.id, apiUrl);
+        const url = await pollForProcessing(result.id);
         safeOpenUrl(url);
 
         return {

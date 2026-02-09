@@ -1,3 +1,4 @@
+import { createApiClient } from "./api-client.js";
 import { getApiBaseUrl, readConfig, writeConfig } from "./config.js";
 import {
   AUTH_POLL_TIMEOUT_MS,
@@ -7,7 +8,6 @@ import {
   PollStatus,
   TOKEN_REFRESH_BUFFER_MS,
 } from "./constants.js";
-import { createApiClient } from "./trpc.js";
 import type { Config, UserConfig } from "./types.js";
 import { poll, safeOpenUrl } from "./utils.js";
 
@@ -18,26 +18,23 @@ interface AuthPollData {
   user?: UserConfig;
 }
 
-const fetchAuthPollData = async (code: string, apiUrl: string): Promise<AuthPollData | null> => {
-  const url = `${apiUrl}/api/trpc/auth.poll?input=${encodeURIComponent(JSON.stringify({ code }))}`;
-  const res = await fetch(url);
-  const json = await res.json();
-  return json.result?.data ?? null;
-};
-
 const pollForAuthCompletion = async (
   code: string,
-  apiUrl: string,
   timeoutMs = AUTH_POLL_TIMEOUT_MS,
 ): Promise<{ token: string; refresh_token: string; user: UserConfig }> => {
+  const api = createApiClient();
+
   const result = await poll<AuthPollData>({
-    fn: () => fetchAuthPollData(code, apiUrl),
+    fn: async () => {
+      const data = await api.auth.poll(code);
+      return data as AuthPollData;
+    },
     isSuccess: (data) =>
       data.status === PollStatus.SUCCESS &&
       data.token !== undefined &&
       data.refresh_token !== undefined &&
       data.user !== undefined,
-    isFailure: (data) => data.status === PollStatus.EXPIRED,
+    isFailure: (data) => data.status === "expired",
     getFailureError: () => "Authentication code expired",
     intervalMs: POLL_INTERVAL_MS,
     timeoutMs,
@@ -57,7 +54,7 @@ const start = async (): Promise<{ code: string; url: string }> => {
   const api = createApiClient();
 
   try {
-    const data = await api.auth.start.mutate();
+    const data = await api.auth.start();
     return { code: data.code, url: data.url };
   } catch (error) {
     throw new Error(
@@ -67,12 +64,10 @@ const start = async (): Promise<{ code: string; url: string }> => {
 };
 
 const run = async (): Promise<string> => {
-  const apiUrl = getApiBaseUrl();
-
   const { code, url } = await start();
   safeOpenUrl(url);
 
-  const { token, refresh_token, user } = await pollForAuthCompletion(code, apiUrl);
+  const { token, refresh_token, user } = await pollForAuthCompletion(code);
 
   const config: Config = {
     auth: {
@@ -95,7 +90,7 @@ const refresh = async (): Promise<boolean> => {
   const api = createApiClient();
 
   try {
-    const result = await api.auth.refresh.mutate({
+    const result = await api.auth.refresh({
       refresh_token: config.auth.refresh_token,
     });
 
@@ -143,7 +138,7 @@ const validate = async (token: string): Promise<boolean> => {
   const api = createApiClient();
 
   try {
-    const result = await api.auth.validate.query({ token });
+    const result = await api.auth.validate(token);
     return result.valid;
   } catch {
     return false;
