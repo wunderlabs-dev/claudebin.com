@@ -8,7 +8,7 @@ import type { GrepBlock } from "@/supabase/types/message";
 
 import { breakpoints } from "@/utils/breakpoints";
 
-import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
+import { SvgIconFileSearch } from "@/components/icon/svg-icon-file-search";
 import {
   Accordion,
   AccordionItem,
@@ -31,7 +31,7 @@ const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) 
     <Accordion type="single" collapsible>
       <AccordionItem value="grep">
         <AccordionTrigger>
-          <SvgIconMagnifier size="sm" color="primary" />
+          <SvgIconFileSearch size="sm" color="primary" />
           {t("chat.grep")}
           {md ? <ThreadPageConversationChip label={block.pattern} /> : null}
         </AccordionTrigger>
