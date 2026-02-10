@@ -5,10 +5,10 @@ import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
-import { useEmbedMode } from "@/context/embed";
+import { useThreadEmbed } from "@/context/thread-embed";
 
+import { APP_URL } from "@/utils/constants";
 import { breakpoints } from "@/utils/breakpoints";
-import { APP_THREADS_URL } from "@/utils/constants";
 
 import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ const ThreadPageSidebarContainer = ({
   const t = useTranslations();
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
-  const { view, onChangeEmbedMode } = useEmbedMode();
+  const { view, selection, onChangeEmbedMode } = useThreadEmbed();
 
   return (
     <div className="flex flex-col items-start gap-6">
@@ -71,7 +71,7 @@ const ThreadPageSidebarContainer = ({
           ) : null}
 
           <div className="flex flex-col w-full gap-8">
-            <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
+            <CopyInput variant="link" value={`${APP_URL}/threads/${id}`} />
 
             <div className="flex flex-col gap-4">
               <Button variant="secondary" onClick={onChangeEmbedMode}>
@@ -84,7 +84,7 @@ const ThreadPageSidebarContainer = ({
           </div>
         </Fragment>
       ) : (
-        <ThreadPageThreadEmbed id={id} onClose={onChangeEmbedMode} />
+        <ThreadPageThreadEmbed id={id} selection={selection} onClose={onChangeEmbedMode} />
       )}
     </div>
   );

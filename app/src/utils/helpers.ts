@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
-import { concat, init, isNil, last, reduce } from "ramda";
+import { concat, head, init, isNil, last, reduce } from "ramda";
 import { twMerge } from "tailwind-merge";
 
 import { MessageRole } from "@/supabase/types/message";
@@ -13,6 +13,13 @@ export const hashString = (str: string): number => {
   return Math.abs(
     Array.from(str).reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0),
   );
+};
+
+export const getAvatarChar = (username: string | null) => {
+  if (username) {
+    return head(username);
+  }
+  return "?";
 };
 
 export const getProjectName = (workingDir: string | null) => {
@@ -29,11 +36,12 @@ export const compactConversation = (messages: ReadonlyArray<Message> = []): Mess
       const isConsecutiveAssistant =
         previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
 
-      return isConsecutiveAssistant
-        ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
-        : concat(accumulator, [{ ...message }]);
+      if (isConsecutiveAssistant) {
+        return concat(init(accumulator), [
+          { ...previous, idx: message.idx, content: concat(previous.content, message.content) },
+        ]);
+      }
+      return concat(accumulator, [{ ...message }]);
     },
     [],
     [...messages],

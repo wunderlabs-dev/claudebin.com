@@ -1,7 +1,9 @@
 import type { Message } from "@/server/repos/messages";
 
-import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 import { block } from "@/utils/renderers";
+import { getAvatarChar } from "@/utils/helpers";
+
+import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { ChatItem, ChatContent } from "@/components/ui/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,7 +19,7 @@ export const EmbedPageConversation = ({
   author,
   avatarUrl,
 }: EmbedPageConversationProps) => {
-  const [fallback] = [...author];
+  const fallback = getAvatarChar(author);
 
   return (
     <div className="flex flex-col gap-3">

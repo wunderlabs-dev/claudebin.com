@@ -15,7 +15,7 @@ const Chat = ({ className, ...props }: ChatProps) => {
   return <div data-slot="chat" className={cn("flex flex-col", className)} {...props} />;
 };
 
-const chatItemVariants = cva(["flex items-start gap-4 pb-8"], {
+const chatItemVariants = cva(["flex items-start gap-4 pb-8 transition-all ease-out"], {
   variants: {
     variant: {
       user: "justify-end",
@@ -45,7 +45,7 @@ const ChatItem = forwardRef<HTMLDivElement, ChatItemProps>(
 );
 
 const chatContentVariants = cva(
-  ["flex flex-col", "min-w-0", "gap-4 px-4 py-3", "border border-gray-250 rounded-xl"],
+  ["flex flex-col min-w-0 gap-4 px-4 py-3 border border-gray-250 rounded-xl"],
   {
     variants: {
       variant: {

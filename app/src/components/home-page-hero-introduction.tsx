@@ -54,10 +54,10 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                   </div>
 
                   <TabsContent value="cli">
-                    <CopyInput value={t("home.commandCli")} />
+                    <CopyInput value="claude plugin marketplace add wunderlabs-dev/claudebin" />
                   </TabsContent>
                   <TabsContent value="editor">
-                    <CopyInput value={t("home.commandEditor")} />
+                    <CopyInput value="claude plugin install claudebin@claudebin-marketplace" />
                   </TabsContent>
                 </Tabs>
               ) : (

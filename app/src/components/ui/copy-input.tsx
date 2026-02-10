@@ -14,7 +14,7 @@ import { THREAD_SNIPPET_TEXTAREA_ROWS } from "@/utils/constants";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/form-control";
 
-export const CopyInputVariants = ["terminal", "link", "snippet"] as const;
+export const CopyInputVariants = ["command", "link", "snippet"] as const;
 export type CopyInputVariant = (typeof CopyInputVariants)[number];
 
 type CopyInputProps = {
@@ -22,7 +22,7 @@ type CopyInputProps = {
   variant?: CopyInputVariant;
 };
 
-const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode => {
+const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode => {
   const t = useTranslations();
   const [copiedText, copy] = useCopyToClipboard();
 
@@ -30,16 +30,16 @@ const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode =
     copy(value);
   };
 
-  if (variant === "terminal") {
+  if (variant === "command") {
     return (
-      <div className="flex items-center justify-between gap-5 p-1 bg-gray-200 border border-gray-50 rounded-full transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
-        <div className="flex items-center gap-5 pl-6">
+      <div className="flex items-center justify-between gap-5 min-w-0 p-1 bg-gray-200 border border-gray-50 rounded-full transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
+        <div className="flex items-center gap-5 min-w-0 pl-6">
           <SvgIconBash className="shrink-0 text-orange-300" />
-          <span className="flex-1 font-mono text-base text-orange-50 whitespace-nowrap">
-            {value}
-          </span>
+          <span className="font-mono text-base text-orange-50 truncate">{value}</span>
         </div>
+
         <Button
+          className="shrink-0"
           variant="outline"
           color={copiedText === value ? "success" : "default"}
           onClick={handleCopy}

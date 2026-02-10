@@ -30,10 +30,10 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
     notFound();
   }
 
-  const fromIdx = Number.parseInt(from, 10);
-  const toIdx = Number.parseInt(to, 10);
+  const fromId = Number.parseInt(from);
+  const toId = Number.parseInt(to);
 
-  if (Number.isNaN(fromIdx) || Number.isNaN(toIdx) || fromIdx > toIdx) {
+  if (Number.isNaN(fromId) || Number.isNaN(toId) || fromId > toId) {
     notFound();
   }
 
@@ -52,10 +52,10 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
     notFound();
   }
 
-  const result = await messages.getByRange(supabase, id, fromIdx, toIdx);
+  const result = await messages.getByRange(supabase, id, fromId, toId);
 
   return (
-    <div className="flex flex-col gap-3 min-h-screen min-w-full bg-gray-100">
+    <div className="flex flex-col min-h-screen min-w-full gap-3 bg-gray-100">
       <div className="flex flex-col gap-3 pt-3 px-3">
         <Typography variant="body" fontWeight="semibold">
           {thread.title}

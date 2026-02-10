@@ -1,111 +1,26 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
-import { last, concat, init, reduce } from "ramda";
-
-import { useEmbedMode } from "@/context/embed";
-
-import { BlockType, MessageRole } from "@/supabase/types/message";
-import type { ContentBlock } from "@/supabase/types/message";
-import type { Message } from "@/server/repos/messages";
+import { block } from "@/utils/renderers";
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
-import { cn } from "@/utils/helpers";
-import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
+import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
+import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
+
+import { useThreadEmbed } from "@/context/thread-embed";
 
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
-import { CopyInput } from "@/components/ui/copy-input";
-import { Typography } from "@/components/ui/typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { ThreadPageConversationText } from "@/components/thread-page-conversation-text";
-import { ThreadPageConversationBash } from "@/components/thread-page-conversation-bash";
-import { ThreadPageConversationFileRead } from "@/components/thread-page-conversation-file-read";
-import { ThreadPageConversationFileWrite } from "@/components/thread-page-conversation-file-write";
-import { ThreadPageConversationFileEdit } from "@/components/thread-page-conversation-file-edit";
-import { ThreadPageConversationGlob } from "@/components/thread-page-conversation-glob";
-import { ThreadPageConversationGrep } from "@/components/thread-page-conversation-grep";
-import { ThreadPageConversationTask } from "@/components/thread-page-conversation-task";
-import { ThreadPageConversationTaskOutput } from "@/components/thread-page-conversation-task-output";
-import { ThreadPageConversationTaskStop } from "@/components/thread-page-conversation-task-stop";
-import { ThreadPageConversationTasks } from "@/components/thread-page-conversation-tasks";
-import { ThreadPageConversationQuestions } from "@/components/thread-page-conversation-questions";
-import { ThreadPageConversationWebFetch } from "@/components/thread-page-conversation-web-fetch";
-import { ThreadPageConversationWebSearch } from "@/components/thread-page-conversation-web-search";
-import { ThreadPageConversationMcp } from "@/components/thread-page-conversation-mcp";
-import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
-import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
+import { ThreadPageConversationContinue } from "@/components/thread-page-conversation-continue";
 
 type ThreadPageConversationContainerProps = {
   id: string;
   author: string;
   avatarUrl?: string | null;
-  isAuthor?: boolean;
-  isPublic?: boolean;
-};
-
-const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
-  reduce<Message, Message[]>(
-    (accumulator, message) => {
-      const previous = last(accumulator);
-      const assistant =
-        previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
-
-      return assistant
-        ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
-        : concat(accumulator, [{ ...message }]);
-    },
-    [],
-    [...messages],
-  );
-
-const renderer = {
-  message: (block: ContentBlock, index: number): ReactNode => {
-    switch (block.type) {
-      case BlockType.TEXT:
-        return <ThreadPageConversationText key={index} block={block} />;
-      case BlockType.BASH:
-        return <ThreadPageConversationBash key={index} block={block} />;
-      case BlockType.FILE_READ:
-        return <ThreadPageConversationFileRead key={index} block={block} />;
-      case BlockType.FILE_WRITE:
-        return <ThreadPageConversationFileWrite key={index} block={block} />;
-      case BlockType.FILE_EDIT:
-        return <ThreadPageConversationFileEdit key={index} block={block} />;
-      case BlockType.GLOB:
-        return <ThreadPageConversationGlob key={index} block={block} />;
-      case BlockType.GREP:
-        return <ThreadPageConversationGrep key={index} block={block} />;
-      case BlockType.TASK:
-        return <ThreadPageConversationTask key={index} block={block} />;
-      case BlockType.TASK_OUTPUT:
-        return <ThreadPageConversationTaskOutput key={index} block={block} />;
-      case BlockType.TASK_STOP:
-        return <ThreadPageConversationTaskStop key={index} block={block} />;
-      case BlockType.TASKS:
-        return <ThreadPageConversationTasks key={index} block={block} />;
-      case BlockType.QUESTION:
-        return <ThreadPageConversationQuestions key={index} block={block} />;
-      case BlockType.WEB_FETCH:
-        return <ThreadPageConversationWebFetch key={index} block={block} />;
-      case BlockType.WEB_SEARCH:
-        return <ThreadPageConversationWebSearch key={index} block={block} />;
-      case BlockType.MCP:
-        return <ThreadPageConversationMcp key={index} block={block} />;
-      case BlockType.GENERIC:
-        return <ThreadPageConversationGeneric key={index} block={block} />;
-      case BlockType.SKILL:
-        return <ThreadPageConversationSkill key={index} block={block} />;
-      default:
-        return null;
-    }
-  },
 };
 
 const ThreadPageConversationContainer = ({
@@ -113,85 +28,70 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
+  const { view, selection, onSetSelection } = useThreadEmbed();
+  const [hoveredIdx, setHoveredIdx] = useState<number | undefined>(undefined);
+
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
   });
 
-  const [fallback] = [...author];
-  const { view, from, to, hovered, onSelectMessage, onHoverMessage } = useEmbedMode();
-
-  const t = useTranslations();
-  const messages = useMemo(() => compact(data?.messages), [data?.messages]);
+  const fallback = getAvatarChar(author);
+  const messages = useMemo(() => compactConversation(data?.messages), [data?.messages]);
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
 
+  const inSelection = (idx: number) => {
+    const from = selection.from;
+    const to = selection.to ?? hoveredIdx;
+    if (from === undefined || to === undefined) return false;
+
+    const min = Math.min(from, to);
+    const max = Math.max(from, to);
+
+    return idx >= min && idx <= max;
+  };
+
+  const handleChatClick = (idx: number) => {
+    if (view === "embed") {
+      onSetSelection(idx);
+    }
+  };
+
   return (
     <Chat className="min-h-screen lg:pr-12">
-      {messages.map((message, index) => {
-        const isActive =
-          index === from ||
-          index === to ||
-          (from !== null && to !== null && index >= from && index <= to);
+      {messages.map((message) => (
+        <ChatItem
+          key={message.uuid}
+          variant={message.role}
+          className={cn(
+            view === "embed" && "cursor-pointer opacity-50 hover:opacity-100",
+            view === "embed" && inSelection(message.idx) && "opacity-100",
+          )}
+          onClick={() => handleChatClick(message.idx)}
+          onMouseEnter={() => view === "embed" && setHoveredIdx(message.idx)}
+          onMouseLeave={() => view === "embed" && setHoveredIdx(undefined)}
+        >
+          {message.role === "assistant" ? (
+            <Avatar size="sm">
+              <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+            </Avatar>
+          ) : null}
 
-        const isHovered = hovered !== null && index === hovered;
+          <ChatContent>{message.content.map(block)}</ChatContent>
 
-        const isInHoverRange =
-          from !== null &&
-          to === null &&
-          hovered !== null &&
-          index >= Math.min(from, hovered) &&
-          index <= Math.max(from, hovered);
+          {message.role === "user" ? (
+            <Avatar size="sm">
+              <AvatarImage src={avatarUrl ?? undefined} />
+              <AvatarFallback>{fallback}</AvatarFallback>
+            </Avatar>
+          ) : null}
+        </ChatItem>
+      ))}
 
-        return (
-          <ChatItem
-            key={message.uuid}
-            variant={message.role}
-            onClick={() => onSelectMessage(index)}
-            onMouseEnter={() => onHoverMessage(index)}
-            onMouseLeave={() => onHoverMessage(null)}
-            className={cn(
-              view === "embed" ? "cursor-pointer opacity-25" : undefined,
-              view === "embed" && (isActive || isHovered || isInHoverRange)
-                ? "opacity-100"
-                : undefined,
-            )}
-          >
-            {message.role === "assistant" ? (
-              <Avatar size="sm">
-                <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-              </Avatar>
-            ) : null}
-
-            <ChatContent>{message.content.map(renderer.message)}</ChatContent>
-
-            {message.role === "user" ? (
-              <Avatar size="sm">
-                <AvatarImage src={avatarUrl ?? undefined} />
-                <AvatarFallback>{fallback}</AvatarFallback>
-              </Avatar>
-            ) : null}
-          </ChatItem>
-        );
-      })}
-
-      <ChatItem variant="assistant">
-        <Avatar size="sm">
-          <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-        </Avatar>
-
-        <ChatContent className="w-auto" data-continue-conversation>
-          <div className="flex flex-col gap-2">
-            <Typography variant="h4">{t("thread.continueTitle")}</Typography>
-            <Typography variant="small" color="muted">
-              {t("thread.continueDescription")}
-            </Typography>
-          </div>
-          <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-        </ChatContent>
-      </ChatItem>
+      <ThreadPageConversationContinue id={id} />
     </Chat>
   );
 };

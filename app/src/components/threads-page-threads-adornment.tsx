@@ -35,10 +35,10 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
     return (
       <DividerGridRow>
         <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-        <DividerGridCell className="grid grid-cols-12 col-span-12 border-l border-r lg:col-span-10">
+        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-l border-r">
           <DividerGridRow>
-            <DividerGridCell className="col-span-9 py-6 border-r lg:col-span-8" />
-            <DividerGridCell className="flex items-center justify-end col-span-3 px-4 lg:col-span-4" />
+            <DividerGridCell className="col-span-9 lg:col-span-8 py-6 border-r" />
+            <DividerGridCell className="flex items-center justify-end col-span-3 lg:col-span-4 px-4" />
           </DividerGridRow>
         </DividerGridCell>
         <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />

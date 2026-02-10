@@ -5,10 +5,9 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/utils/helpers";
 
 import { SvgIconBash } from "@/components/icon/svg-icon-bash";
-
 import { CopyInput } from "@/components/ui/copy-input";
-import { Steps, StepsItem } from "@/components/ui/steps";
 import { Typography } from "@/components/ui/typography";
+import { Steps, StepsItem } from "@/components/ui/steps";
 
 type ProfilePageQuickStartProps = ComponentProps<"div">;
 
@@ -28,18 +27,30 @@ const ProfilePageQuickStart = ({ className, ...props }: ProfilePageQuickStartPro
       <Steps>
         <StepsItem>{t("user.shareGuideStep1")}</StepsItem>
 
-        <div className="pl-11">
-          <CopyInput variant="terminal" value="npm i -g claudebin" />
+        <div className="max-w-full pl-11">
+          <CopyInput
+            variant="command"
+            value="claude plugin marketplace add wunderlabs-dev/claudebin"
+          />
         </div>
 
         <StepsItem>{t("user.shareGuideStep2")}</StepsItem>
-        <StepsItem>{t("user.shareGuideStep3")}</StepsItem>
 
-        <div className="pl-11">
-          <CopyInput variant="terminal" value="/claudebin:share" />
+        <div className="max-w-full pl-11">
+          <CopyInput
+            variant="command"
+            value="claude plugin install claudebin@claudebin-marketplace"
+          />
         </div>
 
+        <StepsItem>{t("user.shareGuideStep3")}</StepsItem>
         <StepsItem>{t("user.shareGuideStep4")}</StepsItem>
+
+        <div className="max-w-full pl-11">
+          <CopyInput variant="command" value="/claudebin:share" />
+        </div>
+
+        <StepsItem>{t("user.shareGuideStep5")}</StepsItem>
       </Steps>
     </div>
   );

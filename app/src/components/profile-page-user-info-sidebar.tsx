@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
-import { cn } from "@/utils/helpers";
+import { cn, getAvatarChar } from "@/utils/helpers";
 
 import { SvgIconCalendar } from "@/components/icon/svg-icon-calendar";
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";
@@ -39,7 +39,7 @@ const ProfilePageUserInfoSidebar = ({
   ...props
 }: ProfilePageUserInfoSidebarProps) => {
   const t = useTranslations();
-  const [fallback] = username ?? "?";
+  const fallback = getAvatarChar(username);
 
   const stats = [
     {
