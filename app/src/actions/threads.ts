@@ -2,6 +2,7 @@
 
 import { createClient } from "@/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/supabase/repos/sessions";
+
 import { THREADS_PAGE_SIZE, THREADS_PAGE_INITIAL } from "@/utils/constants";
 
 export const getPublicThreads = async (

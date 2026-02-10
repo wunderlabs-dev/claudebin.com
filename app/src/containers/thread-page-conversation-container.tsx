@@ -125,8 +125,7 @@ const ThreadPageConversationContainer = ({
   }
 
   return (
-    <>
-      <Chat className="min-h-screen lg:pr-12">
+    <Chat className="min-h-screen lg:pr-12">
         {messages.map((message) => (
           <ChatItem key={message.uuid} variant={message.role}>
             {message.role === "assistant" ? (
@@ -161,8 +160,7 @@ const ThreadPageConversationContainer = ({
             <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
           </ChatContent>
         </ChatItem>
-      </Chat>
-    </>
+    </Chat>
   );
 };
 
