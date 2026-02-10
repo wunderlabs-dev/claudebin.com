@@ -17,6 +17,7 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { ThreadPageThreadMeta } from "@/components/thread-page-thread-meta";
 import { ThreadPageThreadEmbed } from "@/components/thread-page-thread-embed";
 import { ThreadPageSidebarContinueConversation } from "@/components/thread-page-sidebar-continue-conversation";
+import { ThreadPageSidebarDeleteContainer } from "@/containers/thread-page-sidebar-delete-container";
 
 type ThreadPageSidebarContainerProps = {
   id: string;
@@ -80,6 +81,7 @@ const ThreadPageSidebarContainer = ({
               </Button>
 
               <ThreadPageSidebarContinueConversation />
+              <ThreadPageSidebarDeleteContainer />
             </div>
           </div>
         </Fragment>

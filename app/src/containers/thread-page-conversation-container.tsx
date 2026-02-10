@@ -67,7 +67,7 @@ const ThreadPageConversationContainer = ({
           key={message.uuid}
           variant={message.role}
           className={cn(
-            view === "embed" && "cursor-pointer opacity-50 hover:opacity-100",
+            view === "embed" && "cursor-pointer opacity-30 hover:opacity-100",
             view === "embed" && inSelection(message.idx) && "opacity-100",
           )}
           onClick={() => handleChatClick(message.idx)}
