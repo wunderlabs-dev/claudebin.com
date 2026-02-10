@@ -5,7 +5,7 @@ import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
-import { useThreadEmbed } from "@/context/embed";
+import { useThreadEmbed } from "@/context/thread-embed";
 
 import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";

@@ -13,7 +13,6 @@ import { Typography } from "@/components/ui/typography";
 
 type ThreadPageAuthorMetaProps = {
   title: string;
-  author: string;
   username?: string | null;
   avatarUrl?: string | null;
   createdAt: string;
@@ -21,13 +20,13 @@ type ThreadPageAuthorMetaProps = {
 
 const ThreadPageAuthorMeta = ({
   title,
-  author,
   avatarUrl,
   username,
   createdAt,
 }: ThreadPageAuthorMetaProps) => {
   const t = useTranslations();
-  const fallback = getAvatarChar(author);
+  const displayName = username ?? t("common.deactivated");
+  const fallback = getAvatarChar(displayName);
 
   return (
     <div className="flex flex-col min-w-full gap-1 pb-4 border-b border-gray-250 lg:pl-12">
@@ -37,7 +36,7 @@ const ThreadPageAuthorMeta = ({
         {username ? (
           <NavLink href={`/profile/${username}`}>
             <Avatar size="sm">
-              {avatarUrl ? <AvatarImage src={avatarUrl} alt={author} /> : null}
+              {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
               <AvatarFallback>{fallback}</AvatarFallback>
             </Avatar>
             <Typography
@@ -54,7 +53,7 @@ const ThreadPageAuthorMeta = ({
               <AvatarFallback>{fallback}</AvatarFallback>
             </Avatar>
             <Typography variant="small" color="accent">
-              {author}
+              {displayName}
             </Typography>
           </Fragment>
         )}

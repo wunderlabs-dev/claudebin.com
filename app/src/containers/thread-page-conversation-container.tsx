@@ -21,8 +21,6 @@ type ThreadPageConversationContainerProps = {
   id: string;
   author: string;
   avatarUrl?: string | null;
-  isAuthor?: boolean;
-  isPublic?: boolean;
 };
 
 const ThreadPageConversationContainer = ({

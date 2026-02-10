@@ -6,11 +6,11 @@ import { APP_THREADS_URL } from "@/utils/constants";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 
+import { Divider } from "@/components/ui/divider";
 import { Input } from "@/components/ui/form-control";
 import { CopyInput } from "@/components/ui/copy-input";
-import { Divider } from "@/components/ui/divider";
-import { NavButton, NavLabel } from "@/components/ui/nav";
 import { Typography } from "@/components/ui/typography";
+import { NavButton, NavLabel } from "@/components/ui/nav";
 
 type ThreadPageThreadEmbedProps = {
   id: string;

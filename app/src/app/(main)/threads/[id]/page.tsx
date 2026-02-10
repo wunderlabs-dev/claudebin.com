@@ -21,7 +21,7 @@ import { ThreadPageConversationSkeleton } from "@/components/thread-page-convers
 import { ThreadPageSidebarContainer } from "@/containers/thread-page-sidebar-container";
 import { ThreadPageConversationContainer } from "@/containers/thread-page-conversation-container";
 
-import { ThreadEmbedProvider } from "@/context/embed";
+import { ThreadEmbedProvider } from "@/context/thread-embed";
 
 type ThreadPageProps = {
   params: Promise<{ id: string }>;
@@ -65,7 +65,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   } = await supabase.auth.getUser();
 
   const thread = await sessions.getByIdWithAuthor(supabase, id, user?.id);
-  const isAuthor = user?.id === thread?.userId;
 
   if (isNil(thread)) {
     notFound();
@@ -88,7 +87,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
               username={thread.profiles?.username}
               createdAt={thread.createdAt}
               title={thread.title ?? t("common.untitled")}
-              author={thread.profiles?.username ?? t("common.deactivated")}
             />
           </div>
 
@@ -97,8 +95,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
               id={thread.id}
               avatarUrl={thread.profiles?.avatarUrl}
               author={thread.profiles?.username ?? t("common.deactivated")}
-              isAuthor={isAuthor}
-              isPublic={thread.isPublic}
             />
           </Suspense>
         </div>
@@ -106,9 +102,9 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
         <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 lg:col-span-3 overflow-y-auto lg:h-screen px-0 pt-12 lg:px-6 lg:pt-24 lg:pb-12 border-t border-gray-250 lg:border-t-0 lg:border-l">
           <ThreadPageSidebarContainer
             id={thread.id}
-            isAuthor={isAuthor}
             isPublic={thread.isPublic}
             initialLiked={thread.hasLiked}
+            isAuthor={user?.id === thread?.userId}
             createdAt={format(thread.createdAt, "MM/dd/yyyy")}
             workingDir={getProjectName(thread.workingDir)}
             modelName={thread.modelName}

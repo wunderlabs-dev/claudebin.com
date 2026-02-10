@@ -1,5 +1,5 @@
 "use client";
-// @TODO: refactor
+
 import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
@@ -9,6 +9,7 @@ import type { McpBlock } from "@/supabase/types/message";
 import { breakpoints } from "@/utils/breakpoints";
 
 import { SvgIconMcp } from "@/components/icon/svg-icon-mcp";
+
 import {
   Accordion,
   AccordionItem,
@@ -26,15 +27,21 @@ type ThreadPageConversationMcpProps = {
 const formatInput = (input: Record<string, unknown>): string => {
   return Object.entries(input)
     .map(([key, value]) => {
-      const str = typeof value === "string" ? value : JSON.stringify(value);
-      return `${key}: ${str}`;
+      const formatted = typeof value === "string" ? value : JSON.stringify(value);
+      return `${key}: ${formatted}`;
     })
     .join("\n");
+};
+
+const formatOutput = (output: unknown): string => {
+  return typeof output === "string" ? output : JSON.stringify(output, null, 2);
 };
 
 const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) => {
   const t = useTranslations();
   const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+
+  const label = `${block.server} → ${block.tool}`;
   const input = formatInput(block.input);
 
   return (
@@ -43,22 +50,13 @@ const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) =>
         <AccordionTrigger>
           <SvgIconMcp size="sm" color="primary" />
           {t("chat.mcp")}
-          {md ? <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} /> : null}
+          {md ? <ThreadPageConversationChip label={label} /> : null}
         </AccordionTrigger>
 
         <AccordionContent>
-          {md ? null : <ThreadPageConversationChip label={`${block.server} → ${block.tool}`} />}
+          {md ? null : <ThreadPageConversationChip label={label} />}
           {input ? <Code code={input} /> : null}
-
-          {block.output ? (
-            <Code
-              code={
-                typeof block.output === "string"
-                  ? block.output
-                  : JSON.stringify(block.output, null, 2)
-              }
-            />
-          ) : null}
+          {block.output ? <Code code={formatOutput(block.output)} /> : null}
         </AccordionContent>
       </AccordionItem>
     </Accordion>
