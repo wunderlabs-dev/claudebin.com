@@ -21,8 +21,8 @@ const INITIAL_SELECTION: ThreadEmbedSelection = { from: undefined, to: undefined
 const ThreadEmbedContext = createContext<ThreadEmbedContextValue>({
   view: "view",
   selection: INITIAL_SELECTION,
-  onChangeEmbedMode: () => {},
-  onSetSelection: () => {},
+  onChangeEmbedMode: () => { },
+  onSetSelection: () => { },
 });
 
 type ThreadEmbedProviderProps = {
@@ -49,6 +49,9 @@ const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
       }
       if (prev.to === undefined) {
         return { from: prev.from, to: idx };
+      }
+      if (prev.from && prev.to) {
+        return { from: idx, to: undefined };
       }
       return { from: idx, to: undefined };
     });

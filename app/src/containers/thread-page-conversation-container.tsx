@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { block } from "@/utils/renderers";
 import { getMessagesBySessionId } from "@/server/actions/messages";
+
+import { both, gte, lte } from "ramda";
 
 import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
@@ -28,7 +30,8 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
-  const { view, onSetSelection } = useThreadEmbed();
+  const { view, selection, onSetSelection } = useThreadEmbed();
+  const [hoveredIdx, setHoveredIdx] = useState<number | undefined>(undefined);
 
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
@@ -41,6 +44,17 @@ const ThreadPageConversationContainer = ({
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
+
+  const inSelection = (idx: number) => {
+    const from = selection.from;
+    const to = selection.to ?? hoveredIdx;
+    if (from === undefined || to === undefined) return false;
+
+    const min = Math.min(from, to);
+    const max = Math.max(from, to);
+
+    return idx >= min && idx <= max;
+  };
 
   const handleChatClick = (idx: number) => {
     if (view === "embed") {
@@ -55,9 +69,12 @@ const ThreadPageConversationContainer = ({
           key={message.uuid}
           variant={message.role}
           className={cn(
-            view === "embed" ? "cursor-pointer opacity-50 hover:opacity-100" : undefined,
+            view === "embed" && "cursor-pointer opacity-50 hover:opacity-100",
+            view === "embed" && inSelection(message.idx) && "opacity-100",
           )}
           onClick={() => handleChatClick(message.idx)}
+          onMouseEnter={() => view === "embed" && setHoveredIdx(message.idx)}
+          onMouseLeave={() => view === "embed" && setHoveredIdx(undefined)}
         >
           {message.role === "assistant" ? (
             <Avatar size="sm">
