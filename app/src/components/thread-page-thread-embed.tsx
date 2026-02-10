@@ -32,7 +32,7 @@ const ThreadPageThreadEmbed = ({ id, selection, onClose }: ThreadPageThreadEmbed
       {isNotNil(selection.from) && isNotNil(selection.to) ? (
         <CopyInput
           variant="snippet"
-          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${selection.from}&to=${selection.to}"></iframe>`}
+          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${Math.min(selection.from, selection.to)}&to=${Math.max(selection.from, selection.to)}"></iframe>`}
         />
       ) : null}
 
@@ -41,7 +41,6 @@ const ThreadPageThreadEmbed = ({ id, selection, onClose }: ThreadPageThreadEmbed
           {t("thread.embedHint")}
         </Typography>
       ) : null}
-
       {isNotNil(selection.from) && isNil(selection.to) ? (
         <Typography variant="small" color="muted">
           {t("thread.selectEndMessage")}
