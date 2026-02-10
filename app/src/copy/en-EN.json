@@ -19,7 +19,10 @@
     "forks": "{count} forks",
     "deactivated": "Deactivated",
     "noResultsFound": "No results found",
-    "image": "Image"
+    "image": "Image",
+    "unlisted": "Unlisted",
+    "sharingSettingsUpdated": "Sharing settings updated",
+    "sharingSettingsUpdateError": "Failed to update sharing settings"
   },
   "appBar": {
     "claudebin": "Claudebin",
@@ -39,7 +42,9 @@
     "installation": "Installation",
     "howToUse": "How to Use",
     "recentThreadsTitle": "/Recent <gradient>threads</gradient>",
-    "recentThreadsDescription": "See what the community is building\nwith Claude."
+    "recentThreadsDescription": "See what the community is building\nwith Claude.",
+    "featuredThreadsTitle": "/Featured <gradient>threads</gradient>",
+    "featuredThreadsDescription": "Handpicked conversations worth exploring."
   },
   "notFound": {
     "title": "Page <gradient>not found</gradient>",
@@ -161,6 +166,9 @@
     "duration": "Duration",
     "bytes": "Bytes",
     "error": "Error"
+  },
+  "embed": {
+    "openFullConversation": "Open full conversation"
   },
   "footer": {
     "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",

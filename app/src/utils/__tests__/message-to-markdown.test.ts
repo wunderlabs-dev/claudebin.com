@@ -1,6 +1,6 @@
 import { describe, it, expect } from "bun:test";
 
-import { messagesToMarkdown } from "../messageToMarkdown";
+import { messagesToMarkdown } from "../message-to-markdown";
 import { BlockType } from "@/supabase/types/message";
 import type { Message } from "@/supabase/repos/messages";
 

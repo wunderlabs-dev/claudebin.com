@@ -4,7 +4,7 @@ import { createClient } from "@/supabase/server";
 import { sessions } from "@/supabase/repos/sessions";
 import { messages } from "@/supabase/repos/messages";
 import { verifyContinueToken } from "@/utils/jwt";
-import { messagesToMarkdown } from "@/utils/messageToMarkdown";
+import { messagesToMarkdown } from "@/utils/message-to-markdown";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

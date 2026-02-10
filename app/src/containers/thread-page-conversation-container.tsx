@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
@@ -11,7 +11,6 @@ import type { ContentBlock } from "@/supabase/types/message";
 import type { Message } from "@/supabase/repos/messages";
 import { getMessagesBySessionId } from "@/actions/messages";
 
-import { cn } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
@@ -37,7 +36,6 @@ import { ThreadPageConversationMcp } from "@/components/thread-page-conversation
 import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
 import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
-import { ThreadPageEmbedSelector } from "@/components/thread-page-embed-selector";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -114,9 +112,6 @@ const ThreadPageConversationContainer = ({
 }: ThreadPageConversationContainerProps): ReactNode => {
   const t = useTranslations();
 
-  const [fromIdx, setFromIdx] = useState<number | null>(null);
-  const [toIdx, setToIdx] = useState<number | null>(null);
-
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
@@ -125,39 +120,6 @@ const ThreadPageConversationContainer = ({
   const [fallback] = [...author];
   const messages = useMemo(() => compact(data?.messages), [data?.messages]);
 
-  const handleMessageClick = useCallback(
-    (idx: number) => {
-      if (fromIdx === null) {
-        setFromIdx(idx);
-      } else if (toIdx === null) {
-        if (idx < fromIdx) {
-          setToIdx(fromIdx);
-          setFromIdx(idx);
-        } else {
-          setToIdx(idx);
-        }
-      } else {
-        setFromIdx(idx);
-        setToIdx(null);
-      }
-    },
-    [fromIdx, toIdx],
-  );
-
-  const handleClearSelection = useCallback(() => {
-    setFromIdx(null);
-    setToIdx(null);
-  }, []);
-
-  const isInRange = useCallback(
-    (idx: number) => {
-      if (fromIdx === null) return false;
-      if (toIdx === null) return idx === fromIdx;
-      return idx >= fromIdx && idx <= toIdx;
-    },
-    [fromIdx, toIdx],
-  );
-
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
@@ -165,16 +127,8 @@ const ThreadPageConversationContainer = ({
   return (
     <>
       <Chat className="min-h-screen lg:pr-12">
-        {messages.map((message, index) => (
-          <ChatItem
-            key={message.uuid}
-            variant={message.role}
-            className={cn(
-              "cursor-pointer transition-colors",
-              isInRange(index) && "bg-orange-50/50 ring-1 ring-orange-200 rounded-lg",
-            )}
-            onClick={() => handleMessageClick(index)}
-          >
+        {messages.map((message) => (
+          <ChatItem key={message.uuid} variant={message.role}>
             {message.role === "assistant" ? (
               <Avatar size="sm">
                 <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
@@ -209,7 +163,6 @@ const ThreadPageConversationContainer = ({
         </ChatItem>
       </Chat>
 
-      <ThreadPageEmbedSelector fromIdx={fromIdx} toIdx={toIdx} onClear={handleClearSelection} />
     </>
   );
 };
