@@ -19,8 +19,8 @@ export const GET = async (request: NextRequest, context: RouteContext) => {
     return NextResponse.json({ error: "Missing 'from' and 'to' parameters" }, { status: 400 });
   }
 
-  const fromIdx = Number.parseInt(from, 10);
-  const toIdx = Number.parseInt(to, 10);
+  const fromIdx = Number.parseInt(from);
+  const toIdx = Number.parseInt(to);
 
   if (Number.isNaN(fromIdx) || Number.isNaN(toIdx)) {
     return NextResponse.json({ error: "Invalid 'from' or 'to' parameter" }, { status: 400 });

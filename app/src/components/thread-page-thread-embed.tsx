@@ -29,7 +29,7 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
     const value = event.target.value;
 
     if (not(isEmpty(value))) {
-      onFromChange(Number.parseInt(value, 10));
+      onFromChange(Number.parseInt(value));
     } else {
       onFromChange(null);
     }
@@ -39,7 +39,7 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
     const value = event.target.value;
 
     if (not(isEmpty(value))) {
-      onToChange(Number.parseInt(value, 10));
+      onToChange(Number.parseInt(value));
     } else {
       onToChange(null);
     }
