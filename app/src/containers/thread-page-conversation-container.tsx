@@ -3,17 +3,13 @@
 import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-
 import { last, concat, init, reduce } from "ramda";
 
-import { useEmbedMode } from "@/context/embed";
-
-import { BlockType, MessageRole } from "@/supabase/types/message";
-import type { ContentBlock } from "@/supabase/types/message";
-import type { Message } from "@/server/repos/messages";
 import { getMessagesBySessionId } from "@/server/actions/messages";
+import { BlockType, MessageRole } from "@/supabase/types/message";
+import type { Message } from "@/server/repos/messages";
+import type { ContentBlock } from "@/supabase/types/message";
 
-import { cn } from "@/utils/helpers";
 import { getAvatarChar } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
@@ -123,60 +119,30 @@ const ThreadPageConversationContainer = ({
   const fallback = getAvatarChar(author);
   const messages = useMemo(() => compact(data?.messages), [data?.messages]);
 
-  const { view, from, to, hovered, onSelectMessage, onHoverMessage } = useEmbedMode();
-
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
 
   return (
     <Chat className="min-h-screen lg:pr-12">
-      {messages.map((message, index) => {
-        const isActive =
-          index === from ||
-          index === to ||
-          (from !== null && to !== null && index >= from && index <= to);
+      {messages.map((message) => (
+        <ChatItem key={message.uuid} variant={message.role}>
+          {message.role === "assistant" ? (
+            <Avatar size="sm">
+              <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+            </Avatar>
+          ) : null}
 
-        const isHovered = hovered !== null && index === hovered;
+          <ChatContent>{message.content.map(renderer.message)}</ChatContent>
 
-        const isInHoverRange =
-          from !== null &&
-          to === null &&
-          hovered !== null &&
-          index >= Math.min(from, hovered) &&
-          index <= Math.max(from, hovered);
-
-        return (
-          <ChatItem
-            key={message.uuid}
-            variant={message.role}
-            onClick={() => onSelectMessage(index)}
-            onMouseEnter={() => onHoverMessage(index)}
-            onMouseLeave={() => onHoverMessage(null)}
-            className={cn(
-              view === "embed" ? "cursor-pointer opacity-25 hover:opacity-100" : undefined,
-              view === "embed" && (isActive || isHovered || isInHoverRange)
-                ? "opacity-100"
-                : undefined,
-            )}
-          >
-            {message.role === "assistant" ? (
-              <Avatar size="sm">
-                <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-              </Avatar>
-            ) : null}
-
-            <ChatContent>{message.content.map(renderer.message)}</ChatContent>
-
-            {message.role === "user" ? (
-              <Avatar size="sm">
-                <AvatarImage src={avatarUrl ?? undefined} />
-                <AvatarFallback>{fallback}</AvatarFallback>
-              </Avatar>
-            ) : null}
-          </ChatItem>
-        );
-      })}
+          {message.role === "user" ? (
+            <Avatar size="sm">
+              <AvatarImage src={avatarUrl ?? undefined} />
+              <AvatarFallback>{fallback}</AvatarFallback>
+            </Avatar>
+          ) : null}
+        </ChatItem>
+      ))}
 
       <ChatItem variant="assistant">
         <Avatar size="sm">
