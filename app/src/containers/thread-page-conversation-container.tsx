@@ -3,14 +3,11 @@
 import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { last, concat, init, reduce } from "ramda";
 
+import { block } from "@/utils/renderers";
 import { getMessagesBySessionId } from "@/server/actions/messages";
-import { BlockType, MessageRole } from "@/supabase/types/message";
-import type { Message } from "@/server/repos/messages";
-import type { ContentBlock } from "@/supabase/types/message";
 
-import { getAvatarChar } from "@/utils/helpers";
+import { compactConversation, getAvatarChar } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
@@ -18,23 +15,6 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { ThreadPageConversationText } from "@/components/thread-page-conversation-text";
-import { ThreadPageConversationBash } from "@/components/thread-page-conversation-bash";
-import { ThreadPageConversationFileRead } from "@/components/thread-page-conversation-file-read";
-import { ThreadPageConversationFileWrite } from "@/components/thread-page-conversation-file-write";
-import { ThreadPageConversationFileEdit } from "@/components/thread-page-conversation-file-edit";
-import { ThreadPageConversationGlob } from "@/components/thread-page-conversation-glob";
-import { ThreadPageConversationGrep } from "@/components/thread-page-conversation-grep";
-import { ThreadPageConversationTask } from "@/components/thread-page-conversation-task";
-import { ThreadPageConversationTaskOutput } from "@/components/thread-page-conversation-task-output";
-import { ThreadPageConversationTaskStop } from "@/components/thread-page-conversation-task-stop";
-import { ThreadPageConversationTasks } from "@/components/thread-page-conversation-tasks";
-import { ThreadPageConversationQuestions } from "@/components/thread-page-conversation-questions";
-import { ThreadPageConversationWebFetch } from "@/components/thread-page-conversation-web-fetch";
-import { ThreadPageConversationWebSearch } from "@/components/thread-page-conversation-web-search";
-import { ThreadPageConversationMcp } from "@/components/thread-page-conversation-mcp";
-import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
-import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
 
 type ThreadPageConversationContainerProps = {
@@ -43,66 +23,6 @@ type ThreadPageConversationContainerProps = {
   avatarUrl?: string | null;
   isAuthor?: boolean;
   isPublic?: boolean;
-};
-
-const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
-  reduce<Message, Message[]>(
-    (accumulator, message) => {
-      const previous = last(accumulator);
-      const assistant =
-        previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
-
-      return assistant
-        ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
-        : concat(accumulator, [{ ...message }]);
-    },
-    [],
-    [...messages],
-  );
-
-const renderer = {
-  message: (block: ContentBlock, index: number): ReactNode => {
-    switch (block.type) {
-      case BlockType.TEXT:
-        return <ThreadPageConversationText key={index} block={block} />;
-      case BlockType.BASH:
-        return <ThreadPageConversationBash key={index} block={block} />;
-      case BlockType.FILE_READ:
-        return <ThreadPageConversationFileRead key={index} block={block} />;
-      case BlockType.FILE_WRITE:
-        return <ThreadPageConversationFileWrite key={index} block={block} />;
-      case BlockType.FILE_EDIT:
-        return <ThreadPageConversationFileEdit key={index} block={block} />;
-      case BlockType.GLOB:
-        return <ThreadPageConversationGlob key={index} block={block} />;
-      case BlockType.GREP:
-        return <ThreadPageConversationGrep key={index} block={block} />;
-      case BlockType.TASK:
-        return <ThreadPageConversationTask key={index} block={block} />;
-      case BlockType.TASK_OUTPUT:
-        return <ThreadPageConversationTaskOutput key={index} block={block} />;
-      case BlockType.TASK_STOP:
-        return <ThreadPageConversationTaskStop key={index} block={block} />;
-      case BlockType.TASKS:
-        return <ThreadPageConversationTasks key={index} block={block} />;
-      case BlockType.QUESTION:
-        return <ThreadPageConversationQuestions key={index} block={block} />;
-      case BlockType.WEB_FETCH:
-        return <ThreadPageConversationWebFetch key={index} block={block} />;
-      case BlockType.WEB_SEARCH:
-        return <ThreadPageConversationWebSearch key={index} block={block} />;
-      case BlockType.MCP:
-        return <ThreadPageConversationMcp key={index} block={block} />;
-      case BlockType.GENERIC:
-        return <ThreadPageConversationGeneric key={index} block={block} />;
-      case BlockType.SKILL:
-        return <ThreadPageConversationSkill key={index} block={block} />;
-      default:
-        return null;
-    }
-  },
 };
 
 const ThreadPageConversationContainer = ({
@@ -117,7 +37,7 @@ const ThreadPageConversationContainer = ({
 
   const t = useTranslations();
   const fallback = getAvatarChar(author);
-  const messages = useMemo(() => compact(data?.messages), [data?.messages]);
+  const messages = useMemo(() => compactConversation(data?.messages), [data?.messages]);
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
@@ -133,7 +53,7 @@ const ThreadPageConversationContainer = ({
             </Avatar>
           ) : null}
 
-          <ChatContent>{message.content.map(renderer.message)}</ChatContent>
+          <ChatContent>{message.content.map(block)}</ChatContent>
 
           {message.role === "user" ? (
             <Avatar size="sm">
