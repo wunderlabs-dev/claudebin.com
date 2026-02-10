@@ -11,10 +11,10 @@ import {
   DividerGridDivider,
 } from "@/components/ui/divider-grid";
 
+import { Footer } from "@/components/ui/footer";
 import { AppBar } from "@/components/ui/app-bar";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Footer } from "@/components/ui/footer";
 import { Typography } from "@/components/ui/typography";
 
 const NotFound = async () => {

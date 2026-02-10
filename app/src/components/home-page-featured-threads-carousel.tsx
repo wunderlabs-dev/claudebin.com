@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { useTranslations } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
 
-import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
 import { cn } from "@/utils/helpers";
 import { gradient } from "@/utils/renderers";

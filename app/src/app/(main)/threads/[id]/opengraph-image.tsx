@@ -4,10 +4,10 @@ import { ImageResponse } from "next/og";
 import { format } from "date-fns";
 import { isNil } from "ramda";
 
-import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
-import { createClient } from "@/supabase/server";
-import { sessions } from "@/supabase/repos/sessions";
+import { createClient } from "@/server/supabase/server";
+import { sessions } from "@/server/repos/sessions";
 
 type Props = {
   params: Promise<{ id: string }>;

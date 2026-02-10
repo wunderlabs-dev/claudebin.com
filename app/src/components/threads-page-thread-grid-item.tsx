@@ -5,7 +5,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { formatDistanceToNow } from "date-fns";
 import { isServer } from "@tanstack/react-query";
 
-import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
 import { breakpoints } from "@/utils/breakpoints";
 import { getProjectName, hashString } from "@/utils/helpers";

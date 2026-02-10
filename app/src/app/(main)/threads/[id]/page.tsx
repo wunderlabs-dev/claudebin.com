@@ -7,8 +7,8 @@ import { format } from "date-fns";
 
 import copy from "@/copy/en-EN.json";
 
-import { sessions } from "@/supabase/repos/sessions";
-import { createClient } from "@/supabase/server";
+import { sessions } from "@/server/repos/sessions";
+import { createClient } from "@/server/supabase/server";
 
 import { getProjectName } from "@/utils/helpers";
 
@@ -18,6 +18,8 @@ import { NavLink, NavLabel } from "@/components/ui/nav";
 
 import { ThreadPageAuthorMeta } from "@/components/thread-page-author-meta";
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
+import { EmbedProvider } from "@/context/embed";
+
 import { ThreadPageSidebarContainer } from "@/containers/thread-page-sidebar-container";
 import { ThreadPageConversationContainer } from "@/containers/thread-page-conversation-container";
 
@@ -72,50 +74,52 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   sessions.incrementViewCount(supabase, id);
 
   return (
-    <Container size="lg" spacing="none" className="grid grid-cols-1 lg:grid-cols-12">
-      <div className="flex flex-col col-span-1 gap-12 pt-9 pb-12 lg:col-span-9 lg:gap-18 lg:pb-0">
-        <div className="flex flex-col items-start gap-9">
-          <NavLink href="/threads">
-            <SvgIconArrowLeft size="sm" />
-            <NavLabel>{t("thread.backToThreads")}</NavLabel>
-          </NavLink>
+    <EmbedProvider>
+      <Container size="lg" spacing="none" className="grid grid-cols-1 lg:grid-cols-12">
+        <div className="flex flex-col col-span-1 gap-12 pt-9 pb-12 lg:col-span-9 lg:gap-18 lg:pb-0">
+          <div className="flex flex-col items-start gap-9">
+            <NavLink href="/threads">
+              <SvgIconArrowLeft size="sm" />
+              <NavLabel>{t("thread.backToThreads")}</NavLabel>
+            </NavLink>
 
-          <ThreadPageAuthorMeta
-            avatarUrl={thread.profiles?.avatarUrl}
-            username={thread.profiles?.username}
-            createdAt={thread.createdAt}
-            title={thread.title ?? t("common.untitled")}
-            author={thread.profiles?.username ?? t("common.deactivated")}
-          />
+            <ThreadPageAuthorMeta
+              avatarUrl={thread.profiles?.avatarUrl}
+              username={thread.profiles?.username}
+              createdAt={thread.createdAt}
+              title={thread.title ?? t("common.untitled")}
+              author={thread.profiles?.username ?? t("common.deactivated")}
+            />
+          </div>
+
+          <Suspense fallback={<ThreadPageConversationSkeleton />}>
+            <ThreadPageConversationContainer
+              id={thread.id}
+              avatarUrl={thread.profiles?.avatarUrl}
+              author={thread.profiles?.username ?? t("common.deactivated")}
+              isAuthor={isAuthor}
+              isPublic={thread.isPublic}
+            />
+          </Suspense>
         </div>
 
-        <Suspense fallback={<ThreadPageConversationSkeleton />}>
-          <ThreadPageConversationContainer
+        <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 px-0 pt-12 border-t border-gray-250 overflow-y-auto lg:col-span-3 lg:h-screen lg:px-6 lg:pt-24 lg:pb-12 lg:border-t-0 lg:border-l">
+          <ThreadPageSidebarContainer
             id={thread.id}
-            avatarUrl={thread.profiles?.avatarUrl}
-            author={thread.profiles?.username ?? t("common.deactivated")}
             isAuthor={isAuthor}
             isPublic={thread.isPublic}
+            initialLiked={thread.hasLiked}
+            createdAt={format(thread.createdAt, "MM/dd/yyyy")}
+            workingDir={getProjectName(thread.workingDir)}
+            modelName={thread.modelName}
+            fileCount={thread.fileCount}
+            viewCount={thread.viewCount}
+            likeCount={thread.likeCount}
+            messageCount={thread.messageCount}
           />
-        </Suspense>
-      </div>
-
-      <div className="sticky top-0 flex flex-col justify-between self-start col-span-1 px-0 pt-12 border-t border-gray-250 overflow-y-auto lg:col-span-3 lg:h-screen lg:px-6 lg:pt-24 lg:pb-12 lg:border-t-0 lg:border-l">
-        <ThreadPageSidebarContainer
-          id={thread.id}
-          isAuthor={isAuthor}
-          isPublic={thread.isPublic}
-          initialLiked={thread.hasLiked}
-          createdAt={format(thread.createdAt, "MM/dd/yyyy")}
-          workingDir={getProjectName(thread.workingDir)}
-          modelName={thread.modelName}
-          fileCount={thread.fileCount}
-          viewCount={thread.viewCount}
-          likeCount={thread.likeCount}
-          messageCount={thread.messageCount}
-        />
-      </div>
-    </Container>
+        </div>
+      </Container>
+    </EmbedProvider>
   );
 };
 

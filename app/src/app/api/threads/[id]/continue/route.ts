@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { createClient } from "@/supabase/server";
-import { sessions } from "@/supabase/repos/sessions";
-import { createContinueToken } from "@/utils/jwt";
+import { createClient } from "@/server/supabase/server";
+import { sessions } from "@/server/repos/sessions";
+import { createContinueToken } from "@/server/utils/jwt";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

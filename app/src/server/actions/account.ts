@@ -3,7 +3,7 @@
 import { isNil } from "ramda";
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/supabase/server";
+import { createClient } from "@/server/supabase/server";
 
 export const deleteAccount = async () => {
   const supabase = await createClient();

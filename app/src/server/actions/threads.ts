@@ -1,7 +1,8 @@
 "use server";
 
-import { createClient } from "@/supabase/server";
-import { sessions, type GetPublicThreadsResult } from "@/supabase/repos/sessions";
+import { createClient } from "@/server/supabase/server";
+import { sessions, type GetPublicThreadsResult } from "@/server/repos/sessions";
+
 import { THREADS_PAGE_SIZE, THREADS_PAGE_INITIAL } from "@/utils/constants";
 
 export const getPublicThreads = async (

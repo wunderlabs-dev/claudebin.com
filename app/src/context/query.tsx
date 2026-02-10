@@ -1,7 +1,9 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { QUERY_STALE_TIME_MS } from "@/utils/constants";
 
 type QueryProviderProps = {
   children: React.ReactNode;
@@ -13,7 +15,7 @@ const QueryProvider = ({ children }: QueryProviderProps) => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000,
+            staleTime: QUERY_STALE_TIME_MS,
           },
         },
       }),

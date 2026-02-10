@@ -7,10 +7,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 import { not, isEmpty } from "ramda";
 
-import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
 import { SEARCH_DEBOUNCE_MS, THREADS_PAGE_INITIAL } from "@/utils/constants";
-import { getPublicThreads } from "@/actions/threads";
+import { getPublicThreads } from "@/server/actions/threads";
 
 import { gradient } from "@/utils/renderers";
 

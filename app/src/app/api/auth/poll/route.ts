@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { cliAuth } from "@/supabase/repos/cli-auth";
-import { createServiceClient } from "@/supabase/service";
-import { authPollInputSchema, PollStatus, type AuthPollResponse } from "@/api/schemas/auth";
+import { cliAuth } from "@/server/repos/cli-auth";
+import { createServiceClient } from "@/server/supabase/service";
+import { authPollInputSchema, PollStatus, type AuthPollResponse } from "@/server/api/schemas/auth";
 
 export const GET = async (request: NextRequest): Promise<NextResponse<AuthPollResponse>> => {
   const { searchParams } = new URL(request.url);

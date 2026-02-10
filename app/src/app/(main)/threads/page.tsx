@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
-import { createClient } from "@/supabase/server";
-import { sessions } from "@/supabase/repos/sessions";
+import { createClient } from "@/server/supabase/server";
+import { sessions } from "@/server/repos/sessions";
 
 import { gradient } from "@/utils/renderers";
 

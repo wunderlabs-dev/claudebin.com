@@ -1,15 +1,17 @@
 "use client";
 
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { last, concat, init, reduce } from "ramda";
 
+import { useEmbedMode } from "@/context/embed";
+
 import { BlockType, MessageRole } from "@/supabase/types/message";
 import type { ContentBlock } from "@/supabase/types/message";
-import type { Message } from "@/supabase/repos/messages";
-import { getMessagesBySessionId } from "@/actions/messages";
+import type { Message } from "@/server/repos/messages";
+import { getMessagesBySessionId } from "@/server/actions/messages";
 
 import { cn } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
@@ -37,7 +39,6 @@ import { ThreadPageConversationMcp } from "@/components/thread-page-conversation
 import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
 import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
-import { ThreadPageEmbedSelector } from "@/components/thread-page-embed-selector";
 
 type ThreadPageConversationContainerProps = {
   id: string;
@@ -112,68 +113,51 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
-  const t = useTranslations();
-
-  const [fromIdx, setFromIdx] = useState<number | null>(null);
-  const [toIdx, setToIdx] = useState<number | null>(null);
-
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
   });
 
   const [fallback] = [...author];
+  const { view, from, to, hovered, onSelectMessage, onHoverMessage } = useEmbedMode();
+
+  const t = useTranslations();
   const messages = useMemo(() => compact(data?.messages), [data?.messages]);
-
-  const handleMessageClick = useCallback(
-    (idx: number) => {
-      if (fromIdx === null) {
-        setFromIdx(idx);
-      } else if (toIdx === null) {
-        if (idx < fromIdx) {
-          setToIdx(fromIdx);
-          setFromIdx(idx);
-        } else {
-          setToIdx(idx);
-        }
-      } else {
-        setFromIdx(idx);
-        setToIdx(null);
-      }
-    },
-    [fromIdx, toIdx],
-  );
-
-  const handleClearSelection = useCallback(() => {
-    setFromIdx(null);
-    setToIdx(null);
-  }, []);
-
-  const isInRange = useCallback(
-    (idx: number) => {
-      if (fromIdx === null) return false;
-      if (toIdx === null) return idx === fromIdx;
-      return idx >= fromIdx && idx <= toIdx;
-    },
-    [fromIdx, toIdx],
-  );
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
 
   return (
-    <>
-      <Chat className="min-h-screen lg:pr-12">
-        {messages.map((message, index) => (
+    <Chat className="min-h-screen lg:pr-12">
+      {messages.map((message, index) => {
+        const isActive =
+          index === from ||
+          index === to ||
+          (from !== null && to !== null && index >= from && index <= to);
+
+        const isHovered = hovered !== null && index === hovered;
+
+        const isInHoverRange =
+          from !== null &&
+          to === null &&
+          hovered !== null &&
+          index >= Math.min(from, hovered) &&
+          index <= Math.max(from, hovered);
+
+        return (
           <ChatItem
             key={message.uuid}
             variant={message.role}
+            onClick={() => onSelectMessage(index)}
+            onMouseEnter={() => onHoverMessage(index)}
+            onMouseLeave={() => onHoverMessage(null)}
             className={cn(
-              "cursor-pointer transition-colors",
-              isInRange(index) && "bg-orange-50/50 ring-1 ring-orange-200 rounded-lg",
+              view === "embed" ? "cursor-pointer opacity-25" : undefined,
+              view === "embed" && (isActive || isHovered || isInHoverRange)
+                ? "opacity-100"
+                : undefined,
             )}
-            onClick={() => handleMessageClick(index)}
           >
             {message.role === "assistant" ? (
               <Avatar size="sm">
@@ -190,27 +174,25 @@ const ThreadPageConversationContainer = ({
               </Avatar>
             ) : null}
           </ChatItem>
-        ))}
+        );
+      })}
 
-        <ChatItem variant="assistant">
-          <Avatar size="sm">
-            <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-          </Avatar>
+      <ChatItem variant="assistant">
+        <Avatar size="sm">
+          <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+        </Avatar>
 
-          <ChatContent className="w-auto" data-continue-conversation>
-            <div className="flex flex-col gap-2">
-              <Typography variant="h4">{t("thread.continueTitle")}</Typography>
-              <Typography variant="small" color="muted">
-                {t("thread.continueDescription")}
-              </Typography>
-            </div>
-            <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-          </ChatContent>
-        </ChatItem>
-      </Chat>
-
-      <ThreadPageEmbedSelector fromIdx={fromIdx} toIdx={toIdx} onClear={handleClearSelection} />
-    </>
+        <ChatContent className="w-auto" data-continue-conversation>
+          <div className="flex flex-col gap-2">
+            <Typography variant="h4">{t("thread.continueTitle")}</Typography>
+            <Typography variant="small" color="muted">
+              {t("thread.continueDescription")}
+            </Typography>
+          </div>
+          <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
+        </ChatContent>
+      </ChatItem>
+    </Chat>
   );
 };
 

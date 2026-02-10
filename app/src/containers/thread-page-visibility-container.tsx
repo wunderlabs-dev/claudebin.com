@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { not } from "ramda";
 import { toast } from "sonner";
 
-import { toggleVisibility } from "@/actions/visibility";
+import { toggleVisibility } from "@/server/actions/visibility";
 
 import { cn } from "@/utils/helpers";
 

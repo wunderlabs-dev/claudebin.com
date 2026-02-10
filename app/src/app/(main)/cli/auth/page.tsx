@@ -3,10 +3,10 @@ import { redirect } from "next/navigation";
 import { isPast } from "date-fns";
 import { getTranslations } from "next-intl/server";
 
-import { cliAuth } from "@/supabase/repos/cli-auth";
+import { cliAuth } from "@/server/repos/cli-auth";
 
-import { createClient } from "@/supabase/server";
-import { createServiceClient } from "@/supabase/service";
+import { createClient } from "@/server/supabase/server";
+import { createServiceClient } from "@/server/supabase/service";
 
 import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 import { SvgIconKey } from "@/components/icon/svg-icon-key";

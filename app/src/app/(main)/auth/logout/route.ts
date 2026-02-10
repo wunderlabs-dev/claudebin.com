@@ -1,4 +1,4 @@
-import { createClient } from "@/supabase/server";
+import { createClient } from "@/server/supabase/server";
 
 export const POST = async () => {
   const supabase = await createClient();

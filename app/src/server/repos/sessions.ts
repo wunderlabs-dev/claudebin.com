@@ -3,7 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/supabase/types";
-import { logger } from "@/utils/logger";
+import { logger } from "@/server/utils/logger";
 
 type SessionsRow = Database["public"]["Tables"]["sessions"]["Row"];
 type SessionsInsert = Database["public"]["Tables"]["sessions"]["Insert"];

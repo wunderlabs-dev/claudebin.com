@@ -2,8 +2,8 @@
 
 import { isNil } from "ramda";
 
-import { createClient } from "@/supabase/server";
-import { sessionLikes } from "@/supabase/repos/sessionLikes";
+import { createClient } from "@/server/supabase/server";
+import { sessionLikes } from "@/server/repos/sessionLikes";
 
 export const like = async (sessionId: string) => {
   const supabase = await createClient();

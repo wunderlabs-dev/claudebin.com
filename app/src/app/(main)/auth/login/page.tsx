@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { createClient } from "@/supabase/server";
+import { createClient } from "@/server/supabase/server";
 
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";

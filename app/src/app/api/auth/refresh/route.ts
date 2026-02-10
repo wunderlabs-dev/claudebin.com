@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { createServiceClient } from "@/supabase/service";
-import { authRefreshInputSchema, type AuthRefreshResponse } from "@/api/schemas/auth";
+import { createServiceClient } from "@/server/supabase/service";
+import { authRefreshInputSchema, type AuthRefreshResponse } from "@/server/api/schemas/auth";
 
 export const POST = async (request: NextRequest): Promise<NextResponse<AuthRefreshResponse>> => {
   const body = await request.json();

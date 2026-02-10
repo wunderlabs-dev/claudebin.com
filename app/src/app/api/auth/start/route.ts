@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 
-import { config } from "@/supabase/config/env";
-import { cliAuth } from "@/supabase/repos/cli-auth";
-import { createServiceClient } from "@/supabase/service";
+import { config } from "@/server/supabase/config/env";
+import { cliAuth } from "@/server/repos/cli-auth";
+import { createServiceClient } from "@/server/supabase/service";
 import { AUTH_SESSION_TIMEOUT_MS, AUTH_TOKEN_LENGTH } from "@/utils/constants";
-import type { AuthStartResponse } from "@/api/schemas/auth";
+import type { AuthStartResponse } from "@/server/api/schemas/auth";
 
 export const POST = async (): Promise<NextResponse<AuthStartResponse>> => {
   const supabase = createServiceClient();
