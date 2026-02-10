@@ -6,11 +6,14 @@ import { useTranslations } from "next-intl";
 
 import { last, concat, init, reduce } from "ramda";
 
+import { useEmbedMode } from "@/context/embed";
+
 import { BlockType, MessageRole } from "@/supabase/types/message";
 import type { ContentBlock } from "@/supabase/types/message";
 import type { Message } from "@/server/repos/messages";
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
+import { cn } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
@@ -54,8 +57,8 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
 
       return assistant
         ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
+          { ...previous, content: concat(previous.content, message.content) },
+        ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
@@ -110,14 +113,15 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
-  const t = useTranslations();
-
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
   });
 
   const [fallback] = [...author];
+  const { view, from, to, hovered, onSelectMessage, onHoverMessage } = useEmbedMode();
+
+  const t = useTranslations();
   const messages = useMemo(() => compact(data?.messages), [data?.messages]);
 
   if (isLoading) {
@@ -126,24 +130,52 @@ const ThreadPageConversationContainer = ({
 
   return (
     <Chat className="min-h-screen lg:pr-12">
-      {messages.map((message) => (
-        <ChatItem key={message.uuid} variant={message.role}>
-          {message.role === "assistant" ? (
-            <Avatar size="sm">
-              <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-            </Avatar>
-          ) : null}
+      {messages.map((message, index) => {
+        const isActive =
+          index === from ||
+          index === to ||
+          (from !== null && to !== null && index >= from && index <= to);
 
-          <ChatContent>{message.content.map(renderer.message)}</ChatContent>
+        const isHovered = hovered !== null && index === hovered;
 
-          {message.role === "user" ? (
-            <Avatar size="sm">
-              <AvatarImage src={avatarUrl ?? undefined} />
-              <AvatarFallback>{fallback}</AvatarFallback>
-            </Avatar>
-          ) : null}
-        </ChatItem>
-      ))}
+        const isInHoverRange =
+          from !== null &&
+          to === null &&
+          hovered !== null &&
+          index >= Math.min(from, hovered) &&
+          index <= Math.max(from, hovered);
+
+        return (
+          <ChatItem
+            key={message.uuid}
+            variant={message.role}
+            onClick={() => onSelectMessage(index)}
+            onMouseEnter={() => onHoverMessage(index)}
+            onMouseLeave={() => onHoverMessage(null)}
+            className={cn(
+              view === "embed" ? "cursor-pointer opacity-25" : undefined,
+              view === "embed" && (isActive || isHovered || isInHoverRange)
+                ? "opacity-100"
+                : undefined,
+            )}
+          >
+            {message.role === "assistant" ? (
+              <Avatar size="sm">
+                <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+              </Avatar>
+            ) : null}
+
+            <ChatContent>{message.content.map(renderer.message)}</ChatContent>
+
+            {message.role === "user" ? (
+              <Avatar size="sm">
+                <AvatarImage src={avatarUrl ?? undefined} />
+                <AvatarFallback>{fallback}</AvatarFallback>
+              </Avatar>
+            ) : null}
+          </ChatItem>
+        );
+      })}
 
       <ChatItem variant="assistant">
         <Avatar size="sm">

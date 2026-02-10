@@ -48,7 +48,7 @@ const ThreadPageSidebarContainer = ({
   const t = useTranslations();
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
-  const { view, handleEmbedMode } = useEmbedMode();
+  const { view, onChangeEmbedMode } = useEmbedMode();
 
   return (
     <div className="flex flex-col items-start gap-6">
@@ -74,7 +74,7 @@ const ThreadPageSidebarContainer = ({
             <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
 
             <div className="flex flex-col gap-4">
-              <Button variant="secondary" onClick={handleEmbedMode}>
+              <Button variant="secondary" onClick={onChangeEmbedMode}>
                 <SvgIconArrowLink />
                 {t("thread.embedConversation")}
               </Button>
@@ -84,7 +84,7 @@ const ThreadPageSidebarContainer = ({
           </div>
         </Fragment>
       ) : (
-        <ThreadPageThreadEmbed id={id} onClose={handleEmbedMode} />
+        <ThreadPageThreadEmbed id={id} onClose={onChangeEmbedMode} />
       )}
     </div>
   );
