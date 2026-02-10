@@ -6,8 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { block } from "@/utils/renderers";
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
-import { both, gte, lte } from "ramda";
-
 import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
