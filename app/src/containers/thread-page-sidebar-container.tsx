@@ -1,9 +1,11 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
+
+import { useEmbedMode } from "@/context/embed";
 
 import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";
@@ -46,19 +48,11 @@ const ThreadPageSidebarContainer = ({
   const t = useTranslations();
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
-  const [view, setView] = useState<"stats" | "embed">("stats");
-
-  const handleEmbedClick = () => {
-    if (view === "embed") {
-      setView("stats");
-    } else {
-      setView("embed");
-    }
-  };
+  const { view, handleEmbedMode } = useEmbedMode();
 
   return (
     <div className="flex flex-col items-start gap-6">
-      {view === "stats" ? (
+      {view === "view" ? (
         <Fragment>
           {lg ? (
             <ThreadPageThreadMeta
@@ -80,7 +74,7 @@ const ThreadPageSidebarContainer = ({
             <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
 
             <div className="flex flex-col gap-4">
-              <Button variant="secondary" onClick={handleEmbedClick}>
+              <Button variant="secondary" onClick={handleEmbedMode}>
                 <SvgIconArrowLink />
                 {t("thread.embedConversation")}
               </Button>
@@ -90,7 +84,7 @@ const ThreadPageSidebarContainer = ({
           </div>
         </Fragment>
       ) : (
-        <ThreadPageThreadEmbed id={id} onClose={() => setView("stats")} />
+        <ThreadPageThreadEmbed id={id} onClose={handleEmbedMode} />
       )}
     </div>
   );
