@@ -162,7 +162,6 @@ const ThreadPageConversationContainer = ({
           </ChatContent>
         </ChatItem>
       </Chat>
-
     </>
   );
 };
