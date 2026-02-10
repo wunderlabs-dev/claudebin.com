@@ -57,8 +57,8 @@ const compact = (messages: ReadonlyArray<Message> = []): Message[] =>
 
       return assistant
         ? concat(init(accumulator), [
-          { ...previous, content: concat(previous.content, message.content) },
-        ])
+            { ...previous, content: concat(previous.content, message.content) },
+          ])
         : concat(accumulator, [{ ...message }]);
     },
     [],
