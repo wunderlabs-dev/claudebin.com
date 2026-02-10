@@ -25,8 +25,8 @@ const ThreadPageAuthorMeta = ({
   createdAt,
 }: ThreadPageAuthorMetaProps) => {
   const t = useTranslations();
-  const displayName = username ?? t("common.deactivated");
-  const fallback = getAvatarChar(displayName);
+  const author = username ?? t("common.deactivated");
+  const fallback = getAvatarChar(author);
 
   return (
     <div className="flex flex-col min-w-full gap-1 pb-4 border-b border-gray-250 lg:pl-12">
@@ -36,7 +36,7 @@ const ThreadPageAuthorMeta = ({
         {username ? (
           <NavLink href={`/profile/${username}`}>
             <Avatar size="sm">
-              {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
+              {avatarUrl ? <AvatarImage src={avatarUrl} alt={username} /> : null}
               <AvatarFallback>{fallback}</AvatarFallback>
             </Avatar>
             <Typography
@@ -53,7 +53,7 @@ const ThreadPageAuthorMeta = ({
               <AvatarFallback>{fallback}</AvatarFallback>
             </Avatar>
             <Typography variant="small" color="accent">
-              {displayName}
+              {author}
             </Typography>
           </Fragment>
         )}
