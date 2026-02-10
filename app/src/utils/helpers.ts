@@ -36,11 +36,12 @@ export const compactConversation = (messages: ReadonlyArray<Message> = []): Mess
       const isConsecutiveAssistant =
         previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
 
-      return isConsecutiveAssistant
-        ? concat(init(accumulator), [
-            { ...previous, content: concat(previous.content, message.content) },
-          ])
-        : concat(accumulator, [{ ...message }]);
+      if (isConsecutiveAssistant) {
+        return concat(init(accumulator), [
+          { ...previous, content: concat(previous.content, message.content) },
+        ]);
+      }
+      return concat(accumulator, [{ ...message }]);
     },
     [],
     [...messages],
