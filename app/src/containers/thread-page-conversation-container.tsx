@@ -10,9 +10,9 @@ import { getMessagesBySessionId } from "@/server/actions/messages";
 import { compactConversation, getAvatarChar } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
-import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
+import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { ThreadPageConversationSkeleton } from "@/components/thread-page-conversation-skeleton";
@@ -76,7 +76,6 @@ const ThreadPageConversationContainer = ({
               {t("thread.continueDescription")}
             </Typography>
           </div>
-
           <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
         </ChatContent>
       </ChatItem>
