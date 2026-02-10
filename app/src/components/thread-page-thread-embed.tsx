@@ -7,7 +7,6 @@ import { APP_URL } from "@/utils/constants";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 
-import { Divider } from "@/components/ui/divider";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { NavButton, NavLabel } from "@/components/ui/nav";
@@ -48,8 +47,6 @@ const ThreadPageThreadEmbed = ({ id, selection, onClose }: ThreadPageThreadEmbed
           {t("thread.selectEndMessage")}
         </Typography>
       ) : null}
-
-      <Divider />
     </div>
   );
 };

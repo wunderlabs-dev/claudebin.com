@@ -71,4 +71,3 @@ const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
 const useThreadEmbed = () => useContext(ThreadEmbedContext);
 
 export { ThreadEmbedProvider, useThreadEmbed };
-export type { ThreadEmbedSelection };

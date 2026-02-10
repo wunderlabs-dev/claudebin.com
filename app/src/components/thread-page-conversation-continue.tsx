@@ -21,7 +21,7 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
       <Avatar size="sm">
         <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
       </Avatar>
-      <ChatContent className="w-full" data-continue-conversation>
+      <ChatContent className="w-auto" data-continue-conversation>
         <div className="flex flex-col gap-2">
           <Typography variant="h4">{t("thread.continueTitle")}</Typography>
           <Typography variant="small" color="muted">
