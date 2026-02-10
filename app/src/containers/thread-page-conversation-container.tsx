@@ -126,40 +126,40 @@ const ThreadPageConversationContainer = ({
 
   return (
     <Chat className="min-h-screen lg:pr-12">
-        {messages.map((message) => (
-          <ChatItem key={message.uuid} variant={message.role}>
-            {message.role === "assistant" ? (
-              <Avatar size="sm">
-                <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-              </Avatar>
-            ) : null}
+      {messages.map((message) => (
+        <ChatItem key={message.uuid} variant={message.role}>
+          {message.role === "assistant" ? (
+            <Avatar size="sm">
+              <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+            </Avatar>
+          ) : null}
 
-            <ChatContent>{message.content.map(renderer.message)}</ChatContent>
+          <ChatContent>{message.content.map(renderer.message)}</ChatContent>
 
-            {message.role === "user" ? (
-              <Avatar size="sm">
-                <AvatarImage src={avatarUrl ?? undefined} />
-                <AvatarFallback>{fallback}</AvatarFallback>
-              </Avatar>
-            ) : null}
-          </ChatItem>
-        ))}
-
-        <ChatItem variant="assistant">
-          <Avatar size="sm">
-            <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
-          </Avatar>
-
-          <ChatContent className="w-auto" data-continue-conversation>
-            <div className="flex flex-col gap-2">
-              <Typography variant="h4">{t("thread.continueTitle")}</Typography>
-              <Typography variant="small" color="muted">
-                {t("thread.continueDescription")}
-              </Typography>
-            </div>
-            <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
-          </ChatContent>
+          {message.role === "user" ? (
+            <Avatar size="sm">
+              <AvatarImage src={avatarUrl ?? undefined} />
+              <AvatarFallback>{fallback}</AvatarFallback>
+            </Avatar>
+          ) : null}
         </ChatItem>
+      ))}
+
+      <ChatItem variant="assistant">
+        <Avatar size="sm">
+          <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
+        </Avatar>
+
+        <ChatContent className="w-auto" data-continue-conversation>
+          <div className="flex flex-col gap-2">
+            <Typography variant="h4">{t("thread.continueTitle")}</Typography>
+            <Typography variant="small" color="muted">
+              {t("thread.continueDescription")}
+            </Typography>
+          </div>
+          <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
+        </ChatContent>
+      </ChatItem>
     </Chat>
   );
 };
