@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { not, inc, dec } from "ramda";
 
-import { like } from "@/actions/like";
+import { like } from "@/server/actions/like";
 import { useAuth } from "@/context/auth";
 
 import { cn } from "@/utils/helpers";

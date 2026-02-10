@@ -1,4 +1,4 @@
-import type { Message } from "@/supabase/repos/messages";
+import type { Message } from "@/server/repos/messages";
 
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 import { block } from "@/utils/renderers";

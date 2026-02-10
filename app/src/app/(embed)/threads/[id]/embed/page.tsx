@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { isNil, not } from "ramda";
 
-import { createClient } from "@/supabase/server";
+import { createClient } from "@/server/supabase/server";
 
-import { sessions } from "@/supabase/repos/sessions";
-import { messages } from "@/supabase/repos/messages";
+import { sessions } from "@/server/repos/sessions";
+import { messages } from "@/server/repos/messages";
 
 import { getProjectName, compactConversation } from "@/utils/helpers";
 

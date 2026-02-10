@@ -4,14 +4,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/supabase/types";
 import type { Json } from "@/supabase/types";
-import type { ParsedMessage } from "@/supabase/services/parser";
+import type { ParsedMessage } from "@/server/services/parser";
 
-import { messages } from "@/supabase/repos/messages";
-import { parseJsonl } from "@/supabase/services/parser";
-import { sessions } from "@/supabase/repos/sessions";
-import { SessionStatus } from "@/api/schemas/sessions";
+import { messages } from "@/server/repos/messages";
+import { parseJsonl } from "@/server/services/parser";
+import { sessions } from "@/server/repos/sessions";
+import { SessionStatus } from "@/server/api/schemas/sessions";
 import { type Block, BlockType, MessageRole } from "@/supabase/types/message";
-import { generateTitle } from "@/utils/openrouter";
+import { generateTitle } from "@/server/utils/openrouter";
 
 const DEFAULT_BATCH_SIZE = 100;
 const AUTO_TITLE_MAX_LENGTH = 100;

@@ -8,8 +8,8 @@ import { last, concat, init, reduce } from "ramda";
 
 import { BlockType, MessageRole } from "@/supabase/types/message";
 import type { ContentBlock } from "@/supabase/types/message";
-import type { Message } from "@/supabase/repos/messages";
-import { getMessagesBySessionId } from "@/actions/messages";
+import type { Message } from "@/server/repos/messages";
+import { getMessagesBySessionId } from "@/server/actions/messages";
 
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 

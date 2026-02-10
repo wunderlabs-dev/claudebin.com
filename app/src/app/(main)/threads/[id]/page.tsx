@@ -7,8 +7,8 @@ import { format } from "date-fns";
 
 import copy from "@/copy/en-EN.json";
 
-import { sessions } from "@/supabase/repos/sessions";
-import { createClient } from "@/supabase/server";
+import { sessions } from "@/server/repos/sessions";
+import { createClient } from "@/server/supabase/server";
 
 import { getProjectName } from "@/utils/helpers";
 

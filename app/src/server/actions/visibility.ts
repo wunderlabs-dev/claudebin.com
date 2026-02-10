@@ -2,8 +2,8 @@
 
 import { not, isNil } from "ramda";
 
-import { createClient } from "@/supabase/server";
-import { sessions } from "@/supabase/repos/sessions";
+import { createClient } from "@/server/supabase/server";
+import { sessions } from "@/server/repos/sessions";
 
 export const toggleVisibility = async (sessionId: string) => {
   const supabase = await createClient();

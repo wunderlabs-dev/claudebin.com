@@ -1,4 +1,4 @@
-import type { Message } from "@/supabase/repos/messages";
+import type { Message } from "@/server/repos/messages";
 import type { ContentBlock } from "@/supabase/types/message";
 import { BlockType, MessageRole } from "@/supabase/types/message";
 

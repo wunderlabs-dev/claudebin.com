@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { config } from "@/supabase/config/env";
-import { sessions } from "@/supabase/repos/sessions";
-import { createServiceClient } from "@/supabase/service";
+import { config } from "@/server/supabase/config/env";
+import { sessions } from "@/server/repos/sessions";
+import { createServiceClient } from "@/server/supabase/service";
 import {
   sessionsPollInputSchema,
   SessionStatus,
   type SessionsPollResponse,
-} from "@/api/schemas/sessions";
+} from "@/server/api/schemas/sessions";
 
 export const GET = async (request: NextRequest): Promise<NextResponse<SessionsPollResponse>> => {
   const { searchParams } = new URL(request.url);

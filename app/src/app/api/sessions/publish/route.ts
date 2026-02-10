@@ -2,15 +2,15 @@ import { nanoid } from "nanoid";
 import { after } from "next/server";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { sessions } from "@/supabase/repos/sessions";
-import { processSession } from "@/supabase/services/processor";
-import { createServiceClient } from "@/supabase/service";
+import { sessions } from "@/server/repos/sessions";
+import { processSession } from "@/server/services/processor";
+import { createServiceClient } from "@/server/supabase/service";
 import { SESSION_MAX_SIZE_BYTES, SESSION_ID_LENGTH } from "@/utils/constants";
 import {
   sessionsPublishInputSchema,
   SessionStatus,
   type SessionsPublishResponse,
-} from "@/api/schemas/sessions";
+} from "@/server/api/schemas/sessions";
 
 export const POST = async (
   request: NextRequest,

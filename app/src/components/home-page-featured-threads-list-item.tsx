@@ -3,7 +3,7 @@ import truncate from "lodash.truncate";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
-import type { ThreadWithAuthor } from "@/supabase/repos/sessions";
+import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
 import { THREAD_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 

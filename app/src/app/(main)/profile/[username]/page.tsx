@@ -3,9 +3,9 @@ import { isNil } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
-import { createClient } from "@/supabase/server";
-import { profiles } from "@/supabase/repos/profiles";
-import { sessions } from "@/supabase/repos/sessions";
+import { createClient } from "@/server/supabase/server";
+import { profiles } from "@/server/repos/profiles";
+import { sessions } from "@/server/repos/sessions";
 
 import { SvgIconLine } from "@/components/icon/svg-icon-line";
 import { SvgIconArrowRight } from "@/components/icon/svg-icon-arrow-right";

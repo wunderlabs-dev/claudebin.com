@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { createServiceClient } from "@/supabase/service";
-import { authValidateInputSchema, type AuthValidateResponse } from "@/api/schemas/auth";
+import { createServiceClient } from "@/server/supabase/service";
+import { authValidateInputSchema, type AuthValidateResponse } from "@/server/api/schemas/auth";
 
 export const GET = async (request: NextRequest): Promise<NextResponse<AuthValidateResponse>> => {
   const { searchParams } = new URL(request.url);

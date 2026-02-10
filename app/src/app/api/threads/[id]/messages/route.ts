@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { createClient } from "@/supabase/server";
-import { sessions } from "@/supabase/repos/sessions";
-import { messages } from "@/supabase/repos/messages";
+import { createClient } from "@/server/supabase/server";
+import { sessions } from "@/server/repos/sessions";
+import { messages } from "@/server/repos/messages";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

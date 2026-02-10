@@ -1,5 +1,5 @@
-import { createClient } from "@/supabase/server";
-import { sessions } from "@/supabase/repos/sessions";
+import { createClient } from "@/server/supabase/server";
+import { sessions } from "@/server/repos/sessions";
 
 import { HomePageHeroIntroduction } from "@/components/home-page-hero-introduction";
 import { HomePageFeaturedThreadsCarousel } from "@/components/home-page-featured-threads-carousel";

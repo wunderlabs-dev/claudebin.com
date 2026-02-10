@@ -3,7 +3,7 @@ import { concat, init, isNil, last, reduce } from "ramda";
 import { twMerge } from "tailwind-merge";
 
 import { MessageRole } from "@/supabase/types/message";
-import type { Message } from "@/supabase/repos/messages";
+import type { Message } from "@/server/repos/messages";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { createOpenApiSpec } from "@/api/openapi";
+import { createOpenApiSpec } from "@/server/api/openapi";
 
 export const GET = () => {
   const spec = createOpenApiSpec();

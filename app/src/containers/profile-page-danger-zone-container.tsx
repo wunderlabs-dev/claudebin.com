@@ -7,7 +7,7 @@ import { useBoolean } from "usehooks-ts";
 import { toast } from "sonner";
 
 import { cn } from "@/utils/helpers";
-import { deleteAccount } from "@/actions/account";
+import { deleteAccount } from "@/server/actions/account";
 
 import { SvgIconSkull } from "@/components/icon/svg-icon-skull";
 import { Button } from "@/components/ui/button";
