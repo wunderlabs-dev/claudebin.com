@@ -26,4 +26,5 @@ export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 export const QUERY_STALE_TIME_MS = 60 * 1000;
 export const SEARCH_DEBOUNCE_MS = 300;
 
-export const APP_THREADS_URL = "https://claudebin.com/threads";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://claudebin.com";
+export const APP_THREADS_URL = `${APP_URL}/threads`;

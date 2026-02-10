@@ -3,33 +3,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/server/supabase/server";
 import { sessions } from "@/server/repos/sessions";
 import { messages } from "@/server/repos/messages";
-import { verifyContinueToken } from "@/server/utils/jwt";
 import { messagesToMarkdown } from "@/server/utils/message-to-markdown";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
 };
 
-export const GET = async (request: NextRequest, context: RouteContext) => {
+export const GET = async (_request: NextRequest, context: RouteContext) => {
   const { id } = await context.params;
-  const { searchParams } = new URL(request.url);
-
-  const token = searchParams.get("token");
-
-  if (!token) {
-    return NextResponse.json({ error: "Missing token parameter" }, { status: 400 });
-  }
-
-  const payload = await verifyContinueToken(token);
-
-  if (!payload) {
-    return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
-  }
-
-  if (payload.sessionId !== id) {
-    return NextResponse.json({ error: "Token does not match session" }, { status: 403 });
-  }
-
   const supabase = await createClient();
 
   const session = await sessions.getById(supabase, id);
@@ -38,8 +19,6 @@ export const GET = async (request: NextRequest, context: RouteContext) => {
     return NextResponse.json({ error: "Session not found" }, { status: 404 });
   }
 
-  // Only allow markdown export for public sessions to prevent private content leakage
-  // via shared/leaked token URLs
   if (!session.isPublic) {
     return NextResponse.json(
       { error: "Markdown export is only available for public sessions" },
@@ -54,9 +33,23 @@ export const GET = async (request: NextRequest, context: RouteContext) => {
 
   const markdown = messagesToMarkdown(result.messages);
 
-  const header = `# ${session.title ?? "Untitled Conversation"}\n\n---\n\n`;
+  const title = session.title ?? "Untitled Conversation";
 
-  return new NextResponse(header + markdown, {
+  const output = `<continue-conversation>
+<instructions>
+You are continuing a previous Claude Code conversation.
+
+1. Read through the conversation below
+2. Summarize what was accomplished and the current state
+3. Ask the user how they'd like to continue
+</instructions>
+
+<conversation title="${title}">
+${markdown}
+</conversation>
+</continue-conversation>`;
+
+  return new NextResponse(output, {
     status: 200,
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
