@@ -2,24 +2,24 @@
 
 import { createContext, useContext, useState } from "react";
 
-type EmbedView = "view" | "embed";
+type ThreadEmbedView = "view" | "embed";
 
-type EmbedContextValue = {
-  view: EmbedView;
+type ThreadEmbedContextValue = {
+  view: ThreadEmbedView;
   onChangeEmbedMode: () => void;
 };
 
-const EmbedContext = createContext<EmbedContextValue>({
+const ThreadEmbedContext = createContext<ThreadEmbedContextValue>({
   view: "view",
   onChangeEmbedMode: () => {},
 });
 
-type EmbedProviderProps = {
+type ThreadEmbedProviderProps = {
   children: React.ReactNode;
 };
 
-const EmbedProvider = ({ children }: EmbedProviderProps) => {
-  const [view, setView] = useState<EmbedView>("view");
+const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
+  const [view, setView] = useState<ThreadEmbedView>("view");
 
   const onChangeEmbedMode = () => {
     if (view === "embed") {
@@ -30,17 +30,17 @@ const EmbedProvider = ({ children }: EmbedProviderProps) => {
   };
 
   return (
-    <EmbedContext.Provider
+    <ThreadEmbedContext.Provider
       value={{
         view,
         onChangeEmbedMode,
       }}
     >
       {children}
-    </EmbedContext.Provider>
+    </ThreadEmbedContext.Provider>
   );
 };
 
-const useEmbedMode = () => useContext(EmbedContext);
+const useThreadEmbed = () => useContext(ThreadEmbedContext);
 
-export { EmbedProvider, useEmbedMode };
+export { ThreadEmbedProvider, useThreadEmbed };

@@ -45,7 +45,7 @@ const ThreadPageConversationQuestions = ({ block }: ThreadPageConversationQuesti
               {isCustomAnswer?.map((answer) => (
                 <div
                   key={answer}
-                  className="inline-flex items-center justify-start w-full px-3 py-2 rounded-lg bg-gray-100 text-base font-normal text-white"
+                  className="inline-flex items-center justify-start w-full px-3 py-2 bg-gray-100 rounded-lg text-base font-normal text-white"
                 >
                   {answer}
                 </div>

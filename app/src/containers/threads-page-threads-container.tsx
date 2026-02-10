@@ -80,9 +80,9 @@ const ThreadsPageThreadsContainer = ({
 
       <DividerGridRow>
         <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-        <DividerGridCell className="grid grid-cols-12 col-span-12 border-t border-r border-b border-l lg:col-span-10 lg:border-t-0">
+        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-t border-r border-b border-l lg:border-t-0">
           <DividerGridRow>
-            <DividerGridCell className="col-span-9 border-r lg:col-span-8">
+            <DividerGridCell className="col-span-9 lg:col-span-8 border-r">
               <FormControl className="flex-row items-center">
                 <Input
                   placeholder={t("threads.searchPlaceholder")}
@@ -95,7 +95,7 @@ const ThreadsPageThreadsContainer = ({
                 </Button>
               </FormControl>
             </DividerGridCell>
-            <DividerGridCell className="flex items-center justify-end col-span-3 px-4 lg:col-span-4">
+            <DividerGridCell className="flex items-center justify-end col-span-3 lg:col-span-4 px-4">
               {hasSearchQuery ? (
                 <Typography variant="small" color="muted">
                   {t("threads.threadCount", { count: threads.length })}
@@ -112,7 +112,7 @@ const ThreadsPageThreadsContainer = ({
       {hasNoResult ? (
         <DividerGridRow>
           <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-          <DividerGridCell className="col-span-12 px-8 py-24 border-t border-r border-b border-l lg:col-span-10 lg:px-12">
+          <DividerGridCell className="col-span-12 lg:col-span-10 px-8 py-24 lg:px-12 border-t border-r border-b border-l">
             <div className="flex flex-col max-w-lg gap-6 mx-auto">
               <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
                 {t.rich("threads.emptyTitle", { gradient, query: queryDebounced })}

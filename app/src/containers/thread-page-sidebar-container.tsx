@@ -5,7 +5,7 @@ import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
-import { useEmbedMode } from "@/context/embed";
+import { useThreadEmbed } from "@/context/embed";
 
 import { breakpoints } from "@/utils/breakpoints";
 import { APP_THREADS_URL } from "@/utils/constants";
@@ -48,7 +48,7 @@ const ThreadPageSidebarContainer = ({
   const t = useTranslations();
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
 
-  const { view, onChangeEmbedMode } = useEmbedMode();
+  const { view, onChangeEmbedMode } = useThreadEmbed();
 
   return (
     <div className="flex flex-col items-start gap-6">

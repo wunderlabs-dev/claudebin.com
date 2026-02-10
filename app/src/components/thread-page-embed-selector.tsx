@@ -29,7 +29,7 @@ const ThreadPageEmbedSelector = ({ fromIdx, toIdx, onClear }: ThreadPageEmbedSel
     <div
       className={cn(
         "fixed bottom-4 left-1/2 z-50 -translate-x-1/2",
-        "flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg",
+        "flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-gray-200 shadow-lg",
         "dark:border-gray-700 dark:bg-gray-800",
       )}
     >
@@ -42,7 +42,7 @@ const ThreadPageEmbedSelector = ({ fromIdx, toIdx, onClear }: ThreadPageEmbedSel
       <button
         type="button"
         onClick={onClear}
-        className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+        className="p-1 rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-300"
       >
         <X className="h-4 w-4" />
       </button>

@@ -21,7 +21,7 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col gap-8 min-w-full">
+    <div className="flex flex-col min-w-full gap-8">
       <NavButton onClick={onClose}>
         <SvgIconArrowLeft size="sm" />
         <NavLabel>{t("thread.hideEmbedPanel")}</NavLabel>
@@ -36,20 +36,14 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
           <Typography variant="small" fontWeight="semibold">
             {t("thread.embedStart")}
           </Typography>
-          <Input
-            type="number"
-            placeholder={t("thread.embedPlaceholder")}
-          />
+          <Input type="number" placeholder={t("thread.embedPlaceholder")} />
         </div>
 
         <div className="flex flex-1 flex-col gap-3">
           <Typography variant="small" fontWeight="semibold">
             {t("thread.embedFinish")}
           </Typography>
-          <Input
-            type="number"
-            placeholder={t("thread.embedPlaceholder")}
-          />
+          <Input type="number" placeholder={t("thread.embedPlaceholder")} />
         </div>
       </div>
 
