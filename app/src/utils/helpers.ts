@@ -38,7 +38,7 @@ export const compactConversation = (messages: ReadonlyArray<Message> = []): Mess
 
       if (isConsecutiveAssistant) {
         return concat(init(accumulator), [
-          { ...previous, content: concat(previous.content, message.content) },
+          { ...previous, idx: message.idx, content: concat(previous.content, message.content) },
         ]);
       }
       return concat(accumulator, [{ ...message }]);

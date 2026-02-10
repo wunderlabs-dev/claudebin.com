@@ -102,7 +102,7 @@
     "embedStart": "Start",
     "embedFinish": "Finish",
     "embedPlaceholder": "N°",
-    "embedHint": "Enter the message numbers that define where the embed should start and end. You can find these numbers displayed next to each message.",
+    "embedHint": "Click on any two messages in the conversation to select the range you want to embed.",
     "embedRange": "Messages {from} - {to}",
     "messagesSelected": "{count, plural, one {# message selected} other {# messages selected}}",
     "selectEndMessage": "Select end message",

@@ -6,8 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { block } from "@/utils/renderers";
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
-import { compactConversation, getAvatarChar } from "@/utils/helpers";
+import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
+
+import { useThreadEmbed } from "@/context/thread-embed";
 
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,6 +28,8 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
+  const { view, onSetSelection } = useThreadEmbed();
+
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
@@ -38,10 +42,23 @@ const ThreadPageConversationContainer = ({
     return <ThreadPageConversationSkeleton />;
   }
 
+  const handleChatClick = (idx: number) => {
+    if (view === "embed") {
+      onSetSelection(idx);
+    }
+  };
+
   return (
     <Chat className="min-h-screen lg:pr-12">
       {messages.map((message) => (
-        <ChatItem key={message.uuid} variant={message.role}>
+        <ChatItem
+          key={message.uuid}
+          variant={message.role}
+          className={cn(
+            view === "embed" ? "cursor-pointer opacity-50 hover:opacity-100" : undefined,
+          )}
+          onClick={() => handleChatClick(message.idx)}
+        >
           {message.role === "assistant" ? (
             <Avatar size="sm">
               <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />

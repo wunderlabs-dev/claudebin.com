@@ -1,23 +1,26 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { isNil, isNotNil } from "ramda";
 
-import { APP_THREADS_URL } from "@/utils/constants";
+import { APP_URL } from "@/utils/constants";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 
 import { Divider } from "@/components/ui/divider";
-import { Input } from "@/components/ui/form-control";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { NavButton, NavLabel } from "@/components/ui/nav";
 
+import type { ThreadEmbedSelection } from "@/context/thread-embed";
+
 type ThreadPageThreadEmbedProps = {
   id: string;
+  selection: ThreadEmbedSelection;
   onClose: () => void;
 };
 
-const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
+const ThreadPageThreadEmbed = ({ id, selection, onClose }: ThreadPageThreadEmbedProps) => {
   const t = useTranslations();
 
   return (
@@ -27,29 +30,26 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
         <NavLabel>{t("thread.hideEmbedPanel")}</NavLabel>
       </NavButton>
 
-      <CopyInput variant="snippet" value={APP_THREADS_URL} />
+      {isNotNil(selection.from) && isNotNil(selection.to) ? (
+        <CopyInput
+          variant="snippet"
+          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${selection.from}&to=${selection.to}"></iframe>`}
+        />
+      ) : null}
+
+      {isNil(selection.from) && isNil(selection.to) ? (
+        <Typography variant="small" color="muted">
+          {t("thread.embedHint")}
+        </Typography>
+      ) : null}
+
+      {isNotNil(selection.from) && isNil(selection.to) ? (
+        <Typography variant="small" color="muted">
+          {t("thread.selectEndMessage")}
+        </Typography>
+      ) : null}
 
       <Divider />
-
-      <div className="flex gap-4">
-        <div className="flex flex-1 flex-col gap-3">
-          <Typography variant="small" fontWeight="semibold">
-            {t("thread.embedStart")}
-          </Typography>
-          <Input type="number" placeholder={t("thread.embedPlaceholder")} />
-        </div>
-
-        <div className="flex flex-1 flex-col gap-3">
-          <Typography variant="small" fontWeight="semibold">
-            {t("thread.embedFinish")}
-          </Typography>
-          <Input type="number" placeholder={t("thread.embedPlaceholder")} />
-        </div>
-      </div>
-
-      <Typography variant="small" color="muted">
-        {t("thread.embedHint")}
-      </Typography>
     </div>
   );
 };

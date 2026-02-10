@@ -16,8 +16,6 @@ type ThreadPageConversationContinueProps = {
 const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinueProps) => {
   const t = useTranslations();
 
-  const curlCommand = `curl -s "${APP_URL}/api/threads/${id}/md" | claude`;
-
   return (
     <ChatItem variant="assistant" className="pb-0">
       <Avatar size="sm">
@@ -30,8 +28,7 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
             {t("thread.continueDescription")}
           </Typography>
         </div>
-
-        <CopyInput variant="snippet" value={curlCommand} />
+        <CopyInput variant="link" value={`curl -s "${APP_URL}/api/threads/${id}/md" | claude`} />
       </ChatContent>
     </ChatItem>
   );
