@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { not, isEmpty } from "ramda";
 
 import { useEmbedMode } from "@/context/embed";
 
@@ -21,16 +22,27 @@ type ThreadPageThreadEmbedProps = {
 
 const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
   const t = useTranslations();
+
   const { from, to, onFromChange, onToChange } = useEmbedMode();
 
   const handleFromInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    onFromChange(value === "" ? null : Number.parseInt(value, 10));
+
+    if (not(isEmpty(value))) {
+      onFromChange(Number.parseInt(value, 10));
+    } else {
+      onFromChange(null);
+    }
   };
 
   const handleToInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    onToChange(value === "" ? null : Number.parseInt(value, 10));
+
+    if (not(isEmpty(value))) {
+      onToChange(Number.parseInt(value, 10));
+    } else {
+      onToChange(null);
+    }
   };
 
   return (
@@ -52,7 +64,7 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
           <Input
             type="number"
             placeholder={t("thread.embedPlaceholder")}
-            value={from ?? ""}
+            value={from}
             onChange={handleFromInput}
           />
         </div>
@@ -64,7 +76,7 @@ const ThreadPageThreadEmbed = ({ id, onClose }: ThreadPageThreadEmbedProps) => {
           <Input
             type="number"
             placeholder={t("thread.embedPlaceholder")}
-            value={to ?? ""}
+            value={to}
             onChange={handleToInput}
           />
         </div>

@@ -14,6 +14,7 @@ import type { Message } from "@/server/repos/messages";
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
 import { cn } from "@/utils/helpers";
+import { getAvatarChar } from "@/utils/helpers";
 import { APP_THREADS_URL, AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { Chat, ChatItem, ChatContent } from "@/components/ui/chat";
@@ -118,11 +119,11 @@ const ThreadPageConversationContainer = ({
     queryFn: () => getMessagesBySessionId(id),
   });
 
-  const [fallback] = [...author];
-  const { view, from, to, hovered, onSelectMessage, onHoverMessage } = useEmbedMode();
-
   const t = useTranslations();
+  const fallback = getAvatarChar(author);
   const messages = useMemo(() => compact(data?.messages), [data?.messages]);
+
+  const { view, from, to, hovered, onSelectMessage, onHoverMessage } = useEmbedMode();
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
@@ -153,7 +154,7 @@ const ThreadPageConversationContainer = ({
             onMouseEnter={() => onHoverMessage(index)}
             onMouseLeave={() => onHoverMessage(null)}
             className={cn(
-              view === "embed" ? "cursor-pointer opacity-25" : undefined,
+              view === "embed" ? "cursor-pointer opacity-25 hover:opacity-100" : undefined,
               view === "embed" && (isActive || isHovered || isInHoverRange)
                 ? "opacity-100"
                 : undefined,
@@ -189,6 +190,7 @@ const ThreadPageConversationContainer = ({
               {t("thread.continueDescription")}
             </Typography>
           </div>
+
           <CopyInput variant="link" value={`${APP_THREADS_URL}/${id}`} />
         </ChatContent>
       </ChatItem>

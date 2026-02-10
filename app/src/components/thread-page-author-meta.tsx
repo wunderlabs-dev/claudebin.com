@@ -2,6 +2,8 @@ import { Fragment } from "react";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
+import { getAvatarChar } from "@/utils/helpers";
+
 import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -25,7 +27,7 @@ const ThreadPageAuthorMeta = ({
   createdAt,
 }: ThreadPageAuthorMetaProps) => {
   const t = useTranslations();
-  const [fallback] = [...author];
+  const fallback = getAvatarChar(author);
 
   return (
     <div className="flex flex-col min-w-full gap-1 pb-4 border-b border-gray-250 lg:pl-12">
