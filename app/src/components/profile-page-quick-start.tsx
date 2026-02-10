@@ -3,6 +3,7 @@ import type { ComponentProps } from "react";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/utils/helpers";
+import { INSTALL_COMMANDS } from "@/utils/constants";
 
 import { SvgIconBash } from "@/components/icon/svg-icon-bash";
 
@@ -29,7 +30,7 @@ const ProfilePageQuickStart = ({ className, ...props }: ProfilePageQuickStartPro
         <StepsItem>{t("user.shareGuideStep1")}</StepsItem>
 
         <div className="pl-11">
-          <CopyInput variant="terminal" value="npm i -g claudebin" />
+          <CopyInput variant="terminal" value={INSTALL_COMMANDS} />
         </div>
 
         <StepsItem>{t("user.shareGuideStep2")}</StepsItem>

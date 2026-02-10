@@ -18,7 +18,7 @@ export const CopyInputVariants = ["terminal", "link", "snippet"] as const;
 export type CopyInputVariant = (typeof CopyInputVariants)[number];
 
 type CopyInputProps = {
-  value: string;
+  value: string | readonly string[];
   variant?: CopyInputVariant;
 };
 
@@ -26,11 +26,39 @@ const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode =
   const t = useTranslations();
   const [copiedText, copy] = useCopyToClipboard();
 
+  const isMultiLine = Array.isArray(value);
+  const copyValue = isMultiLine ? value.join("\n") : value;
+
   const handleCopy = () => {
-    copy(value);
+    copy(copyValue);
   };
 
   if (variant === "terminal") {
+    if (isMultiLine) {
+      return (
+        <div className="flex items-start justify-between gap-5 p-4 bg-gray-200 border border-gray-50 rounded-2xl transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
+          <div className="flex items-start gap-5">
+            <SvgIconBash className="shrink-0 mt-1 text-orange-300" />
+            <div className="flex flex-col gap-1">
+              {value.map((line) => (
+                <span key={line} className="font-mono text-base text-orange-50">
+                  {line}
+                </span>
+              ))}
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            color={copiedText === copyValue ? "success" : "default"}
+            onClick={handleCopy}
+          >
+            {copiedText === copyValue ? t("common.copied") : t("common.copy")}
+            {copiedText === copyValue ? <SvgIconCheck /> : <SvgIconCopy />}
+          </Button>
+        </div>
+      );
+    }
+
     return (
       <div className="flex items-center justify-between gap-5 p-1 bg-gray-200 border border-gray-50 rounded-full transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
         <div className="flex items-center gap-5 pl-6">
@@ -41,11 +69,11 @@ const CopyInput = ({ value, variant = "terminal" }: CopyInputProps): ReactNode =
         </div>
         <Button
           variant="outline"
-          color={copiedText === value ? "success" : "default"}
+          color={copiedText === copyValue ? "success" : "default"}
           onClick={handleCopy}
         >
-          {copiedText === value ? t("common.copied") : t("common.copy")}
-          {copiedText === value ? <SvgIconCheck /> : <SvgIconCopy />}
+          {copiedText === copyValue ? t("common.copied") : t("common.copy")}
+          {copiedText === copyValue ? <SvgIconCheck /> : <SvgIconCopy />}
         </Button>
       </div>
     );

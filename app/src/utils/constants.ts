@@ -27,3 +27,8 @@ export const QUERY_STALE_TIME_MS = 60 * 1000;
 export const SEARCH_DEBOUNCE_MS = 300;
 
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://claudebin.com";
+
+export const INSTALL_COMMANDS = [
+  "claude plugin marketplace add wunderlabs-dev/claudebin",
+  "claude plugin install claudebin@claudebin-marketplace",
+] as const;
