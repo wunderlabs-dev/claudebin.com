@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { isNil } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -67,10 +66,8 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               <SvgIconLine size="md" color="accent" />
               <Typography variant="h4">{t("user.recentThreads")}</Typography>
             </div>
-            <NavLink href="/threads" >
-              <NavLabel>
-                {t("user.seeAllThreads")}
-              </NavLabel>
+            <NavLink href="/threads">
+              <NavLabel>{t("user.seeAllThreads")}</NavLabel>
               <SvgIconArrowRight size="sm" />
             </NavLink>
           </div>
