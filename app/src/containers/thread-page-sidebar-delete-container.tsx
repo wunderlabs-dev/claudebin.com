@@ -1,9 +1,10 @@
 "use client";
 
-import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useBoolean } from "usehooks-ts";
+import { toast } from "sonner";
 
 import { deleteThread } from "@/server/actions/threads";
 
@@ -18,25 +19,26 @@ const ThreadPageSidebarDeleteContainer = ({ id }: ThreadPageSidebarDeleteContain
   const t = useTranslations();
   const router = useRouter();
 
-  const { value: isConfirming, setTrue: showConfirm } = useBoolean();
-  const [isPending, startTransition] = useTransition();
+  const { value, setTrue } = useBoolean();
 
-  const handleDelete = () => {
-    startTransition(async () => {
-      await deleteThread(id);
-      router.push("/");
-    });
-  };
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => deleteThread(id),
+    onSuccess: () => {
+      toast.success(t("thread.deleteSuccess"));
+      router.push("/threads");
+    },
+    onError: () => toast.error(t("thread.deleteError")),
+  });
 
-  if (isConfirming) {
+  if (value) {
     return (
-      <Button variant="danger" onClick={handleDelete} disabled={isPending}>
+      <Button variant="danger" onClick={() => mutate()} disabled={isPending}>
         {isPending ? t("thread.deleting") : t("thread.confirmDelete")}
       </Button>
     );
   }
   return (
-    <Button variant="secondary" onClick={showConfirm}>
+    <Button variant="secondary" onClick={setTrue}>
       <SvgIconBin />
       {t("thread.deleteThread")}
     </Button>

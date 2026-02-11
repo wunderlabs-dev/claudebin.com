@@ -104,7 +104,9 @@
     "deleteThread": "Delete thread",
     "cancelDelete": "Cancel",
     "confirmDelete": "Confirm delete",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "deleteSuccess": "Thread deleted successfully",
+    "deleteError": "Failed to delete thread"
   },
   "login": {
     "title": "<gradient>Authenticate</gradient>\nto Claudebin",

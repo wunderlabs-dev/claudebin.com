@@ -75,9 +75,9 @@ const ThreadPageConversationContainer = ({
             view === "embed" ? "cursor-pointer opacity-30 hover:opacity-100" : undefined,
             view === "embed" && inSelection(message.idx) ? "opacity-100" : undefined,
           )}
-          onClick={() => handleClick(message.idx)}
           onMouseEnter={() => view === "embed" && setCandidate(message.idx)}
           onMouseLeave={() => view === "embed" && setCandidate(undefined)}
+          onClick={() => handleClick(message.idx)}
         >
           {message.role === "assistant" ? (
             <Avatar size="sm">
