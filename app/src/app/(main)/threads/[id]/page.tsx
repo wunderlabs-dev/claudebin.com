@@ -27,7 +27,9 @@ type ThreadPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata | undefined> => {
+export const generateMetadata = async ({
+  params,
+}: ThreadPageProps): Promise<Metadata | undefined> => {
   const { id } = await params;
 
   const supabase = await createClient();

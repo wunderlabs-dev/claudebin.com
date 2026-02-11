@@ -36,17 +36,16 @@ const codeToHtml = (code: string, lang: string) => {
     lang,
     theme: "plastic",
     colorReplacements: {
-      "#21252b": "transparent"
+      "#21252b": "transparent",
     },
   });
-}
+};
 
 const Code = ({ code, lang = "typescript", className }: CodeProps) => {
-  const [dynamicHtml, setDynamicHtml] = useState<string>();
+  const [dynamicHtml, setDynamicHtml] = useState(code);
 
   const role = useChatItemRole();
   const isLoaded = highlighter.getLoadedLanguages().includes(lang);
-
 
   useEffect(() => {
     if (isLoaded) {

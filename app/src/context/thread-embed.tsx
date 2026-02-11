@@ -45,10 +45,10 @@ const ThreadEmbedContext = createContext<ThreadEmbedContextValue>({
   candidate: undefined,
   from: undefined,
   to: undefined,
-  setView: () => { },
-  setStart: () => { },
-  setEnd: () => { },
-  setCandidate: () => { },
+  setView: () => {},
+  setStart: () => {},
+  setEnd: () => {},
+  setCandidate: () => {},
 });
 
 const reducer = (state: ThreadEmbedState, action: ThreadEmbedAction): ThreadEmbedState => {
