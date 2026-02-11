@@ -96,14 +96,23 @@ const getByUserId = async (
   supabase: SupabaseClient<Database>,
   userId: string,
   limit = 20,
+  viewerId?: string,
 ): Promise<Session[]> => {
-  const { data, error } = await supabase
+  const isOwnerViewing = viewerId === userId;
+
+  let query = supabase
     .from("sessions")
     .select("*")
     .eq("userId", userId)
-    .eq("isPublic", true)
     .order("createdAt", { ascending: false })
     .limit(limit);
+
+  // Only filter by isPublic if viewer is not the owner
+  if (!isOwnerViewing) {
+    query = query.eq("isPublic", true);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     throw new Error(`Failed to fetch threads by user: ${error.message}`);

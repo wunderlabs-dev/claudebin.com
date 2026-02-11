@@ -37,7 +37,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const threads = await sessions.getByUserId(supabase, profile.id);
+  const threads = await sessions.getByUserId(supabase, profile.id, 20, user?.id);
 
   // Analytics for profile views
   // Fire-and-forget increment, no await needed as it doesn't affect page render
