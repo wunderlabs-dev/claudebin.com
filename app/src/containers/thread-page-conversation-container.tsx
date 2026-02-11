@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { getMessagesBySessionId } from "@/server/actions/messages";
@@ -29,8 +29,7 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
-  const { view, selection, onSetSelection } = useThreadEmbed();
-  const [hoveredIdx, setHoveredIdx] = useState<number | undefined>(undefined);
+  const { isEmbedMode, selectEmbedIndex, setEmbedPreviewTo, isInEmbedSelection } = useThreadEmbed();
 
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
@@ -44,20 +43,9 @@ const ThreadPageConversationContainer = ({
     return <ThreadPageConversationSkeleton />;
   }
 
-  const inSelection = (idx: number) => {
-    const from = selection.from;
-    const to = selection.to ?? hoveredIdx;
-    if (from === undefined || to === undefined) return false;
-
-    const min = Math.min(from, to);
-    const max = Math.max(from, to);
-
-    return idx >= min && idx <= max;
-  };
-
   const handleChatClick = (idx: number) => {
-    if (view === "embed") {
-      onSetSelection(idx);
+    if (isEmbedMode) {
+      selectEmbedIndex(idx);
     }
   };
 
@@ -68,12 +56,12 @@ const ThreadPageConversationContainer = ({
           key={message.uuid}
           variant={message.role}
           className={cn(
-            view === "embed" && "cursor-pointer opacity-30 hover:opacity-100",
-            view === "embed" && inSelection(message.idx) && "opacity-100",
+            isEmbedMode && "cursor-pointer opacity-30 hover:opacity-100",
+            isEmbedMode && isInEmbedSelection(message.idx) && "opacity-100",
           )}
           onClick={() => handleChatClick(message.idx)}
-          onMouseEnter={() => view === "embed" && setHoveredIdx(message.idx)}
-          onMouseLeave={() => view === "embed" && setHoveredIdx(undefined)}
+          onMouseEnter={() => isEmbedMode && setEmbedPreviewTo(message.idx)}
+          onMouseLeave={() => isEmbedMode && setEmbedPreviewTo(undefined)}
         >
           {message.role === "assistant" ? (
             <Avatar size="sm">
