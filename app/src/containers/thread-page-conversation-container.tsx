@@ -55,7 +55,7 @@ const ThreadPageConversationContainer = ({
 
   const handleClick = (idx: number) => {
     if (view !== "embed") {
-      return null;
+      return;
     }
 
     if (isNil(start) || isNotNil(end)) {

@@ -31,7 +31,7 @@ type ThreadEmbedAction =
   | { type: "SET_END"; value: number | undefined }
   | { type: "SET_CANDIDATE"; value: number | undefined };
 
-const initialState: ThreadEmbedState = {
+const INITIAL_STATE: ThreadEmbedState = {
   view: "default",
   start: undefined,
   end: undefined,
@@ -45,16 +45,16 @@ const ThreadEmbedContext = createContext<ThreadEmbedContextValue>({
   candidate: undefined,
   from: undefined,
   to: undefined,
-  setView: () => {},
-  setStart: () => {},
-  setEnd: () => {},
-  setCandidate: () => {},
+  setView: () => { },
+  setStart: () => { },
+  setEnd: () => { },
+  setCandidate: () => { },
 });
 
 const reducer = (state: ThreadEmbedState, action: ThreadEmbedAction): ThreadEmbedState => {
   switch (action.type) {
     case "SET_VIEW":
-      return action.value === "default" ? initialState : { ...state, view: action.value };
+      return action.value === "default" ? INITIAL_STATE : { ...state, view: action.value };
     case "SET_START":
       return { ...state, start: action.value, end: undefined, candidate: undefined };
     case "SET_END":
@@ -69,7 +69,7 @@ type ThreadEmbedProviderProps = {
 };
 
 const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   const from = useMemo(() => {
     if (isNotNil(state.start) && isNotNil(state.end)) {

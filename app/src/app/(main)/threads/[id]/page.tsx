@@ -27,14 +27,14 @@ type ThreadPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata | null> => {
+export const generateMetadata = async ({ params }: ThreadPageProps): Promise<Metadata | undefined> => {
   const { id } = await params;
 
   const supabase = await createClient();
   const thread = await sessions.getByIdWithAuthor(supabase, id);
 
   if (isNil(thread) || isNil(thread.title) || isNil(thread.profiles?.username)) {
-    return null;
+    return;
   }
 
   return {

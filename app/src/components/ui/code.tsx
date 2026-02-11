@@ -1,6 +1,8 @@
 "use client";
 
-import { createHighlighter } from "shiki";
+import { useEffect, useState } from "react";
+import { isNil } from "ramda";
+import { type BundledLanguage, createHighlighter } from "shiki";
 
 import { cn } from "@/utils/helpers";
 import { useChatItemRole } from "@/components/ui/chat";
@@ -11,21 +13,64 @@ type CodeProps = {
   className?: string;
 };
 
+const PRELOADED_LANGS = [
+  "typescript",
+  "javascript",
+  "json",
+  "bash",
+  "tsx",
+  "jsx",
+  "css",
+  "html",
+  "diff",
+  "python",
+];
+
 const highlighter = await createHighlighter({
   themes: ["plastic"],
-  langs: ["typescript", "javascript", "json", "bash", "tsx", "jsx", "css", "html", "sql", "diff"],
+  langs: PRELOADED_LANGS,
 });
 
-const Code = ({ code, lang = "typescript", className }: CodeProps) => {
-  const role = useChatItemRole();
-
-  const html = highlighter.codeToHtml(code, {
+const codeToHtml = (code: string, lang: string) => {
+  return highlighter.codeToHtml(code, {
     lang,
     theme: "plastic",
     colorReplacements: {
-      "#21252b": "transparent",
+      "#21252b": "transparent"
     },
   });
+}
+
+const Code = ({ code, lang = "typescript", className }: CodeProps) => {
+  const [dynamicHtml, setDynamicHtml] = useState<string>();
+
+  const role = useChatItemRole();
+  const isLoaded = highlighter.getLoadedLanguages().includes(lang);
+
+
+  useEffect(() => {
+    if (isLoaded) {
+      return;
+    }
+
+    const loadAndHighlight = async () => {
+      try {
+        await highlighter.loadLanguage(lang as BundledLanguage);
+      } catch { }
+
+      const loaded = highlighter.getLoadedLanguages();
+      const effectiveLang = loaded.includes(lang) ? lang : "plaintext";
+
+      if (isNil(code)) {
+        return;
+      }
+      setDynamicHtml(codeToHtml(code, effectiveLang));
+    };
+
+    loadAndHighlight();
+  }, [code, lang, isLoaded]);
+
+  const html = isLoaded ? codeToHtml(code, lang) : dynamicHtml;
 
   return (
     <div

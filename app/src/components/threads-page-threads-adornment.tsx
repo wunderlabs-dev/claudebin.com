@@ -68,7 +68,6 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
       </DividerGridRow>
     );
   }
-
   return null;
 };
 

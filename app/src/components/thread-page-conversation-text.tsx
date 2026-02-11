@@ -45,7 +45,7 @@ const parseCodeBlock = (children: ReactNode) => {
       lang: last(split("language-", firstChild.props.className ?? "typescript")),
     };
   }
-  return null;
+  return;
 };
 
 const createComponents = (role: Role) => ({
