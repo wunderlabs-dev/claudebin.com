@@ -25,7 +25,7 @@ const ThreadPageSidebarDeleteContainer = ({ id }: ThreadPageSidebarDeleteContain
     mutationFn: () => deleteThread(id),
     onSuccess: () => {
       toast.success(t("thread.deleteSuccess"));
-      router.push("/threads");
+      router.push("/");
     },
     onError: () => toast.error(t("thread.deleteError")),
   });
