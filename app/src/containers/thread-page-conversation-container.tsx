@@ -8,7 +8,7 @@ import { getMessagesBySessionId } from "@/server/actions/messages";
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
 import { block } from "@/utils/renderers";
-import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
+import { cn, compactConversation, isIndexWithin } from "@/utils/helpers";
 
 import { useThreadEmbed } from "@/context/thread-embed";
 
@@ -29,23 +29,34 @@ const ThreadPageConversationContainer = ({
   author,
   avatarUrl,
 }: ThreadPageConversationContainerProps): ReactNode => {
-  const { isEmbedMode, selectEmbedIndex, setEmbedPreviewTo, isInEmbedSelection } = useThreadEmbed();
+  const { view, start, end, candidate, from, to, setStart, setEnd, setCandidate } =
+    useThreadEmbed();
 
   const { data, isLoading } = useQuery({
     queryKey: ["messages", id],
     queryFn: () => getMessagesBySessionId(id),
   });
 
-  const fallback = getAvatarChar(author);
   const messages = useMemo(() => compactConversation(data?.messages), [data?.messages]);
+  const isEmbedding = view === "embed";
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
 
-  const handleChatClick = (idx: number) => {
-    if (isEmbedMode) {
-      selectEmbedIndex(idx);
+  const inSelection = (idx: number) => {
+    if (from != null && to != null) return isIndexWithin(idx, from, to);
+    if (start != null && candidate != null) return isIndexWithin(idx, start, candidate);
+    return false;
+  };
+
+  const handleClick = (idx: number) => {
+    if (!isEmbedding) return;
+
+    if (start == null || end != null) {
+      setStart(idx);
+    } else {
+      setEnd(idx);
     }
   };
 
@@ -56,12 +67,12 @@ const ThreadPageConversationContainer = ({
           key={message.uuid}
           variant={message.role}
           className={cn(
-            isEmbedMode && "cursor-pointer opacity-30 hover:opacity-100",
-            isEmbedMode && isInEmbedSelection(message.idx) && "opacity-100",
+            isEmbedding && "cursor-pointer opacity-30 hover:opacity-100",
+            isEmbedding && inSelection(message.idx) && "opacity-100",
           )}
-          onClick={() => handleChatClick(message.idx)}
-          onMouseEnter={() => isEmbedMode && setEmbedPreviewTo(message.idx)}
-          onMouseLeave={() => isEmbedMode && setEmbedPreviewTo(undefined)}
+          onClick={() => handleClick(message.idx)}
+          onMouseEnter={() => isEmbedding && setCandidate(message.idx)}
+          onMouseLeave={() => isEmbedding && setCandidate(undefined)}
         >
           {message.role === "assistant" ? (
             <Avatar size="sm">
@@ -74,7 +85,7 @@ const ThreadPageConversationContainer = ({
           {message.role === "user" ? (
             <Avatar size="sm">
               <AvatarImage src={avatarUrl ?? undefined} />
-              <AvatarFallback>{fallback}</AvatarFallback>
+              <AvatarFallback name={author} />
             </Avatar>
           ) : null}
         </ChatItem>

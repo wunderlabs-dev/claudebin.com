@@ -1,7 +1,6 @@
 import type { Message } from "@/server/repos/messages";
 
 import { block } from "@/utils/renderers";
-import { getAvatarChar } from "@/utils/helpers";
 
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
 
@@ -19,8 +18,6 @@ export const EmbedPageConversation = ({
   author,
   avatarUrl,
 }: EmbedPageConversationProps) => {
-  const fallback = getAvatarChar(author);
-
   return (
     <div className="flex flex-col gap-3">
       {messages.map((message) => (
@@ -34,7 +31,7 @@ export const EmbedPageConversation = ({
           {message.role === "user" ? (
             <Avatar size="sm">
               <AvatarImage src={avatarUrl ?? undefined} />
-              <AvatarFallback>{fallback}</AvatarFallback>
+              <AvatarFallback name={author} />
             </Avatar>
           ) : null}
         </ChatItem>

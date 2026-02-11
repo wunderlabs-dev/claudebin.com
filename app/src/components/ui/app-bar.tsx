@@ -12,13 +12,15 @@ import { breakpoints } from "@/utils/breakpoints";
 
 import { useAuth } from "@/context/auth";
 
+import { SvgIconClaudebinXs } from "@/components/icon/svg-icon-claudebin-xs";
+import { SvgIconHome } from "@/components/icon/svg-icon-home";
+import { SvgIconUser } from "@/components/icon/svg-icon-user";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
-import { SvgIconClaudebinXs } from "@/components/icon/svg-icon-claudebin-xs";
-import { SvgIconHome } from "@/components/icon/svg-icon-home";
-import { SvgIconUser } from "@/components/icon/svg-icon-user";
+import { Typography } from "@/components/ui/typography";
 
 type AppBarProps = ComponentProps<"header">;
 
@@ -76,10 +78,22 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
           </div>
 
           {user ? (
-            <Button onClick={signOut}>
-              <SvgIconUser size="sm" />
-              {t("appBar.logout")}
-            </Button>
+            <div className="flex items-center gap-8">
+              <NavLink href={`/profile/${user.user_metadata.user_name}`}>
+                <Avatar size="sm">
+                  <AvatarImage src={user.user_metadata.avatar_url} />
+                  <AvatarFallback name={user.user_metadata.user_name} />
+                </Avatar>
+                <NavLabel>
+                  {user.user_metadata.user_name}
+                </NavLabel>
+              </NavLink>
+
+              <Button onClick={signOut}>
+                <SvgIconUser size="sm" />
+                {t("appBar.logout")}
+              </Button>
+            </div>
           ) : (
             <Button as={Link} href="/auth/login">
               <SvgIconUser size="sm" />

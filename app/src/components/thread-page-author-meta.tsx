@@ -2,13 +2,11 @@ import { Fragment } from "react";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 
-import { getAvatarChar } from "@/utils/helpers";
-
 import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { List, ListItem } from "@/components/ui/list";
-import { NavLink } from "@/components/ui/nav";
+import { NavLabel, NavLink } from "@/components/ui/nav";
 import { Typography } from "@/components/ui/typography";
 
 type ThreadPageAuthorMetaProps = {
@@ -26,7 +24,6 @@ const ThreadPageAuthorMeta = ({
 }: ThreadPageAuthorMetaProps) => {
   const t = useTranslations();
   const author = username ?? t("common.deactivated");
-  const fallback = getAvatarChar(author);
 
   return (
     <div className="flex flex-col min-w-full gap-1 pb-4 border-b border-gray-250 lg:pl-12">
@@ -34,23 +31,19 @@ const ThreadPageAuthorMeta = ({
 
       <div className="flex items-center gap-3">
         {username ? (
-          <NavLink href={`/profile/${username}`}>
+          <NavLink href={`/profile/${username}`} className="group">
             <Avatar size="sm">
               {avatarUrl ? <AvatarImage src={avatarUrl} alt={username} /> : null}
-              <AvatarFallback>{fallback}</AvatarFallback>
+              <AvatarFallback name={author} />
             </Avatar>
-            <Typography
-              variant="small"
-              color="accent"
-              className="underline decoration-orange-50/0 underline-offset-2 transition-colors duration-150 ease-in-out group-hover:decoration-orange-50"
-            >
+            <Typography variant="small" color="accent" className="group-hover:underline">
               {username}
             </Typography>
           </NavLink>
         ) : (
           <Fragment>
             <Avatar size="sm">
-              <AvatarFallback>{fallback}</AvatarFallback>
+              <AvatarFallback name={author} />
             </Avatar>
             <Typography variant="small" color="accent">
               {author}

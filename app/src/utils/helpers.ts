@@ -13,7 +13,7 @@ export const isIndexWithin = (index: number, from: number, to: number) => {
   return index >= Math.min(from, to) && index <= Math.max(from, to);
 };
 
-export const getAvatarChar = (username: string | null) => {
+export const getAvatarChar = (username?: string | null) => {
   if (username) {
     return head(username);
   }

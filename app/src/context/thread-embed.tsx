@@ -1,116 +1,104 @@
 "use client";
 
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useMemo, useReducer } from "react";
 
-import { isIndexWithin } from "@/utils/helpers";
-
-export type EmbedRange =
-  | { status: "idle" }
-  | { status: "selecting"; from: number }
-  | { status: "complete"; from: number; to: number };
+export type ThreadEmbedView = "default" | "embed";
 
 type ThreadEmbedContextValue = {
-  isEmbedMode: boolean;
-  embedRange: EmbedRange;
-  previewTo: number | undefined;
-  setEmbedMode: (value: boolean) => void;
-  selectEmbedIndex: (idx: number) => void;
-  setEmbedPreviewTo: (value: number | undefined) => void;
-  isInEmbedSelection: (idx: number) => boolean;
+  view: ThreadEmbedView;
+  start: number | undefined;
+  end: number | undefined;
+  candidate: number | undefined;
+  setView: (view: ThreadEmbedView) => void;
+  setStart: (idx: number | undefined) => void;
+  setEnd: (idx: number | undefined) => void;
+  setCandidate: (idx: number | undefined) => void;
+  from: number | undefined;
+  to: number | undefined;
 };
 
-const INITIAL_RANGE: EmbedRange = { status: "idle" };
+type ThreadEmbedState = {
+  view: ThreadEmbedView;
+  start: number | undefined;
+  end: number | undefined;
+  candidate: number | undefined;
+};
+
+type ThreadEmbedAction =
+  | { type: "setView"; value: ThreadEmbedView }
+  | { type: "setStart"; value: number | undefined }
+  | { type: "setEnd"; value: number | undefined }
+  | { type: "setCandidate"; value: number | undefined };
+
+const INITIAL_STATE: ThreadEmbedState = {
+  view: "default",
+  start: undefined,
+  end: undefined,
+  candidate: undefined,
+};
 
 const ThreadEmbedContext = createContext<ThreadEmbedContextValue>({
-  isEmbedMode: false,
-  embedRange: INITIAL_RANGE,
-  previewTo: undefined,
-  setEmbedMode: () => {},
-  selectEmbedIndex: () => {},
-  setEmbedPreviewTo: () => {},
-  isInEmbedSelection: () => false,
+  view: "default",
+  start: undefined,
+  end: undefined,
+  candidate: undefined,
+  setView: () => {},
+  setStart: () => {},
+  setEnd: () => {},
+  setCandidate: () => {},
+  from: undefined,
+  to: undefined,
 });
+
+const reducer = (state: ThreadEmbedState, action: ThreadEmbedAction): ThreadEmbedState => {
+  switch (action.type) {
+    case "setView":
+      if (action.value === "default") return { ...INITIAL_STATE };
+      return { ...state, view: action.value };
+    case "setStart":
+      return { ...state, start: action.value, end: undefined, candidate: undefined };
+    case "setEnd":
+      return { ...state, end: action.value, candidate: undefined };
+    case "setCandidate":
+      return { ...state, candidate: action.value };
+  }
+};
 
 type ThreadEmbedProviderProps = {
   children: React.ReactNode;
 };
 
-type ThreadEmbedState = {
-  isEmbedMode: boolean;
-  embedRange: EmbedRange;
-  previewTo: number | undefined;
-};
-
-type ThreadEmbedAction =
-  | { type: "setMode"; value: boolean }
-  | { type: "select"; idx: number }
-  | { type: "preview"; value: number | undefined };
-
-const INITIAL_STATE: ThreadEmbedState = {
-  isEmbedMode: false,
-  embedRange: INITIAL_RANGE,
-  previewTo: undefined,
-};
-
-const reducer = (state: ThreadEmbedState, action: ThreadEmbedAction): ThreadEmbedState => {
-  if (action.type === "setMode") {
-    if (action.value) return { ...state, isEmbedMode: true };
-    return { ...INITIAL_STATE };
-  }
-
-  if (action.type === "select") {
-    const prev = state.embedRange;
-
-    if (prev.status === "idle") {
-      return { ...state, embedRange: { status: "selecting", from: action.idx } };
-    }
-    if (prev.status === "selecting") {
-      const from = Math.min(prev.from, action.idx);
-      const to = Math.max(prev.from, action.idx);
-
-      return { ...state, embedRange: { status: "complete", from, to } };
-    }
-    return { ...state, embedRange: { status: "selecting", from: action.idx } };
-  }
-
-  return { ...state, previewTo: action.value };
-};
-
 const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  const setEmbedMode = (value: boolean) => {
-    dispatch({ type: "setMode", value });
-  };
+  const setView = (value: ThreadEmbedView) => dispatch({ type: "setView", value });
+  const setStart = (value: number | undefined) => dispatch({ type: "setStart", value });
+  const setEnd = (value: number | undefined) => dispatch({ type: "setEnd", value });
+  const setCandidate = (value: number | undefined) => dispatch({ type: "setCandidate", value });
 
-  const selectEmbedIndex = (idx: number) => {
-    dispatch({ type: "select", idx });
-  };
+  const from = useMemo(
+    () => (state.start != null && state.end != null ? Math.min(state.start, state.end) : undefined),
+    [state.start, state.end],
+  );
 
-  const setEmbedPreviewTo = (value: number | undefined) => {
-    dispatch({ type: "preview", value });
-  };
-
-  const isInEmbedSelection = (idx: number) => {
-    if (state.embedRange.status === "idle") return false;
-
-    const from = state.embedRange.from;
-    const to = state.embedRange.status === "complete" ? state.embedRange.to : state.previewTo;
-    if (to === undefined) return false;
-
-    return isIndexWithin(idx, from, to);
-  };
+  const to = useMemo(
+    () => (state.start != null && state.end != null ? Math.max(state.start, state.end) : undefined),
+    [state.start, state.end],
+  );
 
   return (
     <ThreadEmbedContext.Provider
       value={{
-        isEmbedMode: state.isEmbedMode,
-        embedRange: state.embedRange,
-        previewTo: state.previewTo,
-        setEmbedMode,
-        selectEmbedIndex,
-        setEmbedPreviewTo,
-        isInEmbedSelection,
+        view: state.view,
+        start: state.start,
+        end: state.end,
+        candidate: state.candidate,
+        setView,
+        setStart,
+        setEnd,
+        setCandidate,
+        from,
+        to,
       }}
     >
       {children}

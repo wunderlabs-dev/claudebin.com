@@ -10,15 +10,15 @@ import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { NavButton, NavLabel } from "@/components/ui/nav";
 
-import type { EmbedRange } from "@/context/thread-embed";
-
 type ThreadPageThreadEmbedProps = {
   id: string;
-  embedRange: EmbedRange;
+  from: number | undefined;
+  to: number | undefined;
+  start: number | undefined;
   onClose: () => void;
 };
 
-const ThreadPageThreadEmbed = ({ id, embedRange, onClose }: ThreadPageThreadEmbedProps) => {
+const ThreadPageThreadEmbed = ({ id, from, to, start, onClose }: ThreadPageThreadEmbedProps) => {
   const t = useTranslations();
 
   return (
@@ -28,19 +28,20 @@ const ThreadPageThreadEmbed = ({ id, embedRange, onClose }: ThreadPageThreadEmbe
         <NavLabel>{t("thread.hideEmbedPanel")}</NavLabel>
       </NavButton>
 
-      {embedRange.status === "complete" ? (
+      {from != null && to != null ? (
         <CopyInput
           variant="snippet"
-          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${embedRange.from}&to=${embedRange.to}"></iframe>`}
+          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${from}&to=${to}"></iframe>`}
         />
       ) : null}
 
-      {embedRange.status === "idle" ? (
+      {start == null ? (
         <Typography variant="small" color="muted">
           {t("thread.embedHint")}
         </Typography>
       ) : null}
-      {embedRange.status === "selecting" ? (
+
+      {start != null && from == null ? (
         <Typography variant="small" color="muted">
           {t("thread.selectEndMessage")}
         </Typography>
