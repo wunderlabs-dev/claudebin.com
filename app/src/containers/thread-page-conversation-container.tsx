@@ -2,7 +2,7 @@
 
 import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { not, isNil, isNotNil } from "ramda";
+import { isNil, isNotNil } from "ramda";
 
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
