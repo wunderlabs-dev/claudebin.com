@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Claudebin - Share Your Claude Sessions",
-    "description": "A pastebin for vibes. Publish and share your Claude Code sessions."
+    "title": "Claudebin - Your Claude Code Sessions Deserve a URL",
+    "description": "Turn your Claude Code sessions into shareable, embeddable, and continuable artifacts."
   },
   "common": {
     "loading": "Loading...",
@@ -35,9 +35,9 @@
     "logout": "Logout"
   },
   "home": {
-    "headline": "<gradient>Share AI Sessions</gradient>\nlike never before",
+    "headline": "Your Claude sessions\n<gradient>deserve a URL</gradient>",
     "badge": "Free & open source",
-    "description": "ClaudeBin is the modern pastebin for developers who code with AI. Share your Claude conversations, collaborate seamlessly.",
+    "description": "Claudebin turns your Claude sessions into shareable, embeddable, and continuable artifacts.",
     "oneClickInstall": "One-click install",
     "claudeInstall": "Claude install",
     "viewDemo": "View Demo",
