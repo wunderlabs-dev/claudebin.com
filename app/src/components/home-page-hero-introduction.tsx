@@ -8,7 +8,7 @@ import { isServer } from "@tanstack/react-query";
 import { gradient } from "@/utils/renderers";
 import { mediaQueries } from "@/utils/mediaQueries";
 
-import { SvgIconGlitters } from "@/components/icon/svg-icon-glitters";
+import { SvgIconGithub } from "@/components/icon/svg-icon-github";
 
 import { Backdrop } from "@/components/ui/backdrop";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
 
           <div className="flex flex-col items-start gap-6">
             <Badge>
-              <SvgIconGlitters />
+              <SvgIconGithub size="sm" />
               {t("home.badge")}
             </Badge>
 
