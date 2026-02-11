@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { GlobBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
 import {

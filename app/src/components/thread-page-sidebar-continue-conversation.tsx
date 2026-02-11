@@ -4,7 +4,7 @@ import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { Button } from "@/components/ui/button";
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";

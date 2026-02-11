@@ -10,7 +10,7 @@ import type { VariantProps } from "class-variance-authority";
 
 import type { badgeVariants } from "@/components/ui/badge";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconCode } from "@/components/icon/svg-icon-code";
 

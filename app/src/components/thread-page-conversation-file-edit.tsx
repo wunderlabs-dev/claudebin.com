@@ -7,7 +7,7 @@ import { isServer } from "@tanstack/react-query";
 
 import type { FileEditBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import {

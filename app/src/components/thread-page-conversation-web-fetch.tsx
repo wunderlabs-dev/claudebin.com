@@ -9,7 +9,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { WebFetchBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 import {

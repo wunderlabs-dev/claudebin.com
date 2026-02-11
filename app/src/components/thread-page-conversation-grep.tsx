@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { GrepBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconFileSearch } from "@/components/icon/svg-icon-file-search";
 import {

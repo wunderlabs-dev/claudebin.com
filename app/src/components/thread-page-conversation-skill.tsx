@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { SkillBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconGlitters } from "@/components/icon/svg-icon-glitters";
 import {

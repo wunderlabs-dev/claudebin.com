@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { McpBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconMcp } from "@/components/icon/svg-icon-mcp";
 

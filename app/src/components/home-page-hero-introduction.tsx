@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { isServer } from "@tanstack/react-query";
 
 import { gradient } from "@/utils/renderers";
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconGithub } from "@/components/icon/svg-icon-github";
 

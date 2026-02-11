@@ -8,7 +8,7 @@ import { isServer } from "@tanstack/react-query";
 
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 import { getProjectName } from "@/utils/helpers";
 
 import { THREAD_CARD_LAYOUTS, THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";

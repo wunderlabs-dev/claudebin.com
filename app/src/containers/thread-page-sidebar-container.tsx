@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
 import { APP_URL } from "@/utils/constants";
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { useThreadEmbed } from "@/context/thread-embed";
 

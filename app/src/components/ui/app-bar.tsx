@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { useEventListener, useIsomorphicLayoutEffect, useMediaQuery } from "usehooks-ts";
 
 import { cn } from "@/utils/helpers";
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { useAuth } from "@/context/auth";
 

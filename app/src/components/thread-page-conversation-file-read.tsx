@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { FileReadBlock } from "@/supabase/types/message";
 
-import { mediaQueries } from "@/utils/mediaQueries";
+import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconEye } from "@/components/icon/svg-icon-eye";
 import {
