@@ -244,6 +244,15 @@ const incrementViewCount = async (
   }
 };
 
+const deleteSession = async (supabase: SupabaseClient<Database>, id: string): Promise<void> => {
+  const { error } = await supabase.from("sessions").delete().eq("id", id);
+
+  if (error) {
+    logger.sessions.error("Session delete failed", error);
+    throw new Error("Failed to delete session.");
+  }
+};
+
 export const sessions = {
   getPublicThreads,
   getFeaturedThreads,
@@ -253,6 +262,7 @@ export const sessions = {
   getByIdForUser,
   create,
   update,
+  delete: deleteSession,
   uploadJsonl,
   downloadJsonl,
   deleteFile,
