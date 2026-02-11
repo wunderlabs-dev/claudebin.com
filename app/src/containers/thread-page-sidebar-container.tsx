@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
 import { APP_URL } from "@/utils/constants";
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { useThreadEmbed } from "@/context/thread-embed";
 
@@ -47,7 +47,7 @@ const ThreadPageSidebarContainer = ({
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
-  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
+  const lg = useMediaQuery(mediaQueries.lg, { initializeWithValue: isServer });
 
   const { view, from, to, start, setView } = useThreadEmbed();
 

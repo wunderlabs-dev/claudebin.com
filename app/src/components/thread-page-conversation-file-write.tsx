@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { FileWriteBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconPen } from "@/components/icon/svg-icon-pen";
 
@@ -28,7 +28,7 @@ type ThreadPageConversationFileWriteProps = {
 
 const ThreadPageConversationFileWrite = ({ block }: ThreadPageConversationFileWriteProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
   const lineCount = block.content.split("\n").length;
 
   return (

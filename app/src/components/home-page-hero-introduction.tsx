@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { isServer } from "@tanstack/react-query";
 
 import { gradient } from "@/utils/renderers";
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconGlitters } from "@/components/icon/svg-icon-glitters";
 
@@ -22,7 +22,7 @@ type HomePageHeroIntroductionProps = ComponentProps<"section">;
 
 const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroductionProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   return (
     <Container as="section" size="lg" className={className} {...props}>

@@ -2,6 +2,7 @@
 
 import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { isNil, isNotNil } from "ramda";
 
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
@@ -45,15 +46,15 @@ const ThreadPageConversationContainer = ({
   }
 
   const inSelection = (idx: number) => {
-    if (from != null && to != null) return isIndexWithin(idx, from, to);
-    if (start != null && candidate != null) return isIndexWithin(idx, start, candidate);
+    if (isNotNil(from) && isNotNil(to)) return isIndexWithin(idx, from, to);
+    if (isNotNil(start) && isNotNil(candidate)) return isIndexWithin(idx, start, candidate);
     return false;
   };
 
   const handleClick = (idx: number) => {
     if (!isEmbedding) return;
 
-    if (start == null || end != null) {
+    if (isNil(start) || isNotNil(end)) {
       setStart(idx);
     } else {
       setEnd(idx);

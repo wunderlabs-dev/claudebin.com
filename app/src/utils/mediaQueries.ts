@@ -1,6 +1,6 @@
-export type Breakpoint = "sm" | "md" | "lg" | "xl" | "2xl";
+export type MediaQuery = "sm" | "md" | "lg" | "xl" | "2xl";
 
-export const breakpoints: Record<Breakpoint, string> = {
+export const mediaQueries: Record<MediaQuery, string> = {
   sm: "(min-width: 640px)",
   md: "(min-width: 768px)",
   lg: "(min-width: 1024px)",

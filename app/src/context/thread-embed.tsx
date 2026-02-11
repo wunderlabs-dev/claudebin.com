@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, useReducer } from "react";
+import { isNotNil } from "ramda";
 
 type ThreadEmbedView = "default" | "embed";
 
@@ -77,12 +78,14 @@ const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
   const setCandidate = (value: number | undefined) => dispatch({ type: "setCandidate", value });
 
   const from = useMemo(
-    () => (state.start != null && state.end != null ? Math.min(state.start, state.end) : undefined),
+    () =>
+      isNotNil(state.start) && isNotNil(state.end) ? Math.min(state.start, state.end) : undefined,
     [state.start, state.end],
   );
 
   const to = useMemo(
-    () => (state.start != null && state.end != null ? Math.max(state.start, state.end) : undefined),
+    () =>
+      isNotNil(state.start) && isNotNil(state.end) ? Math.max(state.start, state.end) : undefined,
     [state.start, state.end],
   );
 

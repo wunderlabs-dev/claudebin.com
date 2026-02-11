@@ -7,7 +7,7 @@ import { isServer } from "@tanstack/react-query";
 
 import type { FileEditBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import {
@@ -39,7 +39,7 @@ const toDiff = (oldString: string, newString: string): string => {
 
 const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEditProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   const filename = block.file_path.split("/").pop() ?? block.file_path;
 

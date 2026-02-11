@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { isNil, isNotNil } from "ramda";
 
 import { APP_URL } from "@/utils/constants";
 
@@ -28,20 +29,20 @@ const ThreadPageThreadEmbed = ({ id, from, to, start, onClose }: ThreadPageThrea
         <NavLabel>{t("thread.hideEmbedPanel")}</NavLabel>
       </NavButton>
 
-      {from != null && to != null ? (
+      {isNotNil(from) && isNotNil(to) ? (
         <CopyInput
           variant="snippet"
           value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${from}&to=${to}"></iframe>`}
         />
       ) : null}
 
-      {start == null ? (
+      {isNil(start) ? (
         <Typography variant="small" color="muted">
           {t("thread.embedHint")}
         </Typography>
       ) : null}
 
-      {start != null && from == null ? (
+      {isNotNil(start) && isNil(from) ? (
         <Typography variant="small" color="muted">
           {t("thread.selectEndMessage")}
         </Typography>

@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { SkillBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconGlitters } from "@/components/icon/svg-icon-glitters";
 import {
@@ -25,7 +25,7 @@ type ThreadPageConversationSkillProps = {
 
 const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>

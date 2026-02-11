@@ -44,6 +44,19 @@
           }
         }
       }
+    },
+    {
+      "includes": ["**/opengraph-image.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useAltText": "off"
+          },
+          "performance": {
+            "noImgElement": "off"
+          }
+        }
+      }
     }
   ],
   "javascript": {

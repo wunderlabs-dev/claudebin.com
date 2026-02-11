@@ -4,14 +4,14 @@ import { isServer } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { Button } from "@/components/ui/button";
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";
 
 const ThreadPageSidebarContinueConversation = () => {
   const t = useTranslations();
-  const xl = useMediaQuery(breakpoints.xl, { initializeWithValue: isServer });
+  const xl = useMediaQuery(mediaQueries.xl, { initializeWithValue: isServer });
 
   const handleClick = () => {
     document?.querySelector("[data-continue-conversation]")?.scrollIntoView({ behavior: "smooth" });

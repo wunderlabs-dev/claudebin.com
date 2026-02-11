@@ -9,7 +9,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { WebFetchBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 import {
@@ -40,7 +40,7 @@ const getStatusColor = (statusCode: number) => {
 
 const ThreadPageConversationWebFetch = ({ block }: ThreadPageConversationWebFetchProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>

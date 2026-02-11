@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { GlobBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
 import {
@@ -26,7 +26,7 @@ type ThreadPageConversationGlobProps = {
 
 const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>

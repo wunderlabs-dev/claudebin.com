@@ -8,7 +8,7 @@ import { isServer } from "@tanstack/react-query";
 
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 import { getProjectName } from "@/utils/helpers";
 
 import { THREAD_CARD_LAYOUTS, THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
@@ -38,7 +38,7 @@ type ThreadsPageThreadGridItemProps = {
 
 const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridItemProps) => {
   const t = useTranslations();
-  const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
+  const lg = useMediaQuery(mediaQueries.lg, { initializeWithValue: isServer });
 
   const hash = stringHash(thread.id);
   const positions = THREAD_CARD_LAYOUTS[hash % THREAD_CARD_LAYOUTS.length];

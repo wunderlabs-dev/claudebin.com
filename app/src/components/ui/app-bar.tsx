@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { useEventListener, useIsomorphicLayoutEffect, useMediaQuery } from "usehooks-ts";
 
 import { cn } from "@/utils/helpers";
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { useAuth } from "@/context/auth";
 
@@ -30,7 +30,7 @@ const links = [
 const AppBar = ({ className, ...props }: AppBarProps) => {
   const t = useTranslations();
   const pathname = usePathname();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   const { user, signOut } = useAuth();
   const [isSticky, setIsSticky] = useState<number>();

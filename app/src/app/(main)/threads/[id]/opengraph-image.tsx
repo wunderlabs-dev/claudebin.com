@@ -206,7 +206,7 @@ const OpenGraphContent = ({ thread }: OpenGraphContentProps) => (
         }}
       >
         <div
-          tw="p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
+          tw="flex-1 p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
           style={{
             borderStyle: "solid",
             borderWidth: sizes.border,
@@ -217,8 +217,6 @@ const OpenGraphContent = ({ thread }: OpenGraphContentProps) => (
           {thread.title}
         </div>
 
-        {/* biome-ignore lint/a11y/useAltText: OG images use Satori */}
-        {/* biome-ignore lint/performance/noImgElement: Satori doesn't support next/image */}
         <img
           src={assistantSrc}
           width={sizes.avatar}

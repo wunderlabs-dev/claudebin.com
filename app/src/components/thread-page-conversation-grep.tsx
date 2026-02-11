@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { GrepBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconFileSearch } from "@/components/icon/svg-icon-file-search";
 import {
@@ -25,7 +25,7 @@ type ThreadPageConversationGrepProps = {
 
 const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   return (
     <Accordion type="single" collapsible>

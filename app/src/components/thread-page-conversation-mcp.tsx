@@ -6,7 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { McpBlock } from "@/supabase/types/message";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconMcp } from "@/components/icon/svg-icon-mcp";
 
@@ -39,7 +39,7 @@ const formatOutput = (output: unknown): string => {
 
 const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   const label = `${block.server} → ${block.tool}`;
   const input = formatInput(block.input);

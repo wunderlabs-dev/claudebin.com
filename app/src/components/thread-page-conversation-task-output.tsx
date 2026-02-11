@@ -2,15 +2,15 @@
 
 import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { isServer } from "@tanstack/react-query";
 import { useMediaQuery } from "usehooks-ts";
+import { isServer } from "@tanstack/react-query";
 
 import type { TaskOutputBlock } from "@/supabase/types/message";
 import type { VariantProps } from "class-variance-authority";
 
 import type { badgeVariants } from "@/components/ui/badge";
 
-import { breakpoints } from "@/utils/breakpoints";
+import { mediaQueries } from "@/utils/mediaQueries";
 
 import { SvgIconCode } from "@/components/icon/svg-icon-code";
 
@@ -31,7 +31,7 @@ type ThreadPageConversationTaskOutputProps = {
 
 const ThreadPageConversationTaskOutput = ({ block }: ThreadPageConversationTaskOutputProps) => {
   const t = useTranslations();
-  const md = useMediaQuery(breakpoints.md, { initializeWithValue: isServer });
+  const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
   const badgeVariant = useMemo((): VariantProps<typeof badgeVariants>["variant"] => {
     if (block.status === "completed") {
