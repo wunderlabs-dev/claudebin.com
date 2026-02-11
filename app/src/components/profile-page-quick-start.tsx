@@ -27,30 +27,17 @@ const ProfilePageQuickStart = ({ className, ...props }: ProfilePageQuickStartPro
       <Steps>
         <StepsItem>{t("user.shareGuideStep1")}</StepsItem>
 
-        <div className="max-w-full pl-11">
-          <CopyInput
-            variant="command"
-            value="claude plugin marketplace add wunderlabs-dev/claudebin"
-          />
+        <div className="min-w-full pl-11">
+          <CopyInput variant="command" value={t("commands.oneClickInstall")} />
         </div>
 
         <StepsItem>{t("user.shareGuideStep2")}</StepsItem>
 
-        <div className="max-w-full pl-11">
-          <CopyInput
-            variant="command"
-            value="claude plugin install claudebin@claudebin-marketplace"
-          />
+        <div className="min-w-full pl-11">
+          <CopyInput variant="command" value={t("commands.share")} />
         </div>
 
         <StepsItem>{t("user.shareGuideStep3")}</StepsItem>
-        <StepsItem>{t("user.shareGuideStep4")}</StepsItem>
-
-        <div className="max-w-full pl-11">
-          <CopyInput variant="command" value="/claudebin:share" />
-        </div>
-
-        <StepsItem>{t("user.shareGuideStep5")}</StepsItem>
       </Steps>
     </div>
   );
