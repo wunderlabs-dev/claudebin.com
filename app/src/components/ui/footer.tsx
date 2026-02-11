@@ -40,7 +40,7 @@ const sections = [
     links: [
       { href: "/", labelKey: "footer.claudebin" },
       { href: "/threads", labelKey: "footer.threads" },
-      { href: "/login", labelKey: "footer.login" },
+      { href: "/auth/login", labelKey: "footer.login" },
     ],
   },
 ] as const;
@@ -69,7 +69,12 @@ const Footer = ({ className, ...props }: FooterProps) => {
                 <Typography variant="h4">{t(section.title)}</Typography>
 
                 {section.links.map((item) => (
-                  <Link key={item.href} href={item.href} target="_blank" className="text-base hover:text-orange-50">
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    className="text-base hover:text-orange-50"
+                  >
                     {t(item.labelKey)}
                   </Link>
                 ))}
