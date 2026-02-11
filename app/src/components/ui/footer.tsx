@@ -32,15 +32,14 @@ const sections = [
       { href: "/", labelKey: "footer.claudebin" },
       { href: "/threads", labelKey: "footer.threads" },
       { href: "/login", labelKey: "footer.login" },
-      { href: "/tutorial", labelKey: "footer.tutorial" },
-      { href: "/terms", labelKey: "footer.securityTerms" },
     ],
   },
   {
     title: "footer.community",
     links: [
       { href: "https://github.com/wunderlabs-dev", labelKey: "footer.github" },
-      { href: "https://x.com/claudebin", labelKey: "footer.twitter" },
+      { href: "https://x.com/vtemian", labelKey: "footer.vtemian" },
+      { href: "https://x.com/balajmarius", labelKey: "footer.balajmarius" },
     ],
   },
 ] as const;
