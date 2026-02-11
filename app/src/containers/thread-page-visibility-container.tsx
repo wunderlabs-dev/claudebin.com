@@ -49,7 +49,7 @@ const ThreadPageVisibilityContainer = ({
 
   if (not(isAuthor)) {
     return (
-      <Badge variant="success">
+      <Badge variant={isPublic ? "success" : "neutral"}>
         <SvgIconGlobe size="sm" />
         {isPublic ? t("common.public") : t("common.unlisted")}
       </Badge>
