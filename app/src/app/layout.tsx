@@ -32,6 +32,9 @@ export const metadata: Metadata = {
   title: copy.metadata.title,
   description: copy.metadata.description,
   icons: "/images/favicon.svg",
+  openGraph: {
+    images: ["/images/og-default-1200x630.png"],
+  },
 };
 
 const RootLayout = async ({ children }: RootLayoutProps) => {
