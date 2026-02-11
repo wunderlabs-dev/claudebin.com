@@ -8,10 +8,9 @@ import { useDebounceValue } from "usehooks-ts";
 import { not, isEmpty } from "ramda";
 
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
-
-import { SEARCH_DEBOUNCE_MS, THREADS_PAGE_INITIAL } from "@/utils/constants";
 import { getPublicThreads } from "@/server/actions/threads";
 
+import { SEARCH_DEBOUNCE_MS, THREADS_PAGE_INITIAL } from "@/utils/constants";
 import { gradient } from "@/utils/renderers";
 
 import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";

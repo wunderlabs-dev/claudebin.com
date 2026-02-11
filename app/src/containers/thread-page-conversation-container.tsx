@@ -3,11 +3,12 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { block } from "@/utils/renderers";
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
-import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
 import { AVATAR_ASSISTANT_IMAGE_SRC } from "@/utils/constants";
+
+import { block } from "@/utils/renderers";
+import { cn, compactConversation, getAvatarChar } from "@/utils/helpers";
 
 import { useThreadEmbed } from "@/context/thread-embed";
 

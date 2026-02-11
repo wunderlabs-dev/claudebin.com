@@ -6,8 +6,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useBoolean } from "usehooks-ts";
 import { toast } from "sonner";
 
-import { cn } from "@/utils/helpers";
 import { deleteAccount } from "@/server/actions/account";
+
+import { cn } from "@/utils/helpers";
 
 import { SvgIconSkull } from "@/components/icon/svg-icon-skull";
 import { Button } from "@/components/ui/button";
