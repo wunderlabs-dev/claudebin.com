@@ -101,26 +101,4 @@ const Button = <T extends React.ElementType = "button">({
   );
 };
 
-type ButtonTextProps = React.ComponentProps<"span">;
-
-const ButtonText = ({ className, ...props }: ButtonTextProps) => {
-  return (
-    <span
-      data-slot="button-text"
-      className={cn(
-        "relative",
-        "after:absolute after:inset-x-0 after:top-full",
-        "after:h-px",
-        "after:bg-orange-50",
-        "after:origin-left after:scale-x-0",
-        "after:transition-transform after:ease-in-out",
-        "group-hover:after:scale-x-100 group-active:text-orange-50",
-        "[&_svg]:shrink-0",
-        className,
-      )}
-      {...props}
-    />
-  );
-};
-
-export { Button, ButtonText, buttonVariants };
+export { Button, buttonVariants };

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useReducer } from "react";
 
-export type ThreadEmbedView = "default" | "embed";
+type ThreadEmbedView = "default" | "embed";
 
 type ThreadEmbedContextValue = {
   view: ThreadEmbedView;

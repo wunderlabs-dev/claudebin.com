@@ -31,7 +31,7 @@ const ThreadPageAuthorMeta = ({
 
       <div className="flex items-center gap-3">
         {username ? (
-          <NavLink href={`/profile/${username}`} className="group">
+          <NavLink className="group" href={`/profile/${username}`}>
             <Avatar size="sm">
               {avatarUrl ? <AvatarImage src={avatarUrl} alt={username} /> : null}
               <AvatarFallback name={author} />

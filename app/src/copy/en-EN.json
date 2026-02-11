@@ -79,7 +79,9 @@
     "loadMore": "Load more threads",
     "loadingMore": "Loading...",
     "emptyTitle": "Nothing was found for <gradient>{query}</gradient>",
-    "emptyDescription": "Check for typos or try different keywords."
+    "emptyDescription": "Check for typos or try different keywords.",
+    "noThreadsTitle": "Nothing here <gradient>yet</gradient>",
+    "noThreadsDescription": "Threads will appear here once they are published."
   },
   "thread": {
     "backToThreads": "Back to threads",

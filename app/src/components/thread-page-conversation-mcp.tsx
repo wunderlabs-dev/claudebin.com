@@ -34,7 +34,7 @@ const formatInput = (input: Record<string, unknown>): string => {
 };
 
 const formatOutput = (output: unknown): string => {
-  return typeof output === "string" ? output : JSON.stringify(output, null, 2);
+  return typeof output === "string" ? output : JSON.stringify(output);
 };
 
 const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) => {
