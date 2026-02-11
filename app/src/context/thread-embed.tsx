@@ -71,19 +71,6 @@ type ThreadEmbedProviderProps = {
 const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setView = (value: ThreadEmbedView) => {
-    dispatch({ type: "SET_VIEW", value });
-  };
-  const setStart = (value: number | undefined) => {
-    dispatch({ type: "SET_START", value });
-  };
-  const setEnd = (value: number | undefined) => {
-    dispatch({ type: "SET_END", value });
-  };
-  const setCandidate = (value: number | undefined) => {
-    dispatch({ type: "SET_CANDIDATE", value });
-  };
-
   const from = useMemo(() => {
     if (isNotNil(state.start) && isNotNil(state.end)) {
       return Math.min(state.start, state.end);
@@ -98,6 +85,19 @@ const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
     return undefined;
   }, [state.start, state.end]);
 
+  const setView = (value: ThreadEmbedView) => {
+    dispatch({ type: "SET_VIEW", value });
+  };
+  const setStart = (value: number | undefined) => {
+    dispatch({ type: "SET_START", value });
+  };
+  const setEnd = (value: number | undefined) => {
+    dispatch({ type: "SET_END", value });
+  };
+  const setCandidate = (value: number | undefined) => {
+    dispatch({ type: "SET_CANDIDATE", value });
+  };
+
   return (
     <ThreadEmbedContext.Provider
       value={{
@@ -105,12 +105,12 @@ const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
         start: state.start,
         end: state.end,
         candidate: state.candidate,
+        from,
+        to,
         setView,
         setStart,
         setEnd,
         setCandidate,
-        from,
-        to,
       }}
     >
       {children}
