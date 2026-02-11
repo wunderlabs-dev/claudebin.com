@@ -1,16 +1,14 @@
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { createClient } from "@/server/supabase/server";
 
 import { Container } from "@/components/ui/container";
-import { Typography } from "@/components/ui/typography";
 
 import { CliAuthLoginPageForm } from "@/components/cli-auth-login-page-form";
+import { CliAuthLoginPageFormSkeleton } from "@/components/cli-auth-login-page-form-skeleton";
 
 const AuthLoginPage = async () => {
-  const t = await getTranslations();
   const supabase = await createClient();
 
   const {
@@ -23,13 +21,7 @@ const AuthLoginPage = async () => {
 
   return (
     <Container as="main" size="sm" spacing="md">
-      <Suspense
-        fallback={
-          <Typography color="neutral" className="text-center">
-            {t("common.loading")}
-          </Typography>
-        }
-      >
+      <Suspense fallback={<CliAuthLoginPageFormSkeleton />}>
         <CliAuthLoginPageForm />
       </Suspense>
     </Container>

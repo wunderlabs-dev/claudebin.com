@@ -32,7 +32,7 @@ const ThreadPageThreadEmbed = ({ id, from, to, start, onClose }: ThreadPageThrea
       {isNotNil(from) && isNotNil(to) ? (
         <CopyInput
           variant="snippet"
-          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/thread/${id}/embed?from=${from}&to=${to}"></iframe>`}
+          value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/threads/${id}/embed?from=${from}&to=${to}"></iframe>`}
         />
       ) : null}
 
