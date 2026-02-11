@@ -29,7 +29,7 @@ const assistantSrc = `data:image/png;base64,${readFileSync(
 ).toString("base64")}`;
 
 const backgroundSrc = `data:image/png;base64,${readFileSync(
-  join(process.cwd(), "public/images/og-image-1200x630.png"),
+  join(process.cwd(), "public/images/og-background-1200x630.png"),
 ).toString("base64")}`;
 
 const colors = {
