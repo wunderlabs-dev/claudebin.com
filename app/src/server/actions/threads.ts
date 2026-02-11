@@ -40,12 +40,8 @@ export const deleteThread = async (sessionId: string) => {
 
   const storagePath = session.storagePath;
 
-  // Delete DB record first (cascades to messages)
-  // If this fails, nothing is deleted
   await sessions.delete(supabase, sessionId);
 
-  // Then delete storage file
-  // If this fails, record is gone but orphaned file can be cleaned up later
   if (storagePath) {
     await sessions.deleteFile(supabase, storagePath);
   }

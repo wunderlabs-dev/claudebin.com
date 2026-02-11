@@ -81,7 +81,7 @@ const ThreadPageSidebarContainer = ({
               </Button>
 
               <ThreadPageSidebarContinueConversation />
-              {isAuthor ? <ThreadPageSidebarDeleteContainer /> : null}
+              {isAuthor ? <ThreadPageSidebarDeleteContainer id={id} /> : null}
             </div>
           </div>
         </Fragment>

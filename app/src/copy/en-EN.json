@@ -103,7 +103,8 @@
     "browseThreads": "Browse threads",
     "deleteThread": "Delete thread",
     "cancelDelete": "Cancel",
-    "confirmDelete": "Confirm delete"
+    "confirmDelete": "Confirm delete",
+    "deleting": "Deleting..."
   },
   "login": {
     "title": "<gradient>Authenticate</gradient>\nto Claudebin",
