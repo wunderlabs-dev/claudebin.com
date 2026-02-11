@@ -8,6 +8,7 @@
     "copy": "Copy",
     "copied": "Copied!",
     "copySnippet": "Copy snippet",
+    "copyCommand": "Copy command",
     "public": "Public",
     "untitled": "Untitled",
     "ago": "{date} ago",
@@ -22,6 +23,10 @@
     "sharingSettingsUpdated": "Sharing settings updated",
     "sharingSettingsUpdateError": "Failed to update sharing settings"
   },
+  "commands": {
+    "oneClickInstall": "claude plugin marketplace add wunderlabs-dev/claudebin\nclaude plugin install claudebin@claudebin-marketplace",
+    "claudeInstall": "claude plugin install claudebin@claudebin-marketplace"
+  },
   "appBar": {
     "claudebin": "Claudebin",
     "threads": "Threads",
@@ -32,8 +37,8 @@
     "headline": "<gradient>Share AI Sessions</gradient>\nlike never before",
     "badge": "Get started for free",
     "description": "ClaudeBin is the modern pastebin for developers who code with AI. Share your Claude conversations, collaborate seamlessly.",
-    "cliInstall": "Step 1",
-    "editorInstall": "Step 2",
+    "oneClickInstall": "One-click install",
+    "claudeInstall": "Claude install",
     "viewDemo": "View Demo",
     "installation": "Installation",
     "howToUse": "How to Use",

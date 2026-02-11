@@ -44,20 +44,20 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
               </Typography>
 
               {md ? (
-                <Tabs defaultValue="cli" className="flex flex-col shrink-0 gap-4 lg:w-md">
+                <Tabs defaultValue="oneClick" className="flex flex-col shrink-0 gap-4 lg:w-lg">
                   <div className="flex items-center justify-between">
                     <TabsList>
-                      <TabsTrigger value="cli">{t("home.cliInstall")}</TabsTrigger>
-                      <TabsTrigger value="editor">{t("home.editorInstall")}</TabsTrigger>
+                      <TabsTrigger value="oneClick">{t("home.oneClickInstall")}</TabsTrigger>
+                      <TabsTrigger value="claudeCode">{t("home.claudeInstall")}</TabsTrigger>
                     </TabsList>
                     <Button variant="secondary">{t("home.viewDemo")}</Button>
                   </div>
 
-                  <TabsContent value="cli">
-                    <CopyInput value="claude plugin marketplace add wunderlabs-dev/claudebin" />
+                  <TabsContent value="oneClick">
+                    <CopyInput value={t("commands.oneClickInstall")} />
                   </TabsContent>
-                  <TabsContent value="editor">
-                    <CopyInput value="claude plugin install claudebin@claudebin-marketplace" />
+                  <TabsContent value="claudeCode">
+                    <CopyInput value={t("commands.claudeInstall")} />
                   </TabsContent>
                 </Tabs>
               ) : (

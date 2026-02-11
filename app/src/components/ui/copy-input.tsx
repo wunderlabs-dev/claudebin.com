@@ -32,10 +32,10 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
 
   if (variant === "command") {
     return (
-      <div className="flex items-center justify-between gap-5 min-w-0 p-1 bg-gray-200 border border-gray-50 rounded-full transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
-        <div className="flex items-center gap-5 min-w-0 pl-6">
+      <div className="flex flex-col items-end gap-4">
+        <div className="flex gap-5 min-w-full py-2 px-6 bg-gray-200 border border-gray-50 rounded-lg transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
           <SvgIconBash className="shrink-0 text-orange-300" />
-          <span className="font-mono text-base text-orange-50 truncate">{value}</span>
+          <span className="font-mono text-orange-50 whitespace-break-spaces">{value}</span>
         </div>
 
         <Button
@@ -44,7 +44,7 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
           color={copiedText === value ? "success" : "default"}
           onClick={handleCopy}
         >
-          {copiedText === value ? t("common.copied") : t("common.copy")}
+          {copiedText === value ? t("common.copied") : t("common.copyCommand")}
           {copiedText === value ? <SvgIconCheck /> : <SvgIconCopy />}
         </Button>
       </div>
