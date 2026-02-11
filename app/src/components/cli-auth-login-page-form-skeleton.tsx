@@ -10,7 +10,6 @@ const CliAuthLoginPageFormSkeleton = () => {
           <SkeletonBar className="w-3/4 h-4" />
         </div>
       </div>
-
       <SkeletonBar className="w-56 h-10 rounded-sm" />
     </div>
   );
