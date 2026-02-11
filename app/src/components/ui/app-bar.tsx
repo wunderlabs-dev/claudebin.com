@@ -20,8 +20,6 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Nav, NavLink, NavLabel } from "@/components/ui/nav";
-import { Typography } from "@/components/ui/typography";
-
 type AppBarProps = ComponentProps<"header">;
 
 const links = [
@@ -84,9 +82,7 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
                   <AvatarImage src={user.user_metadata.avatar_url} />
                   <AvatarFallback name={user.user_metadata.user_name} />
                 </Avatar>
-                <NavLabel>
-                  {user.user_metadata.user_name}
-                </NavLabel>
+                <NavLabel>{user.user_metadata.user_name}</NavLabel>
               </NavLink>
 
               <Button onClick={signOut}>

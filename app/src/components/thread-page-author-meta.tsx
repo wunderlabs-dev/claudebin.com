@@ -6,7 +6,7 @@ import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { List, ListItem } from "@/components/ui/list";
-import { NavLabel, NavLink } from "@/components/ui/nav";
+import { NavLink } from "@/components/ui/nav";
 import { Typography } from "@/components/ui/typography";
 
 type ThreadPageAuthorMetaProps = {

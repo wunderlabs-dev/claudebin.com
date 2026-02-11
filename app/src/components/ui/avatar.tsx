@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 import type * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
-import { cn, getAvatarChar } from "@/utils/helpers";
+import { cn, getAvatarInitial } from "@/utils/helpers";
 import { AVATAR_FALLBACK_DELAY_MS } from "@/utils/constants";
 
 const AvatarSizes = ["sm", "md", "lg"] as const;
@@ -73,7 +73,7 @@ const AvatarFallback = ({
   ...props
 }: AvatarFallbackProps) => {
   const size = useContext(AvatarContext);
-  const initial = getAvatarChar(name);
+  const initial = getAvatarInitial(name);
 
   return (
     <AvatarPrimitive.Fallback
