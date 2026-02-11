@@ -26,12 +26,12 @@ type ThreadEmbedState = {
 };
 
 type ThreadEmbedAction =
-  | { type: "setView"; value: ThreadEmbedView }
-  | { type: "setStart"; value: number | undefined }
-  | { type: "setEnd"; value: number | undefined }
-  | { type: "setCandidate"; value: number | undefined };
+  | { type: "SET_VIEW"; value: ThreadEmbedView }
+  | { type: "SET_START"; value: number | undefined }
+  | { type: "SET_END"; value: number | undefined }
+  | { type: "SET_CANDIDATE"; value: number | undefined };
 
-const INITIAL_STATE: ThreadEmbedState = {
+const initialState: ThreadEmbedState = {
   view: "default",
   start: undefined,
   end: undefined,
@@ -43,24 +43,23 @@ const ThreadEmbedContext = createContext<ThreadEmbedContextValue>({
   start: undefined,
   end: undefined,
   candidate: undefined,
+  from: undefined,
+  to: undefined,
   setView: () => {},
   setStart: () => {},
   setEnd: () => {},
   setCandidate: () => {},
-  from: undefined,
-  to: undefined,
 });
 
 const reducer = (state: ThreadEmbedState, action: ThreadEmbedAction): ThreadEmbedState => {
   switch (action.type) {
-    case "setView":
-      if (action.value === "default") return { ...INITIAL_STATE };
-      return { ...state, view: action.value };
-    case "setStart":
+    case "SET_VIEW":
+      return action.value === "default" ? initialState : { ...state, view: action.value };
+    case "SET_START":
       return { ...state, start: action.value, end: undefined, candidate: undefined };
-    case "setEnd":
+    case "SET_END":
       return { ...state, end: action.value, candidate: undefined };
-    case "setCandidate":
+    case "SET_CANDIDATE":
       return { ...state, candidate: action.value };
   }
 };
@@ -70,24 +69,34 @@ type ThreadEmbedProviderProps = {
 };
 
 const ThreadEmbedProvider = ({ children }: ThreadEmbedProviderProps) => {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setView = (value: ThreadEmbedView) => dispatch({ type: "setView", value });
-  const setStart = (value: number | undefined) => dispatch({ type: "setStart", value });
-  const setEnd = (value: number | undefined) => dispatch({ type: "setEnd", value });
-  const setCandidate = (value: number | undefined) => dispatch({ type: "setCandidate", value });
+  const setView = (value: ThreadEmbedView) => {
+    dispatch({ type: "SET_VIEW", value });
+  };
+  const setStart = (value: number | undefined) => {
+    dispatch({ type: "SET_START", value });
+  };
+  const setEnd = (value: number | undefined) => {
+    dispatch({ type: "SET_END", value });
+  };
+  const setCandidate = (value: number | undefined) => {
+    dispatch({ type: "SET_CANDIDATE", value });
+  };
 
-  const from = useMemo(
-    () =>
-      isNotNil(state.start) && isNotNil(state.end) ? Math.min(state.start, state.end) : undefined,
-    [state.start, state.end],
-  );
+  const from = useMemo(() => {
+    if (isNotNil(state.start) && isNotNil(state.end)) {
+      return Math.min(state.start, state.end);
+    }
+    return undefined;
+  }, [state.start, state.end]);
 
-  const to = useMemo(
-    () =>
-      isNotNil(state.start) && isNotNil(state.end) ? Math.max(state.start, state.end) : undefined,
-    [state.start, state.end],
-  );
+  const to = useMemo(() => {
+    if (isNotNil(state.start) && isNotNil(state.end)) {
+      return Math.max(state.start, state.end);
+    }
+    return undefined;
+  }, [state.start, state.end]);
 
   return (
     <ThreadEmbedContext.Provider

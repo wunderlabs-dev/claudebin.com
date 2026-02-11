@@ -2,7 +2,7 @@
 
 import { useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { isNil, isNotNil } from "ramda";
+import { not, isNil, isNotNil } from "ramda";
 
 import { getMessagesBySessionId } from "@/server/actions/messages";
 
@@ -39,20 +39,24 @@ const ThreadPageConversationContainer = ({
   });
 
   const messages = useMemo(() => compactConversation(data?.messages), [data?.messages]);
-  const isEmbedding = view === "embed";
 
   if (isLoading) {
     return <ThreadPageConversationSkeleton />;
   }
 
   const inSelection = (idx: number) => {
-    if (isNotNil(from) && isNotNil(to)) return isIndexWithin(idx, from, to);
-    if (isNotNil(start) && isNotNil(candidate)) return isIndexWithin(idx, start, candidate);
-    return false;
+    if (isNotNil(from) && isNotNil(to)) {
+      return isIndexWithin(idx, from, to);
+    }
+    if (isNotNil(start) && isNotNil(candidate)) {
+      return isIndexWithin(idx, start, candidate);
+    }
   };
 
   const handleClick = (idx: number) => {
-    if (!isEmbedding) return;
+    if (view !== "embed") {
+      return null;
+    }
 
     if (isNil(start) || isNotNil(end)) {
       setStart(idx);
@@ -68,12 +72,12 @@ const ThreadPageConversationContainer = ({
           key={message.uuid}
           variant={message.role}
           className={cn(
-            isEmbedding && "cursor-pointer opacity-30 hover:opacity-100",
-            isEmbedding && inSelection(message.idx) && "opacity-100",
+            view === "embed" ? "cursor-pointer opacity-30 hover:opacity-100" : undefined,
+            view === "embed" && inSelection(message.idx) ? "opacity-100" : undefined,
           )}
           onClick={() => handleClick(message.idx)}
-          onMouseEnter={() => isEmbedding && setCandidate(message.idx)}
-          onMouseLeave={() => isEmbedding && setCandidate(undefined)}
+          onMouseEnter={() => view === "embed" && setCandidate(message.idx)}
+          onMouseLeave={() => view === "embed" && setCandidate(undefined)}
         >
           {message.role === "assistant" ? (
             <Avatar size="sm">
