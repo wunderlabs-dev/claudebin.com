@@ -42,7 +42,7 @@ const codeToHtml = (code: string, lang: string) => {
 };
 
 const Code = ({ code, lang = "typescript", className }: CodeProps) => {
-  const [dynamicHtml, setDynamicHtml] = useState(code);
+  const [dynamicHtml, setDynamicHtml] = useState<string>();
 
   const role = useChatItemRole();
   const isLoaded = highlighter.getLoadedLanguages().includes(lang);
@@ -65,12 +65,14 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
       }
       setDynamicHtml(codeToHtml(code, effectiveLang));
     };
-
     loadAndHighlight();
   }, [code, lang, isLoaded]);
 
   const html = isLoaded ? codeToHtml(code, lang) : dynamicHtml;
 
+  if (isNil(html)) {
+    return null;
+  }
   return (
     <div
       data-slot="code"
