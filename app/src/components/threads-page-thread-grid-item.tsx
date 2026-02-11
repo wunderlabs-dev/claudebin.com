@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import truncate from "lodash.truncate";
+import stringHash from "string-hash";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 import { formatDistanceToNow } from "date-fns";
@@ -8,9 +9,16 @@ import { isServer } from "@tanstack/react-query";
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
 import { breakpoints } from "@/utils/breakpoints";
-import { getProjectName, hashString } from "@/utils/helpers";
+import { getProjectName } from "@/utils/helpers";
 
 import { THREAD_CARD_LAYOUTS, THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
+
+import { SvgIconChat } from "@/components/icon/svg-icon-chat";
+import { SvgIconClock } from "@/components/icon/svg-icon-clock";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
+import { SvgIconFile } from "@/components/icon/svg-icon-file";
+import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
+import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 
 import {
   Card,
@@ -24,21 +32,15 @@ import {
 } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 
-import { SvgIconChat } from "@/components/icon/svg-icon-chat";
-import { SvgIconClock } from "@/components/icon/svg-icon-clock";
-import { SvgIconEye } from "@/components/icon/svg-icon-eye";
-import { SvgIconFile } from "@/components/icon/svg-icon-file";
-import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
-import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
-
 type ThreadsPageThreadGridItemProps = {
   thread: ThreadWithAuthor;
 } & ComponentProps<typeof Card>;
 
 const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridItemProps) => {
   const t = useTranslations();
-  const hash = hashString(thread.id);
   const lg = useMediaQuery(breakpoints.lg, { initializeWithValue: isServer });
+
+  const hash = stringHash(thread.id);
   const positions = THREAD_CARD_LAYOUTS[hash % THREAD_CARD_LAYOUTS.length];
 
   const columns: ReactNode[] = [

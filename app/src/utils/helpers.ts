@@ -9,10 +9,8 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-export const hashString = (str: string): number => {
-  return Math.abs(
-    Array.from(str).reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0),
-  );
+export const isIndexWithin = (index: number, from: number, to: number) => {
+  return index >= Math.min(from, to) && index <= Math.max(from, to);
 };
 
 export const getAvatarChar = (username: string | null) => {
@@ -33,10 +31,10 @@ export const compactConversation = (messages: ReadonlyArray<Message> = []): Mess
   reduce<Message, Message[]>(
     (accumulator, message) => {
       const previous = last(accumulator);
-      const isConsecutiveAssistant =
+      const isAssistant =
         previous?.role === MessageRole.ASSISTANT && message.role === MessageRole.ASSISTANT;
 
-      if (isConsecutiveAssistant) {
+      if (isAssistant) {
         return concat(init(accumulator), [
           { ...previous, idx: message.idx, content: concat(previous.content, message.content) },
         ]);
