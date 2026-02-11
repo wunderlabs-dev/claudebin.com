@@ -27,6 +27,19 @@ const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps
   const t = useTranslations();
   const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
+  const hasContent = block.instructions || block.output;
+
+  // No content: show simple pill without accordion
+  if (!hasContent) {
+    return (
+      <div className="flex items-center gap-2 py-2">
+        <SvgIconGlitters size="sm" color="primary" />
+        <span className="text-sm text-primary">{t("chat.skill")}</span>
+        <ThreadPageConversationChip label={block.commandName} />
+      </div>
+    );
+  }
+
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="skill">

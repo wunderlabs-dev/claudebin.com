@@ -319,8 +319,16 @@ export const parseSkillCommand = (content: string): SkillCommandData | null => {
 export const parseSkillMeta = (content: string): SkillMetaData => {
   const instructionsMatch = content.match(SKILL_INSTRUCTIONS_REGEX);
   const outputMatch = content.match(SKILL_OUTPUT_REGEX);
-  return {
-    instructions: instructionsMatch?.[1]?.trim(),
-    output: outputMatch?.[1]?.trim(),
-  };
+
+  // Old format: has <instructions> and/or <output> tags
+  if (instructionsMatch || outputMatch) {
+    return {
+      instructions: instructionsMatch?.[1]?.trim(),
+      output: outputMatch?.[1]?.trim(),
+    };
+  }
+
+  // New format: plain text without tags - use entire content as instructions
+  const trimmed = content.trim();
+  return trimmed ? { instructions: trimmed } : {};
 };
