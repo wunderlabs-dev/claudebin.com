@@ -27,19 +27,20 @@ const renderers = {
 
 const sections = [
   {
+    title: "footer.community",
+    links: [
+      { href: "https://github.com/wunderlabs-dev", labelKey: "footer.github" },
+      { href: "https://agentic.tm", labelKey: "footer.discord" },
+      { href: "https://x.com/vtemian", labelKey: "footer.vtemian" },
+      { href: "https://x.com/balajmarius", labelKey: "footer.balajmarius" },
+    ],
+  },
+  {
     title: "footer.product",
     links: [
       { href: "/", labelKey: "footer.claudebin" },
       { href: "/threads", labelKey: "footer.threads" },
       { href: "/login", labelKey: "footer.login" },
-    ],
-  },
-  {
-    title: "footer.community",
-    links: [
-      { href: "https://github.com/wunderlabs-dev", labelKey: "footer.github" },
-      { href: "https://x.com/vtemian", labelKey: "footer.vtemian" },
-      { href: "https://x.com/balajmarius", labelKey: "footer.balajmarius" },
     ],
   },
 ] as const;
@@ -68,7 +69,7 @@ const Footer = ({ className, ...props }: FooterProps) => {
                 <Typography variant="h4">{t(section.title)}</Typography>
 
                 {section.links.map((item) => (
-                  <Link key={item.href} href={item.href} className="text-base hover:text-orange-50">
+                  <Link key={item.href} href={item.href} target="_blank" className="text-base hover:text-orange-50">
                     {t(item.labelKey)}
                   </Link>
                 ))}
