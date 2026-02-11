@@ -63,7 +63,7 @@ const ThreadPageConversationTaskOutput = ({ block }: ThreadPageConversationTaskO
         </AccordionTrigger>
 
         <AccordionContent>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 w-full">
             {md ? null : (
               <div className="flex items-center gap-2">
                 {block.status ? (

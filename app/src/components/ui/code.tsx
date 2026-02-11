@@ -55,7 +55,7 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
     const loadAndHighlight = async () => {
       try {
         await highlighter.loadLanguage(lang as BundledLanguage);
-      } catch { }
+      } catch {}
 
       const loaded = highlighter.getLoadedLanguages();
       const effectiveLang = loaded.includes(lang) ? lang : "plaintext";
