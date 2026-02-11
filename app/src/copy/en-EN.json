@@ -46,6 +46,12 @@
     "featuredThreadsTitle": "/Featured <gradient>threads</gradient>",
     "featuredThreadsDescription": "Handpicked conversations worth exploring."
   },
+  "error": {
+    "title": "Something went <gradient>wrong</gradient>",
+    "description": "An unexpected error occurred. Please try again or go back to the home page.",
+    "tryAgain": "Try again",
+    "backToHome": "Back to home"
+  },
   "notFound": {
     "title": "Page <gradient>not found</gradient>",
     "description": "The page you're looking for doesn't exist or has been moved.",
