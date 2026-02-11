@@ -17,6 +17,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@sentry/nextjs": "^10",
+    "@sindresorhus/string-hash": "^2.0.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.39.0",
     "@tanstack/react-query": "^5.90.20",
@@ -37,7 +38,6 @@
     "remark-gfm": "^4.0.1",
     "shiki": "^3.21.0",
     "sonner": "^2.0.7",
-    "string-hash": "^1.1.3",
     "tailwind-merge": "^3.4.0",
     "usehooks-ts": "^3.1.1",
     "zod": "^4.3.5"
@@ -49,7 +49,6 @@
     "@types/pretty-ms": "^5.0.1",
     "@types/ramda": "^0.31.1",
     "@types/react": "^18.2.0",
-    "@types/string-hash": "^1.1.3",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.3.0"
   }

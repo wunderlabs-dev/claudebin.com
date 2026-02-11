@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import truncate from "lodash.truncate";
-import stringHash from "string-hash";
+import stringHash from "@sindresorhus/string-hash";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 import { formatDistanceToNow } from "date-fns";
