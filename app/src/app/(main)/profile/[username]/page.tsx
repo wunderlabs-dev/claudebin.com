@@ -12,6 +12,7 @@ import { SvgIconArrowRight } from "@/components/icon/svg-icon-arrow-right";
 
 import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
+import { NavLabel, NavLink } from "@/components/ui/nav";
 
 import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
@@ -66,12 +67,12 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               <SvgIconLine size="md" color="accent" />
               <Typography variant="h4">{t("user.recentThreads")}</Typography>
             </div>
-            <Link href="/threads" className="flex items-center gap-3">
-              <Typography variant="small" fontWeight="semibold">
+            <NavLink href="/threads" >
+              <NavLabel>
                 {t("user.seeAllThreads")}
-              </Typography>
+              </NavLabel>
               <SvgIconArrowRight size="sm" />
-            </Link>
+            </NavLink>
           </div>
         ) : null}
 
