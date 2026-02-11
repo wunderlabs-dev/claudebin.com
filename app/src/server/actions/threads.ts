@@ -1,5 +1,7 @@
 "use server";
 
+import { isNil } from "ramda";
+
 import { createClient } from "@/server/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/server/repos/sessions";
 
@@ -17,4 +19,28 @@ export const getPublicThreads = async (
     offset,
     limit,
   });
+};
+
+export const deleteThread = async (sessionId: string) => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (isNil(user)) {
+    throw new Error("Unauthorized");
+  }
+
+  const session = await sessions.getByIdForUser(supabase, sessionId, user.id);
+
+  if (isNil(session)) {
+    throw new Error("Session not found or not owned by user");
+  }
+
+  if (session.storagePath) {
+    await sessions.deleteFile(supabase, session.storagePath);
+  }
+
+  await sessions.delete(supabase, sessionId);
 };
