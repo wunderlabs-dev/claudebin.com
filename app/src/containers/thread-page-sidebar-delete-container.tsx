@@ -13,7 +13,7 @@ const ThreadPageSidebarDeleteContainer = () => {
 
   if (value) {
     return (
-      <Button variant="danger" onClick={() => { }}>
+      <Button variant="danger" onClick={() => {}}>
         {t("thread.confirmDelete")}
       </Button>
     );

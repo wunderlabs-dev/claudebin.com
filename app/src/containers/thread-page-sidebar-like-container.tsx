@@ -7,9 +7,9 @@ import { useTranslations } from "next-intl";
 import { not, inc, dec } from "ramda";
 
 import { like } from "@/server/actions/like";
-import { useAuth } from "@/context/auth";
 
 import { cn } from "@/utils/helpers";
+import { useAuth } from "@/context/auth";
 
 import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 import { SvgIconHeartSolid } from "@/components/icon/svg-icon-heart-solid";
