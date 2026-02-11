@@ -83,7 +83,11 @@ export const createPipeline = () => {
       .filter((name): name is string => !!name);
 
   const getTextParts = (): string[] =>
-    msg.blocks.filter((b) => b.type === BlockType.TEXT).map((b) => (b as { text: string }).text);
+    msg.blocks.flatMap((b) => {
+      if (b.type === BlockType.TEXT) return [(b as { text: string }).text];
+      if (b.type === BlockType.SKILL) return [(b as { name: string }).name];
+      return [];
+    });
 
   const emit = (block: ContentBlock): void => {
     msg.blocks.push(block);
