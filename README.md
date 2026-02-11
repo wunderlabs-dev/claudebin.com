@@ -1,40 +1,13 @@
 # Claudebin
 
-**Pastebin for vibes** - Share your Claude Code sessions with teammates.
-
-## Quick Start
-
-### Option 1: MCP Plugin (Recommended)
-
-Add the plugin to your Claude Code configuration:
-
-```bash
-claude mcp add claudebin -- npx -y claudebin-mcp
-```
-
-Then during any session, use:
-
-```
-/share
-```
-
-The plugin will:
-1. Authenticate via GitHub (first time only)
-2. Extract your current session
-3. Upload and return a shareable URL
-
-### Option 2: CLI
-
-```bash
-npx claudebin publish
-```
+Share your Claude Code sessions with teammates.
 
 ## Repository Structure
 
-This repository contains the **web application** only. The MCP plugin and CLI are in a separate repository:
+This repository contains the **web application** (claudebin.com). The plugin is in a separate repository:
 
 - **Web App** (this repo): [github.com/wunderlabs-dev/claudebin.com](https://github.com/wunderlabs-dev/claudebin.com)
-- **Plugin/CLI**: [github.com/wunderlabs-dev/claudebin](https://github.com/wunderlabs-dev/claudebin)
+- **Plugin**: [github.com/wunderlabs-dev/claudebin](https://github.com/wunderlabs-dev/claudebin)
 
 ```
 claudebin.com/
@@ -94,7 +67,7 @@ Server-side logic organized into layers:
 - **`server/api/`** - OpenAPI schemas and spec generation
 
 **Session Processing Pipeline:**
-1. CLI/Plugin uploads JSONL conversation data
+1. Plugin uploads JSONL conversation data
 2. API stores raw file in Supabase Storage
 3. Background processor parses JSONL into normalized messages
 4. Auto-generates title using LLM (OpenRouter)
@@ -148,6 +121,22 @@ SUPABASE_SERVICE_ROLE_KEY=
 OPENROUTER_API_KEY=
 ```
 
+### Running with the Plugin Locally
+
+To test the full flow with a local plugin:
+
+1. Start the web app: `bun dev` (runs on port 3000)
+2. In the [plugin repo](https://github.com/wunderlabs-dev/claudebin), build the MCP server:
+   ```bash
+   cd mcp
+   bun install
+   bun run build
+   ```
+3. Run Claude with the local plugin pointing to local API:
+   ```bash
+   CLAUDEBIN_API_URL=http://localhost:3000 claude --plugin-dir /path/to/claudebin --dangerously-skip-permissions
+   ```
+
 ## Tech Stack
 
 - **Framework**: Next.js 16, Turbopack
@@ -155,3 +144,7 @@ OPENROUTER_API_KEY=
 - **Auth**: Supabase Auth with GitHub OAuth
 - **Styling**: Tailwind CSS, shadcn/ui
 - **Tooling**: Bun, Biome
+
+## License
+
+MIT
