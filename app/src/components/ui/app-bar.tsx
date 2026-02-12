@@ -76,7 +76,7 @@ const AppBar = ({ className, ...props }: AppBarProps) => {
           </div>
 
           {user ? (
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 sm:gap-8">
               <NavLink href={`/profile/${user.user_metadata.user_name}`}>
                 <Avatar size="sm">
                   <AvatarImage src={user.user_metadata.avatar_url} />

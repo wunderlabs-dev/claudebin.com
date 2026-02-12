@@ -1,4 +1,6 @@
-# Claudebin
+<p align="center">
+  <img src=".github/logo.svg" alt="Claudebin" width="360" />
+</p>
 
 Share your Claude Code sessions with teammates.
 
