@@ -44,7 +44,7 @@ const ThreadPageConversationContainer = ({
     return <ThreadPageConversationSkeleton />;
   }
 
-  const inSelection = (idx: number) => {
+  const isSelected = (idx: number) => {
     if (isNotNil(from) && isNotNil(to)) {
       return isIndexWithin(idx, from, to);
     }
@@ -57,7 +57,6 @@ const ThreadPageConversationContainer = ({
     if (view !== "embed") {
       return;
     }
-
     if (isNil(start) || isNotNil(end)) {
       setStart(idx);
     } else {
@@ -73,7 +72,7 @@ const ThreadPageConversationContainer = ({
           variant={message.role}
           className={cn(
             view === "embed" ? "cursor-pointer opacity-30 hover:opacity-100" : undefined,
-            view === "embed" && inSelection(message.idx) ? "opacity-100" : undefined,
+            view === "embed" && isSelected(message.idx) ? "opacity-100" : undefined,
           )}
           onMouseEnter={() => view === "embed" && setCandidate(message.idx)}
           onMouseLeave={() => view === "embed" && setCandidate(undefined)}
