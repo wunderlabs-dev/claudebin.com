@@ -12,11 +12,10 @@
   <a href="#getting-started">Getting Started</a>
 </p>
 
-<br />
-
 ---
 
 > **Web App** (this repo) &mdash; the Next.js frontend and API at [claudebin.com](https://claudebin.com)
+>
 > **Plugin** &mdash; the Claude Code plugin at [github.com/wunderlabs-dev/claudebin](https://github.com/wunderlabs-dev/claudebin)
 
 ## Getting Started
