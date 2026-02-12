@@ -34,7 +34,7 @@ export const EmbedPageFooter = ({
   const t = useTranslations();
 
   return (
-    <div className="sticky bottom-0 flex items-center justify-between p-3 bg-gray-100 border-t border-gray-200">
+    <div className="sticky bottom-0 flex items-center justify-between p-4 bg-gray-100 border-t border-gray-200">
       <Link href={`/threads/${id}`} target="_blank">
         <SvgIconClaudebinXs
           size="auto"
@@ -45,6 +45,14 @@ export const EmbedPageFooter = ({
       <div className="flex flex-col items-end gap-1">
         <List direction="row">
           <ListItem icon={<SvgIconBrain size="sm" color="neutral" />}>{modelName}</ListItem>
+          <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
+            {t("common.likes", { count: likeCount })}
+          </ListItem>
+        </List>
+        <List direction="row">
+          <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
+            {t("common.views", { count: viewCount })}
+          </ListItem>
           {messageCount ? (
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
               {t("common.messages", { count: messageCount })}
@@ -53,15 +61,6 @@ export const EmbedPageFooter = ({
           <ListItem icon={<SvgIconFile size="sm" color="neutral" />}>
             {t("common.files", { count: fileCount })}
           </ListItem>
-        </List>
-        <List direction="row">
-          <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
-            {t("common.views", { count: viewCount })}
-          </ListItem>
-          <ListItem icon={<SvgIconHeart size="sm" color="neutral" />}>
-            {t("common.likes", { count: likeCount })}
-          </ListItem>
-          <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
         </List>
       </div>
     </div>

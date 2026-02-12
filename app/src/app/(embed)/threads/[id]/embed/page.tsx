@@ -55,7 +55,7 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
 
   return (
     <div className="flex flex-col min-h-screen min-w-full gap-3 bg-gray-100">
-      <div className="flex flex-col gap-3 pt-3 px-3">
+      <div className="flex flex-col gap-4 pt-4 px-4">
         <Typography variant="body" fontWeight="semibold">
           {thread.title}
         </Typography>
