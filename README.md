@@ -18,6 +18,22 @@
 >
 > **Plugin** &mdash; the Claude Code plugin at [github.com/wunderlabs-dev/claudebin](https://github.com/wunderlabs-dev/claudebin)
 
+## What it looks like
+
+Publish any Claude Code session with a single command and get a shareable link — complete with syntax highlighting, tool calls, and the full conversation thread.
+
+<p align="center">
+  <img src=".github/screenshot-thread.png" alt="Thread view" width="720" />
+</p>
+
+### Embeddable
+
+Every thread has an embed view. Select a range of messages and drop it into your docs, blog posts, or any page that supports iframes.
+
+<p align="center">
+  <img src=".github/screenshot-embed.png" alt="Embed view" width="720" />
+</p>
+
 ## Getting Started
 
 ```bash
