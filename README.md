@@ -112,7 +112,6 @@ PostgreSQL with Row Level Security. Auto-profile creation on signup, denormalize
 
 ## Tech Stack
 
-| | |
 |---|---|
 | **Framework** | Next.js 16, Turbopack |
 | **Database** | Supabase (PostgreSQL) |
