@@ -46,7 +46,7 @@ const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) 
 
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.pattern} />}
-          <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />
+          {block.filenames?.length ? <Code code={block.filenames?.join("\n")} /> : t("common.noResultsFound")}
         </AccordionContent>
       </AccordionItem>
     </Accordion>
