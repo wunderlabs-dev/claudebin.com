@@ -11,6 +11,7 @@ import type { ThreadWithAuthor } from "@/server/repos/sessions";
 import { getPublicThreads } from "@/server/actions/threads";
 
 import { SEARCH_DEBOUNCE_MS, THREADS_PAGE_INITIAL } from "@/utils/constants";
+import { cn } from "@/utils/helpers";
 
 import { SvgIconMagnifier } from "@/components/icon/svg-icon-magnifier";
 import { Button } from "@/components/ui/button";
@@ -81,7 +82,7 @@ const ThreadsPageThreadsContainer = ({
         <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
         <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-t border-r border-b border-l lg:border-t-0">
           <DividerGridRow>
-            <DividerGridCell className="col-span-9 lg:col-span-8 border-r">
+            <DividerGridCell className="col-span-12 md:col-span-9 lg:col-span-8 md:border-r">
               <FormControl className="flex-row items-center">
                 <Input
                   placeholder={t("threads.searchPlaceholder")}
@@ -94,7 +95,12 @@ const ThreadsPageThreadsContainer = ({
                 </Button>
               </FormControl>
             </DividerGridCell>
-            <DividerGridCell className="flex items-center justify-end col-span-3 lg:col-span-4 px-4">
+            <DividerGridCell
+              className={cn(
+                "flex items-center md:justify-end col-span-12 md:col-span-3 lg:col-span-4 px-4",
+                hasSearchQuery ? "py-3 border-t md:border-t-0" : undefined,
+              )}
+            >
               {hasSearchQuery ? (
                 <Typography variant="small" color="muted">
                   {t("threads.threadCount", { count: threads.length })}
@@ -107,7 +113,6 @@ const ThreadsPageThreadsContainer = ({
       </DividerGridRow>
 
       <ThreadsPageThreadsAdornment variant="spacer" />
-
       {hasNoResult ? <ThreadsPageThreadsNoResult query={queryDebounced} /> : null}
 
       {threads.length ? (
@@ -144,10 +149,9 @@ const ThreadsPageThreadsContainer = ({
             </DividerGridRow>
           ) : null}
         </Fragment>
-      ) : (
-        <ThreadsPageThreadsNoResult />
-      )}
+      ) : null}
 
+      {isEmpty(threads) && isEmpty(queryDebounced) ? <ThreadsPageThreadsNoResult /> : null}
       <ThreadsPageThreadsAdornment variant="end" />
     </DividerGrid>
   );
