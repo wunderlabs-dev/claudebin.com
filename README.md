@@ -14,13 +14,13 @@
 
 ---
 
-> **Web App** (this repo) &mdash; the Next.js frontend and API at [claudebin.com](https://claudebin.com)
+> **Web App** (this repo) - the Next.js frontend and API at [claudebin.com](https://claudebin.com)
 >
-> **Plugin** &mdash; the Claude Code plugin at [github.com/wunderlabs-dev/claudebin](https://github.com/wunderlabs-dev/claudebin)
+> **Plugin** - the Claude Code plugin at [github.com/wunderlabs-dev/claudebin](https://github.com/wunderlabs-dev/claudebin)
 
 ## What it looks like
 
-Publish any Claude Code session with a single command and get a shareable link — complete with syntax highlighting, tool calls, and the full conversation thread.
+Publish any Claude Code session with a single command and get a shareable link - complete with syntax highlighting, tool calls, and the full conversation thread.
 
 <p align="center">
   <img src=".github/screenshot-thread.png" alt="Thread view" />
