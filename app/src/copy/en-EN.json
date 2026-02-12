@@ -25,7 +25,7 @@
   },
   "commands": {
     "oneClickInstall": "claude plugin marketplace add wunderlabs-dev/claudebin\nclaude plugin install claudebin@claudebin-marketplace",
-    "claudeInstall": "claude plugin install claudebin@claudebin-marketplace",
+    "claudeInstall": "curl https://claudebin.com/INSTALL_CLAUDE.md | claude",
     "share": "/claudebin:share"
   },
   "appBar": {
