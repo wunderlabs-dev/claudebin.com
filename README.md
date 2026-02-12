@@ -23,7 +23,7 @@
 Publish any Claude Code session with a single command and get a shareable link — complete with syntax highlighting, tool calls, and the full conversation thread.
 
 <p align="center">
-  <img src=".github/screenshot-thread.png" alt="Thread view" />
+  <img src=".github/screenshot-thread.png" alt="Thread view" style="border-radius:8px;border:1px solid #2e353c" />
 </p>
 
 ### Embeddable
