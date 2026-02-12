@@ -50,7 +50,16 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                       <TabsTrigger value="oneClick">{t("home.oneClickInstall")}</TabsTrigger>
                       <TabsTrigger value="claudeCode">{t("home.claudeInstall")}</TabsTrigger>
                     </TabsList>
-                    <Button variant="secondary">{t("home.viewDemo")}</Button>
+                    <Button
+                      as="a"
+                      variant="secondary"
+                      href="https://github.com/wunderlabs-dev/claudebin"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SvgIconGithub size="sm" />
+                      {t("home.star")}
+                    </Button>
                   </div>
 
                   <TabsContent value="oneClick">
@@ -62,7 +71,16 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                 </Tabs>
               ) : (
                 <div className="shrink-0">
-                  <Button variant="secondary">{t("home.viewDemo")}</Button>
+                  <Button
+                    as="a"
+                    variant="secondary"
+                    href="https://github.com/wunderlabs-dev/claudebin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SvgIconGithub size="sm" />
+                    {t("home.star")}
+                  </Button>
                 </div>
               )}
             </div>
