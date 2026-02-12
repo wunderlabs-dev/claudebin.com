@@ -23,7 +23,7 @@
 Publish any Claude Code session with a single command and get a shareable link â€” complete with syntax highlighting, tool calls, and the full conversation thread.
 
 <p align="center">
-  <img src=".github/screenshot-thread.png" alt="Thread view" width="720" />
+  <img src=".github/screenshot-thread.png" alt="Thread view" />
 </p>
 
 ### Embeddable
@@ -31,7 +31,7 @@ Publish any Claude Code session with a single command and get a shareable link â
 Every thread has an embed view. Select a range of messages and drop it into your docs, blog posts, or any page that supports iframes.
 
 <p align="center">
-  <img src=".github/screenshot-embed.png" alt="Embed view" width="720" />
+  <img src=".github/screenshot-embed.png" alt="Embed view" />
 </p>
 
 ## Getting Started
