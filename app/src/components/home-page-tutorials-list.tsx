@@ -24,7 +24,7 @@ const HomePageTutorialsList = ({ ...props }: HomePageTutorialsListProps) => {
   const t = useTranslations();
 
   return (
-    <Container as="section" size="md" {...props}>
+    <Container as="section" spacing="md" size="lg" {...props}>
       <Tabs defaultValue="installation" className="flex flex-col items-center gap-8">
         <Backdrop size="half" spacing="lg" className="sm:px-4 lg:px-12">
           <div className="w-full max-w-6xl mx-auto p-2 bg-gray-200/50 border border-gray-500/20 rounded-3xl">
