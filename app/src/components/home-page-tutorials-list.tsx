@@ -26,7 +26,7 @@ const HomePageTutorialsList = ({ ...props }: HomePageTutorialsListProps) => {
   return (
     <Container as="section" size="lg" {...props}>
       <Tabs defaultValue="installation" className="flex flex-col items-center gap-8">
-        <Backdrop size="half" spacing="lg" className="sm:px-4 lg:px-12">
+        <Backdrop size="half" spacing="md" className="sm:px-4 lg:px-12">
           <div className="w-full max-w-6xl mx-auto p-2 bg-gray-200/50 border border-gray-500/20 rounded-3xl">
             {tutorials.map((tutorial) => (
               <TabsContent key={tutorial.id} value={tutorial.id}>

@@ -50,10 +50,11 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                       <TabsTrigger value="oneClick">{t("home.oneClickInstall")}</TabsTrigger>
                       <TabsTrigger value="claudeCode">{t("home.claudeInstall")}</TabsTrigger>
                     </TabsList>
+
                     <Button
                       as="a"
                       variant="secondary"
-                      href="https://github.com/wunderlabs-dev/claudebin"
+                      href="https://github.com/wunderlabs-dev/claudebin.com"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
