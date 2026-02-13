@@ -33,9 +33,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
           </Typography>
 
           <div className="flex flex-col items-start gap-6">
-            <Badge>
-              {t("home.badge")}
-            </Badge>
+            <Badge>{t("home.badge")}</Badge>
 
             <div className="flex flex-col gap-12 lg:flex-row w-full">
               <Typography variant="body" color="neutral" className="leading-8">
