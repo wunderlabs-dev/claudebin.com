@@ -2,6 +2,9 @@ import "@/static/css/globals.css";
 
 import type { Metadata } from "next";
 import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -54,6 +57,13 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
             <AuthProvider initialUser={user}>{children}</AuthProvider>
           </NextIntlClientProvider>
         </QueryProvider>
+
+        <Analytics />
+        <SpeedInsights />
+
+        {process.env.NEXT_PUBLIC_GA_ID ? (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        ) : null}
       </body>
     </html>
   );
