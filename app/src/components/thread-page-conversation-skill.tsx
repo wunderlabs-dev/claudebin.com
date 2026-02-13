@@ -34,7 +34,7 @@ const ThreadPageConversationSkill = ({ block }: ThreadPageConversationSkillProps
     return (
       <div className="flex items-center gap-2 py-2">
         <SvgIconGlitters size="sm" color="primary" />
-        <span className="text-sm text-primary">{t("chat.skill")}</span>
+        <span className="text-primary text-sm">{t("chat.skill")}</span>
         <ThreadPageConversationChip label={block.commandName} />
       </div>
     );

@@ -68,7 +68,7 @@ const ThreadPageSidebarLikeContainer = ({
       onClick={handleClick}
       disabled={isPending}
       className={cn(
-        "flex items-center gap-1 cursor-pointer transition-colors duration-150 ease-in-out",
+        "flex cursor-pointer items-center gap-1 transition-colors duration-150 ease-in-out",
         liked ? "text-red-500" : "text-gray-500 hover:text-red-400",
         isPending ? "opacity-50" : "opacity-100",
       )}

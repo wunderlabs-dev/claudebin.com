@@ -67,7 +67,7 @@ const ThreadPageConversationWebFetch = ({ block }: ThreadPageConversationWebFetc
           {md ? null : <ThreadPageConversationChip label={block.url} />}
 
           {block.bytes || block.statusCode ? (
-            <div className="flex items-center justify-between w-full gap-3">
+            <div className="flex w-full items-center justify-between gap-3">
               {block.bytes ? (
                 <Typography variant="small" color="neutral">
                   {t("chat.bytes")}: {prettyBytes(block.bytes)}

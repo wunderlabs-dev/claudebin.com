@@ -83,7 +83,7 @@ const AvatarFallback = ({
         "flex items-center justify-center",
         "size-full",
         "rounded-full",
-        "text-orange-50 font-bold uppercase",
+        "font-bold text-orange-50 uppercase",
         avatarFallbackFontSizeClassNames[size],
         className,
       )}

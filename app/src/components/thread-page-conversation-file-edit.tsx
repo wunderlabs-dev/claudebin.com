@@ -63,7 +63,7 @@ const ThreadPageConversationFileEdit = ({ block }: ThreadPageConversationFileEdi
 
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={filename} />}
-          <div className="flex items-center justify-between w-full">
+          <div className="flex w-full items-center justify-between">
             <Typography variant="small" color="neutral">
               {t("chat.lines", { count: lineCount })}
             </Typography>

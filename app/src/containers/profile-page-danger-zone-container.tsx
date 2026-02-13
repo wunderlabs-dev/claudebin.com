@@ -32,7 +32,7 @@ const ProfilePageDangerZoneContainer = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-start gap-3 p-8 border border-gray-250 transition-colors duration-200 ease-in-out hover:border-red-50/50",
+        "flex flex-col items-start gap-3 border border-gray-250 p-8 transition-colors duration-200 ease-in-out hover:border-red-50/50",
         className,
       )}
       {...props}

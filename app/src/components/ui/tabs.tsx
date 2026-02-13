@@ -69,7 +69,7 @@ const TabsTrigger = ({ className, ...props }: ComponentProps<typeof TabsPrimitiv
         "h-full",
         "px-6 py-2",
         "rounded-full",
-        "text-base font-normal text-gray-450",
+        "font-normal text-base text-gray-450",
         "transition-colors duration-150 ease-in-out",
         "active:scale-98",
         "disabled:pointer-events-none disabled:opacity-50",

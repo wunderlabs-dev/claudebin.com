@@ -46,7 +46,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   return (
     <Container
       spacing="md"
-      className="grid grid-cols-1 items-start lg:grid-cols-12 gap-12 xl:gap-18"
+      className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 xl:gap-18"
     >
       <div className="col-span-1 lg:col-span-4">
         <ProfilePageUserInfoSidebar
@@ -59,9 +59,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 col-span-1 lg:col-span-8">
+      <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
         {threads.length ? (
-          <div className="flex justify-between col-span-12 lg:items-center p-4 md:p-8 border border-gray-250">
+          <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
             <div className="flex items-center gap-3">
               <SvgIconLine size="md" color="accent" />
               <Typography variant="h4">{t("user.recentThreads")}</Typography>

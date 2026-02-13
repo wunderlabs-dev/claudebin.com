@@ -23,7 +23,7 @@ const ThreadPageThreadEmbed = ({ id, from, to, start, onClose }: ThreadPageThrea
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col min-w-full gap-8">
+    <div className="flex min-w-full flex-col gap-8">
       <NavButton onClick={onClose}>
         <SvgIconArrowLeft size="sm" />
         <NavLabel>{t("thread.hideEmbedPanel")}</NavLabel>

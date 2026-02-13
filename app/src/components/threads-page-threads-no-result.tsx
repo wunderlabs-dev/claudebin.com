@@ -16,9 +16,9 @@ const ThreadsPageThreadsNoResult = ({ query }: ThreadsPageThreadsNoResultProps) 
   if (query) {
     return (
       <DividerGridRow>
-        <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-        <DividerGridCell className="col-span-12 lg:col-span-10 px-8 py-24 lg:px-12 border-t border-r border-b border-l">
-          <div className="flex flex-col max-w-lg gap-6 mx-auto">
+        <DividerGridEdge position="left" className="col-span-1 hidden lg:flex" />
+        <DividerGridCell className="col-span-12 border-t border-r border-b border-l px-8 py-24 lg:col-span-10 lg:px-12">
+          <div className="mx-auto flex max-w-lg flex-col gap-6">
             <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
               {t.rich("threads.emptyTitle", { gradient, query })}
             </Typography>
@@ -27,15 +27,15 @@ const ThreadsPageThreadsNoResult = ({ query }: ThreadsPageThreadsNoResultProps) 
             </Typography>
           </div>
         </DividerGridCell>
-        <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
+        <DividerGridEdge position="right" className="col-span-1 hidden lg:flex" />
       </DividerGridRow>
     );
   }
   return (
     <DividerGridRow>
-      <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-      <DividerGridCell className="col-span-12 lg:col-span-10 px-8 py-24 lg:px-12 border-t border-r border-b border-l">
-        <div className="flex flex-col max-w-lg gap-6 mx-auto">
+      <DividerGridEdge position="left" className="col-span-1 hidden lg:flex" />
+      <DividerGridCell className="col-span-12 border-t border-r border-b border-l px-8 py-24 lg:col-span-10 lg:px-12">
+        <div className="mx-auto flex max-w-lg flex-col gap-6">
           <Typography variant="h2" leading="normal" className="whitespace-break-spaces">
             {t.rich("threads.noThreadsTitle", { gradient })}
           </Typography>
@@ -44,7 +44,7 @@ const ThreadsPageThreadsNoResult = ({ query }: ThreadsPageThreadsNoResultProps) 
           </Typography>
         </div>
       </DividerGridCell>
-      <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
+      <DividerGridEdge position="right" className="col-span-1 hidden lg:flex" />
     </DividerGridRow>
   );
 };

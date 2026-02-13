@@ -17,12 +17,12 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
     return (
       <DividerGridRow className="hidden lg:grid">
         <DividerGridEdge position="left" className="col-span-1" />
-        <DividerGridCell className="grid grid-cols-12 col-span-10 border-b">
-          <DividerGridCell className="flex justify-between col-span-8">
+        <DividerGridCell className="col-span-10 grid grid-cols-12 border-b">
+          <DividerGridCell className="col-span-8 flex justify-between">
             <DividerGridDivider variant="top" />
             <DividerGridDivider variant="top" />
           </DividerGridCell>
-          <DividerGridCell className="flex justify-end col-span-4">
+          <DividerGridCell className="col-span-4 flex justify-end">
             <DividerGridDivider variant="top" />
           </DividerGridCell>
         </DividerGridCell>
@@ -33,14 +33,14 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
   if (variant === "spacer") {
     return (
       <DividerGridRow>
-        <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-l border-r">
+        <DividerGridEdge position="left" className="col-span-1 hidden lg:flex" />
+        <DividerGridCell className="col-span-12 grid grid-cols-12 border-r border-l lg:col-span-10">
           <DividerGridRow>
-            <DividerGridCell className="col-span-12 md:col-span-9 lg:col-span-8 py-6 md:border-r" />
-            <DividerGridCell className="hidden lg:flex col-span-12 md:col-span-3 lg:col-span-4 px-4" />
+            <DividerGridCell className="col-span-12 py-6 md:col-span-9 md:border-r lg:col-span-8" />
+            <DividerGridCell className="col-span-12 hidden px-4 md:col-span-3 lg:col-span-4 lg:flex" />
           </DividerGridRow>
         </DividerGridCell>
-        <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
+        <DividerGridEdge position="right" className="col-span-1 hidden lg:flex" />
       </DividerGridRow>
     );
   }
@@ -50,14 +50,14 @@ const ThreadsPageThreadsAdornment = ({ variant }: ThreadsPageThreadsAdornmentPro
         <DividerGridCell className="col-span-1" />
         <DividerGridCell className="col-span-10">
           <DividerGridRow>
-            <DividerGridCell className="flex justify-between col-span-4">
+            <DividerGridCell className="col-span-4 flex justify-between">
               <DividerGridDivider variant="bottom" />
               <DividerGridDivider variant="bottom" />
             </DividerGridCell>
-            <DividerGridCell className="flex justify-end col-span-4">
+            <DividerGridCell className="col-span-4 flex justify-end">
               <DividerGridDivider variant="bottom" />
             </DividerGridCell>
-            <DividerGridCell className="flex justify-end col-span-4">
+            <DividerGridCell className="col-span-4 flex justify-end">
               <DividerGridDivider variant="bottom" />
             </DividerGridCell>
           </DividerGridRow>

@@ -96,7 +96,7 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
   const components = useMemo(() => createComponents(role), [role]);
 
   return (
-    <div className="flex flex-col max-w-full gap-4 break-all [&>*:first-child]:mt-0">
+    <div className="flex max-w-full flex-col gap-4 break-all [&>*:first-child]:mt-0">
       {block.text.trim().length ? (
         <Markdown remarkPlugins={REMARK_PLUGINS} components={components}>
           {block.text}

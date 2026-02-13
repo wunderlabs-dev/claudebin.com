@@ -33,9 +33,9 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
   if (variant === "command") {
     return (
       <div className="flex flex-col items-end gap-4">
-        <div className="flex gap-5 min-w-full py-2 px-6 bg-gray-200 border border-gray-50 rounded-lg transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
+        <div className="flex min-w-full gap-5 rounded-lg border border-gray-50 bg-gray-200 px-6 py-2 transition-colors duration-150 ease-in-out hover:border-orange-50/60 active:border-orange-50">
           <SvgIconBash className="shrink-0 text-orange-300" />
-          <span className="font-mono text-orange-50 whitespace-break-spaces">{value}</span>
+          <span className="whitespace-break-spaces font-mono text-orange-50">{value}</span>
         </div>
 
         <Button
