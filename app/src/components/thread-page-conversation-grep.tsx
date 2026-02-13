@@ -38,7 +38,12 @@ const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) 
 
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.pattern} />}
-          <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />
+
+          {block.filenames ? (
+            <Code code={block.filenames?.join("\n")} />
+          ) : (
+            t("common.noResultsFound")
+          )}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

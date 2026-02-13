@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 
 import type { GenericBlock } from "@/supabase/types/message";
 
+import { stringifyJSON } from "@/utils/helpers";
+
 import { SvgIconHammer } from "@/components/icon/svg-icon-hammer";
 
 import {
@@ -31,7 +33,7 @@ const ThreadPageConversationGeneric = ({ block }: ThreadPageConversationGenericP
         </AccordionTrigger>
 
         <AccordionContent>
-          <Code code={JSON.stringify(block.input)} />
+          <Code code={stringifyJSON(block.input)} />
         </AccordionContent>
       </AccordionItem>
     </Accordion>
