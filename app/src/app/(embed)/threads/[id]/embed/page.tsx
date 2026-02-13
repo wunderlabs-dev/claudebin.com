@@ -7,7 +7,7 @@ import { createClient } from "@/server/supabase/server";
 import { sessions } from "@/server/repos/sessions";
 import { messages } from "@/server/repos/messages";
 
-import { getProjectName, compactConversation } from "@/utils/helpers";
+import { compactConversation } from "@/utils/helpers";
 
 import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
 import { Typography } from "@/components/ui/typography";
@@ -78,7 +78,6 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
 
       <EmbedPageFooter
         id={id}
-        workingDir={getProjectName(thread.workingDir)}
         modelName={thread.modelName}
         fileCount={thread.fileCount}
         viewCount={thread.viewCount}
