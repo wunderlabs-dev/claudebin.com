@@ -50,7 +50,7 @@ const ThreadPageConversationGlob = ({ block }: ThreadPageConversationGlobProps) 
           {block.filenames?.length ? (
             <Code code={block.filenames?.join("\n")} />
           ) : (
-            <Typography variant="small">{t("common.noResultsFound")}</Typography>
+            <Typography variant="small" color="neutral">{t("common.noResultsFound")}</Typography>
           )}
         </AccordionContent>
       </AccordionItem>
