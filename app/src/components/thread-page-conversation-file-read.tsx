@@ -42,7 +42,9 @@ const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileRea
           {block.content ? (
             <Code code={block.content} />
           ) : (
-            <Typography variant="small" color="neutral">{t("common.noResultsFound")}</Typography>
+            <Typography variant="small" color="neutral">
+              {t("common.noResultsFound")}
+            </Typography>
           )}
         </AccordionContent>
       </AccordionItem>

@@ -78,7 +78,6 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
 
       <EmbedPageFooter
         id={id}
-        workingDir={getProjectName(thread.workingDir)}
         modelName={thread.modelName}
         fileCount={thread.fileCount}
         viewCount={thread.viewCount}

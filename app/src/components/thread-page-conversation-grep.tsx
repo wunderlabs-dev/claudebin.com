@@ -43,7 +43,9 @@ const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) 
           {block.filenames ? (
             <Code code={block.filenames?.join("\n")} />
           ) : (
-            <Typography variant="small" color="neutral">{t("common.noResultsFound")}</Typography>
+            <Typography variant="small" color="neutral">
+              {t("common.noResultsFound")}
+            </Typography>
           )}
         </AccordionContent>
       </AccordionItem>
