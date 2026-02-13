@@ -15,7 +15,7 @@ export const TrackingPixel = ({ type, id }: TrackingPixelProps) => {
       alt=""
       width={1}
       height={1}
-      className="absolute invisible"
+      className="invisible absolute"
       aria-hidden="true"
     />
   );

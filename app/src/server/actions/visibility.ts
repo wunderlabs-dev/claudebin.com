@@ -1,6 +1,7 @@
 "use server";
 
 import { not, isNil } from "ramda";
+import { revalidateTag } from "next/cache";
 
 import { createClient } from "@/server/supabase/server";
 import { sessions } from "@/server/repos/sessions";
@@ -25,6 +26,8 @@ export const toggleVisibility = async (sessionId: string) => {
   await sessions.update(supabase, sessionId, {
     isPublic: not(session.isPublic),
   });
+
+  revalidateTag(`thread:${sessionId}`, "minutes");
 
   return {
     isPublic: not(session.isPublic),

@@ -156,6 +156,23 @@ const getByIdWithAuthor = async (
   return { ...session, profiles: sanitizeProfile(profiles), hasLiked };
 };
 
+const getByIdWithProfile = async (
+  supabase: SupabaseClient<Database>,
+  id: string,
+): Promise<ThreadWithAuthor | null> => {
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("*, profiles(username, avatarUrl, deletedAt)")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to fetch session: ${error.message}`);
+  if (!data) return null;
+
+  const { profiles, ...session } = data;
+  return { ...session, profiles: sanitizeProfile(profiles) };
+};
+
 const getByIdForUser = async (
   supabase: SupabaseClient<Database>,
   id: string,
@@ -255,6 +272,7 @@ export const sessions = {
   getByUserId,
   getById,
   getByIdWithAuthor,
+  getByIdWithProfile,
   getByIdForUser,
   create,
   update,

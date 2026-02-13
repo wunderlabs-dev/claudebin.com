@@ -7,8 +7,8 @@ import { format } from "date-fns";
 
 import copy from "@/copy/en-EN.json";
 
-import { sessions } from "@/server/repos/sessions";
 import { createClient } from "@/server/supabase/server";
+import { getCachedThread } from "@/server/cache/thread";
 
 import { getProjectName } from "@/utils/helpers";
 
@@ -33,10 +33,14 @@ export const generateMetadata = async ({
 }: ThreadPageProps): Promise<Metadata | undefined> => {
   const { id } = await params;
 
-  const supabase = await createClient();
-  const thread = await sessions.getByIdWithAuthor(supabase, id);
+  const thread = await getCachedThread(id);
 
-  if (isNil(thread) || isNil(thread.title) || isNil(thread.profiles?.username)) {
+  if (
+    isNil(thread) ||
+    !thread.isPublic ||
+    isNil(thread.title) ||
+    isNil(thread.profiles?.username)
+  ) {
     return;
   }
 
@@ -61,16 +65,22 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   const { id } = await params;
 
   const t = await getTranslations();
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const thread = await sessions.getByIdWithAuthor(supabase, id, user?.id);
+  const thread = await getCachedThread(id);
 
   if (isNil(thread)) {
     notFound();
+  }
+
+  // Private threads require auth — dynamic path (cheap cookie read)
+  if (!thread.isPublic) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user?.id !== thread.userId) {
+      notFound();
+    }
   }
 
   return (
@@ -105,8 +115,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           <ThreadPageSidebarContainer
             id={thread.id}
             isPublic={thread.isPublic}
-            initialLiked={thread.hasLiked}
-            isAuthor={user?.id === thread?.userId}
+            userId={thread.userId}
             createdAt={format(thread.createdAt, "MM/dd/yyyy")}
             workingDir={getProjectName(thread.workingDir)}
             modelName={thread.modelName}

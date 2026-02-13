@@ -1,6 +1,7 @@
 "use server";
 
 import { isNil } from "ramda";
+import { revalidateTag } from "next/cache";
 
 import { createClient } from "@/server/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/server/repos/sessions";
@@ -41,6 +42,7 @@ export const deleteThread = async (sessionId: string) => {
   const storagePath = session.storagePath;
 
   await sessions.delete(supabase, sessionId);
+  revalidateTag(`thread:${sessionId}`, "minutes");
 
   if (storagePath) {
     await sessions.deleteFile(supabase, storagePath);
