@@ -14,4 +14,5 @@ export const logger = {
   parser: createLogger("parser"),
   sessions: createLogger("sessions"),
   auth: createLogger("auth"),
+  pixel: createLogger("pixel"),
 };

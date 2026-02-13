@@ -6,6 +6,8 @@ import { createClient } from "@/server/supabase/server";
 import { profiles } from "@/server/repos/profiles";
 import { sessions } from "@/server/repos/sessions";
 
+import { TrackingPixel } from "@/components/tracking-pixel";
+
 import { SvgIconLine } from "@/components/icon/svg-icon-line";
 import { SvgIconArrowRight } from "@/components/icon/svg-icon-arrow-right";
 
@@ -39,55 +41,54 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   const threads = await sessions.getByUserId(supabase, profile.id, 20, user?.id);
 
-  // Analytics for profile views
-  // Fire-and-forget increment, no await needed as it doesn't affect page render
-  profiles.incrementViewCount(supabase, profile.id);
-
   return (
-    <Container
-      spacing="md"
-      className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 xl:gap-18"
-    >
-      <div className="col-span-1 lg:col-span-4">
-        <ProfilePageUserInfoSidebar
-          username={profile.username}
-          name={profile.name}
-          avatarUrl={profile.avatarUrl}
-          createdAt={new Date(profile.createdAt)}
-          threads={threads.length}
-          views={profile.viewCount}
-        />
-      </div>
-
-      <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
-        {threads.length ? (
-          <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
-            <div className="flex items-center gap-3">
-              <SvgIconLine size="md" color="accent" />
-              <Typography variant="h4">{t("user.recentThreads")}</Typography>
-            </div>
-            <NavLink href="/threads">
-              <NavLabel>{t("user.seeAllThreads")}</NavLabel>
-              <SvgIconArrowRight size="sm" />
-            </NavLink>
-          </div>
-        ) : null}
-
-        <div className="flex flex-col gap-8">
-          {threads.length ? (
-            <div className="flex flex-col">
-              {threads.map((thread) => (
-                <ProfilePageThreadListItem key={thread.id} thread={thread} />
-              ))}
-            </div>
-          ) : (
-            <ProfilePageQuickStart />
-          )}
-
-          {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
+    <>
+      <TrackingPixel type="p" id={profile.id} />
+      <Container
+        spacing="md"
+        className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 xl:gap-18"
+      >
+        <div className="col-span-1 lg:col-span-4">
+          <ProfilePageUserInfoSidebar
+            username={profile.username}
+            name={profile.name}
+            avatarUrl={profile.avatarUrl}
+            createdAt={new Date(profile.createdAt)}
+            threads={threads.length}
+            views={profile.viewCount}
+          />
         </div>
-      </div>
-    </Container>
+
+        <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
+          {threads.length ? (
+            <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
+              <div className="flex items-center gap-3">
+                <SvgIconLine size="md" color="accent" />
+                <Typography variant="h4">{t("user.recentThreads")}</Typography>
+              </div>
+              <NavLink href="/threads">
+                <NavLabel>{t("user.seeAllThreads")}</NavLabel>
+                <SvgIconArrowRight size="sm" />
+              </NavLink>
+            </div>
+          ) : null}
+
+          <div className="flex flex-col gap-8">
+            {threads.length ? (
+              <div className="flex flex-col">
+                {threads.map((thread) => (
+                  <ProfilePageThreadListItem key={thread.id} thread={thread} />
+                ))}
+              </div>
+            ) : (
+              <ProfilePageQuickStart />
+            )}
+
+            {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
+          </div>
+        </div>
+      </Container>
+    </>
   );
 };
 

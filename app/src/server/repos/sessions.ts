@@ -240,19 +240,6 @@ const deleteFile = async (
   }
 };
 
-const incrementViewCount = async (
-  supabase: SupabaseClient<Database>,
-  sessionId: string,
-): Promise<void> => {
-  const { error } = await supabase.rpc("increment_session_view_count", {
-    session_id: sessionId,
-  });
-
-  if (error) {
-    logger.sessions.error("View count increment failed", error);
-  }
-};
-
 const deleteSession = async (supabase: SupabaseClient<Database>, id: string): Promise<void> => {
   const { error } = await supabase.from("sessions").delete().eq("id", id);
 
@@ -275,5 +262,4 @@ export const sessions = {
   uploadJsonl,
   downloadJsonl,
   deleteFile,
-  incrementViewCount,
 };

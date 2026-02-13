@@ -22,6 +22,7 @@ import { ThreadPageSidebarContainer } from "@/containers/thread-page-sidebar-con
 import { ThreadPageConversationContainer } from "@/containers/thread-page-conversation-container";
 
 import { ThreadEmbedProvider } from "@/context/thread-embed";
+import { TrackingPixel } from "@/components/tracking-pixel";
 
 type ThreadPageProps = {
   params: Promise<{ id: string }>;
@@ -72,10 +73,9 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
     notFound();
   }
 
-  sessions.incrementViewCount(supabase, id);
-
   return (
     <ThreadEmbedProvider>
+      <TrackingPixel type="t" id={id} />
       <Container size="lg" spacing="none" className="grid grid-cols-1 lg:grid-cols-12">
         <div className="col-span-1 flex flex-col gap-12 pt-9 pb-12 lg:col-span-9 lg:gap-18 lg:pb-0">
           <div className="flex flex-col items-start gap-9">
