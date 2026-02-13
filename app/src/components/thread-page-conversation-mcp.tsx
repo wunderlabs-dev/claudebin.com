@@ -6,6 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import type { McpBlock } from "@/supabase/types/message";
 
+import { stringifyJSON } from "@/utils/helpers";
 import { mediaQueries } from "@/utils/media-queries";
 
 import { SvgIconMcp } from "@/components/icon/svg-icon-mcp";
@@ -24,25 +25,11 @@ type ThreadPageConversationMcpProps = {
   block: McpBlock;
 };
 
-const formatInput = (input: Record<string, unknown>): string => {
-  return Object.entries(input)
-    .map(([key, value]) => {
-      const formatted = typeof value === "string" ? value : JSON.stringify(value);
-      return `${key}: ${formatted}`;
-    })
-    .join("\n");
-};
-
-const formatOutput = (output: unknown): string => {
-  return typeof output === "string" ? output : JSON.stringify(output);
-};
-
 const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) => {
   const t = useTranslations();
   const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
-  const label = `${block.server} → ${block.tool}`;
-  const input = formatInput(block.input);
+  const label = t("chat.mcpLabel", { server: block.server, tool: block.tool });
 
   return (
     <Accordion type="single" collapsible>
@@ -55,8 +42,8 @@ const ThreadPageConversationMcp = ({ block }: ThreadPageConversationMcpProps) =>
 
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={label} />}
-          {input ? <Code code={input} /> : null}
-          {block.output ? <Code code={formatOutput(block.output)} /> : null}
+          {block.input ? <Code code={stringifyJSON(block.input)} /> : null}
+          {block.output ? <Code code={stringifyJSON(block.output)} /> : null}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

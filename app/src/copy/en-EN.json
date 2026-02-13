@@ -155,6 +155,7 @@
     "exitCode": "Exit code: {code}",
     "unknownTool": "Unknown tool",
     "mcp": "MCP",
+    "mcpLabel": "{server} → {tool}",
     "skill": "Skill",
     "bytes": "Bytes",
     "error": "Error"
