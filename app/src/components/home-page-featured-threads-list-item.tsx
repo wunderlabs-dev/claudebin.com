@@ -42,15 +42,19 @@ const HomePageFeaturedThreadsListItem = ({
           <CardActions />
         </List>
       </CardBody>
+
       <CardBody>
         <CardHeader>
-          <CardTitle>
-            {truncate(thread.title ?? t("common.untitled"), {
-              length: THREAD_TITLE_TRUNCATE_LENGTH,
-            })}
-          </CardTitle>
+          {thread.title ? (
+            <CardTitle>
+              {truncate(thread.title, { length: THREAD_TITLE_TRUNCATE_LENGTH })}
+            </CardTitle>
+          ) : (
+            <CardTitle>{t("common.untitled")}</CardTitle>
+          )}
           <CardDescription>{thread.profiles?.username ?? "Anonymous"}</CardDescription>
         </CardHeader>
+
         <List direction="column">
           {thread.messageCount ? (
             <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>

@@ -16,7 +16,7 @@ const ProfilePageQuickStart = ({ className, ...props }: ProfilePageQuickStartPro
 
   return (
     <div
-      className={cn("flex flex-col items-start gap-6 p-8 border border-gray-250", className)}
+      className={cn("flex flex-col items-start gap-6 border border-gray-250 p-8", className)}
       {...props}
     >
       <div className="flex items-center gap-3">

@@ -16,6 +16,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
+import { Typography } from "@/components/ui/typography";
 
 import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
@@ -37,7 +38,11 @@ const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileRea
         </AccordionTrigger>
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.file_path} />}
-          <Code code={block.content ?? t("common.noResultsFound")} />
+          {block.content ? (
+            <Code code={block.content} />
+          ) : (
+            <Typography variant="small">{t("common.noResultsFound")}</Typography>
+          )}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -3,8 +3,11 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { format } from "date-fns";
 import { isNil } from "ramda";
+import truncate from "lodash.truncate";
 
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
+
+import { THREAD_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import { createClient } from "@/server/supabase/server";
 import { sessions } from "@/server/repos/sessions";
@@ -205,17 +208,19 @@ const OpenGraphContent = ({ thread }: OpenGraphContentProps) => (
           gap: sizes.gapXl,
         }}
       >
-        <div
-          tw="flex-1 p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
-          style={{
-            borderStyle: "solid",
-            borderWidth: sizes.border,
-            borderColor: colors.gray50,
-            backgroundColor: colors.gray100,
-          }}
-        >
-          {thread.title}
-        </div>
+        {thread.title ? (
+          <div
+            tw="flex-1 p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
+            style={{
+              borderStyle: "solid",
+              borderWidth: sizes.border,
+              borderColor: colors.gray50,
+              backgroundColor: colors.gray100,
+            }}
+          >
+            {truncate(thread.title, { length: THREAD_TITLE_TRUNCATE_LENGTH })}
+          </div>
+        ) : null}
 
         <img
           src={assistantSrc}

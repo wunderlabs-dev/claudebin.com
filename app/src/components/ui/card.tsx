@@ -166,7 +166,7 @@ type CardDividerProps = React.ComponentProps<"div">;
 
 const CardDivider = ({ className, ...props }: CardDividerProps) => {
   return (
-    <div data-slot="card-divider" className={cn("w-full h-px bg-gray-200", className)} {...props} />
+    <div data-slot="card-divider" className={cn("h-px w-full bg-gray-200", className)} {...props} />
   );
 };
 

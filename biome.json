@@ -22,7 +22,7 @@
         "useParseIntRadix": "off"
       },
       "nursery": {
-        "useSortedClasses": "off"
+        "useSortedClasses": "error"
       }
     }
   },

@@ -71,7 +71,7 @@ const ThreadPageSidebarContainer = ({
             />
           ) : null}
 
-          <div className="flex flex-col w-full gap-8">
+          <div className="flex w-full flex-col gap-8">
             <CopyInput variant="link" value={`${APP_URL}/threads/${id}`} />
 
             <div className="flex flex-col gap-4">

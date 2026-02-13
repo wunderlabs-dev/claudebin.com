@@ -27,7 +27,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
   return (
     <Container as="section" size="lg" className={className} {...props}>
       <Backdrop spacing="md" className="px-4 lg:px-12">
-        <div className="flex flex-col max-w-4xl gap-12 xl:gap-18">
+        <div className="flex max-w-4xl flex-col gap-12 xl:gap-18">
           <Typography variant="h1" leading="none" className="whitespace-break-spaces">
             {t.rich("home.headline", { gradient })}
           </Typography>
@@ -35,13 +35,13 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
           <div className="flex flex-col items-start gap-6">
             <Badge>{t("home.badge")}</Badge>
 
-            <div className="flex flex-col gap-12 lg:flex-row w-full">
+            <div className="flex w-full flex-col gap-12 lg:flex-row">
               <Typography variant="body" color="neutral" className="leading-8">
                 {t("home.description")}
               </Typography>
 
               {md ? (
-                <Tabs defaultValue="oneClick" className="flex flex-col shrink-0 gap-4 lg:w-xl">
+                <Tabs defaultValue="oneClick" className="flex shrink-0 flex-col gap-4 lg:w-xl">
                   <div className="flex items-center justify-between">
                     <TabsList>
                       <TabsTrigger value="oneClick">{t("home.oneClickInstall")}</TabsTrigger>

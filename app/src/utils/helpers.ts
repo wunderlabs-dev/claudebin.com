@@ -27,6 +27,13 @@ export const getProjectName = (workingDir: string | null) => {
   return last(workingDir.split("/"));
 };
 
+export const stringifyJSON = (value: unknown): string => {
+  if (typeof value === "string") {
+    return value;
+  }
+  return JSON.stringify(value);
+};
+
 export const compactConversation = (messages: ReadonlyArray<Message> = []): Message[] =>
   reduce<Message, Message[]>(
     (accumulator, message) => {

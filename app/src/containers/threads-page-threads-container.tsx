@@ -79,10 +79,10 @@ const ThreadsPageThreadsContainer = ({
       <ThreadsPageThreadsAdornment variant="start" />
 
       <DividerGridRow>
-        <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
-        <DividerGridCell className="grid grid-cols-12 col-span-12 lg:col-span-10 border-t border-r border-b border-l lg:border-t-0">
+        <DividerGridEdge position="left" className="col-span-1 hidden lg:flex" />
+        <DividerGridCell className="col-span-12 grid grid-cols-12 border-t border-r border-b border-l lg:col-span-10 lg:border-t-0">
           <DividerGridRow>
-            <DividerGridCell className="col-span-12 md:col-span-9 lg:col-span-8 md:border-r">
+            <DividerGridCell className="col-span-12 md:col-span-9 md:border-r lg:col-span-8">
               <FormControl className="flex-row items-center">
                 <Input
                   placeholder={t("threads.searchPlaceholder")}
@@ -97,8 +97,8 @@ const ThreadsPageThreadsContainer = ({
             </DividerGridCell>
             <DividerGridCell
               className={cn(
-                "flex items-center md:justify-end col-span-12 md:col-span-3 lg:col-span-4 px-4",
-                hasSearchQuery ? "py-3 border-t md:border-t-0" : undefined,
+                "col-span-12 flex items-center px-4 md:col-span-3 md:justify-end lg:col-span-4",
+                hasSearchQuery ? "border-t py-3 md:border-t-0" : undefined,
               )}
             >
               {hasSearchQuery ? (
@@ -109,7 +109,7 @@ const ThreadsPageThreadsContainer = ({
             </DividerGridCell>
           </DividerGridRow>
         </DividerGridCell>
-        <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
+        <DividerGridEdge position="right" className="col-span-1 hidden lg:flex" />
       </DividerGridRow>
 
       <ThreadsPageThreadsAdornment variant="spacer" />
@@ -129,7 +129,7 @@ const ThreadsPageThreadsContainer = ({
 
           {hasNextPage ? (
             <DividerGridRow>
-              <DividerGridEdge position="left" className="hidden lg:flex col-span-1" />
+              <DividerGridEdge position="left" className="col-span-1 hidden lg:flex" />
               <DividerGridCell className="col-span-12 lg:col-span-10">
                 <Card variant="grid">
                   <CardBody className="hidden lg:flex" />
@@ -145,7 +145,7 @@ const ThreadsPageThreadsContainer = ({
                   <CardBody className="hidden lg:flex" />
                 </Card>
               </DividerGridCell>
-              <DividerGridEdge position="right" className="hidden lg:flex col-span-1" />
+              <DividerGridEdge position="right" className="col-span-1 hidden lg:flex" />
             </DividerGridRow>
           ) : null}
         </Fragment>

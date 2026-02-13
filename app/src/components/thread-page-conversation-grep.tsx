@@ -16,6 +16,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Code } from "@/components/ui/code";
+import { Typography } from "@/components/ui/typography";
 
 import { ThreadPageConversationChip } from "@/components/thread-page-conversation-chip";
 
@@ -38,7 +39,12 @@ const ThreadPageConversationGrep = ({ block }: ThreadPageConversationGrepProps) 
 
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.pattern} />}
-          <Code code={block.filenames?.join("\n") ?? t("common.noResultsFound")} />
+
+          {block.filenames ? (
+            <Code code={block.filenames?.join("\n")} />
+          ) : (
+            <Typography variant="small">{t("common.noResultsFound")}</Typography>
+          )}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

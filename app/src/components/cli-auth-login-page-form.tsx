@@ -47,7 +47,7 @@ const CliAuthLoginPageForm = () => {
 
       <div className="flex flex-col items-start gap-5">
         {authError ? (
-          <div className="flex flex-col gap-3 px-8 py-8 border border-gray-500/40">
+          <div className="flex flex-col gap-3 border border-gray-500/40 px-8 py-8">
             <Typography variant="h4" className="flex items-center gap-2">
               <SvgIconSkull />
               {t("login.errorTitle")}

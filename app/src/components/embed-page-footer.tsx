@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { SvgIconClaudebinXs } from "@/components/icon/svg-icon-claudebin-xs";
 import { SvgIconBrain } from "@/components/icon/svg-icon-brain";
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";
-import { SvgIconFolder } from "@/components/icon/svg-icon-folder";
 import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import { SvgIconEye } from "@/components/icon/svg-icon-eye";
 import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
@@ -14,7 +13,6 @@ import { List, ListItem } from "@/components/ui/list";
 
 type EmbedPageFooterProps = {
   id: string;
-  workingDir?: string | null;
   modelName?: string | null;
   fileCount: number;
   viewCount: number;
@@ -24,7 +22,6 @@ type EmbedPageFooterProps = {
 
 export const EmbedPageFooter = ({
   id,
-  workingDir,
   modelName,
   fileCount,
   viewCount,
@@ -34,7 +31,7 @@ export const EmbedPageFooter = ({
   const t = useTranslations();
 
   return (
-    <div className="sticky bottom-0 flex items-center justify-between p-4 bg-gray-100 border-t border-gray-200">
+    <div className="sticky bottom-0 flex items-center justify-between border-gray-200 border-t bg-gray-100 p-4">
       <Link href={`/threads/${id}`} target="_blank">
         <SvgIconClaudebinXs
           size="auto"

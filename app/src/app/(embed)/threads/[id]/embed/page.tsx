@@ -54,8 +54,8 @@ const EmbedPage = async ({ params, searchParams }: EmbedPageProps) => {
   const result = await messages.getByRange(supabase, id, fromId, toId);
 
   return (
-    <div className="flex flex-col min-h-screen min-w-full gap-3 bg-gray-100">
-      <div className="flex flex-col gap-4 pt-4 px-4">
+    <div className="flex min-h-screen min-w-full flex-col gap-3 bg-gray-100">
+      <div className="flex flex-col gap-4 px-4 pt-4">
         <Typography variant="body" fontWeight="semibold">
           {thread.title}
         </Typography>
