@@ -34,17 +34,16 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
 
           <div className="flex flex-col items-start gap-6">
             <Badge>
-              <SvgIconGithub size="sm" />
               {t("home.badge")}
             </Badge>
 
-            <div className="flex flex-col gap-12 lg:flex-row">
+            <div className="flex flex-col gap-12 lg:flex-row w-full">
               <Typography variant="body" color="neutral" className="leading-8">
                 {t("home.description")}
               </Typography>
 
               {md ? (
-                <Tabs defaultValue="oneClick" className="flex flex-col shrink-0 gap-4 lg:w-lg">
+                <Tabs defaultValue="oneClick" className="flex flex-col shrink-0 gap-4 lg:w-xl">
                   <div className="flex items-center justify-between">
                     <TabsList>
                       <TabsTrigger value="oneClick">{t("home.oneClickInstall")}</TabsTrigger>
