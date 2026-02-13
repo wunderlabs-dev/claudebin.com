@@ -36,12 +36,13 @@ const ThreadPageConversationFileRead = ({ block }: ThreadPageConversationFileRea
           {t("chat.read")}
           {md ? <ThreadPageConversationChip label={block.file_path} /> : null}
         </AccordionTrigger>
+
         <AccordionContent>
           {md ? null : <ThreadPageConversationChip label={block.file_path} />}
           {block.content ? (
             <Code code={block.content} />
           ) : (
-            <Typography variant="small">{t("common.noResultsFound")}</Typography>
+            <Typography variant="small" color="neutral">{t("common.noResultsFound")}</Typography>
           )}
         </AccordionContent>
       </AccordionItem>
