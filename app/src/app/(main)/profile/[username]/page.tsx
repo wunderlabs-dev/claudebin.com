@@ -43,7 +43,6 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   return (
     <>
-      <TrackingPixel type="p" id={profile.id} />
       <Container
         spacing="md"
         className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 xl:gap-18"
@@ -88,6 +87,8 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
           </div>
         </div>
       </Container>
+
+      <TrackingPixel type="p" id={profile.id} />
     </>
   );
 };

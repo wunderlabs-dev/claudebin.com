@@ -85,7 +85,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   return (
     <ThreadEmbedProvider>
-      <TrackingPixel type="t" id={id} />
       <Container size="lg" spacing="none" className="grid grid-cols-1 lg:grid-cols-12">
         <div className="col-span-1 flex flex-col gap-12 pt-9 pb-12 lg:col-span-9 lg:gap-18 lg:pb-0">
           <div className="flex flex-col items-start gap-9">
@@ -126,6 +125,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
           />
         </div>
       </Container>
+      <TrackingPixel type="t" id={id} />
     </ThreadEmbedProvider>
   );
 };
