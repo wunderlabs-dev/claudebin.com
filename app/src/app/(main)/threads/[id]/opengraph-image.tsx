@@ -208,17 +208,19 @@ const OpenGraphContent = ({ thread }: OpenGraphContentProps) => (
           gap: sizes.gapXl,
         }}
       >
-        <div
-          tw="flex-1 p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
-          style={{
-            borderStyle: "solid",
-            borderWidth: sizes.border,
-            borderColor: colors.gray50,
-            backgroundColor: colors.gray100,
-          }}
-        >
-          {truncate(thread.title ?? "Untitled", { length: THREAD_TITLE_TRUNCATE_LENGTH })}
-        </div>
+        {thread.title ? (
+          <div
+            tw="flex-1 p-6 rounded-3xl rounded-tr-none font-bold text-7xl"
+            style={{
+              borderStyle: "solid",
+              borderWidth: sizes.border,
+              borderColor: colors.gray50,
+              backgroundColor: colors.gray100,
+            }}
+          >
+            {truncate(thread.title, { length: THREAD_TITLE_TRUNCATE_LENGTH })}
+          </div>
+        ) : null}
 
         <img
           src={assistantSrc}
