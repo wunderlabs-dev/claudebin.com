@@ -75,10 +75,12 @@ const ThreadPageSidebarContainer = ({
             <CopyInput variant="link" value={`${APP_URL}/threads/${id}`} />
 
             <div className="flex flex-col gap-4">
-              <Button variant="secondary" onClick={() => setView("embed")}>
-                <SvgIconArrowLink />
-                {t("thread.embedConversation")}
-              </Button>
+              {lg ? (
+                <Button variant="secondary" onClick={() => setView("embed")}>
+                  <SvgIconArrowLink className="shrink-0" />
+                  {t("thread.embedConversation")}
+                </Button>
+              ) : null}
 
               <ThreadPageSidebarContinueConversation />
               {isAuthor ? <ThreadPageSidebarDeleteContainer id={id} /> : null}
