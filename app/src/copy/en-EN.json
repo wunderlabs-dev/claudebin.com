@@ -164,8 +164,8 @@
     "openFullConversation": "Open full conversation"
   },
   "footer": {
-    "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
-    "product": "Product",
+    "copyright": "© {year} Claudebin. A <link>Wunderlabs</link> project. All rights reserved.",
+    "product": "Explore",
     "claudebin": "Claudebin",
     "threads": "Threads",
     "login": "Login",
