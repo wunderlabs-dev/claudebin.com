@@ -5,15 +5,6 @@ export const THREAD_SNIPPET_TEXTAREA_ROWS = 4;
 export const THREAD_ATTACHMENT_SIZE = 200;
 export const THREAD_TITLE_TRUNCATE_LENGTH = 56;
 export const THREAD_GRID_TITLE_TRUNCATE_LENGTH = 36;
-export const THREAD_CARD_LAYOUTS = [
-  [0, 1, 2],
-  [0, 2, 1],
-  [1, 0, 2],
-  [1, 2, 0],
-  [2, 0, 1],
-  [2, 1, 0],
-] as const;
-
 export const THREADS_PAGE_SIZE = 20;
 export const THREADS_PAGE_INITIAL = 0;
 
