@@ -99,7 +99,7 @@
     "continue": "Continue",
     "continueConversation": "Continue conversation",
     "continueTitle": "Continue this conversation?",
-    "continueDescription": "Run this command in your terminal to continue with Claude",
+    "continueDescription": "Run this command in your terminal to continue with Claude. Review the conversation before running. Use at your own risk.",
     "embedConversation": "Embed conversation",
     "hideEmbedPanel": "Hide embed panel",
     "embedHint": "Click on any two messages in the conversation to select the range you want to embed.",
