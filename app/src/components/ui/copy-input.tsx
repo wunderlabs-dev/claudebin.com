@@ -26,14 +26,14 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
   const t = useTranslations();
 
   const [, copy] = useCopyToClipboard();
-  const { value: isCopied, setTrue: setCopied, setFalse: resetCopied } = useBoolean();
+  const { value: isCopied, setTrue: setIsCopied, setFalse: resetIsCopied } = useBoolean();
 
   const handleCopy = useCallback(() => {
     copy(value);
-    setCopied();
-  }, [copy, value, setCopied]);
+    setIsCopied();
+  }, [copy, value, setIsCopied]);
 
-  useTimeout(resetCopied, isCopied ? COPY_RESET_MS : null);
+  useTimeout(resetIsCopied, isCopied ? COPY_RESET_MS : null);
 
   if (variant === "command") {
     return (

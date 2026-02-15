@@ -22,7 +22,7 @@ const ProfilePageDangerZoneContainer = ({
 }: ProfilePageDangerZoneContainerProps) => {
   const t = useTranslations();
 
-  const { value, setTrue, setFalse } = useBoolean();
+  const { value: isConfirming, setTrue: setIsConfirming, setFalse: resetIsConfirming } = useBoolean();
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteAccount,
@@ -46,9 +46,9 @@ const ProfilePageDangerZoneContainer = ({
         {t("user.dangerZoneDescription")}
       </Typography>
 
-      {value ? (
+      {isConfirming ? (
         <div className="flex gap-3">
-          <Button variant="secondary" onClick={setFalse} disabled={isPending}>
+          <Button variant="secondary" onClick={resetIsConfirming} disabled={isPending}>
             {t("user.cancel")}
           </Button>
           <Button variant="danger" onClick={() => mutate()} disabled={isPending}>
@@ -56,7 +56,7 @@ const ProfilePageDangerZoneContainer = ({
           </Button>
         </div>
       ) : (
-        <Button variant="danger" onClick={setTrue}>
+        <Button variant="danger" onClick={setIsConfirming}>
           {t("user.deleteAccount")}
         </Button>
       )}
