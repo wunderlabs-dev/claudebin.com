@@ -28,7 +28,11 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
             {t("thread.continueHint")}
           </Typography>
         </div>
-        <CopyInput variant="link" value={`curl -s "${APP_URL}/api/threads/${id}/md" | claude`} />
+        <CopyInput
+          variant="link"
+          className="field-sizing-content w-auto"
+          value={`curl -s "${APP_URL}/api/threads/${id}/md" | claude`}
+        />
         <Typography variant="small" color="muted">
           {t("thread.continueDescription")}
         </Typography>

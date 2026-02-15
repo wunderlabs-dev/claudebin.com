@@ -20,9 +20,10 @@ export type CopyInputVariant = (typeof CopyInputVariants)[number];
 type CopyInputProps = {
   value: string;
   variant?: CopyInputVariant;
+  className?: string;
 };
 
-const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode => {
+const CopyInput = ({ value, className, variant = "command" }: CopyInputProps): ReactNode => {
   const t = useTranslations();
 
   const [, copy] = useCopyToClipboard();
@@ -58,7 +59,7 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
   if (variant === "link") {
     return (
       <div className="flex flex-col gap-4">
-        <Input variant="filled" value={value} readOnly />
+        <Input variant="filled" className={className} value={value} readOnly />
         <Button variant="outline" color={isCopied ? "success" : "default"} onClick={handleCopy}>
           {isCopied ? <SvgIconCheck /> : <SvgIconCopy />}
           {isCopied ? t("common.copied") : t("common.copy")}

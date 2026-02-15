@@ -54,7 +54,7 @@ const inputVariants = cva(
           "rounded-full border border-gray-50 focus:border-orange-50 focus:ring-1 focus:ring-orange-50/30",
         error:
           "rounded-full border border-red-50 text-red-50 placeholder:text-red-50 focus:border-red-50",
-        filled: "px-4 rounded-lg border-none sizing-content",
+        filled: "w-full px-4 rounded-lg border-none",
       },
     },
     defaultVariants: {
