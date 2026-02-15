@@ -1,15 +1,15 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useCallback, type ReactNode } from "react";
 
-import { useCopyToClipboard } from "usehooks-ts";
+import { useBoolean, useCopyToClipboard, useTimeout } from "usehooks-ts";
 import { useTranslations } from "next-intl";
 
 import { SvgIconBash } from "@/components/icon/svg-icon-bash";
 import { SvgIconCheck } from "@/components/icon/svg-icon-check";
 import { SvgIconCopy } from "@/components/icon/svg-icon-copy";
 
-import { THREAD_SNIPPET_TEXTAREA_ROWS } from "@/utils/constants";
+import { COPY_RESET_MS, THREAD_SNIPPET_TEXTAREA_ROWS } from "@/utils/constants";
 
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/form-control";
@@ -24,11 +24,16 @@ type CopyInputProps = {
 
 const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode => {
   const t = useTranslations();
-  const [copiedText, copy] = useCopyToClipboard();
 
-  const handleCopy = () => {
+  const [, copy] = useCopyToClipboard();
+  const { value: isCopied, setTrue: setCopied, setFalse: resetCopied } = useBoolean();
+
+  const handleCopy = useCallback(() => {
     copy(value);
-  };
+    setCopied();
+  }, [copy, value, setCopied]);
+
+  useTimeout(resetCopied, isCopied ? COPY_RESET_MS : null);
 
   if (variant === "command") {
     return (
@@ -41,11 +46,11 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
         <Button
           className="shrink-0"
           variant="outline"
-          color={copiedText === value ? "success" : "default"}
+          color={isCopied ? "success" : "default"}
           onClick={handleCopy}
         >
-          {copiedText === value ? t("common.copied") : t("common.copyCommand")}
-          {copiedText === value ? <SvgIconCheck /> : <SvgIconCopy />}
+          {isCopied ? t("common.copied") : t("common.copyCommand")}
+          {isCopied ? <SvgIconCheck /> : <SvgIconCopy />}
         </Button>
       </div>
     );
@@ -54,13 +59,9 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
     return (
       <div className="flex flex-col gap-4">
         <Input variant="filled" value={value} readOnly />
-        <Button
-          variant="outline"
-          color={copiedText === value ? "success" : "default"}
-          onClick={handleCopy}
-        >
-          {copiedText === value ? <SvgIconCheck /> : <SvgIconCopy />}
-          {copiedText === value ? t("common.copied") : t("common.copy")}
+        <Button variant="outline" color={isCopied ? "success" : "default"} onClick={handleCopy}>
+          {isCopied ? <SvgIconCheck /> : <SvgIconCopy />}
+          {isCopied ? t("common.copied") : t("common.copy")}
         </Button>
       </div>
     );
@@ -69,13 +70,9 @@ const CopyInput = ({ value, variant = "command" }: CopyInputProps): ReactNode =>
   return (
     <div className="flex flex-col gap-4">
       <Textarea value={value} rows={THREAD_SNIPPET_TEXTAREA_ROWS} readOnly />
-      <Button
-        variant="outline"
-        color={copiedText === value ? "success" : "default"}
-        onClick={handleCopy}
-      >
-        {copiedText === value ? <SvgIconCheck /> : <SvgIconCopy />}
-        {copiedText === value ? t("common.copied") : t("common.copySnippet")}
+      <Button variant="outline" color={isCopied ? "success" : "default"} onClick={handleCopy}>
+        {isCopied ? <SvgIconCheck /> : <SvgIconCopy />}
+        {isCopied ? t("common.copied") : t("common.copySnippet")}
       </Button>
     </div>
   );
