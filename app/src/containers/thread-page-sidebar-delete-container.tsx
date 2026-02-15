@@ -19,7 +19,7 @@ const ThreadPageSidebarDeleteContainer = ({ id }: ThreadPageSidebarDeleteContain
   const t = useTranslations();
   const router = useRouter();
 
-  const { value, setTrue } = useBoolean();
+  const { value: isConfirming, setTrue: setIsConfirming } = useBoolean();
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => deleteThread(id),
@@ -30,7 +30,7 @@ const ThreadPageSidebarDeleteContainer = ({ id }: ThreadPageSidebarDeleteContain
     onError: () => toast.error(t("thread.deleteError")),
   });
 
-  if (value) {
+  if (isConfirming) {
     return (
       <Button variant="danger" onClick={() => mutate()} disabled={isPending}>
         {isPending ? t("thread.deleting") : t("thread.confirmDelete")}
@@ -38,7 +38,7 @@ const ThreadPageSidebarDeleteContainer = ({ id }: ThreadPageSidebarDeleteContain
     );
   }
   return (
-    <Button variant="secondary" onClick={setTrue}>
+    <Button variant="secondary" onClick={setIsConfirming}>
       <SvgIconBin />
       {t("thread.deleteThread")}
     </Button>

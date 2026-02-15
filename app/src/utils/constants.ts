@@ -14,6 +14,7 @@ export const SESSION_MAX_SIZE_BYTES = 50 * 1024 * 1024;
 export const AUTH_TOKEN_LENGTH = 21;
 export const AUTH_SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 
+export const COPY_RESET_MS = 3000;
 export const QUERY_STALE_TIME_MS = 60 * 1000;
 export const SEARCH_DEBOUNCE_MS = 300;
 

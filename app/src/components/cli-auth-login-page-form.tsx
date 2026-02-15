@@ -21,10 +21,10 @@ const CliAuthLoginPageForm = () => {
   const authError = searchParams.get("error");
   const authErrorDescription = searchParams.get("error_description");
 
-  const { value, setTrue, setFalse } = useBoolean();
+  const { value: isLoading, setTrue: setIsLoading, setFalse: resetIsLoading } = useBoolean();
 
   const handleSignIn = async () => {
-    setTrue();
+    setIsLoading();
 
     const supabase = createClient();
     const redirect = encodeURIComponent(redirectTo);
@@ -37,7 +37,7 @@ const CliAuthLoginPageForm = () => {
     });
 
     if (error) {
-      setFalse();
+      resetIsLoading();
     }
   };
 
@@ -58,9 +58,9 @@ const CliAuthLoginPageForm = () => {
           </div>
         ) : null}
 
-        <Button variant="secondary" onClick={handleSignIn} disabled={value}>
+        <Button variant="secondary" onClick={handleSignIn} disabled={isLoading}>
           <SvgIconGithub />
-          {value ? t("common.loading") : t("login.continueWithGithub")}
+          {isLoading ? t("common.loading") : t("login.continueWithGithub")}
         </Button>
       </div>
     </div>
