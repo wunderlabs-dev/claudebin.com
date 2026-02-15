@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const alt = "Claudebin";
-export const contentType = "image/png";
+export const contentType = "image/jpeg";
 
 const hostGroteskRegular = fetch(
   "https://fonts.gstatic.com/s/hostgrotesk/v5/co3UmWBnlCJ3U42vbbfdwMjzqHAXOdFzqU5PuefOzhY.ttf",
