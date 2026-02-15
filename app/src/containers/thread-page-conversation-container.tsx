@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, type ReactNode } from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { isNil, isNotNil } from "ramda";
 
@@ -87,10 +88,12 @@ const ThreadPageConversationContainer = ({
           <ChatContent>{message.content.map(block)}</ChatContent>
 
           {message.role === "user" ? (
-            <Avatar size="sm">
-              <AvatarImage src={avatarUrl ?? undefined} />
-              <AvatarFallback name={author} />
-            </Avatar>
+            <Link href={`/profile/${author}`}>
+              <Avatar size="sm">
+                <AvatarImage src={avatarUrl ?? undefined} />
+                <AvatarFallback name={author} />
+              </Avatar>
+            </Link>
           ) : null}
         </ChatItem>
       ))}

@@ -44,7 +44,8 @@
     "installation": "Installation",
     "howToUse": "How to Use",
     "featuredThreadsTitle": "/Featured <gradient>threads</gradient>",
-    "featuredThreadsDescription": "Handpicked conversations worth exploring."
+    "featuredThreadsDescription": "Handpicked conversations worth exploring.",
+    "seeMoreThreads": "See more threads"
   },
   "error": {
     "title": "Something went <gradient>wrong</gradient>",
@@ -99,8 +100,10 @@
     "continue": "Continue",
     "continueConversation": "Continue conversation",
     "continueTitle": "Continue this conversation?",
-    "continueDescription": "Run this command in your terminal to continue with Claude",
+    "continueDescription": "Review the conversation before running. Use at your own risk.",
+    "continueHint": "Run this command in your terminal to continue with Claude.",
     "embedConversation": "Embed conversation",
+    "embed": "Embed",
     "hideEmbedPanel": "Hide embed panel",
     "embedHint": "Click on any two messages in the conversation to select the range you want to embed.",
     "selectEndMessage": "Select end message",
@@ -155,7 +158,7 @@
     "exitCode": "Exit code: {code}",
     "unknownTool": "Unknown tool",
     "mcp": "MCP",
-    "mcpLabel": "{server} → {tool}",
+    "mcpLabel": "{server} / {tool}",
     "skill": "Skill",
     "bytes": "Bytes",
     "error": "Error"
@@ -164,8 +167,8 @@
     "openFullConversation": "Open full conversation"
   },
   "footer": {
-    "copyright": "© {year} Claudebin created by <link>Wunderlabs</link>. All rights reserved.",
-    "product": "Product",
+    "copyright": "© {year} Claudebin. A <link>Wunderlabs</link> project. All rights reserved.",
+    "product": "Explore",
     "claudebin": "Claudebin",
     "threads": "Threads",
     "login": "Login",
