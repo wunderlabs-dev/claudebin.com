@@ -48,6 +48,7 @@ const ThreadPageSidebarContainer = ({
 }: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
   const lg = useMediaQuery(mediaQueries.lg, { initializeWithValue: isServer });
+  const xl = useMediaQuery(mediaQueries.xl, { initializeWithValue: isServer });
 
   const { view, from, to, start, setView } = useThreadEmbed();
 
@@ -78,7 +79,7 @@ const ThreadPageSidebarContainer = ({
               {lg ? (
                 <Button variant="secondary" onClick={() => setView("embed")}>
                   <SvgIconArrowLink className="shrink-0" />
-                  {t("thread.embedConversation")}
+                  {xl ? t("thread.embedConversation") : t("thread.embed")}
                 </Button>
               ) : null}
 
