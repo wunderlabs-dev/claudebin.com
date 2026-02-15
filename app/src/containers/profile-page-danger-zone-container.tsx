@@ -22,7 +22,11 @@ const ProfilePageDangerZoneContainer = ({
 }: ProfilePageDangerZoneContainerProps) => {
   const t = useTranslations();
 
-  const { value: isConfirming, setTrue: setIsConfirming, setFalse: resetIsConfirming } = useBoolean();
+  const {
+    value: isConfirming,
+    setTrue: setIsConfirming,
+    setFalse: resetIsConfirming,
+  } = useBoolean();
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteAccount,
