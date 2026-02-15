@@ -44,7 +44,8 @@
     "installation": "Installation",
     "howToUse": "How to Use",
     "featuredThreadsTitle": "/Featured <gradient>threads</gradient>",
-    "featuredThreadsDescription": "Handpicked conversations worth exploring."
+    "featuredThreadsDescription": "Handpicked conversations worth exploring.",
+    "seeMoreThreads": "See more threads"
   },
   "error": {
     "title": "Something went <gradient>wrong</gradient>",
