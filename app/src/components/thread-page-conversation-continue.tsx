@@ -25,10 +25,13 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
         <div className="flex flex-col gap-2">
           <Typography variant="h4">{t("thread.continueTitle")}</Typography>
           <Typography variant="small" color="muted">
-            {t("thread.continueDescription")}
+            {t("thread.continueHint")}
           </Typography>
         </div>
         <CopyInput variant="link" value={`curl -s "${APP_URL}/api/threads/${id}/md" | claude`} />
+        <Typography variant="small" color="muted">
+          {t("thread.continueDescription")}
+        </Typography>
       </ChatContent>
     </ChatItem>
   );
