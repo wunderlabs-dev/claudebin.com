@@ -131,10 +131,6 @@
   }
 }
 
-@utility sizing-content {
-  field-sizing: content;
-}
-
 @utility bg-grid {
   background-size: calc(var(--util-full-width) / var(--util-grid-columns)) var(--util-full-width);
   background-image:
