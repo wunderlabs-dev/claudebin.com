@@ -21,6 +21,7 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
       <Avatar size="sm">
         <AvatarImage src={AVATAR_ASSISTANT_IMAGE_SRC} />
       </Avatar>
+
       <ChatContent className="w-auto" data-continue-conversation>
         <div className="flex flex-col gap-2">
           <Typography variant="h4">{t("thread.continueTitle")}</Typography>
@@ -28,11 +29,13 @@ const ThreadPageConversationContinue = ({ id }: ThreadPageConversationContinuePr
             {t("thread.continueHint")}
           </Typography>
         </div>
+
         <CopyInput
           variant="link"
           className="field-sizing-content w-auto"
           value={`curl -s "${APP_URL}/api/threads/${id}/md" | claude`}
         />
+
         <Typography variant="small" color="muted">
           {t("thread.continueDescription")}
         </Typography>

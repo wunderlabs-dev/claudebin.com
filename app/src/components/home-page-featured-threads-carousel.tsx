@@ -14,7 +14,7 @@ import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 import { SvgIconArrowRight } from "@/components/icon/svg-icon-arrow-right";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { NavLink } from "@/components/ui/nav";
+import { NavLabel, NavLink } from "@/components/ui/nav";
 import { Typography } from "@/components/ui/typography";
 
 import { HomePageFeaturedThreadsListItem } from "@/components/home-page-featured-threads-list-item";
@@ -71,9 +71,9 @@ const HomePageFeaturedThreadsCarousel = ({
         </div>
       </div>
 
-      <Container size="lg" className="flex justify-end">
-        <NavLink href="/threads" className="flex items-center gap-1">
-          {t("home.seeMoreThreads")}
+      <Container size="lg" className="flex justify-end pb-1">
+        <NavLink href="/threads">
+          <NavLabel>{t("home.seeMoreThreads")}</NavLabel>
           <SvgIconArrowRight size="sm" />
         </NavLink>
       </Container>
