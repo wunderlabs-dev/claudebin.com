@@ -23,7 +23,7 @@ const navLinkVariants = cva(
     variants: {
       variant: {
         default: "hover:text-orange-50",
-        active: "text-orange-50 [&>svg]:text-white",
+        active: "text-orange-50",
       },
     },
     defaultVariants: {
