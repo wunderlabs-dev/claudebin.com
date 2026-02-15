@@ -73,13 +73,11 @@ const HomePageFeaturedThreadsCarousel = ({
 
       <Container size="lg" className="flex justify-end pb-1">
         <NavLink href="/threads">
-          <NavLabel>
-            {t("home.seeMoreThreads")}
-          </NavLabel>
+          <NavLabel>{t("home.seeMoreThreads")}</NavLabel>
           <SvgIconArrowRight size="sm" />
         </NavLink>
       </Container>
-    </section >
+    </section>
   );
 };
 
