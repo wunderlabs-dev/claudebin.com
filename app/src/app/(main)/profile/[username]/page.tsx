@@ -43,17 +43,14 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // const threads = await sessions.getByUserId(
-  //   supabase,
-  //   profile.id,
-  //   USER_PROFILE_THREADS_LIMIT,
-  //   user?.id,
-  // );
+  const threads = await sessions.getByUserId(
+    supabase,
+    profile.id,
+    USER_PROFILE_THREADS_LIMIT,
+    user?.id,
+  );
 
-  const threads = []
-  const isOwner = false
-
-  // const isOwner = user?.id === profile.id;
+  const isOwner = user?.id === profile.id;
 
   return (
     <>
@@ -73,18 +70,16 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         </div>
 
         <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
-          {not(isOwner) && isEmpty(threads) ? (
-            <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
-              <div className="flex items-center gap-3">
-                <SvgIconLine size="md" color="accent" />
-                <Typography variant="h4">{t("user.recentThreads")}</Typography>
-              </div>
-              <NavLink href="/threads">
-                <NavLabel>{t("user.seeAllThreads")}</NavLabel>
-                <SvgIconArrowRight size="sm" />
-              </NavLink>
+          <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
+            <div className="flex items-center gap-3">
+              <SvgIconLine size="md" color="accent" />
+              <Typography variant="h4">{t("user.recentThreads")}</Typography>
             </div>
-          ) : null}
+            <NavLink href="/threads">
+              <NavLabel>{t("user.seeAllThreads")}</NavLabel>
+              <SvgIconArrowRight size="sm" />
+            </NavLink>
+          </div>
 
           <div className="flex flex-col gap-8">
             {threads.length ? (
@@ -96,7 +91,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             ) : null}
 
             {isEmpty(threads) ? (
-              <Fragment>{isOwner ? <ProfilePageQuickStart /> : <ProfilePageNoThreads />}</Fragment>
+              <Fragment>
+                <ProfilePageNoThreads />
+                <ProfilePageQuickStart />
+              </Fragment>
             ) : null}
 
             {isOwner ? <ProfilePageDangerZoneContainer /> : null}
