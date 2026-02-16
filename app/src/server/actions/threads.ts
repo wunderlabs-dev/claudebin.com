@@ -1,6 +1,7 @@
 "use server";
 
 import { isNil } from "ramda";
+import { revalidateTag } from "next/cache";
 
 import { createClient } from "@/server/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/server/repos/sessions";
@@ -38,11 +39,12 @@ export const deleteThread = async (sessionId: string) => {
     throw new Error("Session not found or not owned by user");
   }
 
-  const storagePath = session.storagePath;
-
   await sessions.delete(supabase, sessionId);
 
-  if (storagePath) {
-    await sessions.deleteFile(supabase, storagePath);
+  revalidateTag(`thread:${sessionId}`, "max");
+  revalidateTag(`messages:${sessionId}`, "max");
+
+  if (session.storagePath) {
+    await sessions.deleteFile(supabase, session.storagePath);
   }
 };
