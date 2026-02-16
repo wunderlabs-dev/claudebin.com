@@ -42,7 +42,8 @@ export const deleteThread = async (sessionId: string) => {
   const storagePath = session.storagePath;
 
   await sessions.delete(supabase, sessionId);
-  revalidateTag(`thread:${sessionId}`, "minutes");
+  revalidateTag(`thread:${sessionId}`, "max");
+  revalidateTag(`messages:${sessionId}`, "max");
 
   if (storagePath) {
     await sessions.deleteFile(supabase, storagePath);

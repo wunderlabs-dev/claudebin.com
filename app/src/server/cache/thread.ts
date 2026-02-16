@@ -9,7 +9,7 @@ import { sessions } from "@/server/repos/sessions";
 // Returns thread + author profile without like status (hasLiked is fetched client-side)
 // Private threads are returned too — access control happens in the page component
 export const getCachedThread = async (id: string) => {
-  cacheLife("minutes");
+  cacheLife("max");
   cacheTag(`thread:${id}`);
 
   const supabase = createServiceClient();

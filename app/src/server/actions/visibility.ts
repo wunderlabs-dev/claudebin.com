@@ -27,7 +27,7 @@ export const toggleVisibility = async (sessionId: string) => {
     isPublic: not(session.isPublic),
   });
 
-  revalidateTag(`thread:${sessionId}`, "minutes");
+  revalidateTag(`thread:${sessionId}`, "max");
 
   return {
     isPublic: not(session.isPublic),
