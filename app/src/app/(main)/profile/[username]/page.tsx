@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from "ramda";
+import { isEmpty, isNil, not } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -19,6 +19,7 @@ import { NavLabel, NavLink } from "@/components/ui/nav";
 
 import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
+import { ProfilePageNoThreads } from "@/components/profile-page-no-threads";
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
 
@@ -48,6 +49,8 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     user?.id,
   );
 
+  const isOwner = user?.id === profile.id;
+
   return (
     <>
       <Container
@@ -66,7 +69,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         </div>
 
         <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
-          {threads.length ? (
+          {not(isOwner) && isEmpty(threads) ? (
             <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
               <div className="flex items-center gap-3">
                 <SvgIconLine size="md" color="accent" />
@@ -88,8 +91,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               </div>
             ) : null}
 
-            {user?.id === profile.id && isEmpty(threads) ? <ProfilePageQuickStart /> : null}
-            {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
+            {not(isOwner) && isEmpty(threads) ? <ProfilePageNoThreads /> : null}
+            {isOwner && isEmpty(threads) ? <ProfilePageQuickStart /> : null}
+            {isOwner ? <ProfilePageDangerZoneContainer /> : null}
           </div>
         </div>
       </Container>
