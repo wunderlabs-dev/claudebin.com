@@ -13,8 +13,8 @@ import { List, ListItem } from "@/components/ui/list";
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";
 import { SvgIconClock } from "@/components/icon/svg-icon-clock";
 import { SvgIconEye } from "@/components/icon/svg-icon-eye";
+import { SvgIconEyeOff } from "@/components/icon/svg-icon-eye-off";
 import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
-import { SvgIconShield } from "@/components/icon/svg-icon-shield";
 
 type ProfilePageThreadListItemProps = {
   thread: Session;
@@ -54,7 +54,7 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
                 thread.isPublic ? (
                   <SvgIconEye size="sm" color="neutral" />
                 ) : (
-                  <SvgIconShield size="sm" color="neutral" />
+                  <SvgIconEyeOff size="sm" color="neutral" />
                 )
               }
             >
