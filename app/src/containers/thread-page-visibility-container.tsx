@@ -10,7 +10,8 @@ import { toggleVisibility } from "@/server/actions/visibility";
 
 import { cn } from "@/utils/helpers";
 
-import { SvgIconGlobe } from "@/components/icon/svg-icon-globe";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
+import { SvgIconEyeOff } from "@/components/icon/svg-icon-eye-off";
 import { Badge } from "@/components/ui/badge";
 
 type ThreadPageVisibilityContainerProps = {
@@ -50,7 +51,7 @@ const ThreadPageVisibilityContainer = ({
   if (not(isAuthor)) {
     return (
       <Badge variant={isPublic ? "success" : "neutral"}>
-        <SvgIconGlobe size="sm" />
+        {isPublic ? <SvgIconEye size="sm" /> : <SvgIconEyeOff size="sm" />}
         {isPublic ? t("common.public") : t("common.unlisted")}
       </Badge>
     );
@@ -64,7 +65,7 @@ const ThreadPageVisibilityContainer = ({
       className={cn("cursor-pointer transition-opacity", isPending ? "opacity-50" : "opacity-100")}
     >
       <Badge variant={isPublic ? "success" : "neutral"}>
-        <SvgIconGlobe size="sm" />
+        {isPublic ? <SvgIconEye size="sm" /> : <SvgIconEyeOff size="sm" />}
         {isPublic ? t("common.public") : t("common.unlisted")}
       </Badge>
     </button>
