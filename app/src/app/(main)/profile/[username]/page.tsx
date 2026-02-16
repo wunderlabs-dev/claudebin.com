@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { isEmpty, isNil, not } from "ramda";
+import { isEmpty, isNil } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
