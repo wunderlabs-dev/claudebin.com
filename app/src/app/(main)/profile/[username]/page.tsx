@@ -18,11 +18,11 @@ import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 import { NavLabel, NavLink } from "@/components/ui/nav";
 
-import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
 import { ProfilePageNoThreads } from "@/components/profile-page-no-threads";
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
+import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 
 type ProfilePageProps = {
   params: Promise<{ username: string }>;
@@ -70,18 +70,16 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         </div>
 
         <div className="col-span-1 grid grid-cols-1 lg:col-span-8">
-          {not(isOwner) && isEmpty(threads) ? (
-            <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
-              <div className="flex items-center gap-3">
-                <SvgIconLine size="md" color="accent" />
-                <Typography variant="h4">{t("user.recentThreads")}</Typography>
-              </div>
-              <NavLink href="/threads">
-                <NavLabel>{t("user.seeAllThreads")}</NavLabel>
-                <SvgIconArrowRight size="sm" />
-              </NavLink>
+          <div className="col-span-12 flex justify-between border border-gray-250 p-4 md:p-8 lg:items-center">
+            <div className="flex items-center gap-3">
+              <SvgIconLine size="md" color="accent" />
+              <Typography variant="h4">{t("user.recentThreads")}</Typography>
             </div>
-          ) : null}
+            <NavLink href="/threads">
+              <NavLabel>{t("user.seeAllThreads")}</NavLabel>
+              <SvgIconArrowRight size="sm" />
+            </NavLink>
+          </div>
 
           <div className="flex flex-col gap-8">
             {threads.length ? (
@@ -93,7 +91,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             ) : null}
 
             {isEmpty(threads) ? (
-              <Fragment>{isOwner ? <ProfilePageQuickStart /> : <ProfilePageNoThreads />}</Fragment>
+              <Fragment>
+                <ProfilePageNoThreads />
+                <ProfilePageQuickStart />
+              </Fragment>
             ) : null}
 
             {isOwner ? <ProfilePageDangerZoneContainer /> : null}
