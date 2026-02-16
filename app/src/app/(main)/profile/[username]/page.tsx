@@ -1,4 +1,4 @@
-import { isNil } from "ramda";
+import { isEmpty, isNil } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -79,10 +79,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
                   <ProfilePageThreadListItem key={thread.id} thread={thread} />
                 ))}
               </div>
-            ) : (
-              <ProfilePageQuickStart />
-            )}
+            ) : null}
 
+            {isEmpty(threads) && user?.id === profile.id ? <ProfilePageQuickStart /> : null}
             {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
           </div>
         </div>
