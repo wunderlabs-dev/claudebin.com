@@ -32,7 +32,7 @@ const ThreadPageConversationAttachmentChip = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <Chip
-            className="cursor-default"
+            className="cursor-zoom-in"
             icon={<SvgIconFile size="xs" />}
             label={attachment.mediaType ?? t("common.image")}
           />

@@ -1,10 +1,12 @@
-import { isNil } from "ramda";
+import { isEmpty, isNil } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { createClient } from "@/server/supabase/server";
 import { profiles } from "@/server/repos/profiles";
 import { sessions } from "@/server/repos/sessions";
+
+import { USER_PROFILE_THREADS_LIMIT } from "@/utils/constants";
 
 import { TrackingPixel } from "@/components/tracking-pixel";
 
@@ -39,7 +41,12 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const threads = await sessions.getByUserId(supabase, profile.id, 20, user?.id);
+  const threads = await sessions.getByUserId(
+    supabase,
+    profile.id,
+    USER_PROFILE_THREADS_LIMIT,
+    user?.id,
+  );
 
   return (
     <>
@@ -79,10 +86,9 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
                   <ProfilePageThreadListItem key={thread.id} thread={thread} />
                 ))}
               </div>
-            ) : (
-              <ProfilePageQuickStart />
-            )}
+            ) : null}
 
+            {user?.id === profile.id && isEmpty(threads) ? <ProfilePageQuickStart /> : null}
             {user?.id === profile.id ? <ProfilePageDangerZoneContainer /> : null}
           </div>
         </div>
