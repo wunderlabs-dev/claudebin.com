@@ -37,11 +37,14 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Pull Requests
 
+We'd love to see your contributions! When submitting a PR, please:
+
 1. Create a feature branch from `develop`
 2. Make your changes
 3. Ensure all checks pass
-4. Submit a PR to `develop`
-5. Wait for review
+4. Include a link to the Claudebin thread (via `/claudebin:share`) in your PR description — it helps reviewers follow your thought process and makes reviews way more fun
+5. Submit a PR to `develop`
+6. Wait for review
 
 ## Project Structure
 
