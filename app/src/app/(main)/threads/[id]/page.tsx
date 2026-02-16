@@ -7,7 +7,6 @@ import { format } from "date-fns";
 
 import copy from "@/copy/en-EN.json";
 
-import { createClient } from "@/server/supabase/server";
 import { getCachedThread } from "@/server/cache/thread";
 
 import { getProjectName } from "@/utils/helpers";
@@ -35,12 +34,7 @@ export const generateMetadata = async ({
 
   const thread = await getCachedThread(id);
 
-  if (
-    isNil(thread) ||
-    !thread.isPublic ||
-    isNil(thread.title) ||
-    isNil(thread.profiles?.username)
-  ) {
+  if (isNil(thread) || isNil(thread.title) || isNil(thread.profiles?.username)) {
     return;
   }
 
@@ -69,18 +63,6 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
 
   if (isNil(thread)) {
     notFound();
-  }
-
-  // Private threads require auth — dynamic path (cheap cookie read)
-  if (!thread.isPublic) {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user?.id !== thread.userId) {
-      notFound();
-    }
   }
 
   return (
