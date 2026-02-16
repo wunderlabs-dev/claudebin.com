@@ -12,6 +12,7 @@ import { List, ListItem } from "@/components/ui/list";
 
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";
 import { SvgIconClock } from "@/components/icon/svg-icon-clock";
+import { SvgIconEye } from "@/components/icon/svg-icon-eye";
 import { SvgIconHeart } from "@/components/icon/svg-icon-heart";
 import { SvgIconShield } from "@/components/icon/svg-icon-shield";
 
@@ -48,7 +49,15 @@ const ProfilePageThreadListItem = ({ thread, ...props }: ProfilePageThreadListIt
             <ListItem icon={<SvgIconClock size="sm" color="neutral" />}>
               {t("common.ago", { date: formatDistanceToNow(new Date(thread.createdAt)) })}
             </ListItem>
-            <ListItem icon={<SvgIconShield size="sm" color="neutral" />}>
+            <ListItem
+              icon={
+                thread.isPublic ? (
+                  <SvgIconEye size="sm" color="neutral" />
+                ) : (
+                  <SvgIconShield size="sm" color="neutral" />
+                )
+              }
+            >
               {thread.isPublic ? t("common.public") : t("common.unlisted")}
             </ListItem>
           </List>
