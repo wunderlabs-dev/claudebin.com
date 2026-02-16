@@ -69,6 +69,7 @@
     "createdOn": "Created on {date}",
     "threads": "{count} threads",
     "views": "{count} views",
+    "noThreads": "No threads published yet.",
     "shareGuideTitle": "How to share your first conversation?",
     "shareGuideStep1": "Install the Claudebin plugin",
     "shareGuideStep2": "Share your conversation",
