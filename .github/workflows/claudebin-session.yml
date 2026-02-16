@@ -1,0 +1,26 @@
+name: Claudebin Session Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches: [main]
+
+jobs:
+  check-session-link:
+    name: Check for Claudebin session link
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR body for claudebin.com link
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if echo "$PR_BODY" | grep -qiE 'https?://claudebin\.com/threads/[a-z0-9]'; then
+            echo "Claudebin session link found."
+          else
+            echo "::error::No claudebin.com session link found in the PR description."
+            echo ""
+            echo "Please attach a Claudebin session link (e.g. https://claudebin.com/threads/abc123)"
+            echo "to the 'Claudebin Session' section of your PR description."
+            exit 1
+          fi
