@@ -8,6 +8,8 @@ export const THREAD_GRID_TITLE_TRUNCATE_LENGTH = 36;
 export const THREADS_PAGE_SIZE = 20;
 export const THREADS_PAGE_INITIAL = 0;
 
+export const USER_PROFILE_THREADS_LIMIT = 20;
+
 export const SESSION_ID_LENGTH = 10;
 export const SESSION_MAX_SIZE_BYTES = 50 * 1024 * 1024;
 
