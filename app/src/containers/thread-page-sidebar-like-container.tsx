@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { not, inc, dec } from "ramda";
+import { not, inc, dec, isNotNil } from "ramda";
 
 import { like, getLikeStatus } from "@/server/actions/like";
 
@@ -29,16 +29,14 @@ const ThreadPageSidebarLikeContainer = ({ id, likeCount }: ThreadPageSidebarLike
   const { data: initialLiked } = useQuery({
     queryKey: ["like-status", id],
     queryFn: () => getLikeStatus(id),
-    enabled: !!user,
+    enabled: isNotNil(user),
   });
 
   const [count, setCount] = useState(likeCount);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState<boolean | null>();
 
   useEffect(() => {
-    if (initialLiked !== undefined) {
-      setLiked(initialLiked);
-    }
+    setLiked(initialLiked);
   }, [initialLiked]);
 
   const { mutate, isPending } = useMutation({
