@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { not, inc, dec } from "ramda";
+import { not, inc, dec, isNotNil } from "ramda";
 
-import { like } from "@/server/actions/like";
+import { like, getLikeStatus } from "@/server/actions/like";
 
 import { cn } from "@/utils/helpers";
 import { useAuth } from "@/context/auth";
@@ -17,22 +17,27 @@ import { Typography } from "@/components/ui/typography";
 
 type ThreadPageSidebarLikeContainerProps = {
   id: string;
-  initialLiked?: boolean;
   likeCount: number;
 };
 
-const ThreadPageSidebarLikeContainer = ({
-  id,
-  initialLiked,
-  likeCount,
-}: ThreadPageSidebarLikeContainerProps) => {
+const ThreadPageSidebarLikeContainer = ({ id, likeCount }: ThreadPageSidebarLikeContainerProps) => {
   const t = useTranslations();
   const router = useRouter();
 
   const { user } = useAuth();
 
+  const { data: initialLiked } = useQuery({
+    queryKey: ["like-status", id],
+    queryFn: () => getLikeStatus(id),
+    enabled: isNotNil(user),
+  });
+
   const [count, setCount] = useState(likeCount);
-  const [liked, setLiked] = useState(initialLiked);
+  const [liked, setLiked] = useState<boolean | null>();
+
+  useEffect(() => {
+    setLiked(initialLiked);
+  }, [initialLiked]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => like(id),

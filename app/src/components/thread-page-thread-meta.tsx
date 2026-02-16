@@ -25,7 +25,6 @@ type ThreadPageThreadMetaProps = {
   workingDir?: string | null;
   modelName?: string | null;
   messageCount?: number | null;
-  initialLiked?: boolean;
   isPublic?: boolean;
   isAuthor?: boolean;
   className?: string;
@@ -40,7 +39,6 @@ const ThreadPageThreadMeta = ({
   workingDir,
   modelName,
   messageCount,
-  initialLiked,
   isPublic,
   isAuthor,
   className,
@@ -68,7 +66,7 @@ const ThreadPageThreadMeta = ({
         <ListItem icon={<SvgIconEye size="sm" color="neutral" />}>
           {t("common.views", { count: viewCount })}
         </ListItem>
-        <ThreadPageSidebarLikeContainer id={id} initialLiked={initialLiked} likeCount={likeCount} />
+        <ThreadPageSidebarLikeContainer id={id} likeCount={likeCount} />
       </List>
     </div>
   );

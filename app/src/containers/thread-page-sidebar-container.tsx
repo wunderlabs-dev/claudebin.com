@@ -8,6 +8,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { APP_URL } from "@/utils/constants";
 import { mediaQueries } from "@/utils/media-queries";
 
+import { useAuth } from "@/context/auth";
 import { useThreadEmbed } from "@/context/thread-embed";
 
 import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
@@ -29,15 +30,13 @@ type ThreadPageSidebarContainerProps = {
   modelName?: string | null;
   messageCount?: number | null;
   isPublic: boolean;
-  isAuthor: boolean;
-  initialLiked?: boolean;
+  userId: string;
 };
 
 const ThreadPageSidebarContainer = ({
   id,
   isPublic,
-  isAuthor,
-  initialLiked,
+  userId,
   createdAt,
   workingDir,
   modelName,
@@ -50,7 +49,10 @@ const ThreadPageSidebarContainer = ({
   const lg = useMediaQuery(mediaQueries.lg, { initializeWithValue: isServer });
   const xl = useMediaQuery(mediaQueries.xl, { initializeWithValue: isServer });
 
+  const { user } = useAuth();
   const { view, from, to, start, setView } = useThreadEmbed();
+
+  const isAuthor = user?.id === userId;
 
   return (
     <div className="flex flex-col items-start gap-6">
@@ -68,7 +70,6 @@ const ThreadPageSidebarContainer = ({
               workingDir={workingDir}
               modelName={modelName}
               messageCount={messageCount}
-              initialLiked={initialLiked}
             />
           ) : null}
 
