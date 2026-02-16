@@ -14,7 +14,7 @@ const ProfilePageNoThreads = ({ className, ...props }: ProfilePageNoThreadsProps
 
   return (
     <div
-      className={cn("-mt-px flex items-center gap-3 border border-gray-250 p-8", className)}
+      className={cn("flex items-center gap-3 border-gray-250 border-x border-b p-8", className)}
       {...props}
     >
       <SvgIconLine size="md" color="neutral" />

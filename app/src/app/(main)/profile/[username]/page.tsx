@@ -18,11 +18,11 @@ import { Container } from "@/components/ui/container";
 import { Typography } from "@/components/ui/typography";
 import { NavLabel, NavLink } from "@/components/ui/nav";
 
-import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 import { ProfilePageThreadListItem } from "@/components/profile-page-thread-list-item";
 import { ProfilePageNoThreads } from "@/components/profile-page-no-threads";
 import { ProfilePageQuickStart } from "@/components/profile-page-quick-start";
 import { ProfilePageUserInfoSidebar } from "@/components/profile-page-user-info-sidebar";
+import { ProfilePageDangerZoneContainer } from "@/containers/profile-page-danger-zone-container";
 
 type ProfilePageProps = {
   params: Promise<{ username: string }>;
@@ -43,14 +43,17 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const threads = await sessions.getByUserId(
-    supabase,
-    profile.id,
-    USER_PROFILE_THREADS_LIMIT,
-    user?.id,
-  );
+  // const threads = await sessions.getByUserId(
+  //   supabase,
+  //   profile.id,
+  //   USER_PROFILE_THREADS_LIMIT,
+  //   user?.id,
+  // );
 
-  const isOwner = user?.id === profile.id;
+  const threads = []
+  const isOwner = false
+
+  // const isOwner = user?.id === profile.id;
 
   return (
     <>
