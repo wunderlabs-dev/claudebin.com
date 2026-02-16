@@ -93,7 +93,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             {isEmpty(threads) ? (
               <Fragment>
                 <ProfilePageNoThreads />
-                <ProfilePageQuickStart />
+                {isOwner ? <ProfilePageQuickStart /> : null}
               </Fragment>
             ) : null}
 
