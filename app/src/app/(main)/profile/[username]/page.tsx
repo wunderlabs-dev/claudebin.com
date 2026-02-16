@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { isEmpty, isNil, not } from "ramda";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -91,8 +92,10 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               </div>
             ) : null}
 
-            {not(isOwner) && isEmpty(threads) ? <ProfilePageNoThreads /> : null}
-            {isOwner && isEmpty(threads) ? <ProfilePageQuickStart /> : null}
+            {isEmpty(threads) ? (
+              <Fragment>{isOwner ? <ProfilePageQuickStart /> : <ProfilePageNoThreads />}</Fragment>
+            ) : null}
+
             {isOwner ? <ProfilePageDangerZoneContainer /> : null}
           </div>
         </div>
