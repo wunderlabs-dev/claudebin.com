@@ -46,11 +46,12 @@ const ThreadPageSidebarContainer = ({
   messageCount,
 }: ThreadPageSidebarContainerProps) => {
   const t = useTranslations();
-  const { user } = useAuth();
-  const isAuthor = user?.id === userId;
   const lg = useMediaQuery(mediaQueries.lg, { initializeWithValue: isServer });
 
+  const { user } = useAuth();
   const { view, from, to, start, setView } = useThreadEmbed();
+
+  const isAuthor = user?.id === userId;
 
   return (
     <div className="flex flex-col items-start gap-6">

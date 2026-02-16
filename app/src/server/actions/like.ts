@@ -6,14 +6,16 @@ import { revalidateTag } from "next/cache";
 import { createClient } from "@/server/supabase/server";
 import { sessionLikes } from "@/server/repos/sessionLikes";
 
-export const getLikeStatus = async (sessionId: string): Promise<boolean> => {
+export const getLikeStatus = async (sessionId: string) => {
   const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (isNil(user)) return false;
+  if (isNil(user)) {
+    return null;
+  }
 
   return sessionLikes.hasLiked(supabase, sessionId, user.id);
 };
@@ -30,6 +32,8 @@ export const like = async (sessionId: string) => {
   }
 
   const result = await sessionLikes.toggle(supabase, sessionId, user.id);
+  
   revalidateTag(`thread:${sessionId}`, "max");
+
   return result;
 };
