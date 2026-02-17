@@ -36,7 +36,6 @@ export const GET = async (request: NextRequest): Promise<NextResponse<AuthPollRe
       user: {
         id: session.profile?.id ?? session.userId,
         name: session.profile?.name ?? null,
-        email: session.profile?.email ?? null,
         avatar_url: session.profile?.avatarUrl ?? null,
       },
     });

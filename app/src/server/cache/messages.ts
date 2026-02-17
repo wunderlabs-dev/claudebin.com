@@ -1,16 +1,10 @@
-"use cache";
-
-import { cacheLife, cacheTag } from "next/cache";
-
 import { createServiceClient } from "@/server/supabase/service";
 import { messages, type PaginatedMessages } from "@/server/repos/messages";
 
-// ABOUTME: Cached messages fetch — messages are immutable after session processing
+// ABOUTME: Messages fetch — messages are immutable after session processing
 // Uses service client to bypass RLS (access control happens at page level)
+// TODO: Re-add "use cache" caching once cacheComponents is stable
 export const getCachedMessages = async (sessionId: string): Promise<PaginatedMessages> => {
-  cacheLife("max");
-  cacheTag(`messages:${sessionId}`);
-
   const supabase = createServiceClient();
   return messages.getBySessionId(supabase, sessionId);
 };

@@ -24,6 +24,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
+import { sanitizeUrl } from "@/utils/sanitizeUrl";
+
 import { ThreadPageConversationAttachmentChip } from "@/components/thread-page-conversation-attachment-chip";
 
 type CodeElementProps = {
@@ -73,7 +75,12 @@ const createComponents = (role: Role) => ({
     <Typography variant="small">{children}</Typography>
   ),
   a: ({ href, children }: { href?: string; children?: ReactNode }) => (
-    <a href={href} className="text-orange-50 hover:underline">
+    <a
+      href={sanitizeUrl(href)}
+      rel="noopener noreferrer"
+      target="_blank"
+      className="text-orange-50 hover:underline"
+    >
       {children}
     </a>
   ),
@@ -103,6 +110,7 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
         <Markdown
           remarkPlugins={REMARK_PLUGINS}
           rehypePlugins={REHYPE_PLUGINS}
+          urlTransform={sanitizeUrl}
           components={components}
         >
           {block.text}

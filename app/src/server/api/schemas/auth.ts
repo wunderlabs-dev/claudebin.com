@@ -31,7 +31,6 @@ export const userSchema = z
   .object({
     id: z.string(),
     name: z.string().nullable(),
-    email: z.string().nullable(),
     avatar_url: z.string().nullable(),
   })
   .openapi("User");
