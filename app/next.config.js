@@ -10,8 +10,6 @@ const root = process.env.VERCEL ? "/vercel/path0" : resolve(__dirname, "../..");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  dynamicIO: false,
-  cacheComponents: true,
   outputFileTracingRoot: root,
   turbopack: {
     root: root,

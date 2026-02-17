@@ -30,7 +30,7 @@ const HomePageTutorialsList = ({ ...props }: HomePageTutorialsListProps) => {
           <div className="mx-auto w-full max-w-6xl rounded-3xl border border-gray-500/20 bg-gray-200/50 p-2">
             {tutorials.map((tutorial) => (
               <TabsContent key={tutorial.id} value={tutorial.id}>
-                <video src={tutorial.src} className="size-full rounded-2xl" controls>
+                <video src={tutorial.src} poster="/images/poster-1210x680.png" className="size-full rounded-2xl" controls>
                   <track kind="captions" />
                 </video>
               </TabsContent>

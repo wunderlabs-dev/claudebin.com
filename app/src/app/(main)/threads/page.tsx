@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { getTranslations } from "next-intl/server";
 
 import { createClient } from "@/server/supabase/server";
