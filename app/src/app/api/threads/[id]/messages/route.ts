@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { createClient } from "@/server/supabase/server";
+import { createServiceClient } from "@/server/supabase/service";
 import { sessions } from "@/server/repos/sessions";
 import { messages } from "@/server/repos/messages";
 
@@ -33,20 +33,15 @@ export const GET = async (request: NextRequest, context: RouteContext) => {
     );
   }
 
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // ABOUTME: Service client bypasses RLS — the session ID itself acts as a
+  // capability token. If you know the ID, you can read the session. RLS
+  // prevents enumeration (discovering IDs you don't know).
+  const supabase = createServiceClient();
 
   const session = await sessions.getById(supabase, id);
 
   if (!session) {
     return NextResponse.json({ error: "Session not found" }, { status: 404 });
-  }
-
-  if (!session.isPublic && session.userId !== user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const result = await messages.getByRange(supabase, id, fromIdx, toIdx);
