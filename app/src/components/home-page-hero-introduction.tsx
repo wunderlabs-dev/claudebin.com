@@ -45,7 +45,7 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                   <div className="flex items-center justify-between">
                     <TabsList>
                       <TabsTrigger value="oneClick">{t("home.oneClickInstall")}</TabsTrigger>
-                      <TabsTrigger value="claudeCode">{t("home.claudeInstall")}</TabsTrigger>
+                      <TabsTrigger value="shareSession">{t("home.shareSession")}</TabsTrigger>
                     </TabsList>
 
                     <Button
@@ -63,8 +63,8 @@ const HomePageHeroIntroduction = ({ className, ...props }: HomePageHeroIntroduct
                   <TabsContent value="oneClick">
                     <CopyInput value={t("commands.oneClickInstall")} />
                   </TabsContent>
-                  <TabsContent value="claudeCode">
-                    <CopyInput value={t("commands.claudeInstall")} />
+                  <TabsContent value="shareSession">
+                    <CopyInput value={t("commands.share")} />
                   </TabsContent>
                 </Tabs>
               ) : (

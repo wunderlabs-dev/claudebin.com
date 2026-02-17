@@ -25,7 +25,6 @@
   },
   "commands": {
     "oneClickInstall": "claude plugin marketplace add wunderlabs-dev/claudebin && claude plugin install claudebin@claudebin-marketplace",
-    "claudeInstall": "curl https://claudebin.com/md | claude",
     "share": "/claudebin:share"
   },
   "appBar": {
@@ -39,7 +38,7 @@
     "badge": "Free & open source",
     "description": "Turn your Claude sessions into shareable, embeddable, and continuable artifacts.",
     "oneClickInstall": "One-click install",
-    "claudeInstall": "Claude install",
+    "shareSession": "Share session",
     "star": "Star on GitHub",
     "installation": "Installation",
     "howToUse": "How to Use",

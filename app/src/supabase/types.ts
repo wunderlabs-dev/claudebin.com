@@ -120,7 +120,6 @@ export type Database = {
           avatarUrl: string | null;
           createdAt: string;
           deletedAt: string | null;
-          email: string | null;
           id: string;
           name: string | null;
           updatedAt: string;
@@ -131,7 +130,6 @@ export type Database = {
           avatarUrl?: string | null;
           createdAt?: string;
           deletedAt?: string | null;
-          email?: string | null;
           id: string;
           name?: string | null;
           updatedAt?: string;
@@ -142,7 +140,6 @@ export type Database = {
           avatarUrl?: string | null;
           createdAt?: string;
           deletedAt?: string | null;
-          email?: string | null;
           id?: string;
           name?: string | null;
           updatedAt?: string;

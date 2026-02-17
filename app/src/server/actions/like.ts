@@ -32,7 +32,7 @@ export const like = async (sessionId: string) => {
   }
 
   const result = await sessionLikes.toggle(supabase, sessionId, user.id);
-  
+
   revalidateTag(`thread:${sessionId}`, "max");
 
   return result;

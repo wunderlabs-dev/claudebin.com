@@ -15,15 +15,21 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 type AuthProviderProps = {
-  initialUser: User | null;
   children: React.ReactNode;
 };
 
-const AuthProvider = ({ initialUser, children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(initialUser);
+const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
+
+    // ABOUTME: Fetch the initial user on mount, then subscribe to auth changes.
+    // This replaces the previous server-side getUser() call which blocked the
+    // root layout from streaming in Next.js 16.
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
 
     const {
       data: { subscription },

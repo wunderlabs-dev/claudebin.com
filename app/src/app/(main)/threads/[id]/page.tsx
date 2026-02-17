@@ -5,10 +5,9 @@ import { getTranslations } from "next-intl/server";
 import { isNil } from "ramda";
 import { format } from "date-fns";
 
-import copy from "@/copy/en-EN.json";
-
 import { getCachedThread } from "@/server/cache/thread";
 
+import copy from "@/copy/en-EN.json";
 import { getProjectName } from "@/utils/helpers";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
