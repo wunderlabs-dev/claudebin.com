@@ -343,7 +343,25 @@ export const parseSkillMeta = (content: string): SkillMetaData => {
 };
 
 // Local command patterns
+// ABOUTME: Local commands use reversed tag order vs skill commands:
+// Local:  <command-name>/clear</command-name>\n<command-message>clear</command-message>
+// Skill:  <command-message>name</command-message>\n<command-name>/name</command-name>
+const LOCAL_COMMAND_REGEX =
+  /<command-name>\/([^<]+)<\/command-name>\s*\n<command-message>([^<]+)<\/command-message>/;
 const LOCAL_COMMAND_STDOUT_REGEX = /<local-command-stdout>([\s\S]*?)<\/local-command-stdout>/;
+const LOCAL_COMMAND_CAVEAT_REGEX = /<local-command-caveat>[\s\S]*?<\/local-command-caveat>/;
+
+export const parseLocalCommand = (content: string): SkillCommandData | null => {
+  const match = content.match(LOCAL_COMMAND_REGEX);
+  if (!match) return null;
+  return {
+    name: match[2].trim(),
+    commandName: `/${match[1].trim()}`,
+  };
+};
+
+export const isLocalCommandMeta = (content: string): boolean =>
+  LOCAL_COMMAND_STDOUT_REGEX.test(content) || LOCAL_COMMAND_CAVEAT_REGEX.test(content);
 
 export const parseLocalCommandOutput = (content: string): { output?: string } => {
   const match = content.match(LOCAL_COMMAND_STDOUT_REGEX);
