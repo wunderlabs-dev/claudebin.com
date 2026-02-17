@@ -1,7 +1,6 @@
 "use server";
 
 import { not, isNil } from "ramda";
-import { revalidateTag } from "next/cache";
 
 import { createClient } from "@/server/supabase/server";
 import { sessions } from "@/server/repos/sessions";
@@ -27,8 +26,7 @@ export const toggleVisibility = async (sessionId: string) => {
     isPublic: not(session.isPublic),
   });
 
-  revalidateTag(`thread:${sessionId}`, "max");
-
+  // TODO: Re-add revalidateTag once cacheComponents is re-enabled
   return {
     isPublic: not(session.isPublic),
   };
