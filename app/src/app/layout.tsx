@@ -8,6 +8,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
+import { createClient } from "@/server/supabase/server";
+
 import copy from "@/copy/en-EN.json";
 
 import { cn } from "@/utils/helpers";
@@ -41,13 +43,18 @@ export const metadata: Metadata = {
 const RootLayout = async ({ children }: RootLayoutProps) => {
   const locale = await getLocale();
   const messages = await getMessages();
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <html lang={locale} className={cn(sans.variable, mono.variable)}>
       <body className="min-h-screen bg-fade bg-gray-100 font-sans text-white antialiased selection:bg-orange-50 selection:text-white">
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider initialUser={user}>{children}</AuthProvider>
           </NextIntlClientProvider>
         </QueryProvider>
 
