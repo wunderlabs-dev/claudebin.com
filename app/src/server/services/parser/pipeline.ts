@@ -7,6 +7,8 @@ import {
   MessageRole,
   parseSkillCommand,
   parseSkillMeta,
+  isLocalCommandOutput,
+  parseLocalCommandOutput,
   type SkillCommandData,
 } from "@/supabase/types/message";
 
@@ -85,6 +87,7 @@ export const createPipeline = (workingDir: string | null = null) => {
     msg.blocks.flatMap((b) => {
       if (b.type === BlockType.TEXT) return [(b as { text: string }).text];
       if (b.type === BlockType.SKILL) return [(b as { name: string }).name];
+      if (b.type === BlockType.LOCAL_COMMAND) return [(b as { name: string }).name];
       return [];
     });
 
@@ -216,14 +219,25 @@ export const createPipeline = (workingDir: string | null = null) => {
     if (!pipeline.pendingSkillCommand) return;
 
     const text = typeof content === "string" ? content : extractText(content);
-    const skillMeta = parseSkillMeta(text);
     resetMessageState();
-    emit({
-      type: BlockType.SKILL,
-      ...pipeline.pendingSkillCommand,
-      instructions: skillMeta.instructions,
-      output: skillMeta.output,
-    });
+
+    if (isLocalCommandOutput(text)) {
+      const { output } = parseLocalCommandOutput(text);
+      emit({
+        type: BlockType.LOCAL_COMMAND,
+        ...pipeline.pendingSkillCommand,
+        output,
+      });
+    } else {
+      const skillMeta = parseSkillMeta(text);
+      emit({
+        type: BlockType.SKILL,
+        ...pipeline.pendingSkillCommand,
+        instructions: skillMeta.instructions,
+        output: skillMeta.output,
+      });
+    }
+
     pipeline.pendingSkillCommand = null;
   };
 
@@ -261,13 +275,25 @@ export const createPipeline = (workingDir: string | null = null) => {
     if (!content) return false;
 
     if (isMeta && pipeline.pendingSkillCommand) {
-      const skillMeta = parseSkillMeta(extractText(content));
-      emit({
-        type: BlockType.SKILL,
-        ...pipeline.pendingSkillCommand,
-        instructions: skillMeta.instructions,
-        output: skillMeta.output,
-      });
+      const text = extractText(content);
+
+      if (isLocalCommandOutput(text)) {
+        const { output } = parseLocalCommandOutput(text);
+        emit({
+          type: BlockType.LOCAL_COMMAND,
+          ...pipeline.pendingSkillCommand,
+          output,
+        });
+      } else {
+        const skillMeta = parseSkillMeta(text);
+        emit({
+          type: BlockType.SKILL,
+          ...pipeline.pendingSkillCommand,
+          instructions: skillMeta.instructions,
+          output: skillMeta.output,
+        });
+      }
+
       pipeline.pendingSkillCommand = null;
       return true;
     }

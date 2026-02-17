@@ -160,6 +160,7 @@
     "mcp": "MCP",
     "mcpLabel": "{server} / {tool}",
     "skill": "Skill",
+    "command": "Command",
     "bytes": "Bytes",
     "error": "Error"
   },

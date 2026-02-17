@@ -1,6 +1,7 @@
 "use server";
 
 import { isNil } from "ramda";
+import { revalidateTag } from "next/cache";
 
 import { createClient } from "@/server/supabase/server";
 import { sessions, type GetPublicThreadsResult } from "@/server/repos/sessions";
@@ -40,7 +41,8 @@ export const deleteThread = async (sessionId: string) => {
 
   await sessions.delete(supabase, sessionId);
 
-  // TODO: Re-add revalidateTag once cacheComponents is re-enabled
+  revalidateTag(`thread-${sessionId}`, { expire: 0 });
+
   if (session.storagePath) {
     await sessions.deleteFile(supabase, session.storagePath);
   }
