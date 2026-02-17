@@ -28,7 +28,7 @@ const getByToken = async (
 ): Promise<(CliAuthSession & { profile: ProfilesRow | null }) | null> => {
   const { data, error } = await supabase
     .from("cli_auth_sessions")
-    .select("*, profiles(*)")
+    .select("*, profiles(id, name, avatarUrl, username)")
     .eq("sessionToken", sessionToken)
     .maybeSingle();
 
