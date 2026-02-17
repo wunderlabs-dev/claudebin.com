@@ -58,7 +58,9 @@ const HomePageFeaturedThreads = ({
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex cursor-grab select-none gap-4 border-transparent border-y active:cursor-grabbing">
           <div className="w-container-start shrink-0" aria-hidden="true" />
-          <Suspense>{children}</Suspense>
+          <Suspense>
+            {children}
+          </Suspense>
           <div className="w-container-start shrink-0" aria-hidden="true" />
         </div>
       </div>
