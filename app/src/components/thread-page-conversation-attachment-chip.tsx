@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import type { Attachment } from "@/supabase/types/message";
 
 import { THREAD_ATTACHMENT_SIZE } from "@/utils/constants";
+import { sanitizeUrl } from "@/utils/sanitizeUrl";
 
 import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import { Chip } from "@/components/ui/chip";
@@ -15,11 +16,15 @@ type ThreadPageConversationAttachmentChipProps = {
   attachment: Attachment;
 };
 
+const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/gif", "image/webp", "image/svg+xml"];
+
 const resolveDataUrlSrc = (attachment: Attachment) => {
   if (attachment.sourceType === "url") {
-    return attachment.data;
+    return sanitizeUrl(attachment.data);
   }
-  return `data:${attachment.mediaType ?? "image/png"};base64,${attachment.data}`;
+  const mediaType = attachment.mediaType ?? "image/png";
+  if (!ALLOWED_IMAGE_TYPES.includes(mediaType)) return "";
+  return `data:${mediaType};base64,${attachment.data}`;
 };
 
 const ThreadPageConversationAttachmentChip = ({
