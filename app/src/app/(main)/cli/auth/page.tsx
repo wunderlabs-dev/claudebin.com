@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { isNil } from "ramda";
 import { redirect } from "next/navigation";
 import { isPast } from "date-fns";
