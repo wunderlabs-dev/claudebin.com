@@ -22,6 +22,13 @@ describe("parseLocalCommand", () => {
     expect(result).toEqual({ name: "compact", commandName: "/compact" });
   });
 
+  test("parses local command with indented whitespace between tags", () => {
+    const content =
+      "<command-name>/clear</command-name>\n            <command-message>clear</command-message>\n            <command-args></command-args>";
+    const result = parseLocalCommand(content);
+    expect(result).toEqual({ name: "clear", commandName: "/clear" });
+  });
+
   test("returns null for skill command format", () => {
     const content =
       "<command-message>claudebin:share</command-message>\n<command-name>/claudebin:share</command-name>";

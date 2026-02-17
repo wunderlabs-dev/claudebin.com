@@ -347,7 +347,7 @@ export const parseSkillMeta = (content: string): SkillMetaData => {
 // Local:  <command-name>/clear</command-name>\n<command-message>clear</command-message>
 // Skill:  <command-message>name</command-message>\n<command-name>/name</command-name>
 const LOCAL_COMMAND_REGEX =
-  /<command-name>\/([^<]+)<\/command-name>\s*\n<command-message>([^<]+)<\/command-message>/;
+  /<command-name>\/([^<]+)<\/command-name>\s+<command-message>([^<]+)<\/command-message>/;
 const LOCAL_COMMAND_STDOUT_REGEX = /<local-command-stdout>([\s\S]*?)<\/local-command-stdout>/;
 const LOCAL_COMMAND_CAVEAT_REGEX = /<local-command-caveat>[\s\S]*?<\/local-command-caveat>/;
 
