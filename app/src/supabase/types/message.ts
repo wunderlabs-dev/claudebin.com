@@ -24,6 +24,7 @@ export const BlockType = {
   WEB_SEARCH: "web_search",
   TASKS: "tasks",
   SKILL: "skill",
+  LOCAL_COMMAND: "local_command",
 } as const;
 
 export type Block = (typeof BlockType)[keyof typeof BlockType];
@@ -46,7 +47,8 @@ export type ContentBlock =
   | WebFetchBlock
   | WebSearchBlock
   | TasksBlock
-  | SkillBlock;
+  | SkillBlock
+  | LocalCommandBlock;
 
 export type ImageAttachment = {
   type: "image";
@@ -248,6 +250,13 @@ export interface SkillBlock {
   output?: string;
 }
 
+export interface LocalCommandBlock {
+  type: typeof BlockType.LOCAL_COMMAND;
+  name: string;
+  commandName: string;
+  output?: string;
+}
+
 export enum RawTool {
   ASK_USER_QUESTION = "AskUserQuestion",
   BASH = "Bash",
@@ -332,3 +341,16 @@ export const parseSkillMeta = (content: string): SkillMetaData => {
   const trimmed = content.trim();
   return trimmed ? { instructions: trimmed } : {};
 };
+
+// Local command patterns
+const LOCAL_COMMAND_STDOUT_REGEX = /<local-command-stdout>([\s\S]*?)<\/local-command-stdout>/;
+
+export const parseLocalCommandOutput = (content: string): { output?: string } => {
+  const match = content.match(LOCAL_COMMAND_STDOUT_REGEX);
+  if (!match) return {};
+  const trimmed = match[1]?.trim();
+  return trimmed ? { output: trimmed } : {};
+};
+
+export const isLocalCommandOutput = (content: string): boolean =>
+  LOCAL_COMMAND_STDOUT_REGEX.test(content);

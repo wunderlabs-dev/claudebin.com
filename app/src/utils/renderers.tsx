@@ -20,6 +20,7 @@ import { ThreadPageConversationWebSearch } from "@/components/thread-page-conver
 import { ThreadPageConversationMcp } from "@/components/thread-page-conversation-mcp";
 import { ThreadPageConversationGeneric } from "@/components/thread-page-conversation-generic";
 import { ThreadPageConversationSkill } from "@/components/thread-page-conversation-skill";
+import { ThreadPageConversationLocalCommand } from "@/components/thread-page-conversation-local-command";
 
 export const gradient = (chunks: ReactNode) => (
   <span className="inline-block bg-linear-to-r from-orange-200 to-orange-50 bg-clip-text text-transparent">
@@ -63,6 +64,8 @@ export const block = (content: ContentBlock, index: number): ReactNode => {
       return <ThreadPageConversationGeneric key={index} block={content} />;
     case BlockType.SKILL:
       return <ThreadPageConversationSkill key={index} block={content} />;
+    case BlockType.LOCAL_COMMAND:
+      return <ThreadPageConversationLocalCommand key={index} block={content} />;
     default:
       return null;
   }
