@@ -28,7 +28,7 @@ const ProfilePageQuickStart = ({ className, ...props }: ProfilePageQuickStartPro
         <StepsItem>{t("user.shareGuideStep1")}</StepsItem>
 
         <div className="min-w-full pl-11">
-          <CopyInput variant="command" value={t("commands.oneClickInstall")} />
+          <CopyInput variant="command" value={t("commands.share")} />
         </div>
 
         <StepsItem>{t("user.shareGuideStep2")}</StepsItem>
