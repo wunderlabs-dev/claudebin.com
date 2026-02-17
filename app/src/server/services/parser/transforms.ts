@@ -87,7 +87,14 @@ const parseMcpToolName = (name: string): McpToolInfo | null => {
   };
 };
 
+// ABOUTME: Normalizes Windows paths (C:\foo\bar) to Unix-style (foo/bar)
+// before applying extraction patterns, so both OS styles get sanitized.
+const normalizeToUnixPath = (path: string): string =>
+  path.replace(/^[A-Za-z]:/, "").replace(/\\/g, "/");
+
 export const toRelativePath = (absolutePath: string): string => {
+  const normalized = normalizeToUnixPath(absolutePath);
+
   const patterns = [
     /.*\/(packages\/.*)/,
     /.*\/(src\/.*)/,
@@ -95,15 +102,17 @@ export const toRelativePath = (absolutePath: string): string => {
   ];
 
   for (const pattern of patterns) {
-    const match = absolutePath.match(pattern);
+    const match = normalized.match(pattern);
     if (match) return match[1];
   }
 
-  return absolutePath.replace(/^\/Users\/[^/]+\/[^/]+\/[^/]+\//, "");
+  return normalized.replace(/^\/Users\/[^/]+\/[^/]+\/[^/]+\//, "");
 };
 
 const stripAbsolutePaths = (text: string): string =>
-  text.replace(/\/Users\/[^\s:]+/g, (match) => toRelativePath(match));
+  text
+    .replace(/[A-Za-z]:[\\/][^\s:]+/g, (match) => toRelativePath(match))
+    .replace(/\/Users\/[^\s:]+/g, (match) => toRelativePath(match));
 
 export const transformToolUse = (
   id: string,
