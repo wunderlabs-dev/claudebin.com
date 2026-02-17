@@ -15,3 +15,6 @@ supabase/.branches/
 .env*.local
 .env.vercel
 .env.prod
+
+# Worktrees
+.worktrees/
