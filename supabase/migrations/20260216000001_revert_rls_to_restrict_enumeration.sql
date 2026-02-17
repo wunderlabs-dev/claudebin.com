@@ -13,7 +13,7 @@ DROP POLICY IF EXISTS "sessions_select_all" ON sessions;
 -- Restore the original policy: public sessions readable by anyone, private only by owner
 CREATE POLICY "sessions_select_public_or_own"
   ON sessions FOR SELECT
-  USING (is_public = true OR auth.uid() = user_id);
+  USING ("isPublic" = true OR auth.uid() = "userId");
 
 -- ============================================================
 -- MESSAGES: Revert to session-visibility-based SELECT policy
@@ -28,7 +28,7 @@ CREATE POLICY "messages_select_via_session"
   USING (
     EXISTS (
       SELECT 1 FROM sessions s
-      WHERE s.id = messages.session_id
-      AND (s.is_public = true OR auth.uid() = s.user_id)
+      WHERE s.id = messages."sessionId"
+      AND (s."isPublic" = true OR auth.uid() = s."userId")
     )
   );
