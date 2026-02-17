@@ -27,8 +27,20 @@ export interface ParsedMessage {
   rawMessage: Json;
 }
 
+export const extractWorkingDir = (jsonl: string): string | null => {
+  for (const line of jsonl.split("\n")) {
+    if (!line.trim()) continue;
+    try {
+      const parsed = JSON.parse(line);
+      if (typeof parsed?.cwd === "string") return parsed.cwd;
+    } catch {}
+  }
+  return null;
+};
+
 export const parseJsonl = (jsonl: string, sessionId: string): ParsedMessage[] => {
-  const pipeline = createPipeline();
+  const workingDir = extractWorkingDir(jsonl);
+  const pipeline = createPipeline(workingDir);
 
   for (const line of jsonl.split("\n")) {
     if (!line.trim()) continue;

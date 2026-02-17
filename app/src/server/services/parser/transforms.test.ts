@@ -1,117 +1,194 @@
 import { describe, expect, test } from "bun:test";
 
-import { sanitizeResult, toRelativePath } from "./transforms";
+import { createTransforms } from "./transforms";
 
-describe("toRelativePath", () => {
-  describe("Unix paths", () => {
-    test("extracts packages/ segment", () => {
-      expect(toRelativePath("/Users/john/projects/myapp/packages/core/index.ts")).toBe(
-        "packages/core/index.ts",
-      );
-    });
+describe("createTransforms", () => {
+  describe("with workingDir", () => {
+    const workingDir = "/Users/john/projects/myapp";
+    const t = createTransforms(workingDir);
 
-    test("extracts src/ segment", () => {
-      expect(toRelativePath("/Users/john/projects/myapp/src/utils/helpers.ts")).toBe(
-        "src/utils/helpers.ts",
-      );
-    });
+    describe("toRelativePath", () => {
+      test("converts absolute path to project-relative", () => {
+        expect(t.toRelativePath("/Users/john/projects/myapp/src/index.ts")).toBe("src/index.ts");
+      });
 
-    test("extracts filename with known extension", () => {
-      expect(toRelativePath("/Users/john/projects/myapp/config.json")).toBe("config.json");
-    });
+      test("handles root-level files", () => {
+        expect(t.toRelativePath("/Users/john/projects/myapp/package.json")).toBe("package.json");
+      });
 
-    test("strips /Users/username/project/repo/ prefix as fallback", () => {
-      expect(toRelativePath("/Users/john/projects/myapp/lib/foo.py")).toBe("lib/foo.py");
-    });
-  });
+      test("handles deeply nested paths", () => {
+        expect(t.toRelativePath("/Users/john/projects/myapp/packages/core/lib/utils.py")).toBe(
+          "packages/core/lib/utils.py",
+        );
+      });
 
-  describe("Windows paths with backslashes", () => {
-    test("extracts packages/ segment", () => {
-      expect(toRelativePath("C:\\Users\\john\\projects\\myapp\\packages\\core\\index.ts")).toBe(
-        "packages/core/index.ts",
-      );
-    });
+      test("falls back for paths outside workingDir", () => {
+        const result = t.toRelativePath("/Users/john/other/file.ts");
+        expect(result).not.toContain("/Users/john");
+        expect(result).toBe("other/file.ts");
+      });
 
-    test("extracts src/ segment", () => {
-      expect(toRelativePath("C:\\Users\\john\\projects\\myapp\\src\\utils\\helpers.ts")).toBe(
-        "src/utils/helpers.ts",
-      );
-    });
-
-    test("extracts filename with known extension", () => {
-      expect(toRelativePath("C:\\Users\\john\\projects\\myapp\\config.json")).toBe("config.json");
-    });
-
-    test("strips C:\\Users\\username\\project\\repo\\ prefix as fallback", () => {
-      expect(toRelativePath("C:\\Users\\john\\projects\\myapp\\lib\\foo.py")).toBe("lib/foo.py");
-    });
-
-    test("handles D: drive letter", () => {
-      expect(toRelativePath("D:\\Users\\john\\projects\\myapp\\src\\app.tsx")).toBe("src/app.tsx");
+      test("returns path as-is when no home dir prefix and outside workingDir", () => {
+        expect(t.toRelativePath("/tmp/file.ts")).toBe("/tmp/file.ts");
+      });
     });
   });
 
-  describe("Windows paths with forward slashes", () => {
-    test("extracts src/ segment from drive-letter path", () => {
-      expect(toRelativePath("C:/Users/john/projects/myapp/src/utils/helpers.ts")).toBe(
-        "src/utils/helpers.ts",
+  describe("with Windows workingDir", () => {
+    const t = createTransforms("C:\\Users\\john\\projects\\myapp");
+
+    test("converts Windows absolute path to project-relative", () => {
+      expect(t.toRelativePath("C:\\Users\\john\\projects\\myapp\\src\\index.ts")).toBe(
+        "src/index.ts",
       );
     });
 
-    test("strips C:/Users/username/project/repo/ prefix as fallback", () => {
-      expect(toRelativePath("C:/Users/john/projects/myapp/lib/foo.py")).toBe("lib/foo.py");
+    test("converts Windows path with forward slashes", () => {
+      expect(t.toRelativePath("C:/Users/john/projects/myapp/src/index.ts")).toBe("src/index.ts");
+    });
+
+    test("handles root-level files", () => {
+      expect(t.toRelativePath("C:\\Users\\john\\projects\\myapp\\config.json")).toBe("config.json");
+    });
+
+    test("handles D: drive letter outside workingDir", () => {
+      expect(t.toRelativePath("D:\\other\\file.ts")).toBe("/other/file.ts");
     });
   });
-});
 
-describe("sanitizeResult", () => {
-  describe("strips Unix paths in free text", () => {
-    test("strips /Users/ paths from bash output", () => {
-      const input = "Error in /Users/john/projects/myapp/src/index.ts:42";
-      const result = sanitizeResult("Bash", input);
+  describe("with Linux workingDir", () => {
+    const t = createTransforms("/home/john/projects/myapp");
+
+    test("converts absolute path to project-relative", () => {
+      expect(t.toRelativePath("/home/john/projects/myapp/src/index.ts")).toBe("src/index.ts");
+    });
+
+    test("falls back for paths outside workingDir", () => {
+      expect(t.toRelativePath("/home/john/other/file.ts")).toBe("other/file.ts");
+    });
+  });
+
+  describe("without workingDir (null)", () => {
+    const t = createTransforms(null);
+
+    test("strips macOS home dir prefix", () => {
+      expect(t.toRelativePath("/Users/john/projects/myapp/src/file.ts")).toBe(
+        "projects/myapp/src/file.ts",
+      );
+    });
+
+    test("strips Linux home dir prefix", () => {
+      expect(t.toRelativePath("/home/john/projects/myapp/src/file.ts")).toBe(
+        "projects/myapp/src/file.ts",
+      );
+    });
+
+    test("strips Windows home dir prefix", () => {
+      expect(t.toRelativePath("C:\\Users\\john\\projects\\myapp\\src\\file.ts")).toBe(
+        "projects/myapp/src/file.ts",
+      );
+    });
+
+    test("returns normalized path when no home dir prefix", () => {
+      expect(t.toRelativePath("/tmp/file.ts")).toBe("/tmp/file.ts");
+    });
+  });
+
+  describe("sanitizeResult", () => {
+    const t = createTransforms("/Users/john/projects/myapp");
+
+    test("strips Unix paths from bash output", () => {
+      const result = t.sanitizeResult(
+        "Bash",
+        "Error in /Users/john/projects/myapp/src/index.ts:42",
+      );
       expect(result).not.toContain("/Users/john");
       expect(result).toContain("src/index.ts:42");
     });
-  });
 
-  describe("strips Windows paths in free text", () => {
-    test("strips C:\\Users\\ paths from bash output", () => {
-      const input = "Error in C:\\Users\\john\\projects\\myapp\\src\\index.ts:42";
-      const result = sanitizeResult("Bash", input);
-      expect(result).not.toContain("\\Users\\john");
+    test("strips Windows paths from bash output", () => {
+      const result = t.sanitizeResult(
+        "Bash",
+        "Error in C:\\Users\\john\\projects\\myapp\\src\\index.ts:42",
+      );
+      expect(result).not.toContain("Users\\john");
       expect(result).toContain("src/index.ts");
     });
 
-    test("strips C:/Users/ paths from bash output", () => {
-      const input = "Error in C:/Users/john/projects/myapp/src/index.ts:42";
-      const result = sanitizeResult("Bash", input);
-      expect(result).not.toContain("C:/Users/john");
-      expect(result).toContain("src/index.ts");
-    });
-
-    test("strips multiple Windows paths in one string", () => {
-      const input = "Comparing C:\\Users\\john\\src\\a.ts and C:\\Users\\john\\src\\b.ts";
-      const result = sanitizeResult("Bash", input);
-      expect(result).not.toContain("\\Users\\john");
-      expect(result).toContain("src/a.ts");
-      expect(result).toContain("src/b.ts");
-    });
-
-    test("handles mixed Unix and Windows paths", () => {
-      const input =
-        "Unix: /Users/john/projects/app/src/a.ts Windows: C:\\Users\\john\\projects\\app\\src\\b.ts";
-      const result = sanitizeResult("Bash", input);
+    test("strips mixed paths", () => {
+      const result = t.sanitizeResult(
+        "Bash",
+        "Unix: /Users/john/projects/myapp/src/a.ts Win: C:\\Users\\john\\projects\\myapp\\src\\b.ts",
+      );
       expect(result).not.toContain("/Users/john");
       expect(result).not.toContain("\\Users\\john");
     });
-  });
 
-  describe("strips system reminders", () => {
+    test("strips Linux /home/ paths from bash output", () => {
+      const tLinux = createTransforms("/home/john/projects/myapp");
+      const result = tLinux.sanitizeResult(
+        "Bash",
+        "Error in /home/john/projects/myapp/src/index.ts:42",
+      );
+      expect(result).not.toContain("/home/john");
+      expect(result).toContain("src/index.ts:42");
+    });
+
     test("removes system-reminder tags", () => {
-      const input = "output <system-reminder>secret</system-reminder> more";
-      const result = sanitizeResult("Bash", input);
+      const result = t.sanitizeResult(
+        "Bash",
+        "output <system-reminder>secret</system-reminder> more",
+      );
       expect(result).not.toContain("system-reminder");
       expect(result).not.toContain("secret");
+    });
+  });
+
+  describe("transformToolUse", () => {
+    const t = createTransforms("/Users/john/projects/myapp");
+
+    test("relativizes file_path in Read tool", () => {
+      const block = t.transformToolUse("id1", "Read", {
+        file_path: "/Users/john/projects/myapp/src/index.ts",
+      });
+      expect(block).toMatchObject({
+        type: "file_read",
+        file_path: "src/index.ts",
+      });
+    });
+
+    test("relativizes file_path in Write tool", () => {
+      const block = t.transformToolUse("id2", "Write", {
+        file_path: "/Users/john/projects/myapp/src/main.ts",
+        content: "hello",
+      });
+      expect(block).toMatchObject({
+        type: "file_write",
+        file_path: "src/main.ts",
+      });
+    });
+
+    test("relativizes file_path in Edit tool", () => {
+      const block = t.transformToolUse("id3", "Edit", {
+        file_path: "/Users/john/projects/myapp/src/utils.ts",
+        old_string: "a",
+        new_string: "b",
+      });
+      expect(block).toMatchObject({
+        type: "file_edit",
+        file_path: "src/utils.ts",
+      });
+    });
+
+    test("relativizes Windows file_path in Read tool", () => {
+      const tWin = createTransforms("C:\\Users\\john\\projects\\myapp");
+      const block = tWin.transformToolUse("id4", "Read", {
+        file_path: "C:\\Users\\john\\projects\\myapp\\src\\index.ts",
+      });
+      expect(block).toMatchObject({
+        type: "file_read",
+        file_path: "src/index.ts",
+      });
     });
   });
 });
