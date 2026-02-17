@@ -1,6 +1,7 @@
 "use server";
 
 import { isNil } from "ramda";
+import { revalidateTag } from "next/cache";
 
 import { createClient } from "@/server/supabase/server";
 import { sessionLikes } from "@/server/repos/sessionLikes";
@@ -32,6 +33,7 @@ export const like = async (sessionId: string) => {
 
   const result = await sessionLikes.toggle(supabase, sessionId, user.id);
 
-  // TODO: Re-add revalidateTag once cacheComponents is re-enabled
+  revalidateTag(`thread-${sessionId}`, { expire: 0 });
+
   return result;
 };
