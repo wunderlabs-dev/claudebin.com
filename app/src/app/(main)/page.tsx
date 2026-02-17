@@ -1,19 +1,18 @@
-import { createClient } from "@/server/supabase/server";
-import { sessions } from "@/server/repos/sessions";
+import { Suspense } from "react";
 
 import { HomePageHeroIntroduction } from "@/components/home-page-hero-introduction";
-import { HomePageFeaturedThreadsCarousel } from "@/components/home-page-featured-threads-carousel";
 import { HomePageTutorialsList } from "@/components/home-page-tutorials-list";
+import { HomePageFeaturedThreadsDataLoader } from "@/components/home-page-featured-threads-data-loader";
+import { HomePageFeaturedThreadsSkeleton } from "@/components/home-page-featured-threads-skeleton";
 
-const HomePage = async () => {
-  const supabase = await createClient();
-  const threads = await sessions.getFeaturedThreads(supabase);
-
+const HomePage = () => {
   return (
     <div className="overflow-hidden [--util-grid-columns:10] md:[--util-grid-columns:20] lg:[--util-grid-columns:30]">
       <HomePageHeroIntroduction />
       <HomePageTutorialsList />
-      <HomePageFeaturedThreadsCarousel threads={threads} />
+      <Suspense fallback={<HomePageFeaturedThreadsSkeleton />}>
+        <HomePageFeaturedThreadsDataLoader />
+      </Suspense>
     </div>
   );
 };

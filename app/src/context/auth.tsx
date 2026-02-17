@@ -15,15 +15,18 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 type AuthProviderProps = {
-  initialUser: User | null;
   children: React.ReactNode;
 };
 
-const AuthProvider = ({ initialUser, children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(initialUser);
+const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
+
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
 
     const {
       data: { subscription },
