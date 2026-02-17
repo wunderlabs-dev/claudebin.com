@@ -2,6 +2,7 @@
 
 import { Children, isValidElement, useMemo, type ReactNode } from "react";
 import { head, last, split } from "ramda";
+import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 
@@ -37,6 +38,7 @@ type ThreadPageConversationTextProps = {
 };
 
 const REMARK_PLUGINS = [remarkGfm];
+const REHYPE_PLUGINS = [rehypeSanitize];
 
 const parseCodeBlock = (children: ReactNode) => {
   const firstChild = head(Children.toArray(children));
@@ -105,7 +107,12 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
   return (
     <div className="flex max-w-full flex-col gap-4 break-all [&>*:first-child]:mt-0">
       {block.text.trim().length ? (
-        <Markdown remarkPlugins={REMARK_PLUGINS} urlTransform={sanitizeUrl} components={components}>
+        <Markdown
+          remarkPlugins={REMARK_PLUGINS}
+          rehypePlugins={REHYPE_PLUGINS}
+          urlTransform={sanitizeUrl}
+          components={components}
+        >
           {block.text}
         </Markdown>
       ) : null}
