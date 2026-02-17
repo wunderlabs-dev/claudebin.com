@@ -20,11 +20,9 @@ import type {
 import {
   BLOCK_TYPE_TO_RAW_TOOL,
   ToolInputSchema,
+  createTransforms,
   extractTaskId,
   extractText,
-  sanitizeResult,
-  transformToolUse,
-  enhanceToolOutput,
   normalizeImageBlock,
   normalizeBlock,
   isFilteredBlock,
@@ -49,7 +47,8 @@ export type IntermediateMessage = {
   textParts: string[];
 };
 
-export const createPipeline = () => {
+export const createPipeline = (workingDir: string | null = null) => {
+  const transforms = createTransforms(workingDir);
   const msg = {
     blocks: [] as ContentBlock[],
     hasToolResult: false,
@@ -142,7 +141,7 @@ export const createPipeline = () => {
 
     const taskTool = pipeline.taskToolMap.get(raw.tool_use_id);
     if (taskTool) {
-      emitTasksSnapshot(taskTool, sanitizeResult(taskTool.name, rawText));
+      emitTasksSnapshot(taskTool, transforms.sanitizeResult(taskTool.name, rawText));
       return;
     }
 
@@ -161,13 +160,15 @@ export const createPipeline = () => {
     }
 
     const outputFields = pipeline.toolUseResult
-      ? enhanceToolOutput(pending.name, pipeline.toolUseResult)
+      ? transforms.enhanceToolOutput(pending.name, pipeline.toolUseResult)
       : null;
 
     if (outputFields) {
       emit(buildBlock(outputFields));
     } else {
-      const errorFields = raw.is_error ? { error: sanitizeResult(pending.name, rawText) } : {};
+      const errorFields = raw.is_error
+        ? { error: transforms.sanitizeResult(pending.name, rawText) }
+        : {};
       emit(buildBlock(errorFields));
     }
   };
@@ -177,7 +178,7 @@ export const createPipeline = () => {
   };
 
   const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
-    const block = transformToolUse(raw.id, raw.name, raw.input);
+    const block = transforms.transformToolUse(raw.id, raw.name, raw.input);
     pipeline.pendingTools.set(raw.id, { name: raw.name, block });
   };
 

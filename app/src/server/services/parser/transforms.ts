@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import type { Attachment, ContentBlock } from "@/supabase/types/message";
 
 import { z } from "zod";
@@ -48,7 +50,11 @@ export const ToolInputSchema = {
   Write: z.object({ file_path: z.string(), content: z.string() }),
   Edit: z.object({ file_path: z.string(), old_string: z.string(), new_string: z.string() }),
   Glob: z.object({ pattern: z.string(), path: z.string().optional() }),
-  Grep: z.object({ pattern: z.string(), path: z.string().optional(), glob: z.string().optional() }),
+  Grep: z.object({
+    pattern: z.string(),
+    path: z.string().optional(),
+    glob: z.string().optional(),
+  }),
   Task: z.object({ description: z.string(), prompt: z.string(), subagent_type: z.string() }),
   TaskOutput: z.object({
     task_id: z.string(),
@@ -87,99 +93,8 @@ const parseMcpToolName = (name: string): McpToolInfo | null => {
   };
 };
 
-export const toRelativePath = (absolutePath: string): string => {
-  const patterns = [
-    /.*\/(packages\/.*)/,
-    /.*\/(src\/.*)/,
-    /.*\/([^/]+\.(ts|tsx|js|jsx|json|md|css|html))$/,
-  ];
-
-  for (const pattern of patterns) {
-    const match = absolutePath.match(pattern);
-    if (match) return match[1];
-  }
-
-  return absolutePath.replace(/^\/Users\/[^/]+\/[^/]+\/[^/]+\//, "");
-};
-
-const stripAbsolutePaths = (text: string): string =>
-  text.replace(/\/Users\/[^\s:]+/g, (match) => toRelativePath(match));
-
-export const transformToolUse = (
-  id: string,
-  name: string,
-  input: Record<string, unknown>,
-): ContentBlock => {
-  const fallback: ContentBlock = { type: BlockType.GENERIC, id, name, input };
-
-  switch (name) {
-    case RawTool.ASK_USER_QUESTION: {
-      const data = parseToolInput(ToolInputSchema.AskUserQuestion, input);
-      return { type: BlockType.QUESTION, id, questions: data?.questions ?? [] };
-    }
-    case RawTool.BASH: {
-      const data = parseToolInput(ToolInputSchema.Bash, input);
-      return data ? { type: BlockType.BASH, id, ...data } : fallback;
-    }
-    case RawTool.READ: {
-      const data = parseToolInput(ToolInputSchema.Read, input);
-      return data
-        ? { type: BlockType.FILE_READ, id, ...data, file_path: toRelativePath(data.file_path) }
-        : fallback;
-    }
-    case RawTool.WRITE: {
-      const data = parseToolInput(ToolInputSchema.Write, input);
-      return data
-        ? { type: BlockType.FILE_WRITE, id, ...data, file_path: toRelativePath(data.file_path) }
-        : fallback;
-    }
-    case RawTool.EDIT: {
-      const data = parseToolInput(ToolInputSchema.Edit, input);
-      return data
-        ? { type: BlockType.FILE_EDIT, id, ...data, file_path: toRelativePath(data.file_path) }
-        : fallback;
-    }
-    case RawTool.GLOB: {
-      const data = parseToolInput(ToolInputSchema.Glob, input);
-      return data ? { type: BlockType.GLOB, id, ...data } : fallback;
-    }
-    case RawTool.GREP: {
-      const data = parseToolInput(ToolInputSchema.Grep, input);
-      return data ? { type: BlockType.GREP, id, ...data } : fallback;
-    }
-    case RawTool.TASK: {
-      const data = parseToolInput(ToolInputSchema.Task, input);
-      return data ? { type: BlockType.TASK, id, ...data } : fallback;
-    }
-    case RawTool.TASK_OUTPUT: {
-      const data = parseToolInput(ToolInputSchema.TaskOutput, input);
-      return data ? { type: BlockType.TASK_OUTPUT, id, ...data } : fallback;
-    }
-    case RawTool.TASK_STOP: {
-      const data = parseToolInput(ToolInputSchema.TaskStop, input);
-      return data ? { type: BlockType.TASK_STOP, id, ...data } : fallback;
-    }
-    case RawTool.WEB_FETCH: {
-      const data = parseToolInput(ToolInputSchema.WebFetch, input);
-      return data ? { type: BlockType.WEB_FETCH, id, ...data } : fallback;
-    }
-    case RawTool.WEB_SEARCH: {
-      const data = parseToolInput(ToolInputSchema.WebSearch, input);
-      return data ? { type: BlockType.WEB_SEARCH, id, ...data } : fallback;
-    }
-    default: {
-      const mcpInfo = parseMcpToolName(name);
-      if (mcpInfo) {
-        return { type: BlockType.MCP, id, ...mcpInfo, input };
-      }
-      console.error("[parser] Unknown tool falling back to generic", {
-        name,
-        inputKeys: Object.keys(input),
-      });
-      return fallback;
-    }
-  }
-};
+// ABOUTME: Converts Windows backslashes to forward slashes and strips drive letters
+const normalizePath = (p: string): string => p.replace(/\\/g, "/").replace(/^[A-Za-z]:/, "");
 
 export const extractText = (content: unknown): string => {
   if (typeof content === "string") return content;
@@ -196,67 +111,6 @@ const stripLineNumbers = (text: string): string => text.replace(/^ *\d+→/gm, "
 // biome-ignore lint/suspicious/noControlCharactersInRegex: ANSI escape codes require control characters
 const stripAnsiCodes = (text: string): string => text.replace(/\x1b\[[0-9;]*m/g, "");
 
-const sanitize = (text: string): string => stripAbsolutePaths(stripSystemReminders(text));
-
-const sanitizers: Partial<Record<string, (result: string) => string>> = {
-  [RawTool.READ]: (result) => sanitize(stripLineNumbers(result)),
-  [RawTool.BASH]: (result) => sanitize(stripAnsiCodes(result)),
-  [RawTool.GLOB]: sanitize,
-  [RawTool.GREP]: sanitize,
-  [RawTool.WRITE]: sanitize,
-  [RawTool.EDIT]: sanitize,
-  [RawTool.TASK]: sanitize,
-  [RawTool.WEB_FETCH]: sanitize,
-  [RawTool.WEB_SEARCH]: sanitize,
-};
-
-export const sanitizeResult = (toolName: string, result: string): string => {
-  const sanitizer = sanitizers[toolName];
-  return sanitizer ? sanitizer(result) : sanitize(result);
-};
-
-const enhanceRead = (data: z.infer<typeof ToolUseResultSchema.Read>) => ({
-  content: sanitize(stripLineNumbers(data.file.content)),
-  numLines: data.file.numLines,
-  totalLines: data.file.totalLines,
-});
-
-const enhanceGlob = (data: z.infer<typeof ToolUseResultSchema.Glob>) => ({
-  filenames: data.filenames.map(toRelativePath),
-  numFiles: data.numFiles,
-  truncated: data.truncated,
-  durationMs: data.durationMs,
-});
-
-const enhanceGrep = (data: z.infer<typeof ToolUseResultSchema.Grep>) => ({
-  filenames: data.filenames.map(toRelativePath),
-  numFiles: data.numFiles,
-  truncated: data.truncated,
-  durationMs: data.durationMs,
-});
-
-const enhanceBash = (data: z.infer<typeof ToolUseResultSchema.Bash>) => ({
-  stdout: sanitize(stripAnsiCodes(data.stdout)),
-  stderr: sanitize(stripAnsiCodes(data.stderr)),
-  interrupted: data.interrupted,
-});
-
-const enhanceWrite = (_data: z.infer<typeof ToolUseResultSchema.Write>) => ({
-  success: true,
-});
-
-const enhanceEdit = (_data: z.infer<typeof ToolUseResultSchema.Edit>) => ({
-  success: true,
-});
-
-const enhanceWebFetch = (data: z.infer<typeof ToolUseResultSchema.WebFetch>) => ({
-  content: sanitize(data.result),
-  statusCode: data.code,
-  statusText: data.codeText,
-  bytes: data.bytes,
-  durationMs: data.durationMs,
-});
-
 const normalizeAnswer = (
   answer: string | string[],
   question: { multiSelect: boolean } | undefined,
@@ -270,63 +124,288 @@ const normalizeAnswer = (
   return [answer];
 };
 
-const enhanceQuestion = (data: z.infer<typeof ToolUseResultSchema.AskUserQuestion>) => {
-  const questionMap = new Map(data.questions.map((q) => [q.question, q]));
-
-  const normalizedAnswers: Record<string, string[]> = {};
-  for (const [questionText, answer] of Object.entries(data.answers)) {
-    normalizedAnswers[questionText] = normalizeAnswer(answer, questionMap.get(questionText));
-  }
-
-  return { answers: normalizedAnswers };
+export type Transforms = {
+  toRelativePath: (absolutePath: string) => string;
+  sanitizeResult: (toolName: string, result: string) => string;
+  transformToolUse: (id: string, name: string, input: Record<string, unknown>) => ContentBlock;
+  enhanceToolOutput: (toolName: string, toolUseResult: unknown) => Record<string, unknown> | null;
 };
 
-const enhanceTaskOutput = (data: z.infer<typeof ToolUseResultSchema.TaskOutput>) => ({
-  status: data.task.status,
-  task_type: data.task.task_type,
-  description: data.task.description,
-  output: data.task.output ? sanitize(data.task.output) : undefined,
-  exitCode: data.task.exitCode,
-});
+export const createTransforms = (workingDir: string | null): Transforms => {
+  const normalizedWorkingDir = workingDir ? normalizePath(workingDir) : null;
 
-const enhanceTaskStop = (data: z.infer<typeof ToolUseResultSchema.TaskStop>) => ({
-  success: data.success,
-});
+  // ABOUTME: Converts absolute paths to project-relative using
+  // path.posix.relative when workingDir is known. Falls back to
+  // stripping home dir for privacy.
+  const toRelativePath = (absolutePath: string): string => {
+    const normalized = normalizePath(absolutePath);
 
-const outputEnhancers = {
-  [RawTool.READ]: { schema: ToolUseResultSchema.Read, enhance: enhanceRead },
-  [RawTool.GLOB]: { schema: ToolUseResultSchema.Glob, enhance: enhanceGlob },
-  [RawTool.GREP]: { schema: ToolUseResultSchema.Grep, enhance: enhanceGrep },
-  [RawTool.BASH]: { schema: ToolUseResultSchema.Bash, enhance: enhanceBash },
-  [RawTool.WRITE]: { schema: ToolUseResultSchema.Write, enhance: enhanceWrite },
-  [RawTool.EDIT]: { schema: ToolUseResultSchema.Edit, enhance: enhanceEdit },
-  [RawTool.WEB_FETCH]: { schema: ToolUseResultSchema.WebFetch, enhance: enhanceWebFetch },
-  [RawTool.ASK_USER_QUESTION]: {
-    schema: ToolUseResultSchema.AskUserQuestion,
-    enhance: enhanceQuestion,
-  },
-  [RawTool.TASK_OUTPUT]: {
-    schema: ToolUseResultSchema.TaskOutput,
-    enhance: enhanceTaskOutput,
-  },
-  [RawTool.TASK_STOP]: {
-    schema: ToolUseResultSchema.TaskStop,
-    enhance: enhanceTaskStop,
-  },
-} as const;
+    if (normalizedWorkingDir) {
+      const relative = path.posix.relative(normalizedWorkingDir, normalized);
+      if (!relative.startsWith("..")) return relative;
+    }
 
-export const enhanceToolOutput = (
-  toolName: string,
-  toolUseResult: unknown,
-): Record<string, unknown> | null => {
-  const enhancer = outputEnhancers[toolName as keyof typeof outputEnhancers];
-  if (!enhancer) return null;
+    // Fallback: strip home dir prefix for privacy
+    const segments = normalized.split(path.posix.sep);
+    if ((segments[1] === "Users" || segments[1] === "home") && segments.length > 3) {
+      return segments.slice(3).join(path.posix.sep);
+    }
 
-  const parsed = enhancer.schema.safeParse(toolUseResult);
-  if (!parsed.success) return null;
+    return normalized;
+  };
 
-  // biome-ignore lint/suspicious/noExplicitAny: enhancer types are matched by registry key
-  return (enhancer.enhance as (data: any) => Record<string, unknown>)(parsed.data);
+  const stripAbsolutePaths = (text: string): string =>
+    text
+      .replace(/[A-Za-z]:[\\/][^\s:]+/g, (match) => toRelativePath(match))
+      .replace(/\/(Users|home)\/[^\s:]+/g, (match) => toRelativePath(match));
+
+  const sanitize = (text: string): string => stripAbsolutePaths(stripSystemReminders(text));
+
+  const sanitizers: Partial<Record<string, (result: string) => string>> = {
+    [RawTool.READ]: (result) => sanitize(stripLineNumbers(result)),
+    [RawTool.BASH]: (result) => sanitize(stripAnsiCodes(result)),
+    [RawTool.GLOB]: sanitize,
+    [RawTool.GREP]: sanitize,
+    [RawTool.WRITE]: sanitize,
+    [RawTool.EDIT]: sanitize,
+    [RawTool.TASK]: sanitize,
+    [RawTool.WEB_FETCH]: sanitize,
+    [RawTool.WEB_SEARCH]: sanitize,
+  };
+
+  const sanitizeResult = (toolName: string, result: string): string => {
+    const sanitizer = sanitizers[toolName];
+    return sanitizer ? sanitizer(result) : sanitize(result);
+  };
+
+  const transformToolUse = (
+    id: string,
+    name: string,
+    input: Record<string, unknown>,
+  ): ContentBlock => {
+    const fallback: ContentBlock = {
+      type: BlockType.GENERIC,
+      id,
+      name,
+      input,
+    };
+
+    switch (name) {
+      case RawTool.ASK_USER_QUESTION: {
+        const data = parseToolInput(ToolInputSchema.AskUserQuestion, input);
+        return {
+          type: BlockType.QUESTION,
+          id,
+          questions: data?.questions ?? [],
+        };
+      }
+      case RawTool.BASH: {
+        const data = parseToolInput(ToolInputSchema.Bash, input);
+        return data ? { type: BlockType.BASH, id, ...data } : fallback;
+      }
+      case RawTool.READ: {
+        const data = parseToolInput(ToolInputSchema.Read, input);
+        return data
+          ? {
+              type: BlockType.FILE_READ,
+              id,
+              ...data,
+              file_path: toRelativePath(data.file_path),
+            }
+          : fallback;
+      }
+      case RawTool.WRITE: {
+        const data = parseToolInput(ToolInputSchema.Write, input);
+        return data
+          ? {
+              type: BlockType.FILE_WRITE,
+              id,
+              ...data,
+              file_path: toRelativePath(data.file_path),
+            }
+          : fallback;
+      }
+      case RawTool.EDIT: {
+        const data = parseToolInput(ToolInputSchema.Edit, input);
+        return data
+          ? {
+              type: BlockType.FILE_EDIT,
+              id,
+              ...data,
+              file_path: toRelativePath(data.file_path),
+            }
+          : fallback;
+      }
+      case RawTool.GLOB: {
+        const data = parseToolInput(ToolInputSchema.Glob, input);
+        return data ? { type: BlockType.GLOB, id, ...data } : fallback;
+      }
+      case RawTool.GREP: {
+        const data = parseToolInput(ToolInputSchema.Grep, input);
+        return data ? { type: BlockType.GREP, id, ...data } : fallback;
+      }
+      case RawTool.TASK: {
+        const data = parseToolInput(ToolInputSchema.Task, input);
+        return data ? { type: BlockType.TASK, id, ...data } : fallback;
+      }
+      case RawTool.TASK_OUTPUT: {
+        const data = parseToolInput(ToolInputSchema.TaskOutput, input);
+        return data ? { type: BlockType.TASK_OUTPUT, id, ...data } : fallback;
+      }
+      case RawTool.TASK_STOP: {
+        const data = parseToolInput(ToolInputSchema.TaskStop, input);
+        return data ? { type: BlockType.TASK_STOP, id, ...data } : fallback;
+      }
+      case RawTool.WEB_FETCH: {
+        const data = parseToolInput(ToolInputSchema.WebFetch, input);
+        return data ? { type: BlockType.WEB_FETCH, id, ...data } : fallback;
+      }
+      case RawTool.WEB_SEARCH: {
+        const data = parseToolInput(ToolInputSchema.WebSearch, input);
+        return data ? { type: BlockType.WEB_SEARCH, id, ...data } : fallback;
+      }
+      default: {
+        const mcpInfo = parseMcpToolName(name);
+        if (mcpInfo) {
+          return { type: BlockType.MCP, id, ...mcpInfo, input };
+        }
+        console.error("[parser] Unknown tool falling back to generic", {
+          name,
+          inputKeys: Object.keys(input),
+        });
+        return fallback;
+      }
+    }
+  };
+
+  const enhanceRead = (data: z.infer<typeof ToolUseResultSchema.Read>) => ({
+    content: sanitize(stripLineNumbers(data.file.content)),
+    numLines: data.file.numLines,
+    totalLines: data.file.totalLines,
+  });
+
+  const enhanceGlob = (data: z.infer<typeof ToolUseResultSchema.Glob>) => ({
+    filenames: data.filenames.map(toRelativePath),
+    numFiles: data.numFiles,
+    truncated: data.truncated,
+    durationMs: data.durationMs,
+  });
+
+  const enhanceGrep = (data: z.infer<typeof ToolUseResultSchema.Grep>) => ({
+    filenames: data.filenames.map(toRelativePath),
+    numFiles: data.numFiles,
+    truncated: data.truncated,
+    durationMs: data.durationMs,
+  });
+
+  const enhanceBash = (data: z.infer<typeof ToolUseResultSchema.Bash>) => ({
+    stdout: sanitize(stripAnsiCodes(data.stdout)),
+    stderr: sanitize(stripAnsiCodes(data.stderr)),
+    interrupted: data.interrupted,
+  });
+
+  const enhanceWrite = (_data: z.infer<typeof ToolUseResultSchema.Write>) => ({
+    success: true,
+  });
+
+  const enhanceEdit = (_data: z.infer<typeof ToolUseResultSchema.Edit>) => ({
+    success: true,
+  });
+
+  const enhanceWebFetch = (data: z.infer<typeof ToolUseResultSchema.WebFetch>) => ({
+    content: sanitize(data.result),
+    statusCode: data.code,
+    statusText: data.codeText,
+    bytes: data.bytes,
+    durationMs: data.durationMs,
+  });
+
+  const enhanceQuestion = (data: z.infer<typeof ToolUseResultSchema.AskUserQuestion>) => {
+    const questionMap = new Map(data.questions.map((q) => [q.question, q]));
+
+    const normalizedAnswers: Record<string, string[]> = {};
+    for (const [questionText, answer] of Object.entries(data.answers)) {
+      normalizedAnswers[questionText] = normalizeAnswer(answer, questionMap.get(questionText));
+    }
+
+    return { answers: normalizedAnswers };
+  };
+
+  const enhanceTaskOutputResult = (data: z.infer<typeof ToolUseResultSchema.TaskOutput>) => ({
+    status: data.task.status,
+    task_type: data.task.task_type,
+    description: data.task.description,
+    output: data.task.output ? sanitize(data.task.output) : undefined,
+    exitCode: data.task.exitCode,
+  });
+
+  const enhanceTaskStop = (data: z.infer<typeof ToolUseResultSchema.TaskStop>) => ({
+    success: data.success,
+  });
+
+  const outputEnhancers = {
+    [RawTool.READ]: {
+      schema: ToolUseResultSchema.Read,
+      enhance: enhanceRead,
+    },
+    [RawTool.GLOB]: {
+      schema: ToolUseResultSchema.Glob,
+      enhance: enhanceGlob,
+    },
+    [RawTool.GREP]: {
+      schema: ToolUseResultSchema.Grep,
+      enhance: enhanceGrep,
+    },
+    [RawTool.BASH]: {
+      schema: ToolUseResultSchema.Bash,
+      enhance: enhanceBash,
+    },
+    [RawTool.WRITE]: {
+      schema: ToolUseResultSchema.Write,
+      enhance: enhanceWrite,
+    },
+    [RawTool.EDIT]: {
+      schema: ToolUseResultSchema.Edit,
+      enhance: enhanceEdit,
+    },
+    [RawTool.WEB_FETCH]: {
+      schema: ToolUseResultSchema.WebFetch,
+      enhance: enhanceWebFetch,
+    },
+    [RawTool.ASK_USER_QUESTION]: {
+      schema: ToolUseResultSchema.AskUserQuestion,
+      enhance: enhanceQuestion,
+    },
+    [RawTool.TASK_OUTPUT]: {
+      schema: ToolUseResultSchema.TaskOutput,
+      enhance: enhanceTaskOutputResult,
+    },
+    [RawTool.TASK_STOP]: {
+      schema: ToolUseResultSchema.TaskStop,
+      enhance: enhanceTaskStop,
+    },
+  } as const;
+
+  const enhanceToolOutput = (
+    toolName: string,
+    toolUseResult: unknown,
+  ): Record<string, unknown> | null => {
+    const enhancer = outputEnhancers[toolName as keyof typeof outputEnhancers];
+    if (!enhancer) return null;
+
+    const parsed = enhancer.schema.safeParse(toolUseResult);
+    if (!parsed.success) return null;
+
+    // biome-ignore lint/suspicious/noExplicitAny: enhancer types are matched by registry key
+    return (enhancer.enhance as (data: any) => Record<string, unknown>)(parsed.data);
+  };
+
+  return {
+    toRelativePath,
+    sanitizeResult,
+    transformToolUse,
+    enhanceToolOutput,
+  };
 };
 
 export const normalizeImageBlock = (block: z.infer<typeof ImageBlockSchema>): Attachment => ({
@@ -341,7 +420,11 @@ export const normalizeBlock = (block: RawContentBlock): ContentBlock | null => {
     case "text":
       return { type: BlockType.TEXT, text: block.text };
     case "thinking":
-      return { type: BlockType.THINKING, thinking: block.thinking, signature: block.signature };
+      return {
+        type: BlockType.THINKING,
+        thinking: block.thinking,
+        signature: block.signature,
+      };
     case "image":
       return null;
     default:
