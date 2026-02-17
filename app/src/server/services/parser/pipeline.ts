@@ -7,6 +7,8 @@ import {
   MessageRole,
   parseSkillCommand,
   parseSkillMeta,
+  parseLocalCommand,
+  isLocalCommandMeta,
   isLocalCommandOutput,
   parseLocalCommandOutput,
   type SkillCommandData,
@@ -22,11 +24,9 @@ import type {
 import {
   BLOCK_TYPE_TO_RAW_TOOL,
   ToolInputSchema,
+  createTransforms,
   extractTaskId,
   extractText,
-  sanitizeResult,
-  transformToolUse,
-  enhanceToolOutput,
   normalizeImageBlock,
   normalizeBlock,
   isFilteredBlock,
@@ -51,7 +51,8 @@ export type IntermediateMessage = {
   textParts: string[];
 };
 
-export const createPipeline = () => {
+export const createPipeline = (workingDir: string | null = null) => {
+  const transforms = createTransforms(workingDir);
   const msg = {
     blocks: [] as ContentBlock[],
     hasToolResult: false,
@@ -64,6 +65,7 @@ export const createPipeline = () => {
     hasPendingTaskSnapshot: false,
     lastTaskChange: null as TaskChange | null,
     pendingSkillCommand: null as SkillCommandData | null,
+    pendingLocalCommand: null as SkillCommandData | null,
     toolUseResult: undefined as unknown,
   };
 
@@ -145,7 +147,7 @@ export const createPipeline = () => {
 
     const taskTool = pipeline.taskToolMap.get(raw.tool_use_id);
     if (taskTool) {
-      emitTasksSnapshot(taskTool, sanitizeResult(taskTool.name, rawText));
+      emitTasksSnapshot(taskTool, transforms.sanitizeResult(taskTool.name, rawText));
       return;
     }
 
@@ -164,13 +166,15 @@ export const createPipeline = () => {
     }
 
     const outputFields = pipeline.toolUseResult
-      ? enhanceToolOutput(pending.name, pipeline.toolUseResult)
+      ? transforms.enhanceToolOutput(pending.name, pipeline.toolUseResult)
       : null;
 
     if (outputFields) {
       emit(buildBlock(outputFields));
     } else {
-      const errorFields = raw.is_error ? { error: sanitizeResult(pending.name, rawText) } : {};
+      const errorFields = raw.is_error
+        ? { error: transforms.sanitizeResult(pending.name, rawText) }
+        : {};
       emit(buildBlock(errorFields));
     }
   };
@@ -180,7 +184,7 @@ export const createPipeline = () => {
   };
 
   const ingestToolUse = (raw: Extract<RawContentBlock, { type: "tool_use" }>): void => {
-    const block = transformToolUse(raw.id, raw.name, raw.input);
+    const block = transforms.transformToolUse(raw.id, raw.name, raw.input);
     pipeline.pendingTools.set(raw.id, { name: raw.name, block });
   };
 
@@ -248,6 +252,12 @@ export const createPipeline = () => {
       const skillCommand = parseSkillCommand(content);
       if (skillCommand) {
         pipeline.pendingSkillCommand = skillCommand;
+        return;
+      }
+      const localCommand = parseLocalCommand(content);
+      if (localCommand) {
+        pipeline.pendingLocalCommand = localCommand;
+        emit({ type: BlockType.LOCAL_COMMAND, ...localCommand });
         return;
       }
       emit({ type: BlockType.TEXT, text: content });
@@ -337,7 +347,21 @@ export const createPipeline = () => {
         return;
       }
 
-      // 2. Tool result in USER message - route through ingestContent
+      // 2. Local command satellite messages (caveat, stdout)
+      const textContent = typeof content === "string" ? content : "";
+      if (textContent && isLocalCommandMeta(textContent)) {
+        if (pipeline.pendingLocalCommand && isLocalCommandOutput(textContent)) {
+          const { output } = parseLocalCommandOutput(textContent);
+          const lastBlock = acc.current?.content.at(-1);
+          if (lastBlock?.type === BlockType.LOCAL_COMMAND && output) {
+            (lastBlock as { output?: string }).output = output;
+          }
+          pipeline.pendingLocalCommand = null;
+        }
+        return;
+      }
+
+      // 3. Tool result in USER message - route through ingestContent
       if (hasToolResultContent(content)) {
         ingestContent(content as RawContentBlock[], r.isMeta);
 
@@ -349,7 +373,7 @@ export const createPipeline = () => {
         return;
       }
 
-      // 3. Regular user message (text/image/skill command)
+      // 4. Regular user message (text/image/skill command/local command)
       ingestUserMessage(content);
       startNewMessage(r);
       return;
