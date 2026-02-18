@@ -3,6 +3,13 @@ export const AVATAR_ASSISTANT_IMAGE_SRC = "/images/assistant-640x640.png";
 
 export const THREAD_SNIPPET_TEXTAREA_ROWS = 4;
 export const THREAD_ATTACHMENT_SIZE = 200;
+export const THREAD_ATTACHMENT_ALLOWED_IMAGE_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+];
 export const THREAD_TITLE_TRUNCATE_LENGTH = 56;
 export const THREAD_GRID_TITLE_TRUNCATE_LENGTH = 36;
 export const THREADS_PAGE_SIZE = 20;
