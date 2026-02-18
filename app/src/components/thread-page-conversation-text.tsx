@@ -24,7 +24,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
-import { sanitizeUrl } from "@/utils/sanitizeUrl";
+import { getSafeUrl } from "@/utils/helpers";
 
 import { ThreadPageConversationAttachmentChip } from "@/components/thread-page-conversation-attachment-chip";
 
@@ -76,9 +76,9 @@ const createComponents = (role: Role) => ({
   ),
   a: ({ href, children }: { href?: string; children?: ReactNode }) => (
     <a
-      href={sanitizeUrl(href)}
       rel="noopener noreferrer"
       target="_blank"
+      href={getSafeUrl(href)}
       className="text-orange-50 hover:underline"
     >
       {children}
@@ -108,10 +108,10 @@ const ThreadPageConversationText = ({ block }: ThreadPageConversationTextProps) 
     <div className="flex max-w-full flex-col gap-4 break-all [&>*:first-child]:mt-0">
       {block.text.trim().length ? (
         <Markdown
+          components={components}
+          urlTransform={getSafeUrl}
           remarkPlugins={REMARK_PLUGINS}
           rehypePlugins={REHYPE_PLUGINS}
-          urlTransform={sanitizeUrl}
-          components={components}
         >
           {block.text}
         </Markdown>

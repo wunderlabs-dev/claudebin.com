@@ -1,9 +1,11 @@
 import { type ClassValue, clsx } from "clsx";
-import { concat, head, init, isNil, last, reduce } from "ramda";
+import { concat, head, init, isNil, isEmpty, last, not, reduce } from "ramda";
 import { twMerge } from "tailwind-merge";
 
 import { MessageRole } from "@/supabase/types/message";
 import type { Message } from "@/server/repos/messages";
+
+import { THREAD_SAFE_URL_PATTERN } from "@/utils/constants";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -32,6 +34,19 @@ export const stringifyJSON = (value: unknown): string => {
     return value;
   }
   return JSON.stringify(value);
+};
+
+export const getSafeUrl = (url: string | undefined) => {
+  if (isNil(url) || isEmpty(url)) {
+    return;
+  }
+
+  const trimmed = url.trimStart();
+
+  if (isEmpty(trimmed) || not(THREAD_SAFE_URL_PATTERN.test(trimmed))) {
+    return;
+  }
+  return url;
 };
 
 export const compactConversation = (messages: ReadonlyArray<Message> = []): Message[] =>

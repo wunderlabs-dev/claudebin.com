@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import type { Attachment } from "@/supabase/types/message";
 
 import { THREAD_ATTACHMENT_ALLOWED_IMAGE_TYPES, THREAD_ATTACHMENT_SIZE } from "@/utils/constants";
-import { sanitizeUrl } from "@/utils/sanitizeUrl";
+import { getSafeUrl } from "@/utils/helpers";
 
 import { SvgIconFile } from "@/components/icon/svg-icon-file";
 import { Chip } from "@/components/ui/chip";
@@ -20,7 +20,7 @@ const resolveDataUrlSrc = (attachment: Attachment) => {
   const mediaType = attachment.mediaType ?? "image/png";
 
   if (attachment.sourceType === "url") {
-    return sanitizeUrl(attachment.data);
+    return getSafeUrl(attachment.data);
   }
   if (THREAD_ATTACHMENT_ALLOWED_IMAGE_TYPES.includes(mediaType)) {
     return `data:${mediaType};base64,${attachment.data}`;
