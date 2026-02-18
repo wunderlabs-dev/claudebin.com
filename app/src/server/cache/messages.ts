@@ -7,10 +7,7 @@ import { messages, type PaginatedMessages } from "@/server/repos/messages";
 // Uses service client to bypass RLS (access control happens at page level)
 // Cached indefinitely — messages never change after processing
 export const getCachedMessages = (sessionId: string): Promise<PaginatedMessages> =>
-  unstable_cache(
-    async () => {
-      const supabase = createServiceClient();
-      return messages.getBySessionId(supabase, sessionId);
-    },
-    ["messages", sessionId],
-  )();
+  unstable_cache(async () => {
+    const supabase = createServiceClient();
+    return messages.getBySessionId(supabase, sessionId);
+  }, ["messages", sessionId])();

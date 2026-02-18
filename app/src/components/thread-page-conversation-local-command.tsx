@@ -1,6 +1,7 @@
 "use client";
 
 import { isServer } from "@tanstack/react-query";
+import { isNil } from "ramda";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -27,7 +28,7 @@ const ThreadPageConversationLocalCommand = ({ block }: ThreadPageConversationLoc
   const t = useTranslations();
   const md = useMediaQuery(mediaQueries.md, { initializeWithValue: isServer });
 
-  if (!block.output) {
+  if (isNil(block.output)) {
     return (
       <div className="flex items-center gap-2 py-2">
         <SvgIconBash size="sm" color="primary" />
