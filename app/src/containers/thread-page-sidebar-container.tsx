@@ -12,6 +12,7 @@ import { useAuth } from "@/context/auth";
 import { useThreadEmbed } from "@/context/thread-embed";
 
 import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
+import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
 
@@ -77,6 +78,8 @@ const ThreadPageSidebarContainer = ({
             <CopyInput variant="link" value={`${APP_URL}/threads/${id}`} />
 
             <div className="flex flex-col gap-4">
+              <ThreadPageSidebarContinueConversation />
+
               {lg ? (
                 <Button variant="secondary" onClick={() => setView("embed")}>
                   <SvgIconArrowLink className="shrink-0" />
@@ -84,7 +87,12 @@ const ThreadPageSidebarContainer = ({
                 </Button>
               ) : null}
 
-              <ThreadPageSidebarContinueConversation />
+              {lg ? (
+                <Button variant="secondary">
+                  <SvgIconDownload className="shrink-0" />
+                  {t("thread.exportImage")}
+                </Button>
+              ) : null}
               {isAuthor ? <ThreadPageSidebarDeleteContainer id={id} /> : null}
             </div>
           </div>

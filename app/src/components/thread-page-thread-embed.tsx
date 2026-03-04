@@ -6,7 +6,9 @@ import { isNil, isNotNil } from "ramda";
 import { APP_URL } from "@/utils/constants";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
+import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 
+import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
 import { Typography } from "@/components/ui/typography";
 import { NavButton, NavLabel } from "@/components/ui/nav";
@@ -34,6 +36,13 @@ const ThreadPageThreadEmbed = ({ id, from, to, start, onClose }: ThreadPageThrea
           variant="snippet"
           value={`<iframe style="width:100%;height:500px;border:none;" src="${APP_URL}/threads/${id}/embed?from=${from}&to=${to}"></iframe>`}
         />
+      ) : null}
+
+      {isNotNil(from) && isNotNil(to) ? (
+        <Button variant="secondary">
+          <SvgIconDownload className="shrink-0" />
+          {t("thread.exportImage")}
+        </Button>
       ) : null}
 
       {isNil(start) ? (
