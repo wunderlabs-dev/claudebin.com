@@ -12,7 +12,6 @@ import { useAuth } from "@/context/auth";
 import { useThreadEmbed } from "@/context/thread-embed";
 
 import { SvgIconArrowLink } from "@/components/icon/svg-icon-arrow-link";
-import { SvgIconDownload } from "@/components/icon/svg-icon-download";
 import { Button } from "@/components/ui/button";
 import { CopyInput } from "@/components/ui/copy-input";
 
@@ -87,12 +86,6 @@ const ThreadPageSidebarContainer = ({
                 </Button>
               ) : null}
 
-              {lg ? (
-                <Button variant="secondary">
-                  <SvgIconDownload className="shrink-0" />
-                  {t("thread.exportImage")}
-                </Button>
-              ) : null}
               {isAuthor ? <ThreadPageSidebarDeleteContainer id={id} /> : null}
             </div>
           </div>
