@@ -52,24 +52,10 @@ const data = {
       name: copy.metadata.organizationName,
       email: "office@wunderlabs.dev",
       url: "https://wunderlabs.dev/",
-      sameAs: [
-        "https://github.com/wunderlabs-dev",
-        "https://x.com/wunderlabs",
-        "https://agentic.tm/",
-      ],
+      sameAs: ["https://github.com/wunderlabs-dev", "https://agentic.tm/"],
       founder: [
-        {
-          "@type": "Person",
-          name: "Vlad Temian",
-          url: "https://blog.vtemian.com/",
-          sameAs: ["https://x.com/vtemian"],
-        },
-        {
-          "@type": "Person",
-          name: "Marius Balaj",
-          url: "https://balajmarius.com/",
-          sameAs: ["https://x.com/balajmarius"],
-        },
+        { "@type": "Person", name: "Vlad Temian", url: "https://blog.vtemian.com/" },
+        { "@type": "Person", name: "Marius Balaj", url: "https://balajmarius.com/" },
       ],
       logo: toString(new URL("/images/favicon.svg", APP_URL)),
     },
