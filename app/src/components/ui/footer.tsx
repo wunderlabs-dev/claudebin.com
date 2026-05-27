@@ -81,7 +81,7 @@ const Footer = ({ className, ...props }: FooterProps) => {
                     key={item.href}
                     href={item.href}
                     target="_blank"
-                    className="text-base hover:text-orange-50"
+                    className="py-1 text-base hover:text-orange-50"
                   >
                     {t(item.labelKey)}
                   </Link>
