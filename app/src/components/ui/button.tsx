@@ -18,7 +18,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: [
-          "bg-orange-50",
+          "bg-orange-50 text-gray-100",
           "hover:bg-linear-to-br hover:to-orange-150",
           "active:ridge-t active:scale-98 active:to-orange-50",
           "disabled:bg-orange-50/20 disabled:text-gray-450",
