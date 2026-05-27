@@ -57,6 +57,18 @@ const data = {
         "https://x.com/wunderlabs",
         "https://agentic.tm/",
       ],
+      founder: [
+        {
+          "@type": "Person",
+          name: "vtemian",
+          url: "https://x.com/vtemian",
+        },
+        {
+          "@type": "Person",
+          name: "balajmarius",
+          url: "https://x.com/balajmarius",
+        },
+      ],
       logo: toString(new URL("/images/favicon.svg", APP_URL)),
     },
     {
@@ -67,8 +79,8 @@ const data = {
       inLanguage: "en-US",
       potentialAction: {
         "@type": "SearchAction",
-        target: toString(new URL("/threads?query={search_term_string}", APP_URL)),
         "query-input": "required name=search_term_string",
+        target: toString(new URL("/threads?query={search_term_string}", APP_URL)),
       },
       publisher: {
         "@type": "Organization",
@@ -91,8 +103,8 @@ const data = {
       },
       publisher: {
         "@type": "Organization",
-        name: copy.metadata.organizationName,
         url: "https://wunderlabs.dev/",
+        name: copy.metadata.organizationName,
       },
     },
   ],
