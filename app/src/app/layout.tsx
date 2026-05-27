@@ -58,16 +58,8 @@ const data = {
         "https://agentic.tm/",
       ],
       founder: [
-        {
-          "@type": "Person",
-          name: "vtemian",
-          url: "https://blog.vtemian.com/",
-        },
-        {
-          "@type": "Person",
-          name: "balajmarius",
-          url: "https://balajmarius.com/",
-        },
+        { "@type": "Person", name: "vtemian", url: "https://blog.vtemian.com/" },
+        { "@type": "Person", name: "balajmarius", url: "https://balajmarius.com/" },
       ],
       logo: toString(new URL("/images/favicon.svg", APP_URL)),
     },
