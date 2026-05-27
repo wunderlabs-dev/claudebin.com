@@ -27,17 +27,17 @@ type RootLayoutProps = {
 const OG_IMAGE_WIDTH = 1200;
 const OG_IMAGE_HEIGHT = 630;
 
-const sans = Host_Grotesk({
+const hostGrotesk = Host_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-const mono = JetBrains_Mono({
+const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 });
 
-const openGraphImage = {
+const openGraphSrc = {
   url: "/images/og-default-1200x630.webp",
   width: OG_IMAGE_WIDTH,
   height: OG_IMAGE_HEIGHT,
@@ -58,8 +58,18 @@ const data = {
         "https://agentic.tm/",
       ],
       founder: [
-        { "@type": "Person", name: "vtemian", url: "https://blog.vtemian.com/" },
-        { "@type": "Person", name: "balajmarius", url: "https://balajmarius.com/" },
+        {
+          "@type": "Person",
+          name: "Vlad Temian",
+          url: "https://blog.vtemian.com/",
+          sameAs: ["https://x.com/vtemian"],
+        },
+        {
+          "@type": "Person",
+          name: "Marius Balaj",
+          url: "https://balajmarius.com/",
+          sameAs: ["https://x.com/balajmarius"],
+        },
       ],
       logo: toString(new URL("/images/favicon.svg", APP_URL)),
     },
@@ -76,8 +86,8 @@ const data = {
       },
       publisher: {
         "@type": "Organization",
-        name: copy.metadata.organizationName,
         url: "https://wunderlabs.dev/",
+        name: copy.metadata.organizationName,
       },
     },
     {
@@ -87,7 +97,7 @@ const data = {
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Web",
       url: toString(new URL("/", APP_URL)),
-      image: toString(new URL(openGraphImage.url, APP_URL)),
+      image: toString(new URL(openGraphSrc.url, APP_URL)),
       offers: {
         "@type": "Offer",
         price: "0",
@@ -116,13 +126,13 @@ export const metadata: Metadata = {
     siteName: copy.metadata.siteName,
     title: copy.metadata.title,
     description: copy.metadata.description,
-    images: [openGraphImage],
+    images: [openGraphSrc],
   },
   twitter: {
     card: "summary_large_image",
     title: copy.metadata.title,
     description: copy.metadata.description,
-    images: [openGraphImage],
+    images: [openGraphSrc],
   },
 };
 
@@ -136,7 +146,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   } = await supabase.auth.getUser();
 
   return (
-    <html lang={locale} className={cn(sans.variable, mono.variable)}>
+    <html lang={locale} className={cn(hostGrotesk.variable, jetBrainsMono.variable)}>
       <body className="min-h-screen bg-fade bg-gray-100 font-sans text-white antialiased selection:bg-orange-50 selection:text-white">
         <script
           type="application/ld+json"
