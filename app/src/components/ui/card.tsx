@@ -176,20 +176,20 @@ const cardActionsVariantClassNames: CardVariantMapping = {
   grid: "absolute top-3 right-3",
 } as const;
 
-type CardActionsProps = Omit<React.ComponentProps<"button">, "children">;
+type CardActionsProps = Omit<React.ComponentProps<"span">, "children">;
 
 const CardActions = ({ className, ...props }: CardActionsProps) => {
   const variant = useContext(CardContext);
 
   return (
-    <button
-      type="button"
+    <span
       data-slot="card-actions"
-      className={cn("cursor-pointer", cardActionsVariantClassNames[variant], className)}
+      aria-hidden="true"
+      className={cn("inline-flex", cardActionsVariantClassNames[variant], className)}
       {...props}
     >
       <SvgIconArrowLink size="sm" color="accent" />
-    </button>
+    </span>
   );
 };
 

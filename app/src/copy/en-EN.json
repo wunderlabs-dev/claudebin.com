@@ -58,6 +58,8 @@
     "howToUse": "How to Use",
     "featuredThreadsTitle": "/Featured <gradient>threads</gradient>",
     "featuredThreadsDescription": "Handpicked conversations worth exploring.",
+    "featuredThreadsPrevious": "Show previous featured threads",
+    "featuredThreadsNext": "Show next featured threads",
     "seeMoreThreads": "See more threads"
   },
   "error": {
