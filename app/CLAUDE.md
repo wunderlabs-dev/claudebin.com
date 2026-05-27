@@ -138,14 +138,14 @@ Named handlers only, never inline callbacks:
 
 ```tsx
 // Wrong
-<Button onClick={() => console.log("clicked")}>Click</Button>
+<Button onClick={() => console.log("clicked")}>Click</Button>;
 
 // Correct
 const handleClick = () => {
   console.log("clicked");
 };
 
-<Button onClick={handleClick}>Click</Button>
+<Button onClick={handleClick}>Click</Button>;
 ```
 
 Naming: `handle[Action]` (e.g., `handleSignUp`, `handleSubmit`)
@@ -228,11 +228,11 @@ const thread = useTranslations("thread");
 Rich text with inline renderers:
 
 ```tsx
-{t.rich("error404.doesNotExist", {
-  serif: (chunks: ReactNode) => (
-    <span className="font-serif italic">{chunks}</span>
-  ),
-})}
+{
+  t.rich("error404.doesNotExist", {
+    serif: (chunks: ReactNode) => <span className="font-serif italic">{chunks}</span>,
+  });
+}
 ```
 
 Translation strings use XML-like tags:

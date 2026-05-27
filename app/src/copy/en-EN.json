@@ -1,5 +1,7 @@
 {
   "metadata": {
+    "siteName": "Claudebin",
+    "organizationName": "Wunderlabs",
     "title": "Claudebin - Your Claude Code Sessions Deserve a URL",
     "description": "Turn your Claude Code sessions into shareable, embeddable, and continuable artifacts.",
     "threads": {

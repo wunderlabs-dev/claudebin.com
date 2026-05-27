@@ -20,7 +20,7 @@ Thanks for your interest in contributing to Claudebin!
 
 ### Code Style
 
-- We use [Biome](https://biomejs.dev/) for linting and formatting
+- We use [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) for linting and Oxfmt for formatting
 - Run `bun format` to auto-format code
 - Follow existing patterns in the codebase
 

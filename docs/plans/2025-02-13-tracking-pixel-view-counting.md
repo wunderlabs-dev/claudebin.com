@@ -13,9 +13,11 @@
 ## Task 1: Database migration — `page_views` table + `track_page_view` RPC
 
 **Files:**
+
 - Create: `supabase/migrations/20250213000001_add_page_views_dedup.sql`
 
 **Context:** The old RPCs live in two migrations:
+
 - `supabase/migrations/20250125000004_add_increment_view_count_rpc.sql` — defines `increment_session_view_count(TEXT)` granted to `authenticated` + `anon`
 - `supabase/migrations/20250127000002_add_profile_view_count.sql` — defines `increment_profile_view_count(UUID)` granted to `authenticated` + `anon`
 
@@ -95,6 +97,7 @@ git commit -m "feat: add page_views table and track_page_view RPC for deduped vi
 ```
 
 **Important notes:**
+
 - The `sessions.id` column is `TEXT` (see `supabase/migrations/20250115000002_create_sessions.sql:7`).
 - The `profiles.id` column is `UUID` (see `supabase/migrations/20250115000001_create_profiles.sql:6`), so the RPC casts `p_entity_id::UUID` for profile updates.
 - The old `viewCount` columns use camelCase (see `20250116000001_rename_columns_to_camelcase.sql`). The `UPDATE` statements use `"viewCount"` with quotes to match.
@@ -105,6 +108,7 @@ git commit -m "feat: add page_views table and track_page_view RPC for deduped vi
 ## Task 2: Bot detection utility
 
 **Files:**
+
 - Create: `app/src/server/utils/bots.ts`
 
 **Context:** This is a new file in `app/src/server/utils/`. Existing files there: `logger.ts`, `message-to-markdown.ts`, `openrouter.ts`. All use camelCase filenames per CLAUDE.md.
@@ -140,11 +144,7 @@ export const getVisitorHash = (ip: string | null, userAgent: string | null): str
 };
 
 export const getClientIp = (headers: Headers): string | null => {
-  return (
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    headers.get("x-real-ip") ??
-    null
-  );
+  return headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? headers.get("x-real-ip") ?? null;
 };
 ```
 
@@ -156,6 +156,7 @@ git commit -m "feat: add bot detection and visitor hashing utility"
 ```
 
 **Important notes:**
+
 - `isBot` returns `true` for null UA — no UA = assume bot.
 - `getVisitorHash` truncates to 16 hex chars (64 bits). Enough for dedup, keeps DB compact.
 - `getClientIp` reads `x-forwarded-for` first (standard for reverse proxies like Vercel), falls back to `x-real-ip`.
@@ -165,6 +166,7 @@ git commit -m "feat: add bot detection and visitor hashing utility"
 ## Task 3: Add pixel logger entry
 
 **Files:**
+
 - Modify: `app/src/server/utils/logger.ts:13-17` (the `logger` export object)
 
 **Context:** The logger module at `app/src/server/utils/logger.ts` exports a `logger` object with entries for `parser`, `sessions`, `auth`. We need to add `pixel`.
@@ -204,9 +206,11 @@ git commit -m "feat: add pixel logger entry"
 ## Task 4: Pixel API route for threads (sessions)
 
 **Files:**
+
 - Create: `app/src/app/api/pixel/t/[id]/route.ts`
 
 **Context:** Existing API route patterns in this codebase:
+
 - Import style: `import { NextResponse, type NextRequest } from "next/server"` (see `app/src/app/api/threads/[id]/messages/route.ts:1`)
 - `after` is imported separately: `import { after } from "next/server"` (see `app/src/app/api/sessions/publish/route.ts:2`)
 - Service client usage: `const supabase = createServiceClient()` — no `await`, it's synchronous (see `app/src/server/supabase/service.ts:5-16`)
@@ -225,16 +229,13 @@ import { getClientIp, getVisitorHash, isBot } from "@/server/utils/botDetection"
 import { logger } from "@/server/utils/logger";
 
 // ABOUTME: 1x1 transparent GIF (43 bytes)
-const PIXEL_GIF = Buffer.from(
-  "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-  "base64",
-);
+const PIXEL_GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
 
 const PIXEL_HEADERS = {
   "Content-Type": "image/gif",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-  "Pragma": "no-cache",
-  "Expires": "0",
+  Pragma: "no-cache",
+  Expires: "0",
 };
 
 type RouteContext = {
@@ -282,6 +283,7 @@ git commit -m "feat: add tracking pixel API route for thread views"
 ```
 
 **Important notes:**
+
 - The response is returned BEFORE the `after()` callback runs. This means the GIF is served instantly; the DB work happens asynchronously after response.
 - `after()` is a Next.js API from `next/server` that runs code after the response is sent — already used in this codebase at `app/src/app/api/sessions/publish/route.ts:71`.
 - `createServiceClient()` is synchronous (returns a client, no promise). See `app/src/server/supabase/service.ts`.
@@ -292,6 +294,7 @@ git commit -m "feat: add tracking pixel API route for thread views"
 ## Task 5: Pixel API route for profiles
 
 **Files:**
+
 - Create: `app/src/app/api/pixel/p/[id]/route.ts`
 
 **Context:** Identical structure to Task 4 but with `p_entity_type: "profile"`. The profile page at `app/src/app/(main)/profile/[username]/page.tsx:44` calls `profiles.incrementViewCount(supabase, profile.id)` where `profile.id` is a UUID string. The tracking pixel will receive this same UUID as the `id` route param.
@@ -308,16 +311,13 @@ import { getClientIp, getVisitorHash, isBot } from "@/server/utils/botDetection"
 import { logger } from "@/server/utils/logger";
 
 // ABOUTME: 1x1 transparent GIF (43 bytes)
-const PIXEL_GIF = Buffer.from(
-  "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-  "base64",
-);
+const PIXEL_GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
 
 const PIXEL_HEADERS = {
   "Content-Type": "image/gif",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-  "Pragma": "no-cache",
-  "Expires": "0",
+  Pragma: "no-cache",
+  Expires: "0",
 };
 
 type RouteContext = {
@@ -365,6 +365,7 @@ git commit -m "feat: add tracking pixel API route for profile views"
 ```
 
 **Important notes:**
+
 - The `id` param here will be a UUID string (profile IDs are UUIDs). The `track_page_view` RPC casts it to UUID internally via `p_entity_id::UUID`.
 
 ---
@@ -372,6 +373,7 @@ git commit -m "feat: add tracking pixel API route for profile views"
 ## Task 6: Tracking pixel component
 
 **Files:**
+
 - Create: `app/src/components/tracking-pixel.tsx`
 
 **Context:** Components in this codebase are single files in `app/src/components/`, kebab-case named. They use `as const` for variant unions per CLAUDE.md type patterns. The component renders a server-side `<img>` tag (no client interactivity needed — no `"use client"`).
@@ -412,6 +414,7 @@ git commit -m "feat: add TrackingPixel component"
 ```
 
 **Important notes:**
+
 - Uses `<img>` (not Next.js `<Image>`) intentionally — this is a tracking pixel, not a content image. Next.js `<Image>` would try to optimize it and break caching headers.
 - `alt=""` + `aria-hidden="true"` makes it invisible to screen readers per accessibility best practices.
 - `className="absolute invisible"` makes it take no layout space and be visually hidden.
@@ -422,9 +425,11 @@ git commit -m "feat: add TrackingPixel component"
 ## Task 7: Update thread page — replace SSR increment with pixel
 
 **Files:**
+
 - Modify: `app/src/app/(main)/threads/[id]/page.tsx:10,24,75,78`
 
 **Context:** Current state at `app/src/app/(main)/threads/[id]/page.tsx`:
+
 - Line 10: `import { sessions } from "@/server/repos/sessions";`
 - Line 24: `import { ThreadEmbedProvider } from "@/context/thread-embed";`
 - Line 75: `sessions.incrementViewCount(supabase, id);` — fire-and-forget SSR call (THIS IS WHAT WE'RE REMOVING)
@@ -445,7 +450,7 @@ import { TrackingPixel } from "@/components/tracking-pixel";
 Delete line 75 entirely:
 
 ```typescript
-  sessions.incrementViewCount(supabase, id);
+sessions.incrementViewCount(supabase, id);
 ```
 
 Also delete the blank line after it if one exists, to keep spacing clean.
@@ -493,9 +498,11 @@ import { TrackingPixel } from "@/components/tracking-pixel";
 ## Task 8: Update profile page — replace SSR increment with pixel
 
 **Files:**
+
 - Modify: `app/src/app/(main)/profile/[username]/page.tsx:6,42-44,46-90`
 
 **Context:** Current state at `app/src/app/(main)/profile/[username]/page.tsx`:
+
 - Line 6: `import { profiles } from "@/server/repos/profiles";` — STILL NEEDED for `profiles.getByUsername` on line 30
 - Lines 42-44: The comment + `profiles.incrementViewCount(supabase, profile.id);` — THIS IS WHAT WE'RE REMOVING
 - Lines 46-91: The `return (<Container ...>...</Container>)` — we need to wrap this in a fragment to add the pixel
@@ -513,9 +520,9 @@ import { TrackingPixel } from "@/components/tracking-pixel";
 Delete lines 42-44 entirely:
 
 ```typescript
-  // Analytics for profile views
-  // Fire-and-forget increment, no await needed as it doesn't affect page render
-  profiles.incrementViewCount(supabase, profile.id);
+// Analytics for profile views
+// Fire-and-forget increment, no await needed as it doesn't affect page render
+profiles.incrementViewCount(supabase, profile.id);
 ```
 
 **Step 3: Wrap return JSX in fragment with pixel**
@@ -569,9 +576,11 @@ git commit -m "feat: replace SSR view count increment with tracking pixel on pro
 ## Task 9: Remove `incrementViewCount` from sessions repo
 
 **Files:**
+
 - Modify: `app/src/server/repos/sessions.ts:243-254,278`
 
 **Context:** Current state:
+
 - Lines 243-254: The `incrementViewCount` function definition
 - Line 278: `incrementViewCount,` in the exports object
 
@@ -655,9 +664,11 @@ git commit -m "refactor: remove incrementViewCount from sessions repo"
 ## Task 10: Remove `incrementViewCount` from profiles repo
 
 **Files:**
+
 - Modify: `app/src/server/repos/profiles.ts:53-58,60`
 
 **Context:** Current state:
+
 - Lines 53-58: The `incrementViewCount` function definition
 - Line 60: `export const profiles = { getById, getByUsername, upsert, incrementViewCount };`
 
@@ -706,16 +717,17 @@ cd app && bun type-check
 ```
 
 Expected: Clean output, no errors. If there are errors, they'll likely be one of:
+
 - Unused import of `logger` in `sessions.ts` — check if anything else uses it (it does: line 185, 199, 215, 239)
 - Missing `after` type — `after` is available in `next/server` since Next.js 15
 
-**Step 2: Run Biome check**
+**Step 2: Run Oxc check**
 
 ```bash
 cd app && bun check
 ```
 
-Expected: Clean output. If there are Biome errors, fix formatting/lint issues.
+Expected: Clean output. If there are Oxlint or Oxfmt errors, fix formatting/lint issues.
 
 **Step 3: Run dev server and manually verify**
 
@@ -724,6 +736,7 @@ cd app && bun dev
 ```
 
 Then:
+
 1. Open a thread page in the browser
 2. Open DevTools → Network tab
 3. Verify you see a request to `/api/pixel/t/{id}` returning `200` with `Content-Type: image/gif`
@@ -753,18 +766,18 @@ The view count on the `sessions` table should NOT have incremented a second time
 
 ## Files Summary
 
-| # | File | Action | Task |
-|---|------|--------|------|
-| 1 | `supabase/migrations/20250213000001_add_page_views_dedup.sql` | Create | 1 |
-| 2 | `app/src/server/utils/bots.ts` | Create | 2 |
-| 3 | `app/src/server/utils/logger.ts` | Edit line 17 | 3 |
-| 4 | `app/src/app/api/pixel/t/[id]/route.ts` | Create | 4 |
-| 5 | `app/src/app/api/pixel/p/[id]/route.ts` | Create | 5 |
-| 6 | `app/src/components/tracking-pixel.tsx` | Create | 6 |
-| 7 | `app/src/app/(main)/threads/[id]/page.tsx` | Edit lines 25, 75, 78 | 7 |
-| 8 | `app/src/app/(main)/profile/[username]/page.tsx` | Edit lines 7, 42-44, 46, 90-91 | 8 |
-| 9 | `app/src/server/repos/sessions.ts` | Delete lines 243-254, 278 | 9 |
-| 10 | `app/src/server/repos/profiles.ts` | Delete lines 53-58, edit line 60 | 10 |
+| #   | File                                                          | Action                           | Task |
+| --- | ------------------------------------------------------------- | -------------------------------- | ---- |
+| 1   | `supabase/migrations/20250213000001_add_page_views_dedup.sql` | Create                           | 1    |
+| 2   | `app/src/server/utils/bots.ts`                                | Create                           | 2    |
+| 3   | `app/src/server/utils/logger.ts`                              | Edit line 17                     | 3    |
+| 4   | `app/src/app/api/pixel/t/[id]/route.ts`                       | Create                           | 4    |
+| 5   | `app/src/app/api/pixel/p/[id]/route.ts`                       | Create                           | 5    |
+| 6   | `app/src/components/tracking-pixel.tsx`                       | Create                           | 6    |
+| 7   | `app/src/app/(main)/threads/[id]/page.tsx`                    | Edit lines 25, 75, 78            | 7    |
+| 8   | `app/src/app/(main)/profile/[username]/page.tsx`              | Edit lines 7, 42-44, 46, 90-91   | 8    |
+| 9   | `app/src/server/repos/sessions.ts`                            | Delete lines 243-254, 278        | 9    |
+| 10  | `app/src/server/repos/profiles.ts`                            | Delete lines 53-58, edit line 60 | 10   |
 
 ## Dependency Order
 

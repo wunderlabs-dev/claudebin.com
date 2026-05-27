@@ -98,7 +98,6 @@ const InputLabel = ({ className, ...props }: InputLabelProps) => {
   const context = use(FormControlContext);
 
   return (
-    // biome-ignore lint/a11y/noLabelWithoutControl: htmlFor is passed via props
     <label
       data-slot="input-label"
       className={cn("px-3", inputLabelVariants({ variant: context.variant }), className)}

@@ -1,9 +1,9 @@
 ---
 name: Bug Report
 about: Report a bug or issue
-title: ''
+title: ""
 labels: bug
-assignees: ''
+assignees: ""
 ---
 
 ## Description

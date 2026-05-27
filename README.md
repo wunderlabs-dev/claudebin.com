@@ -80,29 +80,29 @@ claudebin.com/
 
 ### Routes
 
-| Route | Description |
-|---|---|
-| `/` | Homepage with featured threads |
-| `/threads` | Browse public threads |
-| `/threads/[id]` | View a session |
-| `/threads/[id]/embed` | Embeddable version |
-| `/profile/[username]` | User profile |
-| `/auth/login` | GitHub OAuth |
+| Route                 | Description                    |
+| --------------------- | ------------------------------ |
+| `/`                   | Homepage with featured threads |
+| `/threads`            | Browse public threads          |
+| `/threads/[id]`       | View a session                 |
+| `/threads/[id]/embed` | Embeddable version             |
+| `/profile/[username]` | User profile                   |
+| `/auth/login`         | GitHub OAuth                   |
 
 ### API
 
 OpenAPI spec at `/api/openapi.json`.
 
-| Endpoint | Method | Description |
-|---|---|---|
-| `/api/auth/start` | `POST` | Start CLI auth flow |
-| `/api/auth/poll` | `GET` | Poll for auth completion |
-| `/api/auth/refresh` | `POST` | Refresh access token |
-| `/api/auth/validate` | `GET` | Validate access token |
-| `/api/sessions/publish` | `POST` | Publish a session |
-| `/api/sessions/poll` | `GET` | Poll processing status |
-| `/api/threads/[id]/messages` | `GET` | Get thread messages |
-| `/api/threads/[id]/md` | `GET` | Get thread as markdown |
+| Endpoint                     | Method | Description              |
+| ---------------------------- | ------ | ------------------------ |
+| `/api/auth/start`            | `POST` | Start CLI auth flow      |
+| `/api/auth/poll`             | `GET`  | Poll for auth completion |
+| `/api/auth/refresh`          | `POST` | Refresh access token     |
+| `/api/auth/validate`         | `GET`  | Validate access token    |
+| `/api/sessions/publish`      | `POST` | Publish a session        |
+| `/api/sessions/poll`         | `GET`  | Poll processing status   |
+| `/api/threads/[id]/messages` | `GET`  | Get thread messages      |
+| `/api/threads/[id]/md`       | `GET`  | Get thread as markdown   |
 
 ### Session Processing Pipeline
 
@@ -114,23 +114,23 @@ Plugin uploads JSONL ─→ Store in Supabase Storage ─→ Parse into messages
 
 PostgreSQL with Row Level Security. Auto-profile creation on signup, denormalized counts via triggers, and full-text search on message content.
 
-| Table | Description |
-|---|---|
-| `profiles` | User data synced from `auth.users` |
-| `sessions` | Published threads with view/like counts |
-| `messages` | Parsed conversation messages |
-| `session_likes` | User likes |
-| `cli_auth_sessions` | Temporary CLI OAuth tokens |
+| Table               | Description                             |
+| ------------------- | --------------------------------------- |
+| `profiles`          | User data synced from `auth.users`      |
+| `sessions`          | Published threads with view/like counts |
+| `messages`          | Parsed conversation messages            |
+| `session_likes`     | User likes                              |
+| `cli_auth_sessions` | Temporary CLI OAuth tokens              |
 
 ## Tech Stack
 
-| | |
-|---|---|
-| **Framework** | Next.js 16, Turbopack |
-| **Database** | Supabase (PostgreSQL) |
-| **Auth** | Supabase Auth, GitHub OAuth |
-| **Styling** | Tailwind CSS, shadcn/ui |
-| **Tooling** | Bun, Biome |
+|               |                             |
+| ------------- | --------------------------- |
+| **Framework** | Next.js 16, Turbopack       |
+| **Database**  | Supabase (PostgreSQL)       |
+| **Auth**      | Supabase Auth, GitHub OAuth |
+| **Styling**   | Tailwind CSS, shadcn/ui     |
+| **Tooling**   | Bun, Oxlint, Oxfmt          |
 
 ## License
 

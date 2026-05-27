@@ -108,8 +108,9 @@ const stripSystemReminders = (text: string): string =>
 
 const stripLineNumbers = (text: string): string => text.replace(/^ *\d+→/gm, "");
 
-// biome-ignore lint/suspicious/noControlCharactersInRegex: ANSI escape codes require control characters
-const stripAnsiCodes = (text: string): string => text.replace(/\x1b\[[0-9;]*m/g, "");
+const ANSI_ESCAPE_CODES_PATTERN = new RegExp(String.raw`\u001b\[[0-9;]*m`, "g");
+
+const stripAnsiCodes = (text: string): string => text.replace(ANSI_ESCAPE_CODES_PATTERN, "");
 
 const normalizeAnswer = (
   answer: string | string[],
@@ -396,7 +397,6 @@ export const createTransforms = (workingDir: string | null): Transforms => {
     const parsed = enhancer.schema.safeParse(toolUseResult);
     if (!parsed.success) return null;
 
-    // biome-ignore lint/suspicious/noExplicitAny: enhancer types are matched by registry key
     return (enhancer.enhance as (data: any) => Record<string, unknown>)(parsed.data);
   };
 

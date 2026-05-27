@@ -84,7 +84,6 @@ const Code = ({ code, lang = "typescript", className }: CodeProps) => {
         "[&_pre]:px-4 [&_pre]:py-3 [&_pre]:font-mono [&_pre]:text-sm",
         className,
       )}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

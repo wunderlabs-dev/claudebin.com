@@ -28,7 +28,7 @@ export interface PaginatedMessages {
 }
 
 const mapRowToMessage = (row: MessagesRow): Message => {
-  const { content, rawMessage, role, ...rest } = row;
+  const { content, role, ...rest } = row;
   return {
     ...rest,
     role: (role ?? "assistant") as Role,

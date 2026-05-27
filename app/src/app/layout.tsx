@@ -6,6 +6,7 @@ import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { toString } from "es-toolkit/compat";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -23,6 +24,9 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+
 const sans = Host_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -32,6 +36,67 @@ const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 });
+
+const openGraphImage = {
+  url: "/images/og-default-1200x630.webp",
+  width: OG_IMAGE_WIDTH,
+  height: OG_IMAGE_HEIGHT,
+  alt: copy.metadata.siteName,
+};
+
+const data = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: copy.metadata.organizationName,
+      email: "office@wunderlabs.dev",
+      url: "https://wunderlabs.dev/",
+      sameAs: [
+        "https://github.com/wunderlabs-dev",
+        "https://x.com/wunderlabs",
+        "https://agentic.tm/",
+      ],
+      logo: toString(new URL("/images/favicon.svg", APP_URL)),
+    },
+    {
+      "@type": "WebSite",
+      name: copy.metadata.siteName,
+      description: copy.metadata.description,
+      url: toString(new URL("/", APP_URL)),
+      inLanguage: "en-US",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: toString(new URL("/threads?query={search_term_string}", APP_URL)),
+        "query-input": "required name=search_term_string",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: copy.metadata.organizationName,
+        url: "https://wunderlabs.dev/",
+      },
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: copy.metadata.siteName,
+      description: copy.metadata.description,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web",
+      url: toString(new URL("/", APP_URL)),
+      image: toString(new URL(openGraphImage.url, APP_URL)),
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: copy.metadata.organizationName,
+        url: "https://wunderlabs.dev/",
+      },
+    },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
@@ -44,16 +109,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: APP_URL,
-    siteName: "Claudebin",
+    siteName: copy.metadata.siteName,
     title: copy.metadata.title,
     description: copy.metadata.description,
-    images: ["/images/og-default-1200x630.webp"],
+    images: [openGraphImage],
   },
   twitter: {
     card: "summary_large_image",
     title: copy.metadata.title,
     description: copy.metadata.description,
-    images: ["/images/og-default-1200x630.webp"],
+    images: [openGraphImage],
   },
 };
 
@@ -69,6 +134,13 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   return (
     <html lang={locale} className={cn(sans.variable, mono.variable)}>
       <body className="min-h-screen bg-fade bg-gray-100 font-sans text-white antialiased selection:bg-orange-50 selection:text-white">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(data),
+          }}
+        />
+
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>
             <AuthProvider initialUser={user}>{children}</AuthProvider>

@@ -5,7 +5,6 @@ type TrackingPixelProps = {
 
 export const TrackingPixel = ({ type, id }: TrackingPixelProps) => {
   return (
-    // biome-ignore lint/performance/noImgElement: tracking pixel must bypass next/image optimization
     <img
       aria-hidden="true"
       src={`/api/pixel/${type}/${id}`}

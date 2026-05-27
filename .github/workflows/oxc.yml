@@ -1,4 +1,4 @@
-name: Biome Check
+name: Oxc Check
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [main, develop]
 
 jobs:
-  biome:
-    name: Run Biome
+  oxc:
+    name: Run Oxc
     runs-on: ubuntu-latest
 
     steps:
@@ -23,5 +23,5 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Run Biome check
+      - name: Run Oxc check
         run: bun check

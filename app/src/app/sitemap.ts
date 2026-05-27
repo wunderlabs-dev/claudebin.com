@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { toString } from "es-toolkit/compat";
 
 import { APP_URL } from "@/utils/constants";
 import { createServiceClient } from "@/server/supabase/service";
@@ -6,7 +7,7 @@ import { createServiceClient } from "@/server/supabase/service";
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const supabase = createServiceClient();
 
-  const [{ data: threads }, { data: profiles }] = await Promise.all([
+  const [{ data: sessions }, { data: users }] = await Promise.all([
     supabase
       .from("sessions")
       .select("id, createdAt")
@@ -19,41 +20,41 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       .not("username", "is", null),
   ]);
 
-  const staticPages: MetadataRoute.Sitemap = [
+  const pages = [
     {
-      url: APP_URL,
-      lastModified: new Date(),
-      changeFrequency: "daily",
       priority: 1,
-    },
-    {
-      url: `${APP_URL}/threads`,
+      changeFrequency: "daily",
       lastModified: new Date(),
-      changeFrequency: "hourly",
-      priority: 0.9,
+      url: toString(new URL("/", APP_URL)),
     },
     {
-      url: `${APP_URL}/privacy-policy`,
-      changeFrequency: "yearly",
-      priority: 0.2,
+      priority: 0.9,
+      changeFrequency: "hourly",
+      lastModified: new Date(),
+      url: toString(new URL("/threads", APP_URL)),
     },
-  ];
+    {
+      priority: 0.2,
+      changeFrequency: "yearly",
+      url: toString(new URL("/privacy-policy", APP_URL)),
+    },
+  ] satisfies MetadataRoute.Sitemap;
 
-  const threadPages: MetadataRoute.Sitemap = (threads ?? []).map((thread) => ({
-    url: `${APP_URL}/threads/${thread.id}`,
-    lastModified: new Date(thread.createdAt),
-    changeFrequency: "weekly",
+  const threads = (sessions ?? []).map((thread) => ({
     priority: 0.7,
-  }));
-
-  const profilePages: MetadataRoute.Sitemap = (profiles ?? []).map((profile) => ({
-    url: `${APP_URL}/profile/${profile.username}`,
-    lastModified: new Date(profile.updatedAt),
     changeFrequency: "weekly",
-    priority: 0.5,
-  }));
+    lastModified: new Date(thread.createdAt),
+    url: toString(new URL(`/threads/${thread.id}`, APP_URL)),
+  })) satisfies MetadataRoute.Sitemap;
 
-  return [...staticPages, ...threadPages, ...profilePages];
+  const profiles = (users ?? []).map((profile) => ({
+    priority: 0.5,
+    changeFrequency: "weekly",
+    lastModified: new Date(profile.updatedAt),
+    url: toString(new URL(`/profile/${profile.username}`, APP_URL)),
+  })) satisfies MetadataRoute.Sitemap;
+
+  return [...pages, ...threads, ...profiles];
 };
 
 export default sitemap;

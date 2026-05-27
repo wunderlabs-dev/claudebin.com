@@ -24,21 +24,25 @@ See `docs/12-12-2025-database-schema.md` for detailed schema documentation.
 ### Option 1: Using Supabase CLI (Recommended)
 
 1. Install the Supabase CLI:
+
 ```bash
 npm install -g supabase
 ```
 
 2. Link your local project to your Supabase project:
+
 ```bash
 supabase link --project-ref your-project-ref
 ```
 
 3. Run the migrations:
+
 ```bash
 supabase db push
 ```
 
 The migrations will be applied in order:
+
 - `20251212000001_create_profiles_table.sql`
 - `20251212000002_create_sessions_table.sql`
 - `20251212000003_create_profiles_rls.sql`
@@ -61,6 +65,7 @@ Copy and paste the contents of each file into the SQL Editor and click "Run".
 After running the migrations, verify the setup:
 
 1. Check that tables exist:
+
 ```sql
 SELECT table_name
 FROM information_schema.tables
@@ -69,6 +74,7 @@ AND table_name IN ('profiles', 'sessions');
 ```
 
 2. Check that RLS is enabled:
+
 ```sql
 SELECT tablename, rowsecurity
 FROM pg_tables
@@ -79,6 +85,7 @@ AND tablename IN ('profiles', 'sessions');
 Both tables should show `rowsecurity = true`.
 
 3. Check that policies exist:
+
 ```sql
 SELECT schemaname, tablename, policyname
 FROM pg_policies
@@ -92,6 +99,7 @@ You should see 4 policies for profiles and 4 policies for sessions.
 After setting up the database, you'll need to configure environment variables for the web and CLI packages.
 
 ### For Web App (`app/.env.local`):
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
@@ -109,15 +117,20 @@ Find these values in your Supabase dashboard under Settings > API.
 ## Troubleshooting
 
 ### "relation already exists" error
+
 This means the table or index already exists. You can either:
+
 - Drop the existing tables and re-run migrations, OR
 - Skip that specific migration file
 
 ### RLS policies not working
+
 Make sure:
+
 1. RLS is enabled on both tables
 2. All policies are created successfully
 3. You're using the correct authentication token
 
 ### Migration order issues
+
 Always run migrations in the numbered order. The sessions table depends on the profiles table, so profiles must be created first.

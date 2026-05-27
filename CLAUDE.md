@@ -16,20 +16,22 @@ bun dev               # Start web app in dev mode
 bun build             # Build the app
 
 # Code Quality
-bun check             # Biome check (runs on pre-commit)
-bun format            # Biome format
-bun lint              # Biome lint
+bun check             # Oxlint and Oxfmt check (runs on pre-commit)
+bun format            # Oxfmt format
+bun lint              # Oxlint lint
 bun type-check        # TypeScript check
 ```
 
 ## Architecture
 
 **Structure:**
+
 - `app/` - Next.js 16 web app (App Router, Turbopack)
 - `docs/` - Architecture documentation
 - `supabase/` - Database migrations
 
 **App Structure (`app/src/`):**
+
 ```
 src/
 ├── app/          # Next.js App Router pages
@@ -43,6 +45,7 @@ src/
 ```
 
 **Key Libraries:**
+
 - Web: next-intl, shadcn/ui (Base UI), Tailwind CSS
 - Data: @supabase/supabase-js, ramda
 - Build: Next.js
@@ -52,20 +55,21 @@ src/
 ### Arrow Functions
 
 **ALWAYS use arrow functions** over function declarations:
+
 ```typescript
 // GOOD
-const myFunction = () => { };
-const asyncFunction = async () => { };
+const myFunction = () => {};
+const asyncFunction = async () => {};
 
 // BAD
-function myFunction() { }
+function myFunction() {}
 ```
 
-### Biome Configuration
+### Oxc Tooling
 
 - Double quotes, 2-space indent, semicolons required
-- 80-char line width
-- Organize imports on save
+- 100-char line width
+- Oxlint for linting, Oxfmt for formatting
 
 ### Component Structure
 
