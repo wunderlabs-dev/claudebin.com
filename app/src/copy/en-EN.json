@@ -35,7 +35,8 @@
     "image": "Image",
     "unlisted": "Unlisted",
     "sharingSettingsUpdated": "Sharing settings updated",
-    "sharingSettingsUpdateError": "Failed to update sharing settings"
+    "sharingSettingsUpdateError": "Failed to update sharing settings",
+    "claudebinHome": "Claudebin home"
   },
   "commands": {
     "oneClickInstall": "claude plugin marketplace add wunderlabs-dev/claudebin && claude plugin install claudebin@claudebin-marketplace",

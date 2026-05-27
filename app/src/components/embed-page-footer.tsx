@@ -32,7 +32,7 @@ export const EmbedPageFooter = ({
 
   return (
     <div className="sticky bottom-0 flex items-center justify-between border-gray-200 border-t bg-gray-100 p-4">
-      <Link href={`/threads/${id}`} target="_blank">
+      <Link href={`/threads/${id}`} target="_blank" aria-label={t("embed.openFullConversation")}>
         <SvgIconClaudebinXs
           size="auto"
           className="w-14 transition-colors duration-150 ease-in-out hover:text-orange-50"
