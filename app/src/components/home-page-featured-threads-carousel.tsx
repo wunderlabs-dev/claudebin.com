@@ -49,10 +49,14 @@ const HomePageFeaturedThreadsCarousel = ({
           </Typography>
 
           <div className="flex items-center gap-2">
-            <Button variant="icon" onClick={handlePrev}>
+            <Button
+              variant="icon"
+              onClick={handlePrev}
+              aria-label={t("home.featuredThreadsPrevious")}
+            >
               <SvgIconArrowLeft />
             </Button>
-            <Button variant="icon" onClick={handleNext}>
+            <Button variant="icon" onClick={handleNext} aria-label={t("home.featuredThreadsNext")}>
               <SvgIconArrowRight />
             </Button>
           </div>
