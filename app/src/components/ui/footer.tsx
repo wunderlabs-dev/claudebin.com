@@ -74,7 +74,9 @@ const Footer = ({ className, ...props }: FooterProps) => {
           <div className="flex flex-col gap-6 sm:flex-row lg:gap-12">
             {sections.map((section) => (
               <nav key={section.title} className="flex flex-col gap-3">
-                <Typography variant="h4">{t(section.title)}</Typography>
+                <Typography variant="h4" as="h2">
+                  {t(section.title)}
+                </Typography>
 
                 {section.links.map((item) => (
                   <Link
