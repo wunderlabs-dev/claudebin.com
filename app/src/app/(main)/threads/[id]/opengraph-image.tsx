@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { format } from "date-fns";
+import { truncate } from "es-toolkit/compat";
 import { isNil } from "ramda";
-import truncate from "lodash.truncate";
 
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
 

@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import truncate from "lodash.truncate";
+import { truncate } from "es-toolkit/compat";
 import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 

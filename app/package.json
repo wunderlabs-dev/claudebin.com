@@ -27,8 +27,8 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
+    "es-toolkit": "^1.47.0",
     "katex": "^0.16.40",
-    "lodash.truncate": "^4.4.2",
     "nanoid": "^5.1.6",
     "next": "16.1.4",
     "next-intl": "^4.7.0",
@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/lodash.truncate": "^4.4.9",
     "@types/node": "^20.10.0",
     "@types/pretty-ms": "^5.0.1",
     "@types/ramda": "^0.31.1",
