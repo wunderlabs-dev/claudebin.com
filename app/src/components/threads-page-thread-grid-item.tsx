@@ -5,8 +5,6 @@ import { formatDistanceToNow } from "date-fns";
 
 import type { ThreadWithAuthor } from "@/server/repos/sessions";
 
-import { getProjectName } from "@/utils/helpers";
-
 import { THREAD_GRID_TITLE_TRUNCATE_LENGTH } from "@/utils/constants";
 
 import { SvgIconChat } from "@/components/icon/svg-icon-chat";
@@ -74,7 +72,7 @@ const ThreadsPageThreadGridItem = ({ thread, ...props }: ThreadsPageThreadGridIt
               {t("common.likes", { count: thread.likeCount })}
             </ListItem>
             <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>
-              {getProjectName(thread.workingDir)}
+              {thread.projectName}
             </ListItem>
           </List>
         </CardSection>

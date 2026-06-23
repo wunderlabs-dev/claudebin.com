@@ -8,7 +8,6 @@ import { format } from "date-fns";
 import { getCachedThread } from "@/server/cache/thread";
 
 import copy from "@/copy/en-EN.json";
-import { getProjectName } from "@/utils/helpers";
 
 import { SvgIconArrowLeft } from "@/components/icon/svg-icon-arrow-left";
 import { Container } from "@/components/ui/container";
@@ -100,7 +99,7 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
             isPublic={thread.isPublic}
             userId={thread.userId}
             createdAt={format(thread.createdAt, "MM/dd/yyyy")}
-            workingDir={getProjectName(thread.workingDir)}
+            projectName={thread.projectName}
             modelName={thread.modelName}
             fileCount={thread.fileCount}
             viewCount={thread.viewCount}

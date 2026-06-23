@@ -22,7 +22,7 @@ type ThreadPageThreadMetaProps = {
   fileCount: number;
   viewCount: number;
   likeCount: number;
-  workingDir?: string | null;
+  projectName?: string | null;
   modelName?: string | null;
   messageCount?: number | null;
   isPublic?: boolean;
@@ -36,7 +36,7 @@ const ThreadPageThreadMeta = ({
   fileCount,
   viewCount,
   likeCount,
-  workingDir,
+  projectName,
   modelName,
   messageCount,
   isPublic,
@@ -54,7 +54,7 @@ const ThreadPageThreadMeta = ({
         <ListItem icon={<SvgIconCalendar size="sm" color="neutral" />}>
           {t("thread.created", { date: createdAt })}
         </ListItem>
-        <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{workingDir}</ListItem>
+        <ListItem icon={<SvgIconFolder size="sm" color="neutral" />}>{projectName}</ListItem>
         {messageCount ? (
           <ListItem icon={<SvgIconChat size="sm" color="neutral" />}>
             {t("common.messages", { count: messageCount })}

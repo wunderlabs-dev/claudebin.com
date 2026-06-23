@@ -4,6 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/supabase/types";
 import { logger } from "@/server/utils/logger";
+import { getProjectName } from "@/server/utils/paths";
 
 type SessionsRow = Database["public"]["Tables"]["sessions"]["Row"];
 type SessionsInsert = Database["public"]["Tables"]["sessions"]["Insert"];
@@ -11,7 +12,8 @@ type SessionsUpdate = Database["public"]["Tables"]["sessions"]["Update"];
 
 export type Session = SessionsRow;
 
-export type ThreadWithAuthor = SessionsRow & {
+export type ThreadWithAuthor = Omit<SessionsRow, "workingDir"> & {
+  projectName: string | null;
   profiles: {
     username: string | null;
     avatarUrl: string | null;
@@ -28,6 +30,17 @@ type ProfileWithDeleted = {
 const sanitizeProfile = (profile: ProfileWithDeleted | null): ThreadWithAuthor["profiles"] => {
   if (!profile || profile.deletedAt) return null;
   return { username: profile.username, avatarUrl: profile.avatarUrl };
+};
+
+const toThreadWithAuthor = (
+  thread: SessionsRow & { profiles: ProfileWithDeleted | null },
+): ThreadWithAuthor => {
+  const { workingDir, profiles, ...session } = thread;
+  return {
+    ...session,
+    projectName: getProjectName(workingDir),
+    profiles: sanitizeProfile(profiles),
+  };
 };
 
 export type GetPublicThreadsResult = {
@@ -58,10 +71,7 @@ const getPublicThreads = async (
     throw new Error(`Failed to fetch threads: ${error.message}`);
   }
 
-  const threads = (data ?? []).map((thread) => ({
-    ...thread,
-    profiles: sanitizeProfile(thread.profiles),
-  }));
+  const threads = (data ?? []).map(toThreadWithAuthor);
 
   const total = count ?? 0;
   const nextOffset = offset + threads.length < total ? offset + threads.length : null;
@@ -86,10 +96,7 @@ const getFeaturedThreads = async (
     throw new Error(`Failed to fetch featured threads: ${error.message}`);
   }
 
-  return (data ?? []).map((thread) => ({
-    ...thread,
-    profiles: sanitizeProfile(thread.profiles),
-  }));
+  return (data ?? []).map(toThreadWithAuthor);
 };
 
 const getByUserId = async (
@@ -150,10 +157,15 @@ const getByIdWithAuthor = async (
   if (error) throw new Error(`Failed to fetch session: ${error.message}`);
   if (!data) return null;
 
-  const { session_likes, profiles, ...session } = data;
+  const { session_likes, workingDir, profiles, ...session } = data;
   const hasLiked = currentUserId ? (session_likes?.length ?? 0) > 0 : false;
 
-  return { ...session, profiles: sanitizeProfile(profiles), hasLiked };
+  return {
+    ...session,
+    projectName: getProjectName(workingDir),
+    profiles: sanitizeProfile(profiles),
+    hasLiked,
+  };
 };
 
 const getByIdWithProfile = async (
@@ -169,8 +181,7 @@ const getByIdWithProfile = async (
   if (error) throw new Error(`Failed to fetch session: ${error.message}`);
   if (!data) return null;
 
-  const { profiles, ...session } = data;
-  return { ...session, profiles: sanitizeProfile(profiles) };
+  return toThreadWithAuthor(data);
 };
 
 const getByIdForUser = async (

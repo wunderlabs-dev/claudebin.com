@@ -26,7 +26,7 @@ type ThreadPageSidebarContainerProps = {
   fileCount: number;
   viewCount: number;
   likeCount: number;
-  workingDir?: string | null;
+  projectName?: string | null;
   modelName?: string | null;
   messageCount?: number | null;
   isPublic: boolean;
@@ -38,7 +38,7 @@ const ThreadPageSidebarContainer = ({
   isPublic,
   userId,
   createdAt,
-  workingDir,
+  projectName,
   modelName,
   viewCount,
   fileCount,
@@ -67,7 +67,7 @@ const ThreadPageSidebarContainer = ({
               fileCount={fileCount}
               viewCount={viewCount}
               likeCount={likeCount}
-              workingDir={workingDir}
+              projectName={projectName}
               modelName={modelName}
               messageCount={messageCount}
             />

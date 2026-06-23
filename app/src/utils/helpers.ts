@@ -22,12 +22,7 @@ export const getAvatarInitial = (username?: string | null) => {
   return "?";
 };
 
-export const getProjectName = (workingDir: string | null) => {
-  if (isNil(workingDir)) {
-    return null;
-  }
-  return last(workingDir.split("/"));
-};
+export const getFileName = (path: string) => last(path.split("/"));
 
 export const stringifyJSON = (value: unknown): string => {
   if (typeof value === "string") {
